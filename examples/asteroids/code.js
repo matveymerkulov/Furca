@@ -41,22 +41,25 @@ export function initUpdate() {
 
     function initLevel(num) {
         for(let i = 0; i < num; i++) {
-            let asteroid = createAsteroid(0, 0, val.asteroidType.big, rnd(rad(360)))
+            let asteroid = createAsteroid(val.asteroidType.big, rnd(rad(360)))
             asteroid.moveToPerimeter(val.bounds)
         }
         explodingAsteroidLevelInit(num)
         if(level > 1) val.score.increment(val.levelBonus)
     }
 
+    function reset() {
+        lives.value = val.startingLives
+        score.value = 0
+        asteroids.clear()
+        level.value = 0
+        nextLifeBonus = val.nextLifeBonus
+    }
+
     // asteroid
 
-    function createAsteroid(centerX, centerY, type, angle = 0) {
+    function createAsteroid(type, angle = 0) {
         let asteroid = Sprite.createFromTemplate(type)
-        if(centerY === undefined) {
-            asteroid.setPositionAs(centerX.toSprite())
-        } else {
-            asteroid.moveTo(centerX, centerY)
-        }
         asteroid.turn(angle)
         asteroid.type = type
         asteroid.imageAngle = 0
@@ -78,7 +81,7 @@ export function initUpdate() {
 
     function destroyAsteroid(asteroid, angle) {
         asteroid.type.pieces?.forEach(piece => {
-            createAsteroid(asteroid, undefined, piece.type, angle + rad(piece.angle))
+            createAsteroid(piece.type, angle + rad(piece.angle)).setPositionAs(asteroid)
         })
         if(asteroid.onHit) asteroid.onHit()
         createExplosion(asteroid, asteroid.width)
@@ -115,7 +118,7 @@ export function initUpdate() {
 
     function createSingleExplosion(sprite, size, playSnd = true) {
         let explosion = Sprite.createFromTemplate(template.explosion)
-        explosion.width = explosion.height = size
+        explosion.size = size
         explosion.moveTo(sprite.centerX, sprite.centerY)
         explosion.add(new DelayedRemove(explosion, explosions, 1.0))
         if(playSnd) playSound(sound.explosion)
@@ -159,17 +162,17 @@ export function initUpdate() {
 
     // exploding asteroid
 
-    val.template.explodingAsteroid.parameters.onHit = function() {
+    template.explodingAsteroid.parameters.onHit = function() {
         removeAsteroid(this)
-        explosionDamage(this, 5)
+        explosionDamage(this)
         if(this.collidesWithSprite(val.shipSprite)) {
             destroyShip()
         }
     }
 
     function explodingAsteroidLevelInit(num) {
-        for(let i = 5; i <= num; i += 5) {
-            let asteroid = createAsteroid(0, 0, val.template.explodingAsteroid, rnd(360))
+        for(let i = 1; i <= num; i += 5) {
+            let asteroid = createAsteroid(val.template.explodingAsteroid, rnd(360))
             asteroid.moveToPerimeter(val.bounds)
         }
     }
@@ -217,7 +220,7 @@ export function initUpdate() {
                 let gunfire = Sprite.createFromTemplate(this.gunfireTemplate)
                 gunfire.setPositionAs(this.barrelEnd[i])
                 gunfire.turn(val.shipSprite.angle)
-                gunfire.add(new DelayedRemove(gunfire, val.shipLayer, 0.05))
+                gunfire.add(new DelayedRemove(gunfire, val.shipLayer, this.gunfireTime))
                 this.gunfire[i] = gunfire
             }
             playSound(sound.bullet)
@@ -242,7 +245,7 @@ export function initUpdate() {
     let launcher = weapon.launcher
 
     launcher.missile.parameters.onHit = function() {
-        explosionDamage(this, 5)
+        explosionDamage(this)
         if(this.collidesWithSprite(val.shipSprite)) {
             destroyShip()
         }
@@ -314,11 +317,7 @@ export function initUpdate() {
                 blinkTime = val.invulnerabilityTime
                 val.invulnerable = true
             } else {
-                lives.value = val.startingLives
-                score.value = 0
-                asteroids.clear()
-                level.value = 0
-                nextLifeBonus = val.nextLifeBonus
+                reset()
             }
             currentState = state.alive
         } else {

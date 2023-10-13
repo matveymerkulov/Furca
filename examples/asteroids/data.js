@@ -20,6 +20,7 @@ import Rnd from "../../function/rnd.js"
 import {rnds} from "../../function/random_sign.js"
 import Mul from "../../function/mul.js"
 import Delayed from "../../actions/delayed.js"
+import Point from "../../point.js"
 
 project.locales.en = {
     // hud
@@ -216,6 +217,21 @@ project.init = (texture) => {
 
     type.small.pieces = []
 
+    // exploding asteroid
+
+    template.explodingAsteroid = {
+        layer: val.asteroids,
+        images: new ImageArray(texture.explodingAsteroid, 8, 4, 0.5, 0.5, 1.5, 1.5),
+        size: 2,
+        speed: 5,
+        //angle: new Rnd(rad(-10), rad(10)),
+        animationSpeed: 24.0,
+        parameters: {
+            explosionSize: 5,
+            hp: 50,
+        }
+    }
+
     // ship
 
     template.ship = {
@@ -261,7 +277,7 @@ project.init = (texture) => {
 
     template.weapon = {}
     let weapon = template.weapon
-    weapon.gun = Sprite.create(undefined, undefined, 1, 0)
+    weapon.gun = new Point(1, 0)
 
     // fireball
 
@@ -288,7 +304,7 @@ project.init = (texture) => {
 
     weapon.turret = {
         sprite: new Sprite(new Img(texture.turret), 0, 0, 2, 2),
-        barrelEnd: [],
+        barrelEnd: [new Point(0.5, 0.4), new Point(0.5, -0.4)],
         gunfire: [0, 1],
         controller: new Delayed(project.key.fire, 0.10),
 
@@ -315,13 +331,9 @@ project.init = (texture) => {
         ammo: new NumericVariable(),
         bonusAmmo: 50,
         maxAmmo: 100,
+        gunfireTime: 0.05
     }
     let turret = weapon.turret
-
-    for(let i = 0; i < 2; i++) {
-        let barrelEnd = new Sprite(undefined, 0.5, 0.4 * (i === 0 ? -1 : 1))
-        turret.barrelEnd.push(barrelEnd)
-    }
 
     turret.sprite.visible = false
     val.shipLayer.add(turret.sprite)
@@ -354,48 +366,39 @@ project.init = (texture) => {
 
     val.hud.add(new Label(hudArea, [weapon.launcher.ammo], align.left, align.bottom, "I1", texture.missileIcon))
 
-    // exploding asteroid
-
-    template.explodingAsteroid = {
-        layer: val.asteroids,
-        images: new ImageArray(texture.explodingAsteroid, 8, 4, 0.5, 0.5, 1.5, 1.5),
-        size: 2,
-        speed: 5,
-        //angle: new Rnd(rad(-10), rad(10)),
-        animationSpeed: 24.0,
-        hp: 50,
-        parameters: {
-            explosionSize: 5,
-        }
-    }
-
     // other
 
     project.background = "rgb(9, 44, 84)"
-    project.scene = [val.bullets, val.asteroids, val.bonuses, val.shipLayer, val.explosions, val.hud]
+    project.scene = [
+        val.bullets,
+        val.asteroids,
+        val.bonuses,
+        val.shipLayer,
+        val.explosions,
+        val.hud
+    ]
 
     project.actions = [
         new LoopArea(val.shipSprite, val.bounds),
         new Move(val.shipSprite),
-
         new Animate(val.flameSprite, val.flameImages, 16),
         new Constraint(val.flameSprite, val.shipSprite),
+        new ExecuteActions(val.shipLayer),
 
         new SetBounds(val.bullets, val.bounds),
-        new ExecuteActions(val.bullets),
         new Move(val.bullets),
+        new ExecuteActions(val.bullets),
 
-        new ExecuteActions(val.asteroids),
-        new Move(val.asteroids),
         new LoopArea(val.asteroids, val.bounds),
-
-        new ExecuteActions(val.explosions),
-        new ExecuteActions(val.bonuses),
-        new ExecuteActions(val.shipLayer),
+        new Move(val.asteroids),
+        new ExecuteActions(val.asteroids),
 
         new Constraint(weapon.gun, val.shipSprite),
         new Constraint(turret.barrelEnd[0], turret.sprite),
         new Constraint(turret.barrelEnd[1], turret.sprite),
+
+        new ExecuteActions(val.explosions),
+        new ExecuteActions(val.bonuses),
     ]
 
     initUpdate()
