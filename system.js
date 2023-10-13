@@ -54,7 +54,7 @@ export function togglePause() {
 
 export let masterVolume = 0.25
 
-export function playSound(sound) {
+export function play(sound) {
     let newSound = new Audio(sound.src)
     newSound.volume = masterVolume
     newSound.play()

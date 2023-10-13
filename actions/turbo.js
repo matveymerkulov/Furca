@@ -1,7 +1,7 @@
 import {apsk} from "../system.js"
 import {Action} from "./action.js"
 
-export default class Delayed extends Action {
+export default class Turbo extends Action {
     constructor(key, cooldown) {
         super()
         this.key = key

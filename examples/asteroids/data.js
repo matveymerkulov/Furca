@@ -19,8 +19,10 @@ import {initUpdate} from "./code.js"
 import Rnd from "../../function/rnd.js"
 import {rnds} from "../../function/random_sign.js"
 import Mul from "../../function/mul.js"
-import Delayed from "../../actions/delayed.js"
+import Turbo from "../../actions/turbo.js"
 import Point from "../../point.js"
+import AnimateOpacity from "../../actions/sprite/blink.js"
+import Cos from "../../function/cos.js"
 
 project.locales.en = {
     // hud
@@ -121,7 +123,6 @@ project.init = (texture) => {
         nextLifeBonus: 25000,
         levelBonus: 1000,
         invulnerabilityTime: 2,
-        blinkingSpeed: 0.05,
     }
     let val = project.registry
     let template = val.template
@@ -153,8 +154,8 @@ project.init = (texture) => {
             speed: new Rnd(2, 3),
             animationSpeed: new Mul(new Rnd(12, 20), rnds),
             rotationSpeed: new Rnd(-180, 180),
+            score: 100,
             parameters: {
-                score: 100,
                 hp: 300,
             }
         },
@@ -167,8 +168,8 @@ project.init = (texture) => {
             speed: new Rnd(2.5, 4),
             animationSpeed: new Mul(new Rnd(16, 25), rnds),
             rotationSpeed: new Rnd(-180, 180),
+            score: 200,
             parameters: {
-                score: 200,
                 hp: 200,
             }
         },
@@ -181,8 +182,8 @@ project.init = (texture) => {
             speed: new Rnd(3, 5),
             animationSpeed: new Mul(new Rnd(20, 30), rnds),
             rotationSpeed: new Rnd(-180, 180),
+            score: 300,
             parameters: {
-                score: 300,
                 hp: 100,
             }
         },
@@ -221,11 +222,13 @@ project.init = (texture) => {
 
     template.explodingAsteroid = {
         layer: val.asteroids,
-        images: new ImageArray(texture.explodingAsteroid, 8, 4, 0.5, 0.5, 1.5, 1.5),
+        images: new ImageArray(texture.explodingAsteroid, 8, 4
+            , 0.5, 0.5, 1.5, 1.5),
         size: 2,
         speed: 5,
         //angle: new Rnd(rad(-10), rad(10)),
         animationSpeed: 24.0,
+        score: 250,
         parameters: {
             explosionSize: 5,
             hp: 50,
@@ -242,6 +245,7 @@ project.init = (texture) => {
     }
 
     val.shipSprite = Sprite.createFromTemplate(template.ship)
+    val.invulnerabilityAction = new AnimateOpacity(val.shipSprite, new Cos(0.2, 0.5, 0, 0.5))
     val.shipLayer.add(val.shipSprite)
 
     val.flameImages = new ImageArray(texture.flame, 3, 3)
@@ -296,17 +300,26 @@ project.init = (texture) => {
             }
         },
 
-        gunController: new Delayed(project.key.fire, 0.15),
+        controller: new Turbo(project.key.fire, 0.15),
     }
     val.currentWeapon = weapon.fireball
 
     // double barreled turret
 
+
+    let gunfireTemplate = {
+        layer: val.shipLayer,
+        image: new Img(texture.gunfire, undefined, undefined, undefined, undefined
+        , 0, 0.5),
+        size: 1,
+        visible: false,
+    }
+
     weapon.turret = {
         sprite: new Sprite(new Img(texture.turret), 0, 0, 2, 2),
         barrelEnd: [new Point(0.5, 0.4), new Point(0.5, -0.4)],
-        gunfire: [0, 1],
-        controller: new Delayed(project.key.fire, 0.10),
+        gunfire: [Sprite.createFromTemplate(gunfireTemplate), Sprite.createFromTemplate(gunfireTemplate)],
+        controller: new Turbo(project.key.fire, 0.10),
 
         bullet: {
             layer: val.bullets,
@@ -317,13 +330,6 @@ project.init = (texture) => {
                 damage: 50,
                 explosionSize: 0.5,
             }
-        },
-
-        gunfireTemplate: {
-            layer: val.shipLayer,
-            image: new Img(texture.gunfire, undefined, undefined, undefined, undefined
-                , 0, 0.5),
-            size: 1,
         },
 
         bonus: new Sprite(new Img(texture.turretBonus)),
@@ -361,7 +367,7 @@ project.init = (texture) => {
         ammo: new NumericVariable(3),
         maxAmmo: 8,
 
-        delay: new Delayed(project.key.fireMissile, 0.5),
+        controller: new Turbo(project.key.fireMissile, 0.5),
     }
 
     val.hud.add(new Label(hudArea, [weapon.launcher.ammo], align.left, align.bottom, "I1", texture.missileIcon))

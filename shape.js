@@ -1,5 +1,3 @@
-import {Renderable} from "./renderable.js"
-import {rnd, rndi} from "./system.js"
 import Point from "./point.js"
 
 export default class Shape extends Point {

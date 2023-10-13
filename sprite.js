@@ -1,6 +1,6 @@
 import Shape from "./shape.js"
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
-import {apsk, num, rad} from "./system.js"
+import {apsk, ctx, num, rad} from "./system.js"
 import Animate from "./actions/sprite/animate.js"
 
 export default class Sprite extends Shape {
@@ -14,6 +14,7 @@ export default class Sprite extends Shape {
         this.speed = speed
         this.visible = visible
         this.active = active
+        this.opacity = 1.0
         this.actions = []
     }
 
@@ -73,13 +74,19 @@ export default class Sprite extends Shape {
 
     draw() {
         if(!this.image || !this.visible) return
+        ctx.globalAlpha = this.opacity
         this.image.drawRotated(xToScreen(this.centerX), yToScreen(this.centerY)
             , distToScreen(this.width), distToScreen(this.height), this.imageAngle ?? this.angle, false)
+        ctx.globalAlpha = 1.0
     }
 
     move() {
         this.centerX += Math.cos(this.angle) * this.speed * apsk
         this.centerY += Math.sin(this.angle) * this.speed * apsk
+    }
+
+    setAngleAs(sprite) {
+        this.angle = sprite.angle
     }
 
     turn(value) {
