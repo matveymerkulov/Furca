@@ -23,6 +23,7 @@ import Turbo from "../../actions/turbo.js"
 import Point from "../../point.js"
 import AnimateOpacity from "../../actions/sprite/blink.js"
 import Cos from "../../function/cos.js"
+import AnimateSize from "../../actions/sprite/animate_size.js"
 
 project.locales.en = {
     // hud
@@ -248,8 +249,8 @@ project.init = (texture) => {
     val.invulnerabilityAction = new AnimateOpacity(val.shipSprite, new Cos(0.2, 0.5, 0, 0.5))
     val.shipLayer.add(val.shipSprite)
 
-    val.flameImages = new ImageArray(texture.flame, 3, 3)
-    val.flameSprite = Sprite.create(val.shipLayer, val.flameImages._images[0], -0.9, 0
+    val.flameImages = new ImageArray(texture.flame, 3, 3, 0.5, 1)
+    val.flameSprite = Sprite.create(val.shipLayer, val.flameImages._images[0], -0.6, 0
         , 1, 1, rad(-90))
 
     // explosions
@@ -305,7 +306,6 @@ project.init = (texture) => {
     val.currentWeapon = weapon.fireball
 
     // double barreled turret
-
 
     let gunfireTemplate = {
         layer: val.shipLayer,
@@ -388,6 +388,7 @@ project.init = (texture) => {
         new LoopArea(val.shipSprite, val.bounds),
         new Move(val.shipSprite),
         new Animate(val.flameSprite, val.flameImages, 16),
+        new AnimateSize(val.flameSprite, new Cos(0.1, 0.1, 0, 0.95)),
         new Constraint(val.flameSprite, val.shipSprite),
         new ExecuteActions(val.shipLayer),
 
