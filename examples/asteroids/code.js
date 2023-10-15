@@ -108,7 +108,7 @@ export function initUpdate() {
     function explosionDamage(sprite) {
         sprite.size = sprite.explosionSize
         let inExplosion = []
-        sprite.collisionWith(val.asteroids, (mis, asteroid) => {
+        sprite.collisionWith(asteroids, (mis, asteroid) => {
             inExplosion.push(asteroid)
         })
         inExplosion.forEach((asteroid) => {
@@ -133,7 +133,7 @@ export function initUpdate() {
 
         function createParticle(first) {
             let angle = rad(rnd(360))
-            let length = first ? 0 : rnd(1)
+            let length = first ? 0 : Math.sqrt(rnd(1))
             let particleSize = first ? size : (1 - length / 2) * size
 
             let explosion = Sprite.create(explosions, val.explosionImages
@@ -167,14 +167,14 @@ export function initUpdate() {
     template.explodingAsteroid.parameters.onHit = function() {
         removeAsteroid(this)
         explosionDamage(this)
-        if(this.collidesWithSprite(val.shipSprite)) {
+        if(this.collidesWithSprite(shipSprite)) {
             destroyShip()
         }
     }
 
     function explodingAsteroidLevelInit(num) {
         for(let i = 1; i <= num; i += 5) {
-            let asteroid = createAsteroid(val.template.explodingAsteroid, rnd(360))
+            let asteroid = createAsteroid(template.explodingAsteroid, rnd(360))
             asteroid.moveToPerimeter(val.bounds)
         }
     }
@@ -360,9 +360,9 @@ export function initUpdate() {
 
         // camera
 
-        currentCanvas.setPositionAs(val.shipSprite)
-        val.bounds.setPositionAs(val.shipSprite)
-        val.hud.setPositionAs(val.shipSprite)
+        currentCanvas.setPositionAs(shipSprite)
+        val.bounds.setPositionAs(shipSprite)
+        val.hud.setPositionAs(shipSprite)
 
         // invulnerability
 

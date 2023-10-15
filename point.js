@@ -1,5 +1,5 @@
 import {Renderable} from "./renderable.js"
-import {rnd, rndi} from "./system.js"
+import {rad, rnd, rndi} from "./system.js"
 
 export default class Point extends Renderable {
     constructor(centerX = 0.0, centerY = 0.0) {
@@ -16,6 +16,13 @@ export default class Point extends Renderable {
     setPositionAs(point) {
         this.centerX = point.centerX
         this.centerY = point.centerY
+    }
+
+    moveToCircle(x, y, radius) {
+        let angle = rad(rnd(360))
+        radius = Math.sqrt(rnd(radius))
+        this.centerX = x + radius * Math.cos(angle)
+        this.centerY = y + radius * Math.sin(angle)
     }
 
     moveToPerimeter(bounds) {
@@ -35,6 +42,12 @@ export default class Point extends Renderable {
         if(this.centerX >= bounds.rightX) this.centerX -= bounds.width
         if(this.centerY < bounds.topY) this.centerY += bounds.height
         if(this.centerY >= bounds.bottomY) this.centerY -= bounds.height
+    }
+
+    distanceTo(point) {
+        let dx = this.centerX - point.centerX
+        let dy = this.centerY - point.centerY
+        return Math.sqrt(dx * dx + dy * dy)
     }
 
     angleTo(point) {

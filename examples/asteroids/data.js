@@ -309,8 +309,7 @@ project.init = (texture) => {
 
     let gunfireTemplate = {
         layer: val.shipLayer,
-        image: new Img(texture.gunfire, undefined, undefined, undefined, undefined
-        , 0, 0.5),
+        image: new Img(texture.gunfire, undefined, undefined, undefined, undefined, 0, 0.5),
         size: 1,
         visible: false,
     }
