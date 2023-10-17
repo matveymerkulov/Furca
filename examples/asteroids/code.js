@@ -9,30 +9,25 @@ import Cos from "../../function/cos.js"
 import AnimateAngle from "../../actions/sprite/animate_angle.js"
 import {currentCanvas} from "../../canvas.js"
 import DelayedHide from "../../actions/sprite/delayed_hide.js"
+import {
+    asteroids,
+    bonuses,
+    bounds, bullets, explosions, flameSprite, gun, hud, invulnerabilityAction, invulnerabilityTime,
+    level,
+    levelBonus,
+    lifeBonus,
+    lives, messageLabel,
+    score, shipAcceleration, shipAccelerationLimit, shipAngularSpeed, shipDeceleration, shipLayer, shipSprite,
+    startingLives, startingWeapon,
+    state,
+    template
+} from "./data.js"
 
 export let currentState
 
 export function initUpdate() {
-    let val = project.registry
     let sound = project.sound
-
-    let asteroids = val.asteroids
-    let shipSprite = val.shipSprite
-    let flameSprite = val.flameSprite
-    let bullets = val.bullets
-    let explosions = val.explosions
-    let bonuses = val.bonuses
-    let shipLayer = val.shipLayer
-
-    let lives = val.lives
-    let messageLabel = val.messageLabel
-    let level = val.level
-    let score = val.score
-
-    let state = val.state
     let key = project.key
-    let template = val.template
-    let ship = val.ship
 
     currentState = state.alive
 
@@ -43,19 +38,20 @@ export function initUpdate() {
 
     function initLevel(num) {
         for(let i = 0; i < num; i++) {
-            let asteroid = createAsteroid(val.asteroidType.big, rnd(rad(360)))
-            asteroid.moveToPerimeter(val.bounds)
+            let asteroid = createAsteroid(template.asteroidType.big, rnd(rad(360)))
+            asteroid.moveToPerimeter(bounds)
         }
         explodingAsteroidLevelInit(num)
-        if(level > 1) score.increment(val.levelBonus)
+        if(level > 1) score.increment(levelBonus)
     }
 
     function reset() {
-        lives.value = val.startingLives
+        lives.value = startingLives
         score.value = 0
         asteroids.clear()
         level.value = 0
-        nextLifeBonus = val.nextLifeBonus
+        nextLifeBonus = lifeBonus
+        currentWeapon = startingWeapon
     }
 
     // asteroid
@@ -100,7 +96,7 @@ export function initUpdate() {
             bonus.setPositionAs(asteroid)
             bonus.add(new AnimateSize(bonus, new Cos(0.45, 0.1, 0, 1)))
             bonus.add(new AnimateAngle(bonus, new Cos(0.9, rad(15))))
-            val.bonuses.add(bonus)
+            bonuses.add(bonus)
             return
         }
     }
@@ -136,7 +132,7 @@ export function initUpdate() {
             let length = first ? 0 : Math.sqrt(rnd(1))
             let particleSize = first ? size : (1 - length / 2) * size
 
-            let explosion = Sprite.create(explosions, val.explosionImages
+            let explosion = Sprite.create(explosions, template.explosion.images
                 , sprite.centerX + length * Math.cos(angle), sprite.centerY + length * Math.sin(angle)
                 , particleSize, particleSize, rad(rnd(360)), 0, 16)
             explosion.add(new DelayedRemove(explosion, explosions, 1))
@@ -175,22 +171,23 @@ export function initUpdate() {
     function explodingAsteroidLevelInit(num) {
         for(let i = 1; i <= num; i += 5) {
             let asteroid = createAsteroid(template.explodingAsteroid, rnd(360))
-            asteroid.moveToPerimeter(val.bounds)
+            asteroid.moveToPerimeter(bounds)
         }
     }
 
     // weapons
 
     let weapon = template.weapon
+    let currentWeapon = startingWeapon
 
     // fireball
 
     weapon.fireball.update = function() {
-        if(val.currentWeapon !== this || currentState !== val.state.alive) return
+        if(currentWeapon !== this || currentState !== state.alive) return
 
         if(this.controller.active()) {
             let bullet = Sprite.createFromTemplate(weapon.fireball.bullet)
-            bullet.setPositionAs(weapon.gun)
+            bullet.setPositionAs(gun)
             bullet.turn(shipSprite.angle)
             play(sound.fireball)
         }
@@ -201,7 +198,7 @@ export function initUpdate() {
     let turret = weapon.turret
 
     turret.collect = function() {
-        val.currentWeapon = this
+        currentWeapon = this
         this.ammo.increment(this.bonusAmmo, this.maxAmmo)
         this.sprite.visible = true
     }
@@ -213,7 +210,7 @@ export function initUpdate() {
             gunfire.setAngleAs(shipSprite)
         }
 
-        if(val.currentWeapon !== this || currentState !== val.state.alive) return
+        if(currentWeapon !== this || currentState !== state.alive) return
         let sprite = this.sprite
 
         if(this.controller.active()) {
@@ -233,7 +230,7 @@ export function initUpdate() {
             this.ammo.decrement()
             if(this.ammo.value === 0) {
                 sprite.visible = false
-                val.currentWeapon = template.weapon.fireball
+                currentWeapon = template.weapon.fireball
             }
         }
 
@@ -253,11 +250,11 @@ export function initUpdate() {
     }
 
     launcher.update = function() {
-        if(currentState !== val.state.alive) return
+        if(currentState !== state.alive) return
 
         if(this.ammo.value > 0 && this.controller.active()) {
             let missile = Sprite.createFromTemplate(this.missile)
-            missile.setPositionAs(weapon.gun)
+            missile.setPositionAs(gun)
             missile.turn(shipSprite.angle)
             this.ammo.decrement()
             play(sound.fireMissile)
@@ -270,8 +267,9 @@ export function initUpdate() {
 
     // main
 
-    let nextLifeBonus = val.nextLifeBonus
+    let nextLifeBonus = lifeBonus
     let invTime = 0
+    let invulnerable = false
 
     project.update = () => {
         if(key.pause.wasPressed) {
@@ -286,25 +284,25 @@ export function initUpdate() {
 
         if(currentState === state.alive) {
             if(key.left.isDown) {
-                LinearChange.execute(shipSprite, "angle", -rad(ship.angularSpeed))
+                LinearChange.execute(shipSprite, "angle", -rad(shipAngularSpeed))
             }
 
             if(key.right.isDown) {
-                LinearChange.execute(shipSprite, "angle", rad(ship.angularSpeed))
+                LinearChange.execute(shipSprite, "angle", rad(shipAngularSpeed))
             }
 
             if(key.forward.isDown) {
-                LinearChange.execute(shipSprite,"speed", ship.acceleration, 0, ship.accelerationLimit)
+                LinearChange.execute(shipSprite,"speed", shipAcceleration, 0, shipAccelerationLimit)
                 if(flameSound) flameSound.play()
             } else {
-                LinearChange.execute(shipSprite, "speed", -ship.deceleration, 0)
+                LinearChange.execute(shipSprite, "speed", -shipDeceleration, 0)
                 if(!flameSound.paused) flameSound.pause()
                 flameSound.currentTime = 0
             }
 
             flameSprite.visible = key.forward.isDown
 
-            if(!val.invulnerable) {
+            if(!invulnerable) {
                 shipSprite.collisionWith(asteroids, (sprite, asteroid) => {
                     destroyShip()
                     destroyAsteroid(asteroid, 0)
@@ -315,8 +313,8 @@ export function initUpdate() {
             messageLabel.show()
             if(currentState === state.dead) {
                 lives.decrement()
-                val.invulnerable = true
-                invTime = val.invulnerabilityTime
+                invulnerable = true
+                invTime = invulnerabilityTime
             } else {
                 reset()
             }
@@ -344,7 +342,7 @@ export function initUpdate() {
 
         // asteroid bonus
 
-        val.bonuses.collisionWith(val.shipSprite, function(bonus) {
+        bonuses.collisionWith(shipSprite, function(bonus) {
             bonus.weapon.collect()
             play(sound.bonus)
             bonuses.remove(bonus)
@@ -352,24 +350,24 @@ export function initUpdate() {
 
         // extra life
 
-        if(val.score.value >= nextLifeBonus) {
+        if(score.value >= nextLifeBonus) {
             lives.increment()
             play(sound.extraLife)
-            nextLifeBonus += val.nextLifeBonus
+            nextLifeBonus += nextLifeBonus
         }
 
         // camera
 
         currentCanvas.setPositionAs(shipSprite)
-        val.bounds.setPositionAs(shipSprite)
-        val.hud.setPositionAs(shipSprite)
+        bounds.setPositionAs(shipSprite)
+        hud.setPositionAs(shipSprite)
 
         // invulnerability
 
-        if(val.invulnerable) {
-            val.invulnerabilityAction.execute()
+        if(invulnerable) {
+            invulnerabilityAction.execute()
             invTime -= apsk
-            if(invTime <= 0) val.invulnerable = false
+            if(invTime <= 0) invulnerable = false
         }
     }
 }
