@@ -27,11 +27,16 @@ project.getAssets = () => {
 
 const dyFrom = -19, dyTo = -15
 const dxFrom = 0.5, dxTo = 1.5
-const mainShotY = 10
+const shotY = 10
 const gravity = 10
-const dyThreshold = 10
-const tailLength = 20
+const dyThreshold = 5
+const tailLength = 20, tailStep = 0.01
 const particlesQuantity = 100
+const probability = 0.02
+const shotSize = 0.50
+const fadingSpeedFrom = 0.25, fadingSpeedTo = 1
+const maxParticleSpeed = 10
+const particleSize = 0.5
 
 project.init = (texture) => {
     let particles = new Layer()
@@ -64,10 +69,8 @@ project.init = (texture) => {
         new SetBounds(particles, currentCanvas)
     ]
 
-    const step = 0.01
-
     project.update = () => {
-        if(rnd(0, 1) < 0.02) {
+        if(rnd(0, 1) < probability) {
             let color = `${rndi(128, 255)},${rndi(128, 255)},${rndi(128, 255)}`
             let shots = new Layer()
             shots.isShot = true
@@ -77,17 +80,17 @@ project.init = (texture) => {
             let dx = rnd(dxFrom, dxTo) * randomSign()
             let dy = rnd(dyFrom, dyTo)
             let x = 0
-            let y = mainShotY
+            let y = shotY
             for(let i = 0; i < tailLength; i++) {
-                let shot = new Sprite(image, x, y, 0.75, 0.75)
-                shot.size = i / tailLength
+                let shot = new Sprite(image, x, y)
+                shot.size = shotSize * i / tailLength
                 shot.dx = dx
                 shot.dy = dy
                 shot.color = color
                 shot.draw = draw
-                x += dx * step
-                y += dy * step
-                dy += step * gravity
+                x += dx * tailStep
+                y += dy * tailStep
+                dy += tailStep * gravity
                 shots.add(shot)
             }
         }
@@ -103,13 +106,13 @@ project.init = (texture) => {
                 if (shot.dy > dyThreshold && layer.isShot) {
                     removeFromArray(layer, project.scene)
                     for (let i = 0; i < particlesQuantity; i++) {
-                        let particle = new Sprite(image, shot.centerX, shot.centerY, 0.5, 0.5)
+                        let particle = new Sprite(image, shot.centerX, shot.centerY, particleSize, particleSize)
                         particle.draw = draw
                         let angle = rnd(rad(360))
-                        let length = Math.sqrt(rnd(0, 1)) * 10
+                        let length = Math.sqrt(rnd(0, 1)) * maxParticleSpeed
                         particle.dx = length * Math.cos(angle)
                         particle.dy = length * Math.sin(angle)
-                        particle.fadingSpeed = rnd(0.5, 1)
+                        particle.fadingSpeed = rnd(fadingSpeedFrom, fadingSpeedTo)
                         particle.opacity = 1
                         particle.color = layer.color
                         particles.add(particle)
