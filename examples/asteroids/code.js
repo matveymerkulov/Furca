@@ -9,27 +9,16 @@ import Cos from "../../function/cos.js"
 import AnimateAngle from "../../actions/sprite/animate_angle.js"
 import {currentCanvas} from "../../canvas.js"
 import DelayedHide from "../../actions/sprite/delayed_hide.js"
-import {
-    asteroids,
-    bonuses,
-    bounds, bullets, explosions, flameSprite, gun, hud, invulnerabilityAction, invulnerabilityTime,
-    level,
-    levelBonus,
-    lifeBonus,
-    lives, messageLabel,
-    score, shipAcceleration, shipAccelerationLimit, shipAngularSpeed, shipDeceleration, shipLayer, shipSprite,
-    startingLives, startingWeapon,
-    state,
-    template
-} from "./data.js"
-
-export let currentState
+import {asteroids, bonuses, bounds, bullets, explosions, flameSprite, gun, hud, invulnerabilityAction
+    , invulnerabilityTime, level, levelBonus, lifeBonus, lives, messageLabel, score, shipAcceleration
+    , shipAccelerationLimit, shipAngularSpeed, shipDeceleration, shipLayer, shipSprite, startingLives
+    , startingWeapon, state, template} from "./data.js"
 
 export function initUpdate() {
     let sound = project.sound
     let key = project.key
 
-    currentState = state.alive
+    let currentState = state.alive
 
     loopedSound(sound.music, 0, 1.81, true)
     let flameSound = loopedSound(sound.flame, 1.1, 1.9)
@@ -108,7 +97,7 @@ export function initUpdate() {
             inExplosion.push(asteroid)
         })
         inExplosion.forEach((asteroid) => {
-            destroyAsteroid(asteroid, sprite.angleTo(asteroid))
+            destroyAsteroid(asteroid, sprite.angleTo(asteroid.centerX, asteroid.centerY))
         })
     }
 
@@ -293,14 +282,18 @@ export function initUpdate() {
 
             if(key.forward.isDown) {
                 LinearChange.execute(shipSprite,"speed", shipAcceleration, 0, shipAccelerationLimit)
-                if(flameSound) flameSound.play()
+                flameSound?.play()
             } else {
                 LinearChange.execute(shipSprite, "speed", -shipDeceleration, 0)
                 if(!flameSound.paused) flameSound.pause()
                 flameSound.currentTime = 0
             }
 
-            flameSprite.visible = key.forward.isDown
+            let thrust = key.forward.isDown
+            flameSprite.visible = thrust
+            if(thrust) {
+
+            }
 
             if(!invulnerable) {
                 shipSprite.collisionWith(asteroids, (sprite, asteroid) => {
@@ -337,7 +330,7 @@ export function initUpdate() {
         // weapon
 
         for(const weapon of Object.values(template.weapon)) {
-            if(weapon.update) weapon.update()
+            weapon.update?.()
         }
 
         // asteroid bonus

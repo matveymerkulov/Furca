@@ -79,6 +79,7 @@ project.getAssets = () => {
             explosion: "textures/explosion.png",
             fireball: "textures/fireball.png",
             flame: "textures/flame.png",
+            flameParticle: "textures/flame_particle.png",
             gunfire: "textures/gunfire.png",
             missile: "textures/missile.png",
             missileBonus: "textures/missile_bonus.png",
@@ -127,6 +128,7 @@ export const level = new NumericVariable()
 export const bullets = new Layer()
 export const shipLayer = new Layer()
 export const asteroids = new Layer()
+export const particles = new Layer()
 export const bonuses = new Layer()
 export const explosions = new Layer()
 
@@ -160,8 +162,7 @@ project.init = (texture) => {
 
         explosion: {
             layer: explosions,
-            images: new ImageArray(texture.explosion, 4, 4
-                , 0.5, 0.5, 2, 2),
+            images: new ImageArray(texture.explosion, 4, 4, 0.5, 0.5, 2, 2),
             angle: new Rnd(360),
             animationSpeed: 16
         },
@@ -372,6 +373,7 @@ project.init = (texture) => {
         bullets,
         asteroids,
         bonuses,
+        particles,
         shipLayer,
         explosions,
         hud
@@ -399,6 +401,9 @@ project.init = (texture) => {
 
         new ExecuteActions(explosions),
         new ExecuteActions(bonuses),
+
+        new Move(particles),
+        new ExecuteActions(particles),
     ]
 
     initUpdate()

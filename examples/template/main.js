@@ -12,6 +12,7 @@ project.key = {
 project.getAssets = () => {
     return {
         texture: {
+            particle: "particle.png"
         },
         sound: {
         }
@@ -19,9 +20,6 @@ project.getAssets = () => {
 }
 
 project.init = (texture) => {
-    project.registry = {
-    }
-
     project.scene = [
     ]
 

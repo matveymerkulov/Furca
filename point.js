@@ -50,7 +50,7 @@ export default class Point extends Renderable {
         return Math.sqrt(dx * dx + dy * dy)
     }
 
-    angleTo(point) {
-        return Math.atan2(this.centerY - point.centerY, this.centerX - point.centerX)
+    angleTo(x, y) {
+        return Math.atan2(this.centerY - y, this.centerX - x)
     }
 }
