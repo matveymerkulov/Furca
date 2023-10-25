@@ -25,7 +25,7 @@ project.getAssets = () => {
     }
 }
 
-const dyFrom = -20, dyTo = -15
+const dyFrom = -19, dyTo = -15
 const dxFrom = 0.5, dxTo = 1.5
 const mainShotY = 10
 const gravity = 10
@@ -40,10 +40,13 @@ project.init = (texture) => {
     let image = new Img(texture.particle, 0, 0)
     let draw = function () {
         ctx.globalAlpha = this.opacity
-        ctx.fillStyle = this.color
-        ctx.beginPath()
-        ctx.arc(xToScreen(this.centerX), yToScreen(this.centerY), distToScreen(0.25), 0, rad(360))
-        ctx.fill()
+        let x = xToScreen(this.centerX)
+        let y = yToScreen(this.centerY)
+        const gradient = ctx.createRadialGradient(x, y, 0, x, y, distToScreen(this.halfWidth));
+        gradient.addColorStop(0, `rgba(${this.color},255)`)
+        gradient.addColorStop(1, `rgba(${this.color},0)`)
+        ctx.fillStyle = gradient;
+        ctx.fillRect(xToScreen(this.leftX), yToScreen(this.topY), distToScreen(this.width), distToScreen(this.height));
         ctx.fillStyle = "white"
         ctx.globalAlpha = 1
     }
@@ -61,10 +64,14 @@ project.init = (texture) => {
         new SetBounds(particles, currentCanvas)
     ]
 
+    const step = 0.01
+
     project.update = () => {
         if(rnd(0, 1) < 0.02) {
+            let color = `${rndi(128, 255)},${rndi(128, 255)},${rndi(128, 255)}`
             let shots = new Layer()
             shots.isShot = true
+            shots.color = color
             project.scene.push(shots)
 
             let dx = rnd(dxFrom, dxTo) * randomSign()
@@ -72,13 +79,15 @@ project.init = (texture) => {
             let x = 0
             let y = mainShotY
             for(let i = 0; i < tailLength; i++) {
-                let shot = new Sprite(image, x, y)
+                let shot = new Sprite(image, x, y, 0.75, 0.75)
                 shot.size = i / tailLength
                 shot.dx = dx
                 shot.dy = dy
-                x += dx * apsk
-                y += dy * apsk
-                dy += apsk * gravity
+                shot.color = color
+                shot.draw = draw
+                x += dx * step
+                y += dy * step
+                dy += step * gravity
                 shots.add(shot)
             }
         }
@@ -93,17 +102,16 @@ project.init = (texture) => {
                 }
                 if (shot.dy > dyThreshold && layer.isShot) {
                     removeFromArray(layer, project.scene)
-                    let color = `rgb(${rndi(256)},${rndi(256)},${rndi(256)})`
                     for (let i = 0; i < particlesQuantity; i++) {
-                        let particle = new Sprite(image, shot.centerX, shot.centerY)
+                        let particle = new Sprite(image, shot.centerX, shot.centerY, 0.5, 0.5)
                         particle.draw = draw
                         let angle = rnd(rad(360))
-                        let length = Math.sqrt(rnd(0, 1)) * 5
+                        let length = Math.sqrt(rnd(0, 1)) * 10
                         particle.dx = length * Math.cos(angle)
                         particle.dy = length * Math.sin(angle)
                         particle.fadingSpeed = rnd(0.5, 1)
                         particle.opacity = 1
-                        particle.color = color
+                        particle.color = layer.color
                         particles.add(particle)
                     }
                 }
