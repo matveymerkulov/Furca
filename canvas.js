@@ -34,9 +34,9 @@ export default class Canvas extends Sprite {
         this.update()
 
         ctx.fillStyle = project.background
-
         //g.setClip(viewport.leftX, viewport.topY, viewport.width, viewport.height)
         ctx.fillRect(viewport.leftX, viewport.topY, viewport.width, viewport.height)
+        
         for(let i = 0; i < project.scene.length; i++) {
             project.scene[i].draw()
         }

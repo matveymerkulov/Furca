@@ -75,8 +75,10 @@ export default class Sprite extends Shape {
     draw() {
         if(!this.image || !this.visible) return
         ctx.globalAlpha = this.opacity
+
         this.image.drawRotated(xToScreen(this.centerX), yToScreen(this.centerY)
             , distToScreen(this.width), distToScreen(this.height), this.imageAngle ?? this.angle, false)
+
         ctx.globalAlpha = 1.0
     }
 
