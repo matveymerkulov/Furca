@@ -18,8 +18,7 @@ export default class Img extends Renderable {
     }
 
     drawResized(sx, sy, swidth, sheight) {
-        ctx.drawImage(this.texture, sx, sy, sx + swidth, sy + sheight
-            , this.x, this.y, this.x + this.width, this.y + this.height)
+        ctx.drawImage(this.texture, this.x, this.y, this.width, this.height, sx, sy, swidth, sheight)
     }
 
     drawRotated(sx, sy, swidth, sheight, angle) {

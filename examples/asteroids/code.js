@@ -9,10 +9,34 @@ import Cos from "../../function/cos.js"
 import AnimateAngle from "../../actions/sprite/animate_angle.js"
 import {currentCanvas} from "../../canvas.js"
 import DelayedHide from "../../actions/sprite/delayed_hide.js"
-import {asteroids, bonuses, bounds, bullets, explosions, flameSprite, gun, hud, invulnerabilityAction
-    , invulnerabilityTime, level, levelBonus, lifeBonus, lives, messageLabel, score, shipAcceleration
-    , shipAccelerationLimit, shipAngularSpeed, shipDeceleration, shipLayer, shipSprite, startingLives
-    , startingWeapon, state, template} from "./data.js"
+import {
+    asteroids,
+    bonuses,
+    bounds,
+    bullets,
+    explosions,
+    flameSprite,
+    gun,
+    hud,
+    invulnerabilityAction,
+    invulnerabilityTime,
+    level,
+    levelBonus,
+    lifeBonus,
+    lives,
+    messageLabel,
+    score,
+    shipAcceleration,
+    shipAccelerationLimit,
+    shipAngularSpeed,
+    shipDeceleration,
+    shipLayer,
+    shipSprite,
+    startingLives,
+    startingWeapon,
+    state,
+    template
+} from "./data.js"
 
 export function initUpdate() {
     let sound = project.sound

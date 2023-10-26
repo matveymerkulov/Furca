@@ -1,4 +1,4 @@
-import NumericVariable from "../../variable/number.js"
+import Num from "../../variable/number.js"
 import Shape from "../../shape.js"
 import {currentCanvas} from "../../canvas.js"
 import Label from "../../gui/label.js"
@@ -119,9 +119,9 @@ export const invulnerabilityTime = 2
 
 // variables
 
-export const score = new NumericVariable()
-export const lives = new NumericVariable(startingLives)
-export const level = new NumericVariable()
+export const score = new Num()
+export const lives = new Num(startingLives)
+export const level = new Num()
 
 // layers
 
@@ -273,7 +273,7 @@ project.init = (texture) => {
 
                 bonus: new Sprite(new Img(texture.turretBonus)),
                 probability: 0.1,
-                ammo: new NumericVariable(),
+                ammo: new Num(),
                 bonusAmmo: 50,
                 maxAmmo: 100,
                 gunfireTime: 0.05
@@ -297,7 +297,7 @@ project.init = (texture) => {
 
                 bonus: new Sprite(new Img(texture.missileBonus)),
                 probability: 0.1,
-                ammo: new NumericVariable(3),
+                ammo: new Num(3),
                 maxAmmo: 8,
 
                 controller: new Turbo(project.key.fireMissile, 0.5),

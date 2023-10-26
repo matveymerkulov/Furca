@@ -1,5 +1,5 @@
 import {num, rnd} from "../system.js"
-import {Function} from "../function.js"
+import {Function} from "./function.js"
 
 export default class Rnd extends Function {
     constructor(from, to) {

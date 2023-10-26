@@ -1,5 +1,5 @@
 import {num} from "../system.js"
-import {Function} from "../function.js"
+import {Function} from "./function.js"
 
 export default class Sum extends Function {
     constructor(value1, value2) {

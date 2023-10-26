@@ -1,4 +1,4 @@
-import {Function} from "../function.js"
+import {Function} from "./function.js"
 
 export default class Cos extends Function {
     constructor(length, amplitude = 1, xshift = 0, yshift = 0) {

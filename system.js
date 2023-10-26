@@ -1,6 +1,6 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
 import {project} from "./project.js"
-import {Function} from "./function.js"
+import {Function} from "./function/function.js"
 
 // global variables
 
