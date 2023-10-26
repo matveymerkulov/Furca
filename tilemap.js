@@ -16,9 +16,9 @@ export default class TileMap extends Area {
         let width = distToScreen(this.cellWidth)
         let height = distToScreen(this.cellHeight)
         for(let row = 0; row < this.rows; row++) {
-            let y = xToScreen(this.topY + this.cellHeight * row)
+            let y = xToScreen(this.topY + this.cellHeight * row) + this.topY
             for(let column = 0; column < this.columns; column++) {
-                let x = xToScreen(this.leftX + this.cellWidth * column)
+                let x = xToScreen(this.leftX + this.cellWidth * column) + this.leftX
                 this.tiles._images[this.map.getNum(column, row)].drawResized(x, y, width, height)
             }
         }

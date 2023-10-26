@@ -11,12 +11,12 @@ export default class ImageArray {
         this.heightMul = heightMul
         this.widthMul = widthMul
         let quantity = columns * rows
-        let width = texture.width / columns
-        let height = texture.height / rows
+        let width = Math.floor(texture.width / columns)
+        let height = Math.floor(texture.height / rows)
         let images = Array(quantity)
         for(let i = 0; i < quantity; i++) {
-            images[i] = new Img(texture, (i % columns) * width, Math.floor(i / columns) * height, width, height
-                , xMul, yMul, widthMul, heightMul)
+            images[i] = new Img(texture, (i % columns) * width + 0.5, Math.floor(i / columns) * height + 0.5
+                , width - 1, height - 1, xMul, yMul, widthMul, heightMul)
         }
         this._images = images
     }

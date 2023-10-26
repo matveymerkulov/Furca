@@ -29,6 +29,9 @@ project.init = (texture) => {
         tileMap.map.array[i] = rndi(tiles._images.length)
     }
 
+
+    project.background = "black"
+
     project.scene = [
         tileMap,
     ]
@@ -36,7 +39,10 @@ project.init = (texture) => {
     project.actions = [
     ]
 
+    let angle = 0
     project.update = () => {
-
+        tileMap.leftX = Math.cos(angle) - 5
+        tileMap.topY = Math.sin(angle) - 5
+        angle += 0.01
     }
 }
