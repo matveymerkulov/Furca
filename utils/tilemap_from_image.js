@@ -1,7 +1,8 @@
 import {currentCanvas} from "../canvas.js"
-import {ctx} from "../system.js"
+import ImageArray from "../image_array.js"
+import TileMap from "../tilemap.js"
 
-function getImageCanvas(image, x = 0, y = 0, width, height) {
+function getImageData(image, x = 0, y = 0, width, height) {
     if(width === undefined) width = image.width
     if(height === undefined) height = image.height
     const canvas = document.createElement('canvas')
@@ -26,54 +27,60 @@ function downloadCanvas(canvas) {
     downloadImage.remove();
 }
 
-export function tilemapFromImage(fileName, cellWidth, cellHeight, columns) {
-    let image = new Image()
-    image.onload = function() {
-        let width = image.width
-        let height = image.height
-        let tiles = []
+export function tilemapFromImage(image, cellWidth, cellHeight, columns, tx, ty, twidth, theight) {
+    let width = image.width
+    let height = image.height
+    let tiles = []
 
-        let imageData = getImageCanvas(image).data
+    let imageData = getImageData(image).data
+    let screenColumns = width / cellWidth
+    let screenRows = height / cellHeight
+    let tilesetArray = new Array(screenColumns * screenRows)
 
-        for(let y = 0; y < height; y += cellHeight) {
-            for(let x = 0; x < width; x += cellWidth) {
-                let found = false
-                main: for(let tileData of tiles) {
-                    for(let dy = 0; dy < cellHeight; dy++) {
-                        for(let dx = 0; dx < cellWidth; dx++) {
-                            if(getPixel(imageData, x + dx, y + dy, width) !== getPixel(tileData, dx, dy, cellWidth)) {
-                                continue main
-                            }
+    for(let y = 0; y < screenRows; y ++) {
+        let yy = y * cellWidth
+        for(let x = 0; x < screenColumns; x ++) {
+            let found = false
+            let xx = x * cellWidth
+            main: for(let i = 0; i < tiles.length; i++) {
+                let tileData = tiles[i]
+                for(let dy = 0; dy < cellHeight; dy++) {
+                    for(let dx = 0; dx < cellWidth; dx++) {
+                        if(getPixel(imageData, xx + dx, yy + dy, width) !== getPixel(tileData, dx, dy, cellWidth)) {
+                            continue main
                         }
                     }
-                    found = true
-                    break
                 }
-                if(!found) {
-                    tiles.push(getImageCanvas(image, x, y, cellWidth, cellHeight).data)
-                }
+                found = true
+                tilesetArray[x + y * screenColumns] = i
+                break
+            }
+            if(!found) {
+                tilesetArray[x + y * screenColumns] = tiles.length
+                tiles.push(getImageData(image, xx, yy, cellWidth, cellHeight).data)
+
             }
         }
-
-        let rows = Math.ceil(tiles.length / columns)
-        let tilesetWidth = cellWidth * columns
-        let tilesetHeight = cellHeight * rows
-        //let image = new Image(tilesetWidth, tilesetHeight)
-        let canvas = document.createElement("canvas")
-        canvas.width = tilesetWidth
-        canvas.height = tilesetHeight
-        //let ctx2 = canvas.getContext("2d")
-
-        //ctx.putImageData(new ImageData(imageData, width, height), 0, 0);
-        ctx.fillStyle = "rgba(255,255,255,255)"
-        ctx.fillRect(0, 0, 2000, 2000)
-        for(let i = 0; i < tiles.length; i++) {
-            ctx.putImageData(new ImageData(tiles[i], cellWidth, cellHeight)
-                , (i % columns) * cellWidth, Math.floor(i / columns) * cellHeight);
-        }
-        //if(tiles.length > 1) downloadCanvas(canvas)
-        //ctx.putImageData(new ImageData)
-        throw new Error("Done!");
     }
-    image.src = fileName
+
+    let rows = Math.floor((tiles.length + columns - 1) / columns)
+    let tilesetWidth = cellWidth * columns
+    let tilesetHeight = cellHeight * rows
+    let canvas = document.createElement("canvas")
+    canvas.width = tilesetWidth
+    canvas.height = tilesetHeight
+    let ctx = canvas.getContext("2d")
+
+    for(let i = 0; i < tiles.length; i++) {
+        ctx.putImageData(new ImageData(tiles[i], cellWidth, cellHeight)
+            , (i % columns) * cellWidth, Math.floor(i / columns) * cellHeight);
+    }
+
+    let tilesetImage = new Image()
+    tilesetImage.src = canvas.toDataURL()
+
+    let tilemap = new TileMap(new ImageArray(tilesetImage, columns, rows), screenColumns, screenRows
+        , tx, ty, twidth, theight)
+    tilemap.map.array = tilesetArray
+    return tilemap
 }

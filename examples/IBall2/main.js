@@ -16,7 +16,8 @@ project.key = {
 project.getAssets = () => {
     return {
         texture: {
-            tiles: "tiles.png"
+            tiles: "tiles.png",
+            level: "screens/01.png",
         },
         sound: {
         }
@@ -24,15 +25,9 @@ project.getAssets = () => {
 }
 
 project.init = (texture) => {
-    tilemapFromImage("screens/01.png", 16, 16, 16)
+    let tileMap = tilemapFromImage(texture.level, 16, 16, 16, 0, 0, 1, 1)
 
-    let tiles = new ImageArray(texture.tiles, 16, 25)
-    let tileMap = new TileMap(tiles, 10, 10, -5, -5, 1, 1)
-    for(let i = 0; i < tileMap.map.array.length; i++) {
-        tileMap.map.array[i] = rndi(tiles._images.length)
-    }
-
-    project.background = "black"
+    project.background = "blue"
 
     project.scene = [
         tileMap,
@@ -43,8 +38,8 @@ project.init = (texture) => {
 
     let angle = 0
     project.update = () => {
-        tileMap.leftX = Math.cos(angle) - 5
-        tileMap.topY = Math.sin(angle) - 5
+        tileMap.leftX = Math.cos(angle) - 6.5
+        tileMap.topY = Math.sin(angle) - 6
         angle += 0.01
     }
 }

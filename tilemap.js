@@ -1,5 +1,6 @@
 import Area from "./area.js"
 import {distToScreen, xToScreen} from "./canvas.js"
+import {ctx} from "./system.js"
 
 export default class TileMap extends Area {
     constructor(tiles, columns, rows, x, y, cellWidth, cellHeight) {
