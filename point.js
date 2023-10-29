@@ -28,7 +28,7 @@ export default class Point extends Renderable {
     moveToPerimeter(bounds) {
         let dx = bounds.rightX - bounds.leftX
         let dy = bounds.bottomY - bounds.topY
-        if (rnd(0, dx + dy) < dx) {
+        if (rnd(dx + dy) < dx) {
             this.centerX = rnd(bounds.leftX, bounds.rightX)
             this.centerY = rndi(2) ? bounds.topY : bounds.bottomY
         } else {

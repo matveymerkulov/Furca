@@ -8,12 +8,12 @@ export default class Img extends Renderable {
         this.texture = texture
         this.x = x
         this.y = y
-        this.height = height
         this.width = width
+        this.height = height
         this.xMul = xMul
         this.yMul = yMul
-        this.heightMul = heightMul
         this.widthMul = widthMul
+        this.heightMul = heightMul
         this.visible = true
     }
 

@@ -1,7 +1,7 @@
-import Area from "./area.js"
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
+import Shape from "./shape.js"
 
-export default class TileMap extends Area {
+export default class TileMap extends Shape {
     constructor(tiles, columns, rows, x, y, cellWidth, cellHeight) {
         super(x, y, cellWidth * columns, cellHeight * rows)
         this.columns = columns

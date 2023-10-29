@@ -35,7 +35,7 @@ export function tilemapFromImage(image, cellWidth, cellHeight, columns, tx, ty, 
     let imageData = getImageData(image).data
     let screenColumns = width / cellWidth
     let screenRows = height / cellHeight
-    let tilesetArray = new Array(screenColumns * screenRows)
+    let tilemapArray = new Array(screenColumns * screenRows)
 
     for(let y = 0; y < screenRows; y ++) {
         let yy = y * cellWidth
@@ -52,37 +52,37 @@ export function tilemapFromImage(image, cellWidth, cellHeight, columns, tx, ty, 
                     }
                 }
                 found = true
-                tilesetArray[x + y * screenColumns] = i
+                tilemapArray[x + y * screenColumns] = i
                 break
             }
             if(!found) {
-                tilesetArray[x + y * screenColumns] = tiles.length
+                tilemapArray[x + y * screenColumns] = tiles.length
                 tiles.push(getImageData(image, xx, yy, cellWidth, cellHeight).data)
 
             }
         }
     }
 
-    let border = 0
+    console.log(`[${tilemapArray.toString()}]`)
+
     let rows = Math.floor((tiles.length + columns - 1) / columns)
-    let tilesetWidth = (cellWidth + border) * columns
-    let tilesetHeight = (cellHeight + border) * rows
 
     let canvas = document.createElement("canvas")
-    canvas.width = cellWidth
-    canvas.height = cellHeight
+    canvas.width = columns * cellWidth
+    canvas.height = rows * cellHeight
     let ctx = canvas.getContext("2d")
 
     let imageArray = new ImageArray(image, columns, rows)
 
     for(let i = 0; i < tiles.length; i++) {
-        ctx.putImageData(new ImageData(tiles[i], cellWidth, cellHeight), 0, 0)
-        let tileImage = new Image()
-        tileImage.src = canvas.toDataURL()
-        imageArray._images[i] = new Img(tileImage)
+        ctx.putImageData(new ImageData(tiles[i], cellWidth, cellHeight), cellWidth * (i % columns), cellHeight
+            * Math.floor(i / columns))
+        //imageArray._images[i] = Img.fromCanvas(canvas)
     }
 
+    downloadCanvas(canvas)
+
     let tilemap = new TileMap(imageArray, screenColumns, screenRows, tx, ty, twidth, theight)
-    tilemap.map.array = tilesetArray
+    tilemap.map.array = tilemapArray
     return tilemap
 }

@@ -7,6 +7,10 @@ export default class Shape extends Point {
         this.halfHeight = 0.5 * height
     }
 
+    static fromArea(leftX, topY, width, height) {
+        return new Shape(leftX + 0.5 * width, topY + 0.5 * height, width, height)
+    }
+
     get size() {
         return this.halfWidth * 2.0
     }
