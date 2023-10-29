@@ -1,6 +1,6 @@
-import {currentCanvas} from "../canvas.js"
 import ImageArray from "../image_array.js"
 import TileMap from "../tilemap.js"
+import Img from "../image.js"
 
 function getImageData(image, x = 0, y = 0, width, height) {
     if(width === undefined) width = image.width
@@ -63,24 +63,26 @@ export function tilemapFromImage(image, cellWidth, cellHeight, columns, tx, ty, 
         }
     }
 
+    let border = 0
     let rows = Math.floor((tiles.length + columns - 1) / columns)
-    let tilesetWidth = cellWidth * columns
-    let tilesetHeight = cellHeight * rows
+    let tilesetWidth = (cellWidth + border) * columns
+    let tilesetHeight = (cellHeight + border) * rows
+
     let canvas = document.createElement("canvas")
-    canvas.width = tilesetWidth
-    canvas.height = tilesetHeight
+    canvas.width = cellWidth
+    canvas.height = cellHeight
     let ctx = canvas.getContext("2d")
 
+    let imageArray = new ImageArray(image, columns, rows)
+
     for(let i = 0; i < tiles.length; i++) {
-        ctx.putImageData(new ImageData(tiles[i], cellWidth, cellHeight)
-            , (i % columns) * cellWidth, Math.floor(i / columns) * cellHeight);
+        ctx.putImageData(new ImageData(tiles[i], cellWidth, cellHeight), 0, 0)
+        let tileImage = new Image()
+        tileImage.src = canvas.toDataURL()
+        imageArray._images[i] = new Img(tileImage)
     }
 
-    let tilesetImage = new Image()
-    tilesetImage.src = canvas.toDataURL()
-
-    let tilemap = new TileMap(new ImageArray(tilesetImage, columns, rows), screenColumns, screenRows
-        , tx, ty, twidth, theight)
+    let tilemap = new TileMap(imageArray, screenColumns, screenRows, tx, ty, twidth, theight)
     tilemap.map.array = tilesetArray
     return tilemap
 }

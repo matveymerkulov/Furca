@@ -1,6 +1,5 @@
 import Area from "./area.js"
-import {distToScreen, xToScreen} from "./canvas.js"
-import {ctx} from "./system.js"
+import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
 
 export default class TileMap extends Area {
     constructor(tiles, columns, rows, x, y, cellWidth, cellHeight) {
@@ -17,9 +16,9 @@ export default class TileMap extends Area {
         let width = distToScreen(this.cellWidth)
         let height = distToScreen(this.cellHeight)
         for(let row = 0; row < this.rows; row++) {
-            let y = xToScreen(this.topY + this.cellHeight * row) + this.topY
+            let y = Math.floor(yToScreen(this.topY)) + height * row
             for(let column = 0; column < this.columns; column++) {
-                let x = xToScreen(this.leftX + this.cellWidth * column) + this.leftX
+                let x = Math.floor(xToScreen(this.leftX)) + width * column
                 this.tiles._images[this.map.getNum(column, row)].drawResized(x, y, width, height)
             }
         }

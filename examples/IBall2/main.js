@@ -1,7 +1,4 @@
 import {project} from "../../project.js"
-import ImageArray from "../../image_array.js"
-import TileMap from "../../tilemap.js"
-import {rndi} from "../../system.js"
 import {tilemapFromImage} from "../../utils/tilemap_from_image.js"
 
 project.locales.en = {
