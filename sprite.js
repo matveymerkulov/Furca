@@ -4,6 +4,7 @@ import {apsk, ctx, num, rad} from "./system.js"
 import Animate from "./actions/sprite/animate.js"
 import {boxWithBoxCollision, circleWithBoxCollision, circleWithCircleCollision} from "./collisions.js"
 import {ShapeType} from "./shape_type.js"
+import {pushBoxFromBox, pushBoxFromCircle, pushCircleFromBox, pushCircleFromCircle} from "./physics.js"
 
 export default class Sprite extends Box {
     constructor(image, centerX = 0.0, centerY = 0.0, width = 1.0, height = 1.0
@@ -140,6 +141,7 @@ export default class Sprite extends Box {
                     case ShapeType.box:
                         return circleWithBoxCollision(this, sprite)
                 }
+                break
             case ShapeType.box:
                 switch(sprite.shapeType) {
                     case ShapeType.circle:
@@ -147,8 +149,34 @@ export default class Sprite extends Box {
                     case ShapeType.box:
                         return boxWithBoxCollision(this, sprite)
                 }
+                break
         }
         return false
+    }
+
+    pushFromSprite(sprite) {
+        switch(this.shapeType) {
+            case ShapeType.circle:
+                switch(sprite.shapeType) {
+                    case ShapeType.circle:
+                        pushCircleFromCircle(this, sprite)
+                        break
+                    case ShapeType.box:
+                        pushCircleFromBox(this, sprite)
+                        break
+                }
+                break
+            case ShapeType.box:
+                switch(sprite.shapeType) {
+                    case ShapeType.circle:
+                        pushBoxFromCircle(this, sprite)
+                        break
+                    case ShapeType.box:
+                        pushBoxFromBox(this, sprite)
+                        break
+                }
+                break
+        }
     }
 
     toSprite() {

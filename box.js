@@ -1,7 +1,7 @@
 import Point from "./point.js"
 
 export default class Box extends Point {
-    constructor(centerX = 0.0, centerY = 0.0,  width = 1.0, height = 1.0) {
+    constructor(centerX = 0.0, centerY = 0.0, width = 1.0, height = 1.0) {
         super(centerX, centerY)
         this.halfWidth = 0.5 * width
         this.halfHeight = 0.5 * height
