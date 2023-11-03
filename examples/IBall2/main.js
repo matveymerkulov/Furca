@@ -1,8 +1,6 @@
 import {project} from "../../project.js"
-import {tilemapFromImage} from "../../utils/tilemap_from_image.js"
 import TileMap from "../../tilemap.js"
 import ImageArray from "../../image_array.js"
-import {template} from "../asteroids/data.js"
 
 project.locales.en = {
 }

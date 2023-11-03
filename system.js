@@ -1,11 +1,12 @@
-import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
+import Point from "./point.js"
+import Canvas, {currentCanvas, setCanvas, xFromScreen, yFromScreen} from "./canvas.js"
 import {project} from "./project.js"
 import {Function} from "./function/function.js"
 
 // global variables
 
 export let zk = 1.2, fps = 60, aps = 150, showCollisionShapes = false, paused = false
-export let ctx, mousesx, mousesy, apsk = 1 / aps
+export let ctx, mouse = new Point(), apsk = 1 / aps
 
 // enums
 
@@ -156,8 +157,13 @@ function start() {
     project.init(project._assets.texture)
     delete project._assets
 
+    document.onmousemove = (event) => {
+        mouse.moveTo(xFromScreen(event.clientX), yFromScreen(event.clientY))
+    }
+
     let apsTime = 0, realAps = 0, apsCounter = 0
     setInterval(function () {
+
         if(paused) {
             project.update()
         } else {

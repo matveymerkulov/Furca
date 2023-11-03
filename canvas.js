@@ -1,5 +1,5 @@
 import Sprite from "./sprite.js"
-import {ctx, mousesx, mousesy} from "./system.js"
+import {ctx} from "./system.js"
 import {project} from "./project.js"
 import Box from "./box.js"
 

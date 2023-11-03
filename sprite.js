@@ -4,7 +4,6 @@ import {apsk, ctx, num, rad} from "./system.js"
 import Animate from "./actions/sprite/animate.js"
 import {boxWithBoxCollision, circleWithBoxCollision, circleWithCircleCollision} from "./collisions.js"
 import {ShapeType} from "./shape_type.js"
-import Shape from "./shape.js"
 
 export default class Sprite extends Box {
     constructor(image, centerX = 0.0, centerY = 0.0, width = 1.0, height = 1.0
@@ -133,7 +132,7 @@ export default class Sprite extends Box {
     }
 
     collidesWithSprite(sprite) {
-        switch(sprite.shapeType) {
+        switch(this.shapeType) {
             case ShapeType.circle:
                 switch(sprite.shapeType) {
                     case ShapeType.circle:

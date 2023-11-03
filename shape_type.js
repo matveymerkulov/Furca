@@ -1,4 +1,4 @@
 export let ShapeType = {
-    circle: {},
-    box: {},
+    circle: ["circle"],
+    box: ["box"],
 }
