@@ -7,7 +7,7 @@ function circleFromCircleVector(circle, fromCircle) {
     let k = (circle.halfWidth + fromCircle.halfWidth) / length
     return {
         x: fromCircle.centerX - circle.centerX + dx * k,
-        y: fromCircle.centerY - circle.centerY + dy * k
+        y: fromCircle.centerY - circle.centerY + dy * k,
     }
 
 }

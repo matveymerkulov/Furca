@@ -60,13 +60,13 @@ project.locales.ru = {
 }
 
 project.key = {
-    left: new Key("left", "ArrowLeft"),
-    right: new Key("right", "ArrowRight"),
-    forward: new Key("forward", "ArrowUp"),
-    fire: new Key("fire", "Space"),
-    fireMissile: new Key("fire missile", "KeyX"),
-    continue: new Key("continue", "Enter"),
-    pause: new Key("pause", "KeyP"),
+    left: new Key("ArrowLeft"),
+    right: new Key("ArrowRight"),
+    forward: new Key("ArrowUp"),
+    fire: new Key("Space"),
+    fireMissile: new Key("KeyX"),
+    continue: new Key("Enter"),
+    pause: new Key("KeyP"),
 }
 
 project.getAssets = () => {

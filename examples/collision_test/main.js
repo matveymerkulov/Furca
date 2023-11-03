@@ -5,23 +5,8 @@ import {ShapeType} from "../../shape_type.js"
 import Shape from "../../shape.js"
 import Key from "../../key.js"
 
-project.locales.en = {
-}
-
-project.locales.ru = {
-}
-
 project.key = {
     switchType: new Key("switchType", "Space")
-}
-
-project.getAssets = () => {
-    return {
-        texture: {
-        },
-        sound: {
-        }
-    }
 }
 
 project.init = (texture) => {
@@ -31,14 +16,15 @@ project.init = (texture) => {
     let pushedColor = "rgba(255, 255, 0, 128)"
 
     let circle = new Sprite(new Shape(defaultColor), 0, -2, 2, 2, ShapeType.circle)
-    let box = new Sprite(new Shape(defaultColor), 0, 2, 2, 2, ShapeType.box)
+    let box = new Sprite(new Shape(defaultColor), 0, 2, 3, 2, ShapeType.box)
 
     let mouseShape = new Sprite(new Shape(mouseColor), 0, 0, 1.5, 1.5, ShapeType.circle)
     let pushed = new Sprite(new Shape(pushedColor), 0, 0, 1.5, 1.5, ShapeType.circle)
     mouseShape.opacity = 0.5
 
     let shapeNumber = 0
-    let shapes = [ShapeType.circle, ShapeType.box]
+    let shapes = [circle, box]
+    let shapeTypes = [ShapeType.circle, ShapeType.box]
 
     project.scene = [
         circle,
@@ -54,22 +40,18 @@ project.init = (texture) => {
         mouseShape.setPositionAs(mouse)
         pushed.setPositionAs(mouse)
 
-        let cc = mouseShape.collidesWithSprite(circle)
-        circle.image.color = cc ? collisionColor : defaultColor
-        if(cc) {
-            pushed.pushFromSprite(circle)
-        }
-
-        let bc = mouseShape.collidesWithSprite(box)
-        box.image.color = bc ? collisionColor : defaultColor
-        if(bc) {
-            pushed.pushFromSprite(box)
+        for(let shape of shapes) {
+            let collision = mouseShape.collidesWithSprite(shape)
+            shape.image.color = collision ? collisionColor : defaultColor
+            if(collision) {
+                pushed.pushFromSprite(shape)
+            }
         }
 
         if(project.key.switchType.wasPressed) {
-            shapeNumber = (shapeNumber + 1) % shapes.length
-            mouseShape.shapeType = shapes[shapeNumber]
-            pushed.shapeType = shapes[shapeNumber]
+            shapeNumber = (shapeNumber + 1) % shapeTypes.length
+            mouseShape.shapeType = shapeTypes[shapeNumber]
+            pushed.shapeType = shapeTypes[shapeNumber]
         }
     }
 }

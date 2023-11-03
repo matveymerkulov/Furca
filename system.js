@@ -6,7 +6,7 @@ import {Function} from "./function/function.js"
 // global variables
 
 export let zk = 1.2, fps = 60, aps = 150, showCollisionShapes = false, paused = false
-export let ctx, mouse = new Point(), apsk = 1 / aps
+export let ctx, mouse, apsk = 1 / aps
 
 // enums
 
@@ -93,6 +93,8 @@ export function loc(stringName) {
 
 let square = true
 document.addEventListener("DOMContentLoaded", function() {
+    mouse = new Point()
+
     let canvas = document.getElementById("canvas")
     if(square) {
         canvas.width = canvas.height = 640
