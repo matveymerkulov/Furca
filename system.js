@@ -158,12 +158,11 @@ function start() {
     delete project._assets
 
     document.onmousemove = (event) => {
-        mouse.moveTo(xFromScreen(event.clientX), yFromScreen(event.clientY))
+        mouse.moveTo(xFromScreen(event.offsetX), yFromScreen(event.offsetY))
     }
 
     let apsTime = 0, realAps = 0, apsCounter = 0
     setInterval(function () {
-
         if(paused) {
             project.update()
         } else {
