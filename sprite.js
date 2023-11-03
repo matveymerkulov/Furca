@@ -1,13 +1,17 @@
-import Shape from "./shape.js"
+import Box from "./box.js"
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
 import {apsk, ctx, num, rad} from "./system.js"
 import Animate from "./actions/sprite/animate.js"
+import {boxWithBoxCollision, circleWithBoxCollision, circleWithCircleCollision} from "./collisions.js"
+import {ShapeType} from "./shape_type.js"
+import Shape from "./shape.js"
 
-export default class Sprite extends Shape {
+export default class Sprite extends Box {
     constructor(image, centerX = 0.0, centerY = 0.0, width = 1.0, height = 1.0
-                , angle = 0.0, speed = 0.0, imageAngle
+                , shapeType = ShapeType.circle, angle = 0.0, speed = 0.0, imageAngle
                 , active = true, visible = true) {
         super(centerX, centerY, width, height)
+        this.shapeType = shapeType
         this.image = image
         this.imageAngle = imageAngle
         this.angle = angle
@@ -18,13 +22,14 @@ export default class Sprite extends Shape {
         this.actions = []
     }
 
-    static create(layer, image, centerX, centerY, width, height, angle, speed, animationSpeed, imageAngle, active, visible) {
+    static create(layer, image, centerX, centerY, width, height, shapeType, angle, speed, animationSpeed, imageAngle
+                  , active, visible) {
         if(typeof centerX === "object") {
             let pos = centerX
             centerX = pos.centerX
             centerY = pos.centerY
         }
-        let sprite = new Sprite(image, centerX, centerY, width, height, angle, speed, imageAngle, active, visible)
+        let sprite = new Sprite(image, centerX, centerY, width, height, shapeType, angle, speed, imageAngle, active, visible)
         if(layer) layer.add(sprite)
         if(animationSpeed !== undefined) {
             sprite.actions = [new Animate(sprite, image, animationSpeed)]
@@ -50,6 +55,7 @@ export default class Sprite extends Shape {
     }
 
     setFromTemplate(template) {
+        if(template.shapeType !== undefined) this.shapeType = template.shapeType
         if(template.image !== undefined) this.image = template.image
         if(template.pos !== undefined) {
             let pos = template.pos.toSprite()
@@ -77,7 +83,7 @@ export default class Sprite extends Shape {
         ctx.globalAlpha = this.opacity
 
         this.image.drawRotated(xToScreen(this.centerX), yToScreen(this.centerY)
-            , distToScreen(this.width), distToScreen(this.height), this.imageAngle ?? this.angle, false)
+            , distToScreen(this.width), distToScreen(this.height), this.shapeType, this.imageAngle ?? this.angle)
 
         ctx.globalAlpha = 1.0
     }
@@ -123,11 +129,27 @@ export default class Sprite extends Shape {
         }
     }
 
+    collisionWithTilemap(tilemap, code) {
+    }
+
     collidesWithSprite(sprite) {
-        let dx = this.centerX - sprite.centerX
-        let dy = this.centerY - sprite.centerY
-        let radius = this.halfWidth + sprite.halfWidth
-        return dx * dx + dy * dy < radius * radius
+        switch(sprite.shapeType) {
+            case ShapeType.circle:
+                switch(sprite.shapeType) {
+                    case ShapeType.circle:
+                        return circleWithCircleCollision(this, sprite)
+                    case ShapeType.box:
+                        return circleWithBoxCollision(this, sprite)
+                }
+            case ShapeType.box:
+                switch(sprite.shapeType) {
+                    case ShapeType.circle:
+                        return circleWithBoxCollision(sprite, this)
+                    case ShapeType.box:
+                        return boxWithBoxCollision(this, sprite)
+                }
+        }
+        return false
     }
 
     toSprite() {

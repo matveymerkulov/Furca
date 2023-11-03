@@ -1,5 +1,5 @@
 import Num from "../../variable/number.js"
-import Shape from "../../shape.js"
+import Box from "../../box.js"
 import {currentCanvas} from "../../canvas.js"
 import Label from "../../gui/label.js"
 import {align, loc, rad} from "../../system.js"
@@ -12,7 +12,7 @@ import LoopArea from "../../actions/sprite/loop_area.js"
 import Move from "../../actions/sprite/move.js"
 import Animate from "../../actions/sprite/animate.js"
 import Constraint from "../../constraint.js"
-import SetBounds from "../../actions/sprite/set_bounds.js"
+import RemoveIfOutside from "../../actions/sprite/remove_if_outside.js"
 import ExecuteActions from "../../actions/sprite/execute_actions.js"
 import {project} from "../../project.js"
 import {initUpdate} from "./code.js"
@@ -341,7 +341,7 @@ project.init = (texture) => {
 
     let flameImages = new ImageArray(texture.flame, 3, 3, 0.5, 1)
     flameSprite = Sprite.create(shipLayer, flameImages._images[0], -0.6, 0
-        , 1, 1, rad(-90))
+        , 1, 1, undefined, rad(-90))
 
     // weapon
 
@@ -353,9 +353,9 @@ project.init = (texture) => {
 
     // gui
 
-    bounds = new Shape(0, 0, currentCanvas.width + 3, currentCanvas.height + 3)
+    bounds = new Box(0, 0, currentCanvas.width + 3, currentCanvas.height + 3)
 
-    let hudArea = new Shape(0, 0, currentCanvas.width - 1, currentCanvas.height - 1)
+    let hudArea = new Box(0, 0, currentCanvas.width - 1, currentCanvas.height - 1)
 
     let scoreLabel = new Label(hudArea, [score], align.left, align.top, "Z8")
     let levelLabel = new Label(hudArea, [loc("level"), level], align.center, align.top)
@@ -387,7 +387,7 @@ project.init = (texture) => {
         new Constraint(flameSprite, shipSprite),
         new ExecuteActions(shipLayer),
 
-        new SetBounds(bullets, bounds),
+        new RemoveIfOutside(bullets, bounds),
         new Move(bullets),
         new ExecuteActions(bullets),
 

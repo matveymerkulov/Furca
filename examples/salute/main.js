@@ -3,7 +3,7 @@ import Img from "../../image.js"
 import Sprite from "../../sprite.js"
 import {apsk, ctx, rad, removeFromArray, rnd} from "../../system.js"
 import Layer from "../../layer.js"
-import SetBounds from "../../actions/sprite/set_bounds.js"
+import RemoveIfOutside from "../../actions/sprite/remove_if_outside.js"
 import {currentCanvas, distToScreen, xToScreen, yToScreen} from "../../canvas.js"
 import Rnd from "../../function/rnd.js"
 
@@ -65,7 +65,7 @@ project.init = (texture) => {
     ]
 
     project.actions = [
-        new SetBounds(particles, currentCanvas)
+        new RemoveIfOutside(particles, currentCanvas)
     ]
 
     project.update = () => {

@@ -1,6 +1,6 @@
 import {Action} from "../action.js"
 
-export default class SetBounds extends Action {
+export default class RemoveIfOutside extends Action {
     constructor(layer, bounds) {
         super()
         this.layer = layer
@@ -14,7 +14,7 @@ export default class SetBounds extends Action {
         while(i < items.length) {
             let sprite = items[i]
             if (sprite.rightX < bounds.leftX || sprite.leftX > bounds.rightX
-                || sprite.bottomY < bounds.topY || sprite.topY > bounds.bottomY) {
+                    || sprite.bottomY < bounds.topY || sprite.topY > bounds.bottomY) {
                 items.splice(i, 1)
             } else {
                 i++

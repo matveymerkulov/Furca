@@ -1,8 +1,7 @@
 import {Action} from "./action.js"
 import Sprite from "../sprite.js"
 import {rnd} from "../system.js"
-
-export const ShapeType = {point: 0, circle: 1, box: 2}
+import {ShapeType} from "../shape_type.js"
 
 export default class Generator extends Action {
     constructor(image, shape, type) {

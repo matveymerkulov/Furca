@@ -88,6 +88,29 @@ export function loc(stringName) {
     return new Loc(stringName)
 }
 
+// listeners
+
+let square = true
+document.addEventListener("DOMContentLoaded", function() {
+    let canvas = document.getElementById("canvas")
+    if(square) {
+        canvas.width = canvas.height = 640
+    } else {
+        canvas.width = 360
+    }
+    canvas.style.display = "flex"
+    canvas.focus()
+
+    ctx = canvas.getContext("2d")
+    ctx.fillStyle = "white"
+    ctx.font = canvas.width / 24 + "px monospace"
+    ctx.textBaseline = "top"
+    project.canvas = Canvas.create(square ? 16 : 9, 16, canvas.width, canvas.height)
+    setCanvas(project.canvas)
+
+    loadAssets("", project.getAssets())
+})
+
 // assets loader
 
 let assetsToLoad = 0
@@ -123,32 +146,11 @@ export function loadAssets(path, asset) {
         assetsToLoad++
     }
 
-    return {texture: textures, sound: sounds}
-}
-
-// listeners
-
-let square = true
-document.addEventListener("DOMContentLoaded", function() {
-    let canvas = document.getElementById("canvas")
-    if(square) {
-        canvas.width = canvas.height = 640
-    } else {
-        canvas.width = 360
-    }
-    canvas.style.display = "flex"
-    canvas.focus()
-
-    ctx = canvas.getContext("2d")
-    ctx.fillStyle = "white"
-    ctx.font = canvas.width / 24 + "px monospace"
-    ctx.textBaseline = "top"
-    project.canvas = Canvas.create(square ? 16 : 9, 16, canvas.width, canvas.height)
-    setCanvas(project.canvas)
-
-    project._assets = loadAssets("", project.getAssets())
+    project._assets = {texture: textures, sound: sounds}
     project.sound = project._assets.sound
-})
+
+    if(assetsToLoad <= 0) start()
+}
 
 function start() {
     project.init(project._assets.texture)

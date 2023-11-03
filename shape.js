@@ -1,77 +1,37 @@
-import Point from "./point.js"
+import {Renderable} from "./renderable.js"
+import {ctx, showCollisionShapes} from "./system.js"
+import {ShapeType} from "./shape_type.js"
 
-export default class Shape extends Point {
-    constructor(centerX = 0.0, centerY = 0.0,  width = 1.0, height = 1.0) {
-        super(centerX, centerY)
-        this.halfWidth = 0.5 * width
-        this.halfHeight = 0.5 * height
-    }
-
-    static fromArea(leftX, topY, width, height) {
-        return new Shape(leftX + 0.5 * width, topY + 0.5 * height, width, height)
+export default class Shape extends Renderable {
+    constructor(color) {
+        super()
+        this.color = color
     }
 
-    get size() {
-        return this.halfWidth * 2.0
+    drawResized(sx, sy, swidth, sheight, shapeType) {
+        let newWidth = swidth * this.widthMul
+        let newHeight = sheight * this.heightMul
+        let newX = -newWidth * this.xMul
+        let newY = -newHeight * this.yMul
+
+        let oldStyle = ctx.fillStyle
+        ctx.fillStyle = this.color
+        ctx.save()
+        ctx.translate(sx, sy)
+        switch(shapeType) {
+            case ShapeType.circle:
+                ctx.beginPath()
+                ctx.arc(0.0, 0.0, 0.5 * swidth, 0, 2.0 * Math.PI, false)
+                ctx.fill()
+                break
+            case ShapeType.box:
+                ctx.fillRect(-0.5 * swidth, -0.5 * sheight, swidth, sheight)
+                break
+        }
+        ctx.fillStyle = oldStyle
+        ctx.restore()
     }
 
-    set size(value) {
-        this.halfWidth = this.halfHeight = value * 0.5
-    }
-
-    get width() {
-        return this.halfWidth * 2.0
-    }
-    set width(value) {
-        this.halfWidth = value * 0.5
-    }
-
-    get height() {
-        return this.halfHeight * 2.0
-    }
-    set height(value) {
-        this.halfHeight = value * 0.5
-    }
-
-    get leftX() {
-        return this.centerX - this.halfWidth
-    }
-    set leftX(value) {
-        this.centerX = value + this.halfWidth
-    }
-
-    get topY() {
-        return this.centerY - this.halfHeight
-    }
-    set topY(value) {
-        this.centerY = value + this.halfHeight
-    }
-
-    get rightX() {
-        return this.centerX + this.halfWidth
-    }
-    set rightX(value) {
-        this.centerX = value - this.halfWidth
-    }
-
-    get bottomY() {
-        return this.centerY + this.halfHeight
-    }
-    set bottomY(value) {
-        this.centerY = value - this.halfHeight
-    }
-
-    setSizeAs(shape) {
-        this.width = shape.width
-        this.height = shape.height
-    }
-
-    collidesWithPoint(x, y) {
-        return x >= this.leftX && x < this.rightX && y >= this.topY && y < this.bottomY
-    }
-
-    overlaps(shape) {
-        return shape.leftX >= this.leftX && shape.topY >= this.topY && shape.rightX < this.rightX
-            && shape.bottomY < this.bottomY
-    }
-}
+    drawRotated(sx, sy, swidth, sheight, shapeType, angle) {
+        this.drawResized(sx, sy, swidth, sheight, shapeType)
+    }}

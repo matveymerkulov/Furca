@@ -1,8 +1,8 @@
-import Shape from "../shape.js"
+import Box from "../box.js"
 import {align, ctx} from "../system.js"
 import {xToScreen, yToScreen} from "../canvas.js"
 
-export default class Label extends Shape {
+export default class Label extends Box {
     constructor(sprite, items, horizontalAlign, verticalAlign, format, image) {
         super(sprite.centerX, sprite.centerY, sprite.width, sprite.height)
         this.items = items

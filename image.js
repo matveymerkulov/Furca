@@ -1,5 +1,8 @@
 import {ctx, showCollisionShapes} from "./system.js"
 import {Renderable} from "./renderable.js"
+import Shape from "./shape.js"
+
+let collisionShape = new Shape("rgba(255, 0, 255, 128)")
 
 export default class Img extends Renderable {
     constructor(texture, x = 0, y = 0, width = texture.width, height = texture.height
@@ -17,12 +20,11 @@ export default class Img extends Renderable {
         this.visible = true
     }
 
-    drawResized(sx, sy, swidth, sheight) {
+    drawResized(sx, sy, swidth, sheight, shapeType) {
         ctx.drawImage(this.texture, this.x, this.y, this.width, this.height, sx, sy, swidth, sheight)
     }
 
-    drawRotated(sx, sy, swidth, sheight, angle) {
-        if(!this.visible) return
+    drawRotated(sx, sy, swidth, sheight, shapeType, angle) {
         let newWidth = swidth * this.widthMul
         let newHeight = sheight * this.heightMul
         let newX = -newWidth * this.xMul
@@ -32,15 +34,11 @@ export default class Img extends Renderable {
         ctx.translate(sx, sy)
         ctx.rotate(angle)
         ctx.drawImage(this.texture, this.x, this.y, this.width, this.height, newX, newY, newWidth, newHeight)
-        if(showCollisionShapes) {
-            let oldStyle = ctx.fillStyle
-            ctx.beginPath()
-            ctx.arc(0.0, 0.0, 0.5 * swidth, 0, 2.0 * Math.PI, false)
-            ctx.fillStyle = "rgba(255, 0, 255, 0.5)"
-            ctx.fill()
-            ctx.fillStyle = oldStyle
-        }
         ctx.restore()
+
+        if(showCollisionShapes) {
+            collisionShape.drawResized(sx, sy, swidth, sheight, shapeType)
+        }
     }
 }
 

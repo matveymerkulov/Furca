@@ -1,7 +1,7 @@
 import Sprite from "./sprite.js"
 import {ctx, mousesx, mousesy} from "./system.js"
 import {project} from "./project.js"
-import Shape from "./shape.js"
+import Box from "./box.js"
 
 export let currentCanvas, zk = 1.2
 
@@ -22,7 +22,7 @@ export default class Canvas extends Sprite {
     }
 
     static create(fwidth, fheight, swidth, sheight, active = true) {
-        return new Canvas(0.0, 0.0, fwidth, fheight, active, Shape.fromArea(0, 0
+        return new Canvas(0.0, 0.0, fwidth, fheight, active, Box.fromArea(0, 0
             , swidth, sheight))
     }
 

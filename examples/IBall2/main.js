@@ -2,6 +2,7 @@ import {project} from "../../project.js"
 import {tilemapFromImage} from "../../utils/tilemap_from_image.js"
 import TileMap from "../../tilemap.js"
 import ImageArray from "../../image_array.js"
+import {template} from "../asteroids/data.js"
 
 project.locales.en = {
 }
@@ -16,7 +17,7 @@ project.getAssets = () => {
     return {
         texture: {
             tiles: "tiles.png",
-            level: "screens/01.png",
+            levels: "screens/all.png",
         },
         sound: {
         }
@@ -25,7 +26,7 @@ project.getAssets = () => {
 
 project.init = (texture) => {
 
-    //let tileMap = tilemapFromImage(texture.level, 16, 16, 16, 0, 0, 1, 1)
+    //let tileMap = tilemapFromImage(texture.levels, 16, 16, 16, 0, 0, 1, 1)
     let tileMap = new TileMap(new ImageArray(texture.tiles, 16, 1), 13, 12, 0, 0, 1, 1)
     tileMap.map.array = [0,0,0,1,0,0,0,0,0,2,3,4,0,0,0,0,0,0,0,0,0,0,5,6,0,0,0,0,0,0,0,0,0,0,0,2,6,0,0,0,0,0,0,0,0,0,0
         ,0,5,3,0,0,7,0,0,0,0,8,0,9,0,0,0,0,0,0,0,0,0,0,2,3,0,0,0,0,0,0,0,0,0,0,0,5,3,0,0,0,0,0,10,0,0,0,5,3,2,6,0,0,0

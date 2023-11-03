@@ -37,6 +37,7 @@ import {
     state,
     template
 } from "./data.js"
+import {ShapeType} from "../../shape_type.js"
 
 export function initUpdate() {
     let sound = project.sound
@@ -147,7 +148,7 @@ export function initUpdate() {
 
             let explosion = Sprite.create(explosions, template.explosion.images
                 , sprite.centerX + length * Math.cos(angle), sprite.centerY + length * Math.sin(angle)
-                , particleSize, particleSize, rad(rnd(360)), 0, 16)
+                , particleSize, particleSize, ShapeType.circle, rad(rnd(360)), 0, 16)
             explosion.add(new DelayedRemove(explosion, explosions, 1))
             times--
             if(times > 0) setTimeout(createParticle, 100)

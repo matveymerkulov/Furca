@@ -6,6 +6,7 @@ export let project = {
     actions: [],
     registry: {},
     sound: {},
+    background: "rgb(0, 0, 0)",
 
     getAssets() {
         return {texture: {}, sound: {}}

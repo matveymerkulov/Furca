@@ -1,7 +1,7 @@
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
-import Shape from "./shape.js"
+import Box from "./box.js"
 
-export default class TileMap extends Shape {
+export default class TileMap extends Box {
     constructor(tiles, columns, rows, x, y, cellWidth, cellHeight) {
         super(x, y, cellWidth * columns, cellHeight * rows)
         this.columns = columns
