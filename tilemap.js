@@ -2,6 +2,8 @@ import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
 import Box from "./box.js"
 import Sprite from "./sprite.js"
 
+export let tileShape
+
 export default class TileMap extends Box {
     constructor(tiles, columns, rows, x, y, cellWidth, cellHeight) {
         super(x, y, cellWidth * columns, cellHeight * rows)
@@ -11,6 +13,7 @@ export default class TileMap extends Box {
         this.cellHeight = cellHeight
         this.tiles = tiles
         this.array = new Array(columns * rows)
+        this.collision = new Array(tiles._images.length)
     }
 
     getTile(column, row) {
@@ -19,6 +22,23 @@ export default class TileMap extends Box {
 
     setTile(column, row, number) {
         this.array[column + row * this.columns] = number
+    }
+
+    setCollision(sprite, from, to) {
+        if(from instanceof Array) {
+            for(let tileNum of from) {
+                this.collision[tileNum] = sprite
+            }
+            return
+        }
+
+        if(to === undefined) {
+            to = this.collision.length
+        }
+        for(let tileNum = from; tileNum <= to; tileNum++) {
+            this.collision[tileNum] = sprite
+        }
+
     }
 
     draw() {
@@ -44,6 +64,22 @@ export default class TileMap extends Box {
                 }
             }
         }
+    }
 
+    collisionWithSprite(sprite, code) {
+        let x0 = Math.floor((sprite.leftX - this.leftX) / this.cellWidth)
+        let x1 = Math.ceil((sprite.rightX - this.leftX) / this.cellWidth)
+        let y0 = Math.floor((sprite.topY - this.topY) / this.cellHeight)
+        let y1 = Math.ceil((sprite.bottomY - this.topY) / this.cellHeight)
+        for(let y = y0; y <= y1; y++) {
+            for(let x = x0; x <= x1; x++) {
+                let shape = this.collision[this.getTile(x, y)]
+                if(shape === undefined) continue
+                shape.moveTo(this.leftX + (0.5 + x) * this.cellWidth, this.topY + (0.5 + y) * this.cellHeight)
+                shape.setSize(this.cellWidth, this.cellHeight)
+                tileShape = shape
+                sprite.collisionWithSprite(shape, code)
+            }
+        }
     }
 }

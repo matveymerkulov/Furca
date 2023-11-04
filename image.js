@@ -2,7 +2,7 @@ import {ctx, showCollisionShapes} from "./system.js"
 import {Renderable} from "./renderable.js"
 import Shape from "./shape.js"
 
-let collisionShape = new Shape("rgba(255, 0, 255, 128)")
+let collisionShape = new Shape("rgb(255, 0, 255)", 0.5)
 
 export default class Img extends Renderable {
     constructor(texture, x = 0, y = 0, width = texture.width, height = texture.height

@@ -3,9 +3,10 @@ import {ctx} from "./system.js"
 import {ShapeType} from "./shape_type.js"
 
 export default class Shape extends Renderable {
-    constructor(color, xMul = 0.5, yMul = 0.5, widthMul = 1.0, heightMul = 1.0) {
+    constructor(color, opacity = 1.0, xMul = 0.5, yMul = 0.5, widthMul = 1.0, heightMul = 1.0) {
         super()
         this.color = color
+        this.opacity = opacity
         this.xMul = xMul
         this.yMul = yMul
         this.widthMul = widthMul
@@ -22,6 +23,7 @@ export default class Shape extends Renderable {
         ctx.fillStyle = this.color
         ctx.save()
         ctx.translate(sx, sy)
+        ctx.globalAlpha = this.opacity
         switch(shapeType) {
             case ShapeType.circle:
                 ctx.beginPath()
@@ -33,6 +35,7 @@ export default class Shape extends Renderable {
                 break
         }
         ctx.fillStyle = oldStyle
+        ctx.globalAlpha = 1.0
         ctx.restore()
     }
 

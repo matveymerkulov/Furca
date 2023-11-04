@@ -62,6 +62,11 @@ export default class Box extends Point {
         this.centerY = value - this.halfHeight
     }
 
+    setSize(width, height) {
+        this.width = width
+        this.height = height
+    }
+
     setSizeAs(shape) {
         this.width = shape.width
         this.height = shape.height

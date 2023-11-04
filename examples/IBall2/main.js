@@ -1,8 +1,10 @@
 import {project} from "../../project.js"
-import TileMap from "../../tilemap.js"
+import TileMap, {tileShape} from "../../tilemap.js"
 import ImageArray from "../../image_array.js"
 import {apsk} from "../../system.js"
 import Key, {key} from "../../key.js"
+import Sprite from "../../sprite.js"
+import {ShapeType} from "../../shape_type.js"
 
 project.getAssets = () => {
     return {
@@ -22,8 +24,8 @@ project.key = {
 }
 
 let gravity = 10
-let jumpdy = -10
-let horizontalAcceleration = 10
+let jumpdy = -11
+let horizontalAcceleration = 20
 let maxHorizontalAcceleration = 5
 
 project.init = (texture) => {
@@ -33,10 +35,13 @@ project.init = (texture) => {
         ,0,5,3,0,0,7,0,0,0,0,8,0,9,0,0,0,0,0,0,0,0,0,0,2,3,0,0,0,0,0,0,0,0,0,0,0,5,3,0,0,0,0,0,10,0,0,0,5,3,2,6,0,0,0
         ,0,0,11,0,0,0,2,6,5,3,0,0,0,0,0,0,0,0,0,2,3,5,6,12,0,0,0,0,13,0,10,14,5,3,2,6,10,14,0,0,0,10,0,11,15,2,6,5,3
         ,11,15,0,0,0,11]
+    tileMap.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.box), 2)
+    tileMap.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.box), [1, 8, 12, 13])
 
     let player = tileMap.extract(7)
     player.dx = 0
     player.dy = 0
+    player.size = 0.99
 
     project.background = "blue"
 
@@ -48,16 +53,23 @@ project.init = (texture) => {
     project.actions = [
     ]
 
+    function onGround() {
+        player.dy = 0
+        if(project.key.jump.isDown) {
+            player.dy = jumpdy
+        }
+    }
+
     project.update = () => {
         player.dy += gravity * apsk
         player.centerY += player.dy * apsk
-        if(!tileMap.overlaps(player)) {
-            player.dy = 0
-            if(project.key.jump.isDown) {
-                player.dy = jumpdy
-            }
-        }
+        if(!tileMap.overlaps(player)) onGround()
         player.limit(tileMap)
+
+        tileMap.collisionWithSprite(player, () => {
+            player.pushFromSprite(tileShape)
+            onGround()
+        })
 
         if(project.key.left.isDown) {
             player.dx = Math.max(-maxHorizontalAcceleration, player.dx - horizontalAcceleration * apsk)
@@ -72,5 +84,10 @@ project.init = (texture) => {
             player.dx = 0
             player.limit(tileMap)
         }
+
+        tileMap.collisionWithSprite(player, () => {
+            player.pushFromSprite(tileShape)
+            player.dx = 0
+        })
     }
 }
