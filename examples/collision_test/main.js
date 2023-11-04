@@ -20,7 +20,7 @@ project.init = (texture) => {
 
     let mouseShape = new Sprite(new Shape(mouseColor), 0, 0, 1.5, 1.5, ShapeType.circle)
     let pushed = new Sprite(new Shape(pushedColor), 0, 0, 1.5, 1.5, ShapeType.circle)
-    mouseShape.opacity = 0.5
+    mouseShape.image.opacity = 0.5
 
     let shapeNumber = 0
     let shapes = [circle, box]

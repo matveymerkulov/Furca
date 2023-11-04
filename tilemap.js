@@ -68,12 +68,25 @@ export default class TileMap extends Box {
     extract(tileNumber) {
         for(let row = 0; row < this.rows; row++) {
             for(let column = 0; column < this.columns; column++) {
-                if(this.getTile(column, row) === tileNumber) {
-                    let x = this.leftX + this.cellWidth * (0.5 + column)
-                    let y = this.topY + this.cellHeight * (0.5 + row)
-                    this.setTile(column, row, 0)
-                    return new Sprite(this.tiles._images[tileNumber], x, y, this.cellWidth, this.cellHeight)
+                if(tileNumber === this.getTile(column, row)) {
+                    return this.extractTile(column, row)
                 }
+            }
+        }
+    }
+
+    extractTile(column, row) {
+        let x = this.leftX + this.cellWidth * (0.5 + column)
+        let y = this.topY + this.cellHeight * (0.5 + row)
+        let tileNum = this.getTile(column, row)
+        this.setTile(column, row, 0)
+        return new Sprite(this.tiles._images[tileNum], x, y, this.cellWidth, this.cellHeight)
+    }
+
+    processTiles(code) {
+        for(let row = 0; row < this.rows; row++) {
+            for(let column = 0; column < this.columns; column++) {
+                code.call(null, column, row, this.getTile(column, row))
             }
         }
     }

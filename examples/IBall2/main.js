@@ -5,6 +5,7 @@ import {apsk} from "../../system.js"
 import Key, {key} from "../../key.js"
 import Sprite from "../../sprite.js"
 import {ShapeType} from "../../shape_type.js"
+import Layer from "../../layer.js"
 
 project.getAssets = () => {
     return {
@@ -27,11 +28,13 @@ let gravity = 10
 let jumpdy = -11
 let horizontalAcceleration = 20
 let maxHorizontalAcceleration = 5
+let panelSpeed = 3
 
 let emptyTile = 0
-let playerTile = 7
 let keyTile = 1
+let playerTile = 7
 let diamondTile = 8
+let panelTile = 9
 let bombTile = 12
 let figureTile = 13
 
@@ -52,11 +55,6 @@ project.init = (texture) => {
     player.size = 0.99
 
     project.background = "blue"
-
-    project.scene = [
-        tileMap,
-        player,
-    ]
 
     project.actions = [
     ]
@@ -86,11 +84,30 @@ project.init = (texture) => {
         }
     }
 
+    let panels = new Layer()
+
+    tileMap.processTiles((column, row, tileNum) => {
+        if(tileNum === panelTile) {
+            let panel = tileMap.extractTile(column, row)
+            panel.dy = -panelSpeed
+            panels.add(panel)
+        }
+    })
+
+    project.scene = [
+        tileMap,
+        player,
+        panels,
+    ]
+
     project.update = () => {
         player.dy += gravity * apsk
         player.centerY += player.dy * apsk
 
-        if(!tileMap.overlaps(player)) onGround()
+        if(!tileMap.overlaps(player)) {
+            onGround()
+            player.limit(tileMap)
+        }
 
         tileMap.collisionWithSprite(player, (shape, tileNum, x, y) => {
             tileCollision(shape, tileNum, x, y)
@@ -117,6 +134,15 @@ project.init = (texture) => {
             player.dx = 0
         })
 
-        player.limit(tileMap)
+        for(let panel of panels.items) {
+            panel.centerY += panel.dy * apsk
+            if(!tileMap.overlaps(panel)) {
+                panel.dy = -panel.dy
+            }
+
+            tileMap.collisionWithSprite(panel, (shape, tileNum, x, y) => {
+                panel.dy = -panel.dy
+            })
+        }
     }
 }
