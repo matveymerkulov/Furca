@@ -1,4 +1,5 @@
 import Point from "./point.js"
+import {unc} from "./system.js"
 
 export default class Box extends Point {
     constructor(centerX = 0.0, centerY = 0.0, width = 1.0, height = 1.0) {
@@ -64,6 +65,13 @@ export default class Box extends Point {
     setSizeAs(shape) {
         this.width = shape.width
         this.height = shape.height
+    }
+
+    limit(box) {
+        if(this.leftX < box.leftX) this.leftX = box.leftX + unc
+        if(this.rightX > box.rightX) this.rightX = box.rightX - unc
+        if(this.topY < box.topY) this.topY = box.topY + unc
+        if(this.bottomY > box.bottomY) this.bottomY = box.bottomY - unc
     }
 
     collidesWithPoint(x, y) {

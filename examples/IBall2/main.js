@@ -1,7 +1,8 @@
 import {project} from "../../project.js"
 import TileMap from "../../tilemap.js"
 import ImageArray from "../../image_array.js"
-import {aps, apsk} from "../../system.js"
+import {apsk} from "../../system.js"
+import Key, {key} from "../../key.js"
 
 project.getAssets = () => {
     return {
@@ -14,6 +15,17 @@ project.getAssets = () => {
     }
 }
 
+project.key = {
+    left: new Key("KeyA"),
+    right: new Key("KeyD"),
+    jump: new Key("KeyW"),
+}
+
+let gravity = 10
+let jumpdy = -10
+let horizontalAcceleration = 10
+let maxHorizontalAcceleration = 5
+
 project.init = (texture) => {
     //let tileMap = tilemapFromImage(texture.levels, 16, 16, 16, 0, 0, 1, 1)
     let tileMap = new TileMap(new ImageArray(texture.tiles, 16, 1), 13, 12, 0, 0, 1, 1)
@@ -23,9 +35,10 @@ project.init = (texture) => {
         ,11,15,0,0,0,11]
 
     let player = tileMap.extract(7)
-    player.imageAngle = 0
+    player.dx = 0
+    player.dy = 0
 
-        project.background = "blue"
+    project.background = "blue"
 
     project.scene = [
         tileMap,
@@ -36,6 +49,28 @@ project.init = (texture) => {
     ]
 
     project.update = () => {
-        player.imageAngle += apsk
+        player.dy += gravity * apsk
+        player.centerY += player.dy * apsk
+        if(!tileMap.overlaps(player)) {
+            player.dy = 0
+            if(project.key.jump.isDown) {
+                player.dy = jumpdy
+            }
+        }
+        player.limit(tileMap)
+
+        if(project.key.left.isDown) {
+            player.dx = Math.max(-maxHorizontalAcceleration, player.dx - horizontalAcceleration * apsk)
+        }
+
+        if(project.key.right.isDown) {
+            player.dx = Math.min(maxHorizontalAcceleration, player.dx + horizontalAcceleration * apsk)
+        }
+        player.centerX += player.dx * apsk
+
+        if(!tileMap.overlaps(player)) {
+            player.dx = 0
+            player.limit(tileMap)
+        }
     }
 }

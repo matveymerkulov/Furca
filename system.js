@@ -6,7 +6,7 @@ import {Function} from "./function/function.js"
 // global variables
 
 export let zk = 1.2, fps = 60, aps = 150, showCollisionShapes = false, paused = false
-export let ctx, mouse, apsk = 1 / aps
+export let ctx, mouse, apsk = 1 / aps, unc = 0.0000001
 
 // enums
 

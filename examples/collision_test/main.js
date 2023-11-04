@@ -6,7 +6,7 @@ import Shape from "../../shape.js"
 import Key from "../../key.js"
 
 project.key = {
-    switchType: new Key("switchType", "Space")
+    switchType: new Key("Space")
 }
 
 project.init = (texture) => {
