@@ -5,6 +5,7 @@ import {showCollisionShapes} from "./system.js"
 import Shape from "./shape.js"
 
 let collisionShape = new Shape("rgb(255, 0, 255)", 0.5)
+let collisionSprite = new Sprite()
 
 export default class TileMap extends Box {
     constructor(tiles, columns, rows, x, y, cellWidth, cellHeight) {
@@ -55,7 +56,9 @@ export default class TileMap extends Box {
                 if(showCollisionShapes) {
                     let shape = this.collision[tileNum]
                     if(shape !== undefined) {
-                        collisionShape.drawResized(x, y, width, height, shape.shapeType)
+                        collisionShape.drawResized(x + distToScreen(shape.centerX- shape.halfWidth)
+                            , y + distToScreen(shape.centerY - shape.halfHeight)
+                            , width * shape.width, height * shape.height, shape.shapeType)
                     }
                 }
             }
@@ -82,12 +85,15 @@ export default class TileMap extends Box {
         let y1 = Math.ceil((sprite.bottomY - this.topY) / this.cellHeight)
         for(let y = y0; y <= y1; y++) {
             for(let x = x0; x <= x1; x++) {
-                let shape = this.collision[this.getTile(x, y)]
+                let tileNum = this.getTile(x, y)
+                let shape = this.collision[tileNum]
                 if(shape === undefined) continue
-                shape.moveTo(this.leftX + (0.5 + x) * this.cellWidth, this.topY + (0.5 + y) * this.cellHeight)
-                shape.setSize(this.cellWidth, this.cellHeight)
-                if(sprite.collidesWithSprite(shape)) {
-                    code.call(null, shape)
+                collisionSprite.shapeType = shape.shapeType
+                collisionSprite.moveTo(this.leftX + (shape.centerX + x) * this.cellWidth
+                    , this.topY + (shape.centerY + y) * this.cellHeight)
+                collisionSprite.setSize(this.cellWidth * shape.width, this.cellHeight * shape.height)
+                if(sprite.collidesWithSprite(collisionSprite)) {
+                    code.call(null, collisionSprite, tileNum, x, y)
                 }
             }
         }

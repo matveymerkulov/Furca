@@ -28,6 +28,13 @@ let jumpdy = -11
 let horizontalAcceleration = 20
 let maxHorizontalAcceleration = 5
 
+let emptyTile = 0
+let playerTile = 7
+let keyTile = 1
+let diamondTile = 8
+let bombTile = 12
+let figureTile = 13
+
 project.init = (texture) => {
     //let tileMap = tilemapFromImage(texture.levels, 16, 16, 16, 0, 0, 1, 1)
     let tileMap = new TileMap(new ImageArray(texture.tiles, 16, 1), 13, 12, 0, 0, 1, 1)
@@ -36,9 +43,10 @@ project.init = (texture) => {
         ,0,0,11,0,0,0,2,6,5,3,0,0,0,0,0,0,0,0,0,2,3,5,6,12,0,0,0,0,13,0,10,14,5,3,2,6,10,14,0,0,0,10,0,11,15,2,6,5,3
         ,11,15,0,0,0,11]
     tileMap.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.box), 2)
-    tileMap.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.circle), [1, 8, 12, 13])
+    tileMap.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.circle)
+        , [keyTile, diamondTile, bombTile, figureTile])
 
-    let player = tileMap.extract(7)
+    let player = tileMap.extract(playerTile)
     player.dx = 0
     player.dy = 0
     player.size = 0.99
@@ -64,14 +72,28 @@ project.init = (texture) => {
         }
     }
 
+    function tileCollision(shape, tileNum, x, y) {
+        switch(tileNum) {
+            case keyTile:
+            case bombTile:
+            case figureTile:
+            case diamondTile:
+                tileMap.setTile(x, y, emptyTile)
+                break
+            default:
+                player.pushFromSprite(shape)
+                break
+        }
+    }
+
     project.update = () => {
         player.dy += gravity * apsk
         player.centerY += player.dy * apsk
 
         if(!tileMap.overlaps(player)) onGround()
 
-        tileMap.collisionWithSprite(player, (shape) => {
-            player.pushFromSprite(shape)
+        tileMap.collisionWithSprite(player, (shape, tileNum, x, y) => {
+            tileCollision(shape, tileNum, x, y)
             onGround()
         })
 
@@ -90,8 +112,8 @@ project.init = (texture) => {
             player.limit(tileMap)
         }
 
-        tileMap.collisionWithSprite(player, (shape) => {
-            player.pushFromSprite(shape)
+        tileMap.collisionWithSprite(player, (shape, tileNum, x, y) => {
+            tileCollision(shape, tileNum, x, y)
             player.dx = 0
         })
 
