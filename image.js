@@ -37,7 +37,7 @@ export default class Img extends Renderable {
         ctx.restore()
 
         if(showCollisionShapes) {
-            collisionShape.drawResized(sx, sy, swidth, sheight, shapeType)
+            collisionShape.drawResized(sx - swidth * 0.5, sy - sheight * 0.5, swidth, sheight, shapeType)
         }
     }
 }

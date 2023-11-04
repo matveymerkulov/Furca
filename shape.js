@@ -27,11 +27,11 @@ export default class Shape extends Renderable {
         switch(shapeType) {
             case ShapeType.circle:
                 ctx.beginPath()
-                ctx.arc(0.0, 0.0, 0.5 * swidth, 0, 2.0 * Math.PI, false)
+                ctx.arc(0.5 * swidth, 0.5 * sheight, 0.5 * swidth, 0, 2.0 * Math.PI)
                 ctx.fill()
                 break
             case ShapeType.box:
-                ctx.fillRect(-0.5 * swidth, -0.5 * sheight, swidth, sheight)
+                ctx.fillRect(0, 0, swidth, sheight)
                 break
         }
         ctx.fillStyle = oldStyle

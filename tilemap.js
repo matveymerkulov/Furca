@@ -1,8 +1,10 @@
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
 import Box from "./box.js"
 import Sprite from "./sprite.js"
+import {showCollisionShapes} from "./system.js"
+import Shape from "./shape.js"
 
-export let tileShape
+let collisionShape = new Shape("rgb(255, 0, 255)", 0.5)
 
 export default class TileMap extends Box {
     constructor(tiles, columns, rows, x, y, cellWidth, cellHeight) {
@@ -35,10 +37,10 @@ export default class TileMap extends Box {
         if(to === undefined) {
             to = this.collision.length
         }
+
         for(let tileNum = from; tileNum <= to; tileNum++) {
             this.collision[tileNum] = sprite
         }
-
     }
 
     draw() {
@@ -48,7 +50,14 @@ export default class TileMap extends Box {
             let y = Math.floor(yToScreen(this.topY)) + height * row
             for(let column = 0; column < this.columns; column++) {
                 let x = Math.floor(xToScreen(this.leftX)) + width * column
-                this.tiles._images[this.getTile(column, row)].drawResized(x, y, width, height)
+                let tileNum = this.getTile(column, row)
+                this.tiles._images[tileNum].drawResized(x, y, width, height)
+                if(showCollisionShapes) {
+                    let shape = this.collision[tileNum]
+                    if(shape !== undefined) {
+                        collisionShape.drawResized(x, y, width, height, shape.shapeType)
+                    }
+                }
             }
         }
     }
@@ -77,8 +86,9 @@ export default class TileMap extends Box {
                 if(shape === undefined) continue
                 shape.moveTo(this.leftX + (0.5 + x) * this.cellWidth, this.topY + (0.5 + y) * this.cellHeight)
                 shape.setSize(this.cellWidth, this.cellHeight)
-                tileShape = shape
-                sprite.collisionWithSprite(shape, code)
+                if(sprite.collidesWithSprite(shape)) {
+                    code.call(null, shape)
+                }
             }
         }
     }
