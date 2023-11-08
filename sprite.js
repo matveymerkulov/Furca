@@ -20,6 +20,7 @@ export default class Sprite extends Box {
         this.active = active
         this.opacity = 1.0
         this.actions = []
+        this.flipped = false
     }
 
     static create(layer, image, centerX, centerY, width, height, shapeType, angle, speed, animationSpeed, imageAngle
@@ -83,7 +84,8 @@ export default class Sprite extends Box {
         ctx.globalAlpha = this.opacity
 
         this.image.drawRotated(xToScreen(this.centerX), yToScreen(this.centerY)
-            , distToScreen(this.width), distToScreen(this.height), this.shapeType, this.imageAngle ?? this.angle)
+            , distToScreen(this.width), distToScreen(this.height), this.shapeType, this.imageAngle ?? this.angle
+            , this.flipped)
 
         ctx.globalAlpha = 1.0
     }

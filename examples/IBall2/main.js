@@ -25,7 +25,7 @@ project.key = {
 }
 
 let gravity = 10
-let jumpdy = -11
+let jumpdy = -9.1
 let horizontalAcceleration = 20
 let maxHorizontalAcceleration = 5
 let panelSpeed = 3
@@ -49,7 +49,7 @@ project.init = (texture) => {
     tileMap.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.circle)
         , [keyTile, diamondTile, bombTile, figureTile])
 
-    let player = tileMap.extract(playerTile)
+    let player = tileMap.extract(playerTile, ShapeType.circle)
     player.dx = 0
     player.dy = 0
     player.size = 0.99
@@ -88,7 +88,7 @@ project.init = (texture) => {
 
     tileMap.processTiles((column, row, tileNum) => {
         if(tileNum === panelTile) {
-            let panel = tileMap.extractTile(column, row)
+            let panel = tileMap.extractTile(column, row, ShapeType.box)
             panel.dy = -panelSpeed
             panels.add(panel)
         }
@@ -99,6 +99,18 @@ project.init = (texture) => {
         player,
         panels,
     ]
+
+    function horizontalMovement(object, leftKey, rightKey, acceleration, maxAcceleration) {
+        if(leftKey.isDown) {
+            object.dx = Math.max(-maxAcceleration, player.dx - acceleration * apsk)
+            object.flipped = true
+        }
+
+        if(rightKey.isDown) {
+            object.dx = Math.min(maxAcceleration, player.dx + acceleration * apsk)
+            object.flipped = false
+        }
+    }
 
     project.update = () => {
         player.dy += gravity * apsk
@@ -114,13 +126,24 @@ project.init = (texture) => {
             onGround()
         })
 
-        if(project.key.left.isDown) {
-            player.dx = Math.max(-maxHorizontalAcceleration, player.dx - horizontalAcceleration * apsk)
+        for(let panel of panels.items) {
+            panel.centerY += panel.dy * apsk
+            if(!tileMap.overlaps(panel)) {
+                panel.dy = -panel.dy
+                panel.limit(tileMap)
+            }
+
+            if(panel.collidesWithSprite(player)) {
+                player.pushFromSprite(panel)
+            }
+
+            tileMap.collisionWithSprite(panel, (shape, tileNum, x, y) => {
+                panel.pushFromSprite(shape)
+                panel.dy = -panel.dy
+            })
         }
 
-        if(project.key.right.isDown) {
-            player.dx = Math.min(maxHorizontalAcceleration, player.dx + horizontalAcceleration * apsk)
-        }
+        horizontalMovement(player, project.key.left, project.key.right, horizontalAcceleration, maxHorizontalAcceleration)
 
         player.centerX += player.dx * apsk
 
@@ -135,14 +158,10 @@ project.init = (texture) => {
         })
 
         for(let panel of panels.items) {
-            panel.centerY += panel.dy * apsk
-            if(!tileMap.overlaps(panel)) {
-                panel.dy = -panel.dy
+            if(panel.collidesWithSprite(player)) {
+                player.pushFromSprite(panel)
+                player.dx = 0
             }
-
-            tileMap.collisionWithSprite(panel, (shape, tileNum, x, y) => {
-                panel.dy = -panel.dy
-            })
         }
     }
 }

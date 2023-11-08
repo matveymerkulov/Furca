@@ -24,7 +24,7 @@ export default class Img extends Renderable {
         ctx.drawImage(this.texture, this.x, this.y, this.width, this.height, sx, sy, swidth, sheight)
     }
 
-    drawRotated(sx, sy, swidth, sheight, shapeType, angle) {
+    drawRotated(sx, sy, swidth, sheight, shapeType, angle, flipped) {
         let newWidth = swidth * this.widthMul
         let newHeight = sheight * this.heightMul
         let newX = -newWidth * this.xMul
@@ -32,6 +32,7 @@ export default class Img extends Renderable {
 
         ctx.save()
         ctx.translate(sx, sy)
+        if(flipped) ctx.scale(-1,1)
         ctx.rotate(angle)
         ctx.drawImage(this.texture, this.x, this.y, this.width, this.height, newX, newY, newWidth, newHeight)
         ctx.restore()

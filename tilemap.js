@@ -65,22 +65,22 @@ export default class TileMap extends Box {
         }
     }
 
-    extract(tileNumber) {
+    extract(tileNumber, shapeType) {
         for(let row = 0; row < this.rows; row++) {
             for(let column = 0; column < this.columns; column++) {
                 if(tileNumber === this.getTile(column, row)) {
-                    return this.extractTile(column, row)
+                    return this.extractTile(column, row, shapeType)
                 }
             }
         }
     }
 
-    extractTile(column, row) {
+    extractTile(column, row, shapeType) {
         let x = this.leftX + this.cellWidth * (0.5 + column)
         let y = this.topY + this.cellHeight * (0.5 + row)
         let tileNum = this.getTile(column, row)
         this.setTile(column, row, 0)
-        return new Sprite(this.tiles._images[tileNum], x, y, this.cellWidth, this.cellHeight)
+        return new Sprite(this.tiles._images[tileNum], x, y, this.cellWidth, this.cellHeight, shapeType)
     }
 
     processTiles(code) {
