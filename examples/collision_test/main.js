@@ -26,12 +26,7 @@ project.init = (texture) => {
     let shapes = [circle, box]
     let shapeTypes = [ShapeType.circle, ShapeType.box]
 
-    project.scene = [
-        circle,
-        box,
-        pushed,
-        mouseShape,
-    ]
+    project.scene.add(circle, box, pushed, mouseShape)
 
     project.actions = [
     ]

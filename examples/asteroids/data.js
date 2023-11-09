@@ -369,15 +369,7 @@ project.init = (texture) => {
     // other
 
     project.background = "rgb(9, 44, 84)"
-    project.scene = [
-        bullets,
-        asteroids,
-        bonuses,
-        particles,
-        shipLayer,
-        explosions,
-        hud
-    ]
+    project.scene.add(bullets, asteroids, bonuses, particles, shipLayer, explosions, hud)
 
     project.actions = [
         new LoopArea(shipSprite, bounds),
@@ -385,25 +377,18 @@ project.init = (texture) => {
         new Animate(flameSprite, flameImages, 16),
         new AnimateSize(flameSprite, new Cos(0.1, 0.1, 0, 0.95)),
         new Constraint(flameSprite, shipSprite),
-        new ExecuteActions(shipLayer),
 
         new RemoveIfOutside(bullets, bounds),
         new Move(bullets),
-        new ExecuteActions(bullets),
 
         new LoopArea(asteroids, bounds),
         new Move(asteroids),
-        new ExecuteActions(asteroids),
 
         new Constraint(gun, shipSprite),
         new Constraint(turret.barrelEnd[0], turret.sprite),
         new Constraint(turret.barrelEnd[1], turret.sprite),
 
-        new ExecuteActions(explosions),
-        new ExecuteActions(bonuses),
-
         new Move(particles),
-        new ExecuteActions(particles),
     ]
 
     initUpdate()

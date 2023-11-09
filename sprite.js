@@ -90,6 +90,12 @@ export default class Sprite extends Box {
         ctx.globalAlpha = 1.0
     }
 
+    update() {
+        if(this.active) {
+            this.actions.forEach(action => action.execute())
+        }
+    }
+
     move() {
         this.centerX += Math.cos(this.angle) * this.speed * apsk
         this.centerY += Math.sin(this.angle) * this.speed * apsk

@@ -27,9 +27,7 @@ project.init = (texture) => {
 
     project.background = "rgb(9, 44, 84)"
 
-    project.scene = [
-        flakes
-    ]
+    project.scene.add(flakes)
 
     project.actions = [
         new Move(flakes),

@@ -37,9 +37,7 @@ export default class Canvas extends Sprite {
         //g.setClip(viewport.leftX, viewport.topY, viewport.width, viewport.height)
         ctx.fillRect(viewport.leftX, viewport.topY, viewport.width, viewport.height)
         
-        for(let i = 0; i < project.scene.length; i++) {
-            project.scene[i].draw()
-        }
+        project.scene.draw()
 
         currentCanvas = oldCanvas
 

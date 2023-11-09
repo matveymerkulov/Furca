@@ -6,10 +6,19 @@ export default class Layer extends Renderable {
         super()
         this.items = items
         this.visible = true
+        this.active = true
     }
 
     draw() {
-        if(this.visible) this.items.forEach(item => item.draw())
+        if(this.visible) {
+            this.items.forEach(item => item.draw())
+        }
+    }
+
+    update() {
+        if(this.active) {
+            this.items.forEach(item => item.update())
+        }
     }
 
     // items management
@@ -22,12 +31,12 @@ export default class Layer extends Renderable {
         this.items = []
     }
 
-    add(sprite) {
-        this.items.push(sprite)
+    add(...objects) {
+        Array.prototype.push.apply(this.items, objects)
     }
 
-    remove(sprite) {
-        removeFromArray(sprite.toSprite(), this.items)
+    remove(object) {
+        removeFromArray(object, this.items)
     }
 
     // sprite manipulations

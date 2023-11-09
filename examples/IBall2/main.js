@@ -94,11 +94,7 @@ project.init = (texture) => {
         }
     })
 
-    project.scene = [
-        tileMap,
-        player,
-        panels,
-    ]
+    project.scene.add(tileMap, player, panels)
 
     function horizontalMovement(object, leftKey, rightKey, acceleration, maxAcceleration) {
         if(leftKey.isDown) {

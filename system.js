@@ -58,7 +58,11 @@ export let masterVolume = 0.25
 export function play(sound) {
     let newSound = new Audio(sound.src)
     newSound.volume = masterVolume
-    newSound.play()
+    try {
+        newSound.play()
+    } catch(e) {
+
+    }
 }
 
 export function loopedSound(sound, loopStart, loopEnd, play) {
@@ -67,7 +71,11 @@ export function loopedSound(sound, loopStart, loopEnd, play) {
     setInterval(function() {
         if(newSound.currentTime > loopEnd) newSound.currentTime -= loopLength
     }, 5)
-    if(play) newSound.play()
+    if(play) try {
+       newSound.play()
+    } catch(e) {
+
+    }
     newSound.volume = masterVolume
     return newSound
 }
@@ -169,6 +177,7 @@ function start() {
             project.update()
         } else {
             project.actions.forEach(action => action.execute())
+            project.scene.update()
             project.update()
         }
 

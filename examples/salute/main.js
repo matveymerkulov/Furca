@@ -60,9 +60,7 @@ project.init = (texture) => {
 
     project.background = "rgb(9, 44, 84)"
 
-    project.scene = [
-        particles,
-    ]
+    project.scene.add(particles)
 
     project.actions = [
         new RemoveIfOutside(particles, currentCanvas)
@@ -74,7 +72,7 @@ project.init = (texture) => {
             let shots = new Layer()
             shots.isShot = true
             shots.color = color
-            project.scene.push(shots)
+            project.scene.add(shots)
 
             let dx = shotdx.toNumber()
             let dy = shotdy.toNumber()
@@ -94,7 +92,7 @@ project.init = (texture) => {
             }
         }
 
-        for(let layer of project.scene) {
+        for(let layer of project.scene.items) {
             for (let shot of layer.items) {
                 shot.moveTo(shot.centerX + shot.dx * apsk, shot.centerY + shot.dy * apsk)
                 shot.dy = shot.dy + apsk * gravity
@@ -103,7 +101,7 @@ project.init = (texture) => {
                     if(shot.opacity < 0) shot.opacity = 0
                 }
                 if (shot.dy > dyThreshold && layer.isShot) {
-                    removeFromArray(layer, project.scene)
+                    project.scene.remove(layer)
                     let quantity = particlesQuantity.toNumber()
                     for (let i = 0; i < quantity; i++) {
                         let size = particleSize.toNumber()
