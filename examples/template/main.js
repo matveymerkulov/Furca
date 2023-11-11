@@ -1,4 +1,4 @@
-import {project} from "../../project.js"
+import {project} from "../../src/project.js"
 
 project.locales.en = {
 }

@@ -1,14 +1,14 @@
-import Sprite from "../../sprite.js"
-import {apsk, loc, loopedSound, num, paused, play, rad, rnd, rndi, togglePause} from "../../system.js"
-import LinearChange from "../../actions/linear_change.js"
-import {project} from "../../project.js"
-import RotateImage from "../../actions/sprite/rotate_image.js"
-import DelayedRemove from "../../actions/sprite/delayed_remove.js"
-import AnimateSize from "../../actions/sprite/animate_size.js"
-import Cos from "../../function/cos.js"
-import AnimateAngle from "../../actions/sprite/animate_angle.js"
-import {currentCanvas} from "../../canvas.js"
-import DelayedHide from "../../actions/sprite/delayed_hide.js"
+import Sprite from "../../src/sprite.js"
+import {apsk, loc, loopedSound, num, paused, play, rad, rnd, rndi, togglePause} from "../../src/system.js"
+import LinearChange from "../../src/actions/linear_change.js"
+import {project} from "../../src/project.js"
+import RotateImage from "../../src/actions/sprite/rotate_image.js"
+import DelayedRemove from "../../src/actions/sprite/delayed_remove.js"
+import AnimateSize from "../../src/actions/sprite/animate_size.js"
+import Cos from "../../src/function/cos.js"
+import AnimateAngle from "../../src/actions/sprite/animate_angle.js"
+import {currentCanvas} from "../../src/canvas.js"
+import DelayedHide from "../../src/actions/sprite/delayed_hide.js"
 import {
     asteroids,
     bonuses,
@@ -37,7 +37,7 @@ import {
     state,
     template
 } from "./data.js"
-import {ShapeType} from "../../shape_type.js"
+import {ShapeType} from "../../src/shape_type.js"
 
 export function initUpdate() {
     let sound = project.sound

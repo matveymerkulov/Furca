@@ -1,20 +1,11 @@
-import {project} from "../../project.js"
-import Img from "../../image.js"
-import Sprite from "../../sprite.js"
-import {apsk, ctx, rad, removeFromArray, rnd} from "../../system.js"
-import Layer from "../../layer.js"
-import RemoveIfOutside from "../../actions/sprite/remove_if_outside.js"
-import {currentCanvas, distToScreen, xToScreen, yToScreen} from "../../canvas.js"
-import Rnd from "../../function/rnd.js"
-
-project.locales.en = {
-}
-
-project.locales.ru = {
-}
-
-project.key = {
-}
+import {project} from "../../src/project.js"
+import Img from "../../src/image.js"
+import Sprite from "../../src/sprite.js"
+import {apsk, ctx, rad, removeFromArray, rnd} from "../../src/system.js"
+import Layer from "../../src/layer.js"
+import RemoveIfOutside from "../../src/actions/sprite/remove_if_outside.js"
+import {currentCanvas, distToScreen, xToScreen, yToScreen} from "../../src/canvas.js"
+import Rnd from "../../src/function/rnd.js"
 
 project.getAssets = () => {
     return {

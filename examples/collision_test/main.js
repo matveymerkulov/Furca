@@ -1,9 +1,9 @@
-import {mouse} from "../../system.js"
-import Sprite from "../../sprite.js"
-import {project} from "../../project.js"
-import {ShapeType} from "../../shape_type.js"
-import Shape from "../../shape.js"
-import Key from "../../key.js"
+import {mouse} from "../../src/system.js"
+import Sprite from "../../src/sprite.js"
+import {project} from "../../src/project.js"
+import {ShapeType} from "../../src/shape_type.js"
+import Shape from "../../src/shape.js"
+import Key from "../../src/key.js"
 
 project.key = {
     switchType: new Key("Space")
@@ -27,9 +27,6 @@ project.init = (texture) => {
     let shapeTypes = [ShapeType.circle, ShapeType.box]
 
     project.scene.add(circle, box, pushed, mouseShape)
-
-    project.actions = [
-    ]
 
     project.update = () => {
         mouseShape.setPositionAs(mouse)

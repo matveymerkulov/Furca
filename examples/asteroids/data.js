@@ -1,29 +1,29 @@
-import Num from "../../variable/number.js"
-import Box from "../../box.js"
-import {currentCanvas} from "../../canvas.js"
-import Label from "../../gui/label.js"
-import {align, loc, rad} from "../../system.js"
-import Sprite from "../../sprite.js"
-import Img from "../../image.js"
-import ImageArray from "../../image_array.js"
-import Layer from "../../layer.js"
-import Key from "../../key.js"
-import LoopArea from "../../actions/sprite/loop_area.js"
-import Move from "../../actions/sprite/move.js"
-import Animate from "../../actions/sprite/animate.js"
-import Constraint from "../../constraint.js"
-import RemoveIfOutside from "../../actions/sprite/remove_if_outside.js"
-import ExecuteActions from "../../actions/sprite/execute_actions.js"
-import {project} from "../../project.js"
+import Num from "../../src/variable/number.js"
+import Box from "../../src/box.js"
+import {currentCanvas} from "../../src/canvas.js"
+import Label from "../../src/gui/label.js"
+import {align, loc, rad} from "../../src/system.js"
+import Sprite from "../../src/sprite.js"
+import Img from "../../src/image.js"
+import ImageArray from "../../src/image_array.js"
+import Layer from "../../src/layer.js"
+import Key from "../../src/key.js"
+import LoopArea from "../../src/actions/sprite/loop_area.js"
+import Move from "../../src/actions/sprite/move.js"
+import Animate from "../../src/actions/sprite/animate.js"
+import Constraint from "../../src/constraint.js"
+import RemoveIfOutside from "../../src/actions/sprite/remove_if_outside.js"
+import ExecuteActions from "../../src/actions/sprite/execute_actions.js"
+import {project} from "../../src/project.js"
 import {initUpdate} from "./code.js"
-import Rnd from "../../function/rnd.js"
-import {rnds} from "../../function/random_sign.js"
-import Mul from "../../function/mul.js"
-import Turbo from "../../actions/turbo.js"
-import Point from "../../point.js"
-import AnimateOpacity from "../../actions/sprite/blink.js"
-import Cos from "../../function/cos.js"
-import AnimateSize from "../../actions/sprite/animate_size.js"
+import Rnd from "../../src/function/rnd.js"
+import {rnds} from "../../src/function/random_sign.js"
+import Mul from "../../src/function/mul.js"
+import Turbo from "../../src/actions/turbo.js"
+import Point from "../../src/point.js"
+import AnimateOpacity from "../../src/actions/sprite/blink.js"
+import Cos from "../../src/function/cos.js"
+import AnimateSize from "../../src/actions/sprite/animate_size.js"
 
 project.locales.en = {
     // hud
@@ -373,22 +373,19 @@ project.init = (texture) => {
 
     project.actions = [
         new LoopArea(shipSprite, bounds),
-        new Move(shipSprite),
         new Animate(flameSprite, flameImages, 16),
         new AnimateSize(flameSprite, new Cos(0.1, 0.1, 0, 0.95)),
         new Constraint(flameSprite, shipSprite),
 
         new RemoveIfOutside(bullets, bounds),
-        new Move(bullets),
 
         new LoopArea(asteroids, bounds),
-        new Move(asteroids),
 
         new Constraint(gun, shipSprite),
         new Constraint(turret.barrelEnd[0], turret.sprite),
         new Constraint(turret.barrelEnd[1], turret.sprite),
 
-        new Move(particles),
+        new Move(project.scene),
     ]
 
     initUpdate()

@@ -12,6 +12,8 @@ export default class Point extends Renderable {
 
     update() {}
 
+    move() {}
+
     moveTo(x, y) {
         this.centerX = x
         this.centerY = y
