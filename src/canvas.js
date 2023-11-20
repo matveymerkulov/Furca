@@ -1,17 +1,21 @@
 import Sprite from "./sprite.js"
-import {ctx} from "./system.js"
+import {mouse} from "./system.js"
 import {project} from "./project.js"
 import Box from "./box.js"
+import {drawRect} from "./draw_rect.js"
 
-export let currentCanvas, zk = 1.2
+export let currentCanvas, ctx, zk = 1.2
 
-export function setCurrentCanvas(canvas) {
+export function setCanvas(canvas) {
     currentCanvas = canvas
+    ctx = currentCanvas.node.getContext("2d")
 }
 
 export default class Canvas extends Sprite {
-    constructor(centerX, centerY, width, height, active, viewport) {
+    constructor(node, scene, centerX, centerY, width, height, active, viewport) {
         super(undefined, centerX, centerY, width, height, 0.0, 0.0, 0, active)
+        this.node = node
+        this.scene = scene
         this.viewport = viewport
         this._vdx = 1.0
         this._vdy = 1.0
@@ -21,25 +25,22 @@ export default class Canvas extends Sprite {
         this.update()
     }
 
-    static create(fwidth, fheight, swidth, sheight, active = true) {
-        return new Canvas(0.0, 0.0, fwidth, fheight, active, Box.fromArea(0, 0
-            , swidth, sheight))
+    static create(node, scene, fwidth, fheight, active = true) {
+        return new Canvas(node, scene,0.0, 0.0, fwidth, fheight, active, Box.fromArea(0, 0
+            , node.width, node.height))
     }
 
     draw() {
         if(!this.active) return
         let viewport = this.viewport
-        let oldCanvas = currentCanvas
-        currentCanvas = this
+        setCanvas(this)
         this.update()
 
         ctx.fillStyle = project.background
         //g.setClip(viewport.leftX, viewport.topY, viewport.width, viewport.height)
         ctx.fillRect(viewport.leftX, viewport.topY, viewport.width, viewport.height)
         
-        project.scene.draw()
-
-        currentCanvas = oldCanvas
+        this.scene.draw()
 
         ctx.fillStyle = "white"
     }
@@ -70,7 +71,7 @@ export default class Canvas extends Sprite {
     }
 
     hasMouse() {
-        return this.viewport.hasPoint(mousesx, mousesy)
+        return this.viewport.collidesWithPoint(mouse.centerX, mouse.centerY)
     }
 
     setDefaultPosition() {
@@ -100,18 +101,6 @@ export default class Canvas extends Sprite {
     }
 }
 
-export function drawRect(x, y, width, height) {
-    let x2 = x + width
-    let y2 = y + height
-    ctx.beginPath()
-    ctx.moveTo(x, y)
-    ctx.lineTo(x2, y)
-    ctx.lineTo(x2, y2)
-    ctx.lineTo(x, y2)
-    ctx.lineTo(x, y)
-    ctx.stroke()
-}
-
 export function xToScreen(fieldX) {
     return fieldX * currentCanvas._k + currentCanvas._vdx
 }
@@ -131,8 +120,4 @@ export function yFromScreen(screenY) {
 
 export function distFromScreen(screenDist) {
     return screenDist / currentCanvas._k
-}
-
-export function setCanvas(canvas) {
-    currentCanvas = canvas
 }

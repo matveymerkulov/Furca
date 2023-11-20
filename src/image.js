@@ -1,6 +1,7 @@
-import {ctx, showCollisionShapes} from "./system.js"
+import {showCollisionShapes} from "./system.js"
 import {Renderable} from "./renderable.js"
 import Shape from "./shape.js"
+import {ctx} from "./canvas.js"
 
 let collisionShape = new Shape("rgb(255, 0, 255)", 0.5)
 

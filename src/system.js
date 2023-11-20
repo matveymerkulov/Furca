@@ -1,12 +1,12 @@
 import Point from "./point.js"
-import Canvas, {currentCanvas, setCanvas, xFromScreen, yFromScreen} from "./canvas.js"
+import Canvas, {ctx, currentCanvas, setCanvas, xFromScreen, yFromScreen} from "./canvas.js"
 import {project} from "./project.js"
 import {Function} from "./function/function.js"
 
 // global variables
 
 export let zk = 1.2, fps = 60, aps = 150, showCollisionShapes = false, paused = false
-export let ctx, mouse, apsk = 1 / aps, unc = 0.0000001
+export let mouse, apsk = 1 / aps, unc = 0.0000001
 
 // enums
 
@@ -100,9 +100,8 @@ export function loc(stringName) {
 // listeners
 
 let square = true
-document.addEventListener("DOMContentLoaded", function() {
-    mouse = new Point()
 
+export function defaultCanvas() {
     let canvas = document.getElementById("canvas")
     if(square) {
         canvas.width = canvas.height = 640
@@ -112,13 +111,15 @@ document.addEventListener("DOMContentLoaded", function() {
     canvas.style.display = "flex"
     canvas.focus()
 
-    ctx = canvas.getContext("2d")
+    project.canvas = Canvas.create(canvas, project.scene, square ? 16 : 9, 16)
+    setCanvas(project.canvas)
     ctx.fillStyle = "white"
     ctx.font = canvas.width / 24 + "px monospace"
     ctx.textBaseline = "top"
-    project.canvas = Canvas.create(square ? 16 : 9, 16, canvas.width, canvas.height)
-    setCanvas(project.canvas)
+}
 
+document.addEventListener("DOMContentLoaded", function() {
+    mouse = new Point()
     loadAssets("", project.getAssets())
 })
 
@@ -166,6 +167,7 @@ export function loadAssets(path, asset) {
 function start() {
     project.init(project._assets.texture)
     delete project._assets
+    if(currentCanvas === undefined) defaultCanvas()
 
     document.onmousemove = (event) => {
         mouse.moveTo(xFromScreen(event.offsetX), yFromScreen(event.offsetY))
@@ -177,8 +179,8 @@ function start() {
             project.update()
         } else {
             project.actions.forEach(action => action.execute())
-            project.scene.update()
             project.update()
+            project.scene.update()
         }
 
         for (const key of Object.values(project.key)) {
@@ -207,7 +209,7 @@ function start() {
             fpsCounter++
         }
 
-        currentCanvas.draw()
+        project.draw()
 
         //ctx.fillText(`fps: ${realFps}, aps: ${realAps}`, 5, 5)
     }, 1000.0 / 150)

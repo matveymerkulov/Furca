@@ -1,6 +1,6 @@
 import {Renderable} from "./renderable.js"
-import {ctx} from "./system.js"
 import {ShapeType} from "./shape_type.js"
+import {ctx} from "./canvas.js"
 
 export default class Shape extends Renderable {
     constructor(color, opacity = 1.0, xMul = 0.5, yMul = 0.5, widthMul = 1.0, heightMul = 1.0) {

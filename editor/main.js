@@ -1,19 +1,13 @@
 import {project} from "../src/project.js"
-import Layer from "../src/layer.js"
-import Generator from "../src/actions/generator.js"
-import {ShapeType} from "../src/shape_type.js"
-import Img from "../src/image.js"
-import Box from "../src/box.js"
-import {currentCanvas} from "../src/canvas.js"
-import {rad, rnd} from "../src/system.js"
-import Interval from "../src/actions/interval.js"
-import RemoveIfOutside from "../src/actions/sprite/remove_if_outside.js"
-import Move from "../src/actions/sprite/move.js"
+import Canvas, {currentCanvas, setCanvas} from "../src/canvas.js"
+import TileMap from "../src/tilemap.js"
+import ImageArray from "../src/image_array.js"
+import {Layer} from "../src/index.js"
 
 project.getAssets = () => {
     return {
         texture: {
-            flake: "editor/snowflake.png",
+            tiles: "tiles.png",
         },
         sound: {
         }
@@ -21,30 +15,19 @@ project.getAssets = () => {
 }
 
 project.init = (texture) => {
-    let flakes = new Layer()
-    let generator = new Generator(new Img(texture.flake), new Box(0, currentCanvas.topY - 3, currentCanvas.width + 3
-        , 2), ShapeType.box)
-
     project.background = "rgb(9, 44, 84)"
 
-    project.scene = [
-        flakes
-    ]
+    let tileMap = new TileMap(new ImageArray(texture.tiles, 16, 21), 13, 12, 0, 0, 1, 1)
+    tileMap.array = [0,0,0,1,0,0,0,0,0,2,3,4,0,0,0,0,0,0,0,0,0,0,5,6,0,0,0,0,0,0,0,0,0,0,0,2,6,0,0,0,0,0,0,0,0,0,0
+        ,0,5,3,0,0,7,0,0,0,0,8,0,9,0,0,0,0,0,0,0,0,0,0,2,3,0,0,0,0,0,0,0,0,0,0,0,5,3,0,0,0,0,0,10,0,0,0,5,3,2,6,0,0,0
+        ,0,0,11,0,0,0,2,6,5,3,0,0,0,0,0,0,0,0,0,2,3,5,6,12,0,0,0,0,13,0,10,14,5,3,2,6,10,14,0,0,0,10,0,11,15,2,6,5,3
+        ,11,15,0,0,0,11]
 
-    project.actions = [
-        new Move(flakes),
-        new RemoveIfOutside(flakes, new Box(0, 0, currentCanvas.width + 6, currentCanvas.height + 6)),
-    ]
-
-    let interval = new Interval(0.05)
+    let map = Canvas.create(document.getElementById("map"), new Layer(tileMap), 30, 14)
+    let tiles = Canvas.create(document.getElementById("tiles"), new Layer(), 8, 14)
+    setCanvas(map)
 
     project.update = () => {
-        if(interval.active()) {
-            let flake = generator.execute()
-            flake.size = rnd(0.5, 2)
-            flake.angle = rad(90)
-            flake.speed = rnd(0.5, 2)
-            flakes.add(flake)
-        }
+        map.draw()
     }
 }

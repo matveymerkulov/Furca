@@ -1,7 +1,7 @@
-import {mouse} from "../../src/system.js"
+import {defaultCanvas, mouse} from "../../src/system.js"
 import Sprite from "../../src/sprite.js"
 import {project} from "../../src/project.js"
-import {ShapeType} from "../../src/shape_type.js"
+import {ShapeType} from "../../src/index.js"
 import Shape from "../../src/shape.js"
 import Key from "../../src/key.js"
 

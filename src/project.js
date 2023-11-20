@@ -10,6 +10,9 @@ export let project = {
     sound: {},
     background: "rgb(0, 0, 0)",
 
+    draw() {
+        if(this.canvas !== undefined) this.canvas.draw()
+    },
     getAssets() {
         return {texture: {}, sound: {}}
     },

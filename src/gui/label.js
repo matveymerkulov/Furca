@@ -1,6 +1,6 @@
 import Box from "../box.js"
-import {align, ctx} from "../system.js"
-import {xToScreen, yToScreen} from "../canvas.js"
+import {align} from "../system.js"
+import {ctx, xToScreen, yToScreen} from "../canvas.js"
 
 export default class Label extends Box {
     constructor(sprite, items, horizontalAlign, verticalAlign, format, image) {

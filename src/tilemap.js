@@ -53,14 +53,12 @@ export default class TileMap extends Box {
                 let x = Math.floor(xToScreen(this.leftX)) + width * column
                 let tileNum = this.getTile(column, row)
                 this.tiles._images[tileNum].drawResized(x, y, width, height)
-                if(showCollisionShapes) {
-                    let shape = this.collision[tileNum]
-                    if(shape !== undefined) {
-                        collisionShape.drawResized(x + distToScreen(shape.centerX- shape.halfWidth)
-                            , y + distToScreen(shape.centerY - shape.halfHeight)
-                            , width * shape.width, height * shape.height, shape.shapeType)
-                    }
-                }
+                if(!showCollisionShapes) continue
+                let shape = this.collision[tileNum]
+                if(shape === undefined) continue
+                collisionShape.drawResized(x + distToScreen(shape.centerX- shape.halfWidth)
+                    , y + distToScreen(shape.centerY - shape.halfHeight)
+                    , width * shape.width, height * shape.height, shape.shapeType)
             }
         }
     }
@@ -68,9 +66,8 @@ export default class TileMap extends Box {
     extract(tileNumber, shapeType) {
         for(let row = 0; row < this.rows; row++) {
             for(let column = 0; column < this.columns; column++) {
-                if(tileNumber === this.getTile(column, row)) {
-                    return this.extractTile(column, row, shapeType)
-                }
+                if(tileNumber !== this.getTile(column, row)) continue
+                return this.extractTile(column, row, shapeType)
             }
         }
     }
@@ -105,9 +102,8 @@ export default class TileMap extends Box {
                 collisionSprite.moveTo(this.leftX + (shape.centerX + x) * this.cellWidth
                     , this.topY + (shape.centerY + y) * this.cellHeight)
                 collisionSprite.setSize(this.cellWidth * shape.width, this.cellHeight * shape.height)
-                if(sprite.collidesWithSprite(collisionSprite)) {
-                    code.call(null, collisionSprite, tileNum, x, y)
-                }
+                if(!sprite.collidesWithSprite(collisionSprite)) continue
+                code.call(null, collisionSprite, tileNum, x, y)
             }
         }
     }

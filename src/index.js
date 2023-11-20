@@ -1,6 +1,6 @@
 import Num from "./variable/number.js"
 import Box from "./box.js"
-import {currentCanvas} from "./canvas.js"
+import {currentCanvas, ctx} from "./canvas.js"
 import Label from "./gui/label.js"
 import {align, loc, rad} from "./system.js"
 import Sprite from "./sprite.js"
@@ -27,6 +27,11 @@ import Shape from "./shape.js"
 import Key from "./key.js"
 import TileMap from "./tilemap.js"
 import {apsk} from "./system.js"
-import {ctx, removeFromArray, rnd} from "./system.js"
+import {removeFromArray, rnd} from "./system.js"
 import Interval from "./actions/interval.js"
 import Generator from "./actions/generator.js"
+import {project} from "./project.js"
+
+export {Num, Box, currentCanvas, Label, align, loc, rad, Sprite, Img, ImageArray, Layer, LoopArea, Move
+    , Animate, Constraint, RemoveIfOutside, ExecuteActions, Rnd, rnds, Mul, Turbo, Point, AnimateOpacity, Cos
+    , AnimateSize, mouse, ShapeType, Shape, Key, TileMap, apsk, ctx, project, removeFromArray, rnd, Interval, Generator}
