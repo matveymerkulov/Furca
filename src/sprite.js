@@ -1,5 +1,5 @@
 import Box from "./box.js"
-import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
+import {ctx, distToScreen, xToScreen, yToScreen} from "./canvas.js"
 import {apsk, num, rad} from "./system.js"
 import Animate from "./actions/sprite/animate.js"
 import {boxWithBoxCollision, circleWithBoxCollision, circleWithCircleCollision} from "./collisions.js"

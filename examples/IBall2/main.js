@@ -6,6 +6,7 @@ import Key, {key} from "../../src/key.js"
 import Sprite from "../../src/sprite.js"
 import {ShapeType} from "../../src/shape_type.js"
 import Layer from "../../src/layer.js"
+import {tilemapFromImage} from "../../src/utils/tilemap_from_image.js"
 
 project.getAssets = () => {
     return {
@@ -31,20 +32,17 @@ let maxHorizontalAcceleration = 5
 let panelSpeed = 3
 
 let emptyTile = 0
-let keyTile = 1
-let playerTile = 7
-let diamondTile = 8
-let panelTile = 9
-let bombTile = 12
-let figureTile = 13
+let keyTile = 42
+let playerTile = 1
+let diamondTile = 64
+let panelTile = 241
+let bombTile = 57
+let figureTile = 51
 
 project.init = (texture) => {
-    //let tileMap = tilemapFromImage(texture.levels, 16, 16, 16, 0, 0, 1, 1)
-    let tileMap = new TileMap(new ImageArray(texture.tiles, 16, 1), 13, 12, 0, 0, 1, 1)
-    tileMap.array = [0,0,0,1,0,0,0,0,0,2,3,4,0,0,0,0,0,0,0,0,0,0,5,6,0,0,0,0,0,0,0,0,0,0,0,2,6,0,0,0,0,0,0,0,0,0,0
-        ,0,5,3,0,0,7,0,0,0,0,8,0,9,0,0,0,0,0,0,0,0,0,0,2,3,0,0,0,0,0,0,0,0,0,0,0,5,3,0,0,0,0,0,10,0,0,0,5,3,2,6,0,0,0
-        ,0,0,11,0,0,0,2,6,5,3,0,0,0,0,0,0,0,0,0,2,3,5,6,12,0,0,0,0,13,0,10,14,5,3,2,6,10,14,0,0,0,10,0,11,15,2,6,5,3
-        ,11,15,0,0,0,11]
+    //let tileMap = tilemapFromImage(texture.levels, texture.tiles, 16, 16, 16, 0, 0, 1, 1)
+    let tileMap = new TileMap(new ImageArray(texture.tiles, 16, 21), 13, 12, 0, 0, 1, 1)
+    tileMap.array = [0,0,0,42,0,0,0,0,0,98,99,16,0,0,0,0,0,0,0,0,0,0,114,115,0,0,0,0,0,0,0,0,0,0,0,98,115,0,0,0,0,0,0,0,0,0,0,0,114,99,0,0,1,0,0,0,0,64,0,241,0,0,0,0,0,0,0,0,0,0,98,99,0,0,0,0,0,0,0,0,0,0,0,114,99,0,0,0,0,0,100,0,0,0,114,99,98,115,0,0,0,0,0,116,0,0,0,98,115,114,99,0,0,0,0,0,0,0,0,0,98,99,114,115,57,0,0,0,0,51,0,100,101,114,99,98,115,100,101,0,0,0,100,0,116,117,98,115,114,99,116,117,0,0,0,116]
     tileMap.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.box), 2)
     tileMap.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.circle)
         , [keyTile, diamondTile, bombTile, figureTile])
@@ -96,12 +94,12 @@ project.init = (texture) => {
     function horizontalMovement(object, leftKey, rightKey, acceleration, maxAcceleration) {
         if(leftKey.isDown) {
             object.dx = Math.max(-maxAcceleration, player.dx - acceleration * apsk)
-            object.flipped = true
+            object.flipped = false
         }
 
         if(rightKey.isDown) {
             object.dx = Math.min(maxAcceleration, player.dx + acceleration * apsk)
-            object.flipped = false
+            object.flipped = true
         }
     }
 

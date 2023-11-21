@@ -26,18 +26,29 @@ function downloadCanvas(canvas) {
     downloadImage.remove();
 }
 
-export function tilemapFromImage(image, cellWidth, cellHeight, columns, tx, ty, twidth, theight) {
-    let width = image.width
-    let height = image.height
+export function tilemapFromImage(image, tilesImage, cellWidth, cellHeight, columns, tx, ty, twidth, theight) {
     let tiles = []
 
+    let tileSetColumns = tilesImage.width / cellWidth
+    let tileSetRows = tilesImage.height / cellHeight
+    for(let y = 0; y < tileSetRows; y ++) {
+        let yy = y * cellWidth
+        for(let x = 0; x < tileSetColumns; x ++) {
+            let xx = x * cellWidth
+            tiles.push(getImageData(tilesImage, xx, yy, cellWidth, cellHeight).data)
+        }
+    }
+
+    let width = image.width
+    let height = image.height
+
     let imageData = getImageData(image).data
-    let screenColumns = width / cellWidth
-    let screenRows = height / cellHeight
+    let screenColumns = 13//width / cellWidth
+    let screenRows = 12//height / cellHeight
     let tilemapArray = new Array(screenColumns * screenRows)
 
     for(let y = 0; y < screenRows; y ++) {
-        let yy = y * cellWidth
+        let yy = y * cellHeight
         for(let x = 0; x < screenColumns; x ++) {
             let found = false
             let xx = x * cellWidth
@@ -57,7 +68,6 @@ export function tilemapFromImage(image, cellWidth, cellHeight, columns, tx, ty, 
             if(!found) {
                 tilemapArray[x + y * screenColumns] = tiles.length
                 tiles.push(getImageData(image, xx, yy, cellWidth, cellHeight).data)
-
             }
         }
     }
@@ -79,9 +89,9 @@ export function tilemapFromImage(image, cellWidth, cellHeight, columns, tx, ty, 
         //imageArray._images[i] = Img.fromCanvas(canvas)
     }
 
-    downloadCanvas(canvas)
+    //downloadCanvas(canvas)
 
     let tilemap = new TileMap(imageArray, screenColumns, screenRows, tx, ty, twidth, theight)
-    tilemap.map.array = tilemapArray
+    tilemap.array = tilemapArray
     return tilemap
 }
