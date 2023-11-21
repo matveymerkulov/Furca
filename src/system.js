@@ -246,3 +246,34 @@ document.addEventListener("keyup", event => {
         }
     }
 }, false)
+
+document.addEventListener("mousedown", event => {
+    for(const button of Object.values(project.key)) {
+        if(!(button instanceof Object)) continue
+        if(event.button === button.button) {
+            if(!button._isDown) {
+                button._wasPressed = true
+            }
+            button._isDown = false
+        }
+    }
+})
+
+document.addEventListener("mouseup", event => {
+    for(const button of Object.values(project.key)) {
+        if(!(button instanceof Object)) continue
+        if(event.code === button.button) {
+            button._isDown = false
+        }
+    }
+}, false)
+
+document.addEventListener("wheel", event => {
+    let dir = Math.sign(event.deltaY)
+    for(const wheel of Object.values(project.key)) {
+        if(!(wheel instanceof Object)) continue
+        if(dir === wheel.dir) {
+            wheel._wasPressed = true
+        }
+    }
+}, false)

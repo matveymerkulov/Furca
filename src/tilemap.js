@@ -1,4 +1,4 @@
-import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
+import {ctx, distToScreen, xToScreen, yToScreen} from "./canvas.js"
 import Box from "./box.js"
 import Sprite from "./sprite.js"
 import {showCollisionShapes} from "./system.js"
@@ -45,19 +45,25 @@ export default class TileMap extends Box {
     }
 
     draw() {
+        let x0 = Math.floor(xToScreen(this.leftX))
+        let y0 = Math.floor(yToScreen(this.topY))
+
+        ctx.fillStyle = "black"
+        ctx.fillRect(x0, y0, distToScreen(this.width), distToScreen((this.height)))
+
         let width = distToScreen(this.cellWidth)
         let height = distToScreen(this.cellHeight)
         for(let row = 0; row < this.rows; row++) {
-            let y = Math.floor(yToScreen(this.topY)) + height * row
+            let y = y0 + height * row
             for(let column = 0; column < this.columns; column++) {
                 let tileNum = this.getTile(column, row)
                 if(tileNum === 0) continue
-                let x = Math.floor(xToScreen(this.leftX)) + width * column
+                let x = x0 + width * column
                 this.tiles._images[tileNum].drawResized(x, y, width, height)
                 if(!showCollisionShapes) continue
                 let shape = this.collision[tileNum]
                 if(shape === undefined) continue
-                collisionShape.drawResized(x + distToScreen(shape.centerX- shape.halfWidth)
+                collisionShape.drawResized(x + distToScreen(shape.centerX - shape.halfWidth)
                     , y + distToScreen(shape.centerY - shape.halfHeight)
                     , width * shape.width, height * shape.height, shape.shapeType)
             }

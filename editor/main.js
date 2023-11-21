@@ -14,6 +14,10 @@ project.getAssets = () => {
     }
 }
 
+project.key = {
+    move: "ControlLeft"
+}
+
 project.init = (texture) => {
     project.background = "rgb(9, 44, 84)"
 
