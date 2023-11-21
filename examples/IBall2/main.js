@@ -11,7 +11,7 @@ import {tilemapFromImage} from "../../src/utils/tilemap_from_image.js"
 project.getAssets = () => {
     return {
         texture: {
-            tiles: "tiles.png",
+            tiles: "new_tiles.png",
             levels: "screens/all.png",
         },
         sound: {

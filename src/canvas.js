@@ -8,7 +8,7 @@ export let currentCanvas, ctx, zk = 1.2
 
 export function setCanvas(canvas) {
     currentCanvas = canvas
-    ctx = currentCanvas.node.getContext("2d")
+    ctx = canvas.node.getContext("2d")
 }
 
 export default class Canvas extends Sprite {
@@ -26,6 +26,8 @@ export default class Canvas extends Sprite {
     }
 
     static create(node, scene, fwidth, fheight, active = true) {
+        node.width = node.clientWidth
+        node.height = node.clientHeight
         return new Canvas(node, scene,0.0, 0.0, fwidth, fheight, active, Box.fromArea(0, 0
             , node.width, node.height))
     }

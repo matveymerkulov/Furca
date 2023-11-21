@@ -50,8 +50,9 @@ export default class TileMap extends Box {
         for(let row = 0; row < this.rows; row++) {
             let y = Math.floor(yToScreen(this.topY)) + height * row
             for(let column = 0; column < this.columns; column++) {
-                let x = Math.floor(xToScreen(this.leftX)) + width * column
                 let tileNum = this.getTile(column, row)
+                if(tileNum === 0) continue
+                let x = Math.floor(xToScreen(this.leftX)) + width * column
                 this.tiles._images[tileNum].drawResized(x, y, width, height)
                 if(!showCollisionShapes) continue
                 let shape = this.collision[tileNum]
