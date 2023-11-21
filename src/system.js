@@ -228,52 +228,57 @@ document.addEventListener("keydown", event => {
     }
 
     for(const key of Object.values(project.key)) {
-        if(!(key instanceof Object)) continue
-        if(event.code === key.code) {
-            if(!key._isDown) {
-                key._wasPressed = true
+        key.items.forEach(item => {
+            if(event.code === item.code) {
+                if(!key._isDown) {
+                    key._wasPressed = true
+                }
+                key._isDown = true
             }
-            key._isDown = true
-        }
+        })
     }
 }, false)
 
 document.addEventListener("keyup", event => {
     for(const key of Object.values(project.key)) {
-        if(!(key instanceof Object)) continue
-        if(event.code === key.code) {
-            key._isDown = false
-        }
+        key.items.forEach(item => {
+            if(event.code === item.code) {
+                key._isDown = false
+            }
+        })
     }
 }, false)
 
 document.addEventListener("mousedown", event => {
-    for(const button of Object.values(project.key)) {
-        if(!(button instanceof Object)) continue
-        if(event.button === button.button) {
-            if(!button._isDown) {
-                button._wasPressed = true
+    for(const key of Object.values(project.key)) {
+        key.items.forEach(item => {
+            if(event.button === item.button) {
+                if(!key._isDown) {
+                    key._wasPressed = true
+                }
+                key._isDown = false
             }
-            button._isDown = false
-        }
+        })
     }
 })
 
 document.addEventListener("mouseup", event => {
-    for(const button of Object.values(project.key)) {
-        if(!(button instanceof Object)) continue
-        if(event.code === button.button) {
-            button._isDown = false
-        }
+    for(const key of Object.values(project.key)) {
+        key.items.forEach(item => {
+            if(event.code === item.button) {
+                key._isDown = false
+            }
+        })
     }
 }, false)
 
 document.addEventListener("wheel", event => {
     let dir = Math.sign(event.deltaY)
-    for(const wheel of Object.values(project.key)) {
-        if(!(wheel instanceof Object)) continue
-        if(dir === wheel.dir) {
-            wheel._wasPressed = true
-        }
+    for(const key of Object.values(project.key)) {
+        key.items.forEach(item => {
+            if(dir === item.dir) {
+                key._wasPressed = true
+            }
+        })
     }
 }, false)
