@@ -24,7 +24,9 @@ project.getAssets = () => {
 }
 
 project.key = {
-    move: new Key("ControlLeft", "MMB")
+    move: new Key("ControlLeft", "MMB"),
+    zoomIn: new Key("WheelUp"),
+    zoomOut: new Key("WheelDown"),
 }
 
 project.init = (texture) => {
@@ -41,7 +43,7 @@ project.init = (texture) => {
     setCanvas(map)
 
     let move = project.key.move
-    let mouseX0, mouseY0, cameraX0, cameraY0
+    let mouseX0, mouseY0, cameraX0, cameraY0, zoom = -21
 
     project.update = () => {
         if(move.wasPressed) {
@@ -53,6 +55,14 @@ project.init = (texture) => {
             map.centerX = cameraX0 + distFromScreen(mouseX0 - screenMouse.centerX)
             map.centerY = cameraY0 + distFromScreen(mouseY0 - screenMouse.centerY)
             map.update()
+        }
+
+        if(project.key.zoomIn.wasPressed) {
+            zoom++
+            map.setZoomXY(zoom, screenMouse.centerX, screenMouse.centerY)
+        } else if(project.key.zoomOut.wasPressed) {
+            zoom--
+            map.setZoomXY(zoom, screenMouse.centerX, screenMouse.centerY)
         }
 
         map.draw()
