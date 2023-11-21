@@ -6,7 +6,7 @@ import {Function} from "./function/function.js"
 // global variables
 
 export let zk = 1.2, fps = 60, aps = 150, showCollisionShapes = false, paused = false
-export let mouse, apsk = 1 / aps, unc = 0.0000001
+export let mouse, screenMouse, apsk = 1 / aps, unc = 0.0000001
 
 // enums
 
@@ -120,6 +120,7 @@ export function defaultCanvas() {
 
 document.addEventListener("DOMContentLoaded", function() {
     mouse = new Point()
+    screenMouse = new Point()
     loadAssets("", project.getAssets())
 })
 
@@ -171,6 +172,7 @@ function start() {
 
     document.onmousemove = (event) => {
         mouse.moveTo(xFromScreen(event.offsetX), yFromScreen(event.offsetY))
+        screenMouse.moveTo(event.offsetX, event.offsetY)
     }
 
     let apsTime = 0, realAps = 0, apsCounter = 0

@@ -1,8 +1,17 @@
 import {project} from "../src/project.js"
-import Canvas, {currentCanvas, setCanvas} from "../src/canvas.js"
+import Canvas, {
+    currentCanvas,
+    distFromScreen,
+    setCanvas,
+    xFromScreen,
+    xToScreen,
+    yFromScreen,
+    yToScreen
+} from "../src/canvas.js"
 import TileMap from "../src/tilemap.js"
 import ImageArray from "../src/image_array.js"
-import {Layer} from "../src/index.js"
+import {Key, Layer, mouse} from "../src/index.js"
+import {screenMouse} from "../src/system.js"
 
 project.getAssets = () => {
     return {
@@ -15,7 +24,7 @@ project.getAssets = () => {
 }
 
 project.key = {
-    move: "ControlLeft"
+    move: new Key("ControlLeft", "MMB")
 }
 
 project.init = (texture) => {
@@ -31,7 +40,21 @@ project.init = (texture) => {
     let tiles = Canvas.create(document.getElementById("tiles"), new Layer(), 8, 14)
     setCanvas(map)
 
+    let move = project.key.move
+    let mouseX0, mouseY0, cameraX0, cameraY0
+
     project.update = () => {
+        if(move.wasPressed) {
+            mouseX0 = screenMouse.centerX
+            mouseY0 = screenMouse.centerY
+            cameraX0 = map.centerX
+            cameraY0 = map.centerY
+        } else if(move.isDown) {
+            map.centerX = cameraX0 + distFromScreen(mouseX0 - screenMouse.centerX)
+            map.centerY = cameraY0 + distFromScreen(mouseY0 - screenMouse.centerY)
+            map.update()
+        }
+
         map.draw()
     }
 }
