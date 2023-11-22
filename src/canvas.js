@@ -28,8 +28,8 @@ export default class Canvas extends Sprite {
     static create(node, scene, fwidth, fheight, active = true) {
         node.width = node.clientWidth
         node.height = node.clientHeight
-        return new Canvas(node, scene,0.0, 0.0, fwidth, fheight, active, Box.fromArea(0, 0
-            , node.width, node.height))
+        return new Canvas(node, scene,0.0, 0.0, fwidth, fheight, active, Box.fromArea(node.offsetLeft
+            , node.offsetTop, node.width, node.height))
     }
 
     draw() {

@@ -171,8 +171,8 @@ function start() {
     if(currentCanvas === undefined) defaultCanvas()
 
     document.onmousemove = (event) => {
-        mouse.moveTo(xFromScreen(event.offsetX), yFromScreen(event.offsetY))
-        screenMouse.moveTo(event.offsetX, event.offsetY)
+        mouse.moveTo(xFromScreen(event.clientX), yFromScreen(event.clientY))
+        screenMouse.moveTo(event.clientX, event.clientY)
     }
 
     let apsTime = 0, realAps = 0, apsCounter = 0

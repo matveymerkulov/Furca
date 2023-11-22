@@ -1,7 +1,8 @@
 import {project} from "../src/project.js"
 import Canvas, {
+    ctx,
     currentCanvas,
-    distFromScreen,
+    distFromScreen, distToScreen,
     setCanvas,
     xFromScreen,
     xToScreen,
@@ -43,28 +44,52 @@ project.init = (texture) => {
     setCanvas(map)
 
     let move = project.key.move
-    let mouseX0, mouseY0, cameraX0, cameraY0, zoom = -21
+    let mouseX0, mouseY0, cameraX0, cameraY0
+    map.zoom = -21
+    tiles.zoom = -21
+
+    function processCamera(canvas) {
+        while(true) {
+            if (!canvas.viewport.collidesWithPoint(screenMouse.centerX, screenMouse.centerY)) break
+
+            if (move.wasPressed) {
+                mouseX0 = screenMouse.centerX
+                mouseY0 = screenMouse.centerY
+                cameraX0 = canvas.centerX
+                cameraY0 = canvas.centerY
+            } else if (move.isDown) {
+                canvas.centerX = cameraX0 + distFromScreen(mouseX0 - screenMouse.centerX)
+                canvas.centerY = cameraY0 + distFromScreen(mouseY0 - screenMouse.centerY)
+                canvas.update()
+            }
+
+            if (project.key.zoomIn.wasPressed) {
+                canvas.zoom++
+            } else if (project.key.zoomOut.wasPressed) {
+                canvas.zoom--
+            } else {
+                break
+            }
+
+            canvas.setZoomXY(canvas.zoom, screenMouse.centerX, screenMouse.centerY)
+            break
+        }
+
+        setCanvas(canvas)
+        canvas.draw()
+    }
+
+    tiles.draw = function() {
+        let columns = Math.floor(this.width)
+        let images = tileMap.tiles._images
+        let size = distToScreen(1)
+        for(let i = 0; i < images.length; i++) {
+            images[i].drawResized(size * (i % columns), size * Math.floor(i / columns), size, size)
+        }
+    }
 
     project.update = () => {
-        if(move.wasPressed) {
-            mouseX0 = screenMouse.centerX
-            mouseY0 = screenMouse.centerY
-            cameraX0 = map.centerX
-            cameraY0 = map.centerY
-        } else if(move.isDown) {
-            map.centerX = cameraX0 + distFromScreen(mouseX0 - screenMouse.centerX)
-            map.centerY = cameraY0 + distFromScreen(mouseY0 - screenMouse.centerY)
-            map.update()
-        }
-
-        if(project.key.zoomIn.wasPressed) {
-            zoom++
-            map.setZoomXY(zoom, screenMouse.centerX, screenMouse.centerY)
-        } else if(project.key.zoomOut.wasPressed) {
-            zoom--
-            map.setZoomXY(zoom, screenMouse.centerX, screenMouse.centerY)
-        }
-
-        map.draw()
+        processCamera(map)
+        processCamera(tiles)
     }
 }
