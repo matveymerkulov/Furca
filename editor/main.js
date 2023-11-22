@@ -1,5 +1,5 @@
 import {project} from "../src/project.js"
-import Canvas, {distFromScreen, distToScreen, setCanvas} from "../src/canvas.js"
+import Canvas, {distFromScreen, distToScreen, setCanvas, yToScreen} from "../src/canvas.js"
 import TileMap from "../src/tilemap.js"
 import ImageArray from "../src/image_array.js"
 import {Key, Layer} from "../src/index.js"
@@ -73,8 +73,9 @@ project.init = (texture) => {
         let columns = Math.floor(tiles.width)
         let images = tileMap.tiles._images
         let size = distToScreen(1)
+        let height = Math.ceil(images.length / columns)
         let x0 = distToScreen(0.5 * (tiles.width - columns))
-        let y0 = distToScreen(0.5 * (tiles.height - Math.ceil(images.length / columns)))
+        let y0 = distToScreen(0.5 * (tiles.height - height) - tiles.centerY)
         for(let i = 0; i < images.length; i++) {
             images[i].drawResized(x0 + size * (i % columns), y0 + size * Math.floor(i / columns), size, size)
         }
