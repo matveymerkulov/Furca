@@ -1,10 +1,10 @@
 import {project} from "../../src/project.js"
 import Img from "../../src/image.js"
 import Sprite from "../../src/sprite.js"
-import {apsk, ctx, rad, removeFromArray, rnd} from "../../src/system.js"
+import {apsk, defaultCanvas, rad, rnd} from "../../src/system.js"
 import Layer from "../../src/layer.js"
 import RemoveIfOutside from "../../src/actions/sprite/remove_if_outside.js"
-import {currentCanvas, distToScreen, xToScreen, yToScreen} from "../../src/canvas.js"
+import {ctx, currentCanvas, distToScreen, xToScreen, yToScreen} from "../../src/canvas.js"
 import Rnd from "../../src/function/rnd.js"
 
 project.getAssets = () => {
@@ -17,8 +17,8 @@ project.getAssets = () => {
     }
 }
 
-const shotdx = new Rnd(0.5, 1.5)
-const shotdy = new Rnd(-19, -15)
+const shotDX = new Rnd(0.5, 1.5)
+const shotDY = new Rnd(-19, -15)
 const shotY = 10
 const gravity = 10
 const dyThreshold = 5
@@ -49,7 +49,8 @@ project.init = (texture) => {
         ctx.globalAlpha = 1
     }
 
-    project.background = "rgb(9, 44, 84)"
+    defaultCanvas()
+    currentCanvas.background = "rgb(9, 44, 84)"
 
     project.scene.add(particles)
 
@@ -65,8 +66,8 @@ project.init = (texture) => {
             shots.color = color
             project.scene.add(shots)
 
-            let dx = shotdx.toNumber()
-            let dy = shotdy.toNumber()
+            let dx = shotDX.toNumber()
+            let dy = shotDY.toNumber()
             let x = 0
             let y = shotY
             for(let i = 0; i < tailLength; i++) {

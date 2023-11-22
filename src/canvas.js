@@ -1,6 +1,5 @@
 import Sprite from "./sprite.js"
 import {mouse} from "./system.js"
-import {project} from "./project.js"
 import Box from "./box.js"
 import {drawRect} from "./draw_rect.js"
 
@@ -22,6 +21,7 @@ export default class Canvas extends Sprite {
         this._k = 1.0
         this._oldZoom = 0
         this._defaultPosition = this
+        this.background = "black"
         this.update()
     }
 
@@ -34,13 +34,14 @@ export default class Canvas extends Sprite {
 
     draw() {
         if(!this.active) return
+
         let viewport = this.viewport
         setCanvas(this)
         this.update()
 
-        ctx.fillStyle = project.background
+        ctx.fillStyle = this.background
         //g.setClip(viewport.leftX, viewport.topY, viewport.width, viewport.height)
-        ctx.fillRect(viewport.leftX, viewport.topY, viewport.width, viewport.height)
+        ctx.fillRect(0, 0, viewport.width, viewport.height)
         
         this.scene.draw()
 
@@ -52,8 +53,8 @@ export default class Canvas extends Sprite {
         let k = 1.0 * viewport.width / this.width
         this._k = k
         this.height = 1.0 * viewport.height / k
-        this._vdx = 0.5 * viewport.width - this.centerX * k + viewport.leftX
-        this._vdy = 0.5 * viewport.height - this.centerY * k + viewport.topY
+        this._vdx = 0.5 * viewport.width - this.centerX * k
+        this._vdy = 0.5 * viewport.height - this.centerY * k
     }
 
     setZoom(zoom) {

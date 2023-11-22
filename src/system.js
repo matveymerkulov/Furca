@@ -1,5 +1,5 @@
 import Point from "./point.js"
-import Canvas, {ctx, currentCanvas, setCanvas, xFromScreen, yFromScreen} from "./canvas.js"
+import Canvas, {ctx, setCanvas, xFromScreen, yFromScreen} from "./canvas.js"
 import {project} from "./project.js"
 import {Function} from "./function/function.js"
 
@@ -168,10 +168,9 @@ export function loadAssets(path, asset) {
 function start() {
     project.init(project._assets.texture)
     delete project._assets
-    if(currentCanvas === undefined) defaultCanvas()
 
     document.onmousemove = (event) => {
-        mouse.moveTo(xFromScreen(event.clientX), yFromScreen(event.clientY))
+        mouse.moveTo(xFromScreen(event.offsetX), yFromScreen(event.offsetY))
         screenMouse.moveTo(event.clientX, event.clientY)
     }
 

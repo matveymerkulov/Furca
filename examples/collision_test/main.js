@@ -10,6 +10,8 @@ project.key = {
 }
 
 project.init = (texture) => {
+    defaultCanvas()
+    
     let defaultColor = "rgb(0, 128, 0)"
     let collisionColor = "rgb(128, 255, 128)"
     let mouseColor = "rgba(255, 255, 0, 128)"

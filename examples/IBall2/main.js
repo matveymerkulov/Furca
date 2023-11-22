@@ -1,12 +1,12 @@
 import {project} from "../../src/project.js"
 import TileMap from "../../src/tilemap.js"
 import ImageArray from "../../src/image_array.js"
-import {apsk} from "../../src/system.js"
-import Key, {key} from "../../src/key.js"
+import {apsk, defaultCanvas} from "../../src/system.js"
+import Key from "../../src/key.js"
 import Sprite from "../../src/sprite.js"
 import {ShapeType} from "../../src/shape_type.js"
 import Layer from "../../src/layer.js"
-import {tilemapFromImage} from "../../src/utils/tilemap_from_image.js"
+import {currentCanvas} from "../../src/index.js"
 
 project.getAssets = () => {
     return {
@@ -52,7 +52,8 @@ project.init = (texture) => {
     player.dy = 0
     player.size = 0.99
 
-    project.background = "blue"
+    defaultCanvas()
+    currentCanvas.background = "blue"
 
     function onGround() {
         if(player.dy < 0) {

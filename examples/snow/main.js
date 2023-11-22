@@ -6,7 +6,7 @@ import {currentCanvas} from "../../src/canvas.js"
 import Interval from "../../src/actions/interval.js"
 import Generator from "../../src/actions/generator.js"
 import Img from "../../src/image.js"
-import {rad, rnd} from "../../src/system.js"
+import {defaultCanvas, rad, rnd} from "../../src/system.js"
 import RemoveIfOutside from "../../src/actions/sprite/remove_if_outside.js"
 import {ShapeType} from "../../src/shape_type.js"
 
@@ -21,11 +21,12 @@ project.getAssets = () => {
 }
 
 project.init = (texture) => {
+    defaultCanvas()
+    currentCanvas.background = "rgb(9, 44, 84)"
+
     let flakes = new Layer()
     let generator = new Generator(new Img(texture.flake), new Box(0, currentCanvas.topY - 3, currentCanvas.width + 3
         , 2), ShapeType.box)
-
-    project.background = "rgb(9, 44, 84)"
 
     project.scene.add(flakes)
 

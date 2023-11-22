@@ -8,7 +8,6 @@ export let project = {
     actions: [],
     registry: {},
     sound: {},
-    background: "rgb(0, 0, 0)",
 
     draw() {
         if(this.canvas !== undefined) this.canvas.draw()
