@@ -1,7 +1,6 @@
 import Sprite from "./sprite.js"
 import {mouse} from "./system.js"
 import Box from "./box.js"
-import {drawRect} from "./draw_rect.js"
 
 export let currentCanvas, ctx, zk = 1.2
 
@@ -95,7 +94,7 @@ export default class Canvas extends Sprite {
     drawDefaultCamera() {
         let pos = this._defaultPosition
         ctx.fillStyle("blue")
-        drawRect(xToScreen(pos.leftX), yToScreen(pos.topY), distToScreen(pos.width), distToScreen(pos.height))
+        ctx.strokeRect(xToScreen(pos.leftX), yToScreen(pos.topY), distToScreen(pos.width), distToScreen(pos.height))
         ctx.fillStyle("white")
     }
 

@@ -257,7 +257,7 @@ document.addEventListener("mousedown", event => {
                 if(!key._isDown) {
                     key._wasPressed = true
                 }
-                key._isDown = false
+                key._isDown = true
             }
         })
     }

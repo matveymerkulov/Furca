@@ -2,7 +2,7 @@ import Num from "../../src/variable/number.js"
 import Box from "../../src/box.js"
 import {currentCanvas} from "../../src/canvas.js"
 import Label from "../../src/gui/label.js"
-import {align, loc, rad} from "../../src/system.js"
+import {align, defaultCanvas, loc, rad} from "../../src/system.js"
 import Sprite from "../../src/sprite.js"
 import Img from "../../src/image.js"
 import ImageArray from "../../src/image_array.js"
@@ -352,6 +352,8 @@ project.init = (texture) => {
 
     // gui
 
+    defaultCanvas()
+
     bounds = new Box(0, 0, currentCanvas.width + 3, currentCanvas.height + 3)
 
     let hudArea = new Box(0, 0, currentCanvas.width - 1, currentCanvas.height - 1)
@@ -367,7 +369,7 @@ project.init = (texture) => {
 
     // other
 
-    project.background = "rgb(9, 44, 84)"
+    currentCanvas.background = "rgb(9, 44, 84)"
     project.scene.add(bullets, asteroids, bonuses, particles, shipLayer, explosions, hud)
 
     project.actions = [

@@ -4,6 +4,7 @@ import TileMap from "../src/tilemap.js"
 import ImageArray from "../src/image_array.js"
 import {Key, Layer} from "../src/index.js"
 import {screenMouse} from "../src/system.js"
+import {drawDashedRect} from "../src/draw_rect.js"
 
 project.getAssets = () => {
     return {
@@ -54,9 +55,9 @@ project.init = (texture) => {
             }
 
             if (project.key.zoomIn.wasPressed) {
-                canvas.zoom++
-            } else if (project.key.zoomOut.wasPressed) {
                 canvas.zoom--
+            } else if (project.key.zoomOut.wasPressed) {
+                canvas.zoom++
             } else {
                 break
             }
@@ -78,8 +79,14 @@ project.init = (texture) => {
         let y0 = distToScreen(0.5 * (tiles.height - height) - tiles.centerY)
         for(let i = 0; i < images.length; i++) {
             images[i].drawResized(x0 + size * (i % columns), y0 + size * Math.floor(i / columns), size, size)
+            if(currentTile === i) {
+                drawDashedRect(Math.floor(x0 + size * (i % columns))
+                    , Math.floor(y0 + size * Math.floor(i / columns)), size, size)
+            }
         }
     }
+
+    let currentTile = 0
 
     project.update = () => {
         processCamera(map)

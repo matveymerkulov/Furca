@@ -1,14 +1,23 @@
 import {ctx} from "./canvas.js"
 
+let dashes = [
+    [4, 4],
+    [0, 1, 4, 3],
+    [0, 2, 4, 2],
+    [0, 3, 4, 1],
+    [0, 4, 4, 0],
+    [1, 4, 3, 0],
+    [2, 4, 2, 0],
+    [3, 4, 1, 0],
+]
 
-export function drawRect(x, y, width, height) {
-    let x2 = x + width
-    let y2 = y + height
-    ctx.beginPath()
-    ctx.moveTo(x, y)
-    ctx.lineTo(x2, y)
-    ctx.lineTo(x2, y2)
-    ctx.lineTo(x, y2)
-    ctx.lineTo(x, y)
-    ctx.stroke()
+export function drawDashedRect(x, y, width, height) {
+    ctx.strokeStyle = "black"
+    ctx.strokeRect(x, y, width, height)
+    let shift = Math.floor(new Date().getTime() / 100) % 8
+    ctx.setLineDash(dashes[shift])
+    ctx.strokeStyle = "white"
+    ctx.strokeRect(x, y, width, height)
+    ctx.setLineDash([])
+    ctx.strokeStyle = "black"
 }
