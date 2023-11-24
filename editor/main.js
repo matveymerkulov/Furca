@@ -2,9 +2,10 @@ import {project} from "../src/project.js"
 import Canvas, {distFromScreen, distToScreen, setCanvas, yToScreen} from "../src/canvas.js"
 import TileMap from "../src/tilemap.js"
 import ImageArray from "../src/image_array.js"
-import {Key, Layer} from "../src/index.js"
-import {screenMouse} from "../src/system.js"
+import {Key, Layer, mouse} from "../src/index.js"
+import {canvasMouse, screenMouse} from "../src/system.js"
 import {drawDashedRect} from "../src/draw_rect.js"
+import {boxWithPointCollision} from "../src/collisions.js"
 
 project.getAssets = () => {
     return {
@@ -17,6 +18,7 @@ project.getAssets = () => {
 }
 
 project.key = {
+    select: new Key("LMB"),
     move: new Key("ControlLeft", "MMB"),
     zoomIn: new Key("WheelUp"),
     zoomOut: new Key("WheelDown"),
@@ -70,7 +72,9 @@ project.init = (texture) => {
         canvas.draw()
     }
 
+    let currentTile = 0
     tiles.scene.draw = function() {
+        setCanvas(tiles)
         let columns = Math.floor(tiles.width)
         let images = tileMap.tiles._images
         let size = distToScreen(1)
@@ -78,18 +82,26 @@ project.init = (texture) => {
         let x0 = distToScreen(0.5 * (tiles.width - columns))
         let y0 = distToScreen(0.5 * (tiles.height - height) - tiles.centerY)
         for(let i = 0; i < images.length; i++) {
-            images[i].drawResized(x0 + size * (i % columns), y0 + size * Math.floor(i / columns), size, size)
+            let x = x0 + size * (i % columns)
+            let y = y0 + size * Math.floor(i / columns)
+            images[i].drawResized(x, y, size, size)
+            if(project.key.select.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
+                currentTile = i
+            }
             if(currentTile === i) {
-                drawDashedRect(Math.floor(x0 + size * (i % columns))
-                    , Math.floor(y0 + size * Math.floor(i / columns)), size, size)
+                drawDashedRect(Math.floor(x), Math.floor(y), Math.floor(size), Math.floor(size))
             }
         }
     }
 
-    let currentTile = 0
-
     project.update = () => {
         processCamera(map)
         processCamera(tiles)
+
+        setCanvas(map)
+        let tilePos = tileMap.tileForPoint(mouse)
+        if(tilePos >= 0 && project.key.select.isDown) {
+            tileMap.array[tilePos] = currentTile
+        }
     }
 }

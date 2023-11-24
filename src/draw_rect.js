@@ -13,6 +13,7 @@ let dashes = [
 
 export function drawDashedRect(x, y, width, height) {
     ctx.strokeStyle = "black"
+    ctx.lineWidth = 2
     ctx.strokeRect(x, y, width, height)
     let shift = Math.floor(new Date().getTime() / 100) % 8
     ctx.setLineDash(dashes[shift])

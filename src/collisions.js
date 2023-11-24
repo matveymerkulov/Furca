@@ -1,3 +1,7 @@
+export function boxWithPointCollision(point, x, y, width, height) {
+    return point.centerX >= x && point.centerX < x + width && point.centerY >= y && point.centerY < y + height
+}
+
 export function circleWithPointCollision(circle, x, y) {
     let dx = circle.centerX - x
     let dy = circle.centerY - y

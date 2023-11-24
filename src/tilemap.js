@@ -95,6 +95,14 @@ export default class TileMap extends Box {
         }
     }
 
+    tileForPoint(point) {
+        let column = Math.floor((point.centerX - this.leftX) / this.cellWidth)
+        if(column < 0 || column >= this.columns) return -1
+        let row = Math.floor((point.centerY - this.topY) / this.cellHeight)
+        if(row < 0 || row >= this.rows) return -1
+        return column + row * this.columns
+    }
+
     collisionWithSprite(sprite, code) {
         let x0 = Math.floor((sprite.leftX - this.leftX) / this.cellWidth)
         let x1 = Math.ceil((sprite.rightX - this.leftX) / this.cellWidth)
