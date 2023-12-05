@@ -22,14 +22,24 @@ project.key = {
     move: new Key("ControlLeft", "MMB"),
     zoomIn: new Key("WheelUp"),
     zoomOut: new Key("WheelDown"),
+    switchMode: new Key("Space"),
+}
+
+const modes = {
+    tiles: Symbol("tiles"),
+    tileMaps: Symbol("tileMaps"),
 }
 
 project.init = (texture) => {
+    let mode = modes.tiles
+
     let tileMap = new TileMap(new ImageArray(texture.tiles, 16, 21), 13, 12, 0, 0, 1, 1)
     tileMap.array = [0,0,0,42,0,0,0,0,0,98,99,16,0,0,0,0,0,0,0,0,0,0,114,115,0,0,0,0,0,0,0,0,0,0,0,98,115,0,0,0,0,0,0
         ,0,0,0,0,0,114,99,0,0,1,0,0,0,0,64,0,241,0,0,0,0,0,0,0,0,0,0,98,99,0,0,0,0,0,0,0,0,0,0,0,114,99,0,0,0,0,0,100
         ,0,0,0,114,99,98,115,0,0,0,0,0,116,0,0,0,98,115,114,99,0,0,0,0,0,0,0,0,0,98,99,114,115,57,0,0,0,0,51,0,100,101
         ,114,99,98,115,100,101,0,0,0,100,0,116,117,98,115,114,99,116,117,0,0,0,116]
+
+    let tileMaps = new Layer(tileMap)
 
     let map = Canvas.create(document.getElementById("map"), new Layer(tileMap), 30, 14)
     map.background = "rgb(9, 44, 84)"
@@ -98,10 +108,35 @@ project.init = (texture) => {
         processCamera(map)
         processCamera(tiles)
 
+        let currentTileMap = undefined
+
+        tileMaps.collisionWithPoint(mouse.centerX, mouse.centerY, (x, y, map) => {
+            currentTileMap = map
+        })
+
+        if(project.key.switchMode.wasPressed) {
+            mode = mode === modes.tiles ? modes.tileMaps : modes.tiles
+        }
+
         setCanvas(map)
-        let tilePos = tileMap.tileForPoint(mouse)
-        if(tilePos >= 0 && project.key.select.isDown) {
-            tileMap.array[tilePos] = currentTile
+
+        if(currentTileMap !== undefined) {
+            switch(mode) {
+                case modes.tiles:
+                    let tile = tileMap.tileForPoint(mouse)
+                    if(tile < 0) break
+                    if(project.key.select.isDown) {
+                        tileMap.array[tile] = currentTile
+                    }
+                    let sprite = currentTileMap.getTileSprite(currentTileMap.getTileColumn(tile)
+                        , currentTileMap.getTileRow(tile))
+                    if(sprite === undefined) break
+                    sprite.drawDashedRect()
+                    break
+                case modes.tileMaps:
+                    currentTileMap.drawDashedRect()
+                    break
+            }
         }
     }
 }

@@ -70,6 +70,21 @@ export default class TileMap extends Box {
         }
     }
 
+    getTileRow(tileNum) {
+        return Math.floor(tileNum / this.columns)
+    }
+
+    getTileColumn(tileNum) {
+        return tileNum % this.columns
+    }
+
+    getTileSprite(column, row, shapeType) {
+        let x = this.leftX + this.cellWidth * (0.5 + column)
+        let y = this.topY + this.cellHeight * (0.5 + row)
+        let tileNum = this.getTile(column, row)
+        return new Sprite(this.tiles._images[tileNum], x, y, this.cellWidth, this.cellHeight, shapeType)
+    }
+
     extract(tileNumber, shapeType) {
         for(let row = 0; row < this.rows; row++) {
             for(let column = 0; column < this.columns; column++) {
@@ -80,11 +95,8 @@ export default class TileMap extends Box {
     }
 
     extractTile(column, row, shapeType) {
-        let x = this.leftX + this.cellWidth * (0.5 + column)
-        let y = this.topY + this.cellHeight * (0.5 + row)
-        let tileNum = this.getTile(column, row)
         this.setTile(column, row, 0)
-        return new Sprite(this.tiles._images[tileNum], x, y, this.cellWidth, this.cellHeight, shapeType)
+        return this.getTileSprite(column, row, shapeType)
     }
 
     processTiles(code) {

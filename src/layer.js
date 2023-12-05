@@ -82,4 +82,8 @@ export default class Layer extends Renderable {
     collisionWithTilemap(tilemap, code) {
         this.items.forEach(item => item.collisionWithTilemap(tilemap, code))
     }
+
+    collisionWithPoint(x, y, code) {
+        this.items.forEach(item => item.collisionWithPoint(x, y, code))
+    }
 }

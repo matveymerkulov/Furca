@@ -1,5 +1,7 @@
 import Point from "./point.js"
 import {unc} from "./system.js"
+import {drawDashedRect} from "./draw_rect.js"
+import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
 
 export default class Box extends Point {
     constructor(centerX = 0.0, centerY = 0.0, width = 1.0, height = 1.0) {
@@ -72,6 +74,10 @@ export default class Box extends Point {
         this.height = shape.height
     }
 
+    drawDashedRect() {
+        drawDashedRect(xToScreen(this.leftX), yToScreen(this.topY), distToScreen(this.width), distToScreen(this.height))
+    }
+
     limit(box) {
         if(this.leftX < box.leftX) this.leftX = box.leftX + unc
         if(this.rightX > box.rightX) this.rightX = box.rightX - unc
@@ -81,6 +87,10 @@ export default class Box extends Point {
 
     collidesWithPoint(x, y) {
         return x >= this.leftX && x < this.rightX && y >= this.topY && y < this.bottomY
+    }
+
+    collisionWithPoint(x, y, code) {
+        if(this.collidesWithPoint(x, y)) code.call(null, x, y, this)
     }
 
     overlaps(box) {
