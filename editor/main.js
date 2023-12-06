@@ -151,6 +151,15 @@ project.init = (texture) => {
                     break
                 case modes.tileMaps:
                     currentTileMap.drawDashedRect()
+                    if (project.key.select.wasPressed) {
+                        mouseX0 = screenMouse.centerX
+                        mouseY0 = screenMouse.centerY
+                        cameraX0 = currentTileMap.centerX
+                        cameraY0 = currentTileMap.centerY
+                    } else if (project.key.select.isDown) {
+                        currentTileMap.centerX = cameraX0 - distFromScreen(mouseX0 - screenMouse.centerX)
+                        currentTileMap.centerY = cameraY0 - distFromScreen(mouseY0 - screenMouse.centerY)
+                    }
                     break
             }
         }
