@@ -95,8 +95,9 @@ export default class TileMap extends Box {
     }
 
     extractTile(column, row, shapeType) {
+        let sprite = this.getTileSprite(column, row, shapeType)
         this.setTile(column, row, 0)
-        return this.getTileSprite(column, row, shapeType)
+        return sprite
     }
 
     processTiles(code) {

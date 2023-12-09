@@ -6,6 +6,8 @@ import {Key, Layer, mouse} from "../src/index.js"
 import {canvasMouse, screenMouse} from "../src/system.js"
 import {drawDashedRect} from "../src/draw_rect.js"
 import {boxWithPointCollision} from "../src/collisions.js"
+import MouseMove from "./mouse_move.js"
+import DashedRect from "./dashed_rect.js"
 
 project.getAssets = () => {
     return {
@@ -119,6 +121,9 @@ project.init = (texture) => {
         }
     }
 
+    let moveMap = new MouseMove(undefined, project.key.select)
+    let mapSelection = new DashedRect()
+
     project.update = () => {
         processCamera(maps)
         processCamera(tiles)
@@ -136,32 +141,27 @@ project.init = (texture) => {
             currentTileMap = map
         })
 
-        if(currentTileMap !== undefined) {
-            switch(mode) {
-                case modes.tiles:
-                    let tile = currentTileMap.tileForPoint(mouse)
-                    if(tile < 0) break
-                    if(project.key.select.isDown) {
-                        currentTileMap.array[tile] = currentTile
-                    }
-                    let sprite = currentTileMap.getTileSprite(currentTileMap.getTileColumn(tile)
-                        , currentTileMap.getTileRow(tile))
-                    if(sprite === undefined) break
-                    sprite.drawDashedRect()
-                    break
-                case modes.tileMaps:
-                    currentTileMap.drawDashedRect()
-                    if (project.key.select.wasPressed) {
-                        mouseX0 = screenMouse.centerX
-                        mouseY0 = screenMouse.centerY
-                        cameraX0 = currentTileMap.centerX
-                        cameraY0 = currentTileMap.centerY
-                    } else if (project.key.select.isDown) {
-                        currentTileMap.centerX = cameraX0 - distFromScreen(mouseX0 - screenMouse.centerX)
-                        currentTileMap.centerY = cameraY0 - distFromScreen(mouseY0 - screenMouse.centerY)
-                    }
-                    break
-            }
+        moveMap.object = currentTileMap
+        mapSelection.object = undefined
+        if(currentTileMap === undefined) return
+
+        switch(mode) {
+            case modes.tiles:
+                let tile = currentTileMap.tileForPoint(mouse)
+                if(tile < 0) break
+                if(project.key.select.isDown) {
+                    currentTileMap.array[tile] = currentTile
+                }
+                let sprite = currentTileMap.getTileSprite(currentTileMap.getTileColumn(tile)
+                    , currentTileMap.getTileRow(tile))
+                if(sprite === undefined) break
+                sprite.drawDashedRect()
+                break
+            case modes.tileMaps:
+                mapSelection.object = currentTileMap
+                moveMap.execute()
+                mapSelection.draw()
+                break
         }
     }
 }
