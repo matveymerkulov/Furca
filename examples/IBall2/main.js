@@ -8,11 +8,13 @@ import {ShapeType} from "../../src/shape_type.js"
 import Layer from "../../src/layer.js"
 import {currentCanvas} from "../../src/index.js"
 import {tilemapFromImage} from "../../src/utils/tilemap_from_image.js"
+import TileLayer from "../../src/tilelayer.js"
+import TileSet from "../../src/tileset.js"
 
 project.getAssets = () => {
     return {
         texture: {
-            tiles: "new_tiles.png",
+            tiles: "tiles.png",
             levels: "screens/02.png",
         },
         sound: {
@@ -42,14 +44,20 @@ let figureTile = 51
 
 project.init = (texture) => {
     //let tileMap = tilemapFromImage(texture.levels, texture.tiles, 16, 16, 16, 0, 0, 1, 1)
-    let tileMap = new TileMap(new ImageArray(texture.tiles, 16, 21), 13, 12, 0, 0, 1, 1)
-    tileMap.array = [0,0,0,42,0,0,0,0,0,98,99,16,0,0,0,0,0,0,0,0,0,0,114,115,0,0,0,0,0,0,0,0,0,0,0,98,115,0,0,0,0,0,0,0,0,0,0,0,114,99,0,0,1,0,0,0,0,64,0,241,0,0,0,0,0,0,0,0,0,0,98,99,0,0,0,0,0,0,0,0,0,0,0,114,99,0,0,0,0,0,100,0,0,0,114,99,98,115,0,0,0,0,0,116,0,0,0,98,115,114,99,0,0,0,0,0,0,0,0,0,98,99,114,115,57,0,0,0,0,51,0,100,101,114,99,98,115,100,101,0,0,0,100,0,116,117,98,115,114,99,116,117,0,0,0,116]
-    //tileMap.array = [0,96,97,0,0,0,0,0,0,0,96,97,0,41,112,113,0,0,0,0,0,0,0,112,113,65,257,257,257,257,0,0,0,0,0,257,257,257,257,0,0,0,0,257,0,0,0,257,0,0,0,0,0,1,0,0,0,330,330,330,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,257,257,257,257,257,0,0,0,0,0,0,257,257,87,0,0,0,87,257,257,0,0,0,0,0,87,0,0,0,0,0,87,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,17]
-    tileMap.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.box), 2)
-    tileMap.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.circle)
+    let tileSet = new TileSet(new ImageArray(texture.tiles, 16, 21))
+    tileSet.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.box), 2)
+    tileSet.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.circle)
         , [keyTile, diamondTile, bombTile, figureTile])
 
-    let player = tileMap.extract(playerTile, ShapeType.circle)
+    let tileMap = new TileMap(13, 12, 0, 0, 1, 1)
+    let tiles = new TileLayer(tileMap, tileSet)
+    tiles.array = [0,0,0,42,0,0,0,0,0,98,99,16,0,0,0,0,0,0,0,0,0,0,114,115,0,0,0,0,0,0,0,0,0,0,0,98,115,0,0,0,0,0,0,0,0
+        ,0,0,0,114,99,0,0,1,0,0,0,0,64,0,241,0,0,0,0,0,0,0,0,0,0,98,99,0,0,0,0,0,0,0,0,0,0,0,114,99,0,0,0,0,0,100,0,0,0
+        ,114,99,98,115,0,0,0,0,0,116,0,0,0,98,115,114,99,0,0,0,0,0,0,0,0,0,98,99,114,115,57,0,0,0,0,51,0,100,101,114,99
+        ,98,115,100,101,0,0,0,100,0,116,117,98,115,114,99,116,117,0,0,0,116]
+    //tileMap.array = [0,96,97,0,0,0,0,0,0,0,96,97,0,41,112,113,0,0,0,0,0,0,0,112,113,65,257,257,257,257,0,0,0,0,0,257,257,257,257,0,0,0,0,257,0,0,0,257,0,0,0,0,0,1,0,0,0,330,330,330,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,257,257,257,257,257,0,0,0,0,0,0,257,257,87,0,0,0,87,257,257,0,0,0,0,0,87,0,0,0,0,0,87,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,17]
+
+    let player = tiles.extract(playerTile, ShapeType.circle)
     player.dx = 0
     player.dy = 0
     player.size = 0.99
@@ -74,7 +82,7 @@ project.init = (texture) => {
             case bombTile:
             case figureTile:
             case diamondTile:
-                tileMap.setTile(x, y, emptyTile)
+                tiles.setTile(x, y, emptyTile)
                 break
             default:
                 player.pushFromSprite(shape)
@@ -84,9 +92,9 @@ project.init = (texture) => {
 
     let panels = new Layer()
 
-    tileMap.processTiles((column, row, tileNum) => {
+    tiles.processTiles((column, row, tileNum) => {
         if(tileNum === panelTile) {
-            let panel = tileMap.extractTile(column, row, ShapeType.box)
+            let panel = tiles.extractTile(column, row, ShapeType.box)
             panel.dy = -panelSpeed
             panels.add(panel)
         }
@@ -115,7 +123,7 @@ project.init = (texture) => {
             player.limit(tileMap)
         }
 
-        tileMap.collisionWithSprite(player, (shape, tileNum, x, y) => {
+        tiles.collisionWithSprite(player, (shape, tileNum, x, y) => {
             tileCollision(shape, tileNum, x, y)
             onGround()
         })
@@ -131,7 +139,7 @@ project.init = (texture) => {
                 player.pushFromSprite(panel)
             }
 
-            tileMap.collisionWithSprite(panel, (shape, tileNum, x, y) => {
+            tiles.collisionWithSprite(panel, (shape, tileNum, x, y) => {
                 panel.pushFromSprite(shape)
                 panel.dy = -panel.dy
             })
@@ -146,7 +154,7 @@ project.init = (texture) => {
             player.limit(tileMap)
         }
 
-        tileMap.collisionWithSprite(player, (shape, tileNum, x, y) => {
+        tiles.collisionWithSprite(player, (shape, tileNum, x, y) => {
             tileCollision(shape, tileNum, x, y)
             player.dx = 0
         })

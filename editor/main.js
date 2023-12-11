@@ -8,6 +8,8 @@ import {drawDashedRect} from "../src/draw_rect.js"
 import {boxWithPointCollision} from "../src/collisions.js"
 import MouseMove from "./mouse_move.js"
 import DashedRect from "./dashed_rect.js"
+import TileLayer from "../src/tilelayer.js"
+import TileSet from "../src/tileset.js"
 
 project.getAssets = () => {
     return {
@@ -35,19 +37,23 @@ const modes = {
 project.init = (texture) => {
     let mode = modes.tiles
 
-    let tileMap = new TileMap(new ImageArray(texture.tiles, 16, 21), 13, 12, -7, 0, 1, 1)
-    tileMap.array = [0,0,0,42,0,0,0,0,0,98,99,16,0,0,0,0,0,0,0,0,0,0,114,115,0,0,0,0,0,0,0,0,0,0,0,98,115,0,0,0,0,0,0
+    let tileSet = new TileSet(new ImageArray(texture.tiles, 16, 21))
+
+    let tileMap1 = new TileMap(13, 12, -7, 0, 1, 1)
+    let tiles1 = new TileLayer(tileMap1, tileSet)
+    tiles1.array = [0,0,0,42,0,0,0,0,0,98,99,16,0,0,0,0,0,0,0,0,0,0,114,115,0,0,0,0,0,0,0,0,0,0,0,98,115,0,0,0,0,0,0
         ,0,0,0,0,0,114,99,0,0,1,0,0,0,0,64,0,241,0,0,0,0,0,0,0,0,0,0,98,99,0,0,0,0,0,0,0,0,0,0,0,114,99,0,0,0,0,0,100
         ,0,0,0,114,99,98,115,0,0,0,0,0,116,0,0,0,98,115,114,99,0,0,0,0,0,0,0,0,0,98,99,114,115,57,0,0,0,0,51,0,100,101
         ,114,99,98,115,100,101,0,0,0,100,0,116,117,98,115,114,99,116,117,0,0,0,116]
 
-    let tileMap2 = new TileMap(new ImageArray(texture.tiles, 16, 21), 13, 12, 7, 0, 1, 1)
-    tileMap2.array = [0,96,97,0,0,0,0,0,0,0,96,97,0,41,112,113,0,0,0,0,0,0,0,112,113,65,257,257,257,257,0,0,0,0,0,257
+    let tileMap2 = new TileMap(13, 12, 7, 0, 1, 1)
+    let tiles2 = new TileLayer(tileMap2, tileSet)
+    tiles2.array = [0,96,97,0,0,0,0,0,0,0,96,97,0,41,112,113,0,0,0,0,0,0,0,112,113,65,257,257,257,257,0,0,0,0,0,257
         ,257,257,257,0,0,0,0,257,0,0,0,257,0,0,0,0,0,1,0,0,0,330,330,330,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
         ,0,0,0,0,0,0,0,0,0,0,0,0,0,257,257,257,257,257,0,0,0,0,0,0,257,257,87,0,0,0,87,257,257,0,0,0,0,0,87,0,0,0,0,0
         ,87,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,17]
 
-    let tileMaps = new Layer(tileMap, tileMap2)
+    let tileMaps = new Layer(tileMap1, tileMap2)
 
     let maps = Canvas.create(document.getElementById("map"), tileMaps, 30, 14)
     maps.background = "rgb(9, 44, 84)"
@@ -102,7 +108,7 @@ project.init = (texture) => {
     tiles.scene.draw = function() {
         setCanvas(tiles)
         let columns = Math.floor(tiles.width)
-        let images = tileMap.tiles._images
+        let images = tileSet.images._images
         let size = distToScreen(1)
         let height = Math.ceil(images.length / columns)
         let x0 = distToScreen(0.5 * (tiles.width - columns))
@@ -147,12 +153,13 @@ project.init = (texture) => {
 
         switch(mode) {
             case modes.tiles:
+                let layer = currentTileMap.layers[0]
                 let tile = currentTileMap.tileForPoint(mouse)
                 if(tile < 0) break
                 if(project.key.select.isDown) {
-                    currentTileMap.array[tile] = currentTile
+                    layer.array[tile] = currentTile
                 }
-                let sprite = currentTileMap.getTileSprite(currentTileMap.getTileColumn(tile)
+                let sprite = layer.getTileSprite(currentTileMap.getTileColumn(tile)
                     , currentTileMap.getTileRow(tile))
                 if(sprite === undefined) break
                 sprite.drawDashedRect()
