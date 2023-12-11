@@ -1,8 +1,8 @@
 export let keys = []
 
 export default class Key {
-    #_isDown = false
-    #_wasPressed = false
+    #isDown = false
+    #wasPressed = false
     constructor(...codes) {
         this.items = []
         codes.forEach(code => {
@@ -34,10 +34,10 @@ export default class Key {
     processKeyDownEvent(event) {
         this.items.forEach(item => {
             if(event.code === item.code) {
-                if(!this.#_isDown) {
-                    this.#_wasPressed = true
+                if(!this.#isDown) {
+                    this.#wasPressed = true
                 }
-                this.#_isDown = true
+                this.#isDown = true
             }
         })
     }
@@ -45,7 +45,7 @@ export default class Key {
     processKeyUpEvent(event) {
         this.items.forEach(item => {
             if(event.code === item.code) {
-                this.#_isDown = false
+                this.#isDown = false
             }
         })
     }
@@ -53,10 +53,10 @@ export default class Key {
     processMouseDownEvent(event) {
         this.items.forEach(item => {
             if(event.button === item.button) {
-                if(!this.#_isDown) {
-                    this.#_wasPressed = true
+                if(!this.#isDown) {
+                    this.#wasPressed = true
                 }
-                this.#_isDown = true
+                this.#isDown = true
             }
         })
     }
@@ -64,7 +64,7 @@ export default class Key {
     processMouseUpEvent(event) {
         this.items.forEach(item => {
             if(event.button === item.button) {
-                this.#_isDown = false
+                this.#isDown = false
             }
         })
     }
@@ -72,20 +72,20 @@ export default class Key {
     processWheelEvent(dir) {
         this.items.forEach(item => {
             if(dir === item.dir) {
-                this.#_wasPressed = true
+                this.#wasPressed = true
             }
         })
     }
 
     get isDown() {
-        return this.#_isDown
+        return this.#isDown
     }
 
     get wasPressed() {
-        return this.#_wasPressed
+        return this.#wasPressed
     }
 
     reset() {
-        this.#_wasPressed = false
+        this.#wasPressed = false
     }
 }

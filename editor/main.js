@@ -41,17 +41,17 @@ project.init = (texture) => {
 
     let tileMap1 = new TileMap(13, 12, -7, 0, 1, 1)
     let tiles1 = new TileLayer(tileMap1, tileSet)
-    tiles1.array = [0,0,0,42,0,0,0,0,0,98,99,16,0,0,0,0,0,0,0,0,0,0,114,115,0,0,0,0,0,0,0,0,0,0,0,98,115,0,0,0,0,0,0
+    tiles1.setArray([0,0,0,42,0,0,0,0,0,98,99,16,0,0,0,0,0,0,0,0,0,0,114,115,0,0,0,0,0,0,0,0,0,0,0,98,115,0,0,0,0,0,0
         ,0,0,0,0,0,114,99,0,0,1,0,0,0,0,64,0,241,0,0,0,0,0,0,0,0,0,0,98,99,0,0,0,0,0,0,0,0,0,0,0,114,99,0,0,0,0,0,100
         ,0,0,0,114,99,98,115,0,0,0,0,0,116,0,0,0,98,115,114,99,0,0,0,0,0,0,0,0,0,98,99,114,115,57,0,0,0,0,51,0,100,101
-        ,114,99,98,115,100,101,0,0,0,100,0,116,117,98,115,114,99,116,117,0,0,0,116]
+        ,114,99,98,115,100,101,0,0,0,100,0,116,117,98,115,114,99,116,117,0,0,0,116])
 
     let tileMap2 = new TileMap(13, 12, 7, 0, 1, 1)
     let tiles2 = new TileLayer(tileMap2, tileSet)
-    tiles2.array = [0,96,97,0,0,0,0,0,0,0,96,97,0,41,112,113,0,0,0,0,0,0,0,112,113,65,257,257,257,257,0,0,0,0,0,257
+    tiles2.setArray([0,96,97,0,0,0,0,0,0,0,96,97,0,41,112,113,0,0,0,0,0,0,0,112,113,65,257,257,257,257,0,0,0,0,0,257
         ,257,257,257,0,0,0,0,257,0,0,0,257,0,0,0,0,0,1,0,0,0,330,330,330,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
         ,0,0,0,0,0,0,0,0,0,0,0,0,0,257,257,257,257,257,0,0,0,0,0,0,257,257,87,0,0,0,87,257,257,0,0,0,0,0,87,0,0,0,0,0
-        ,87,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,17]
+        ,87,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,17])
 
     let tileMaps = new Layer(tileMap1, tileMap2)
 
@@ -153,13 +153,13 @@ project.init = (texture) => {
 
         switch(mode) {
             case modes.tiles:
-                let layer = currentTileMap.layers[0]
+                let layer = currentTileMap.layer(0)
                 let tile = currentTileMap.tileForPoint(mouse)
                 if(tile < 0) break
                 if(project.key.select.isDown) {
-                    layer.array[tile] = currentTile
+                    layer.setTile(tile, currentTile)
                 }
-                let sprite = layer.getTileSprite(currentTileMap.getTileColumn(tile), currentTileMap.getTileRow(tile))
+                let sprite = layer.tileSprite(tile)
                 if(sprite === undefined) break
                 sprite.drawDashedRect()
                 break
