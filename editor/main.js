@@ -110,10 +110,10 @@ project.init = (texture) => {
         let columns = Math.floor(tiles.width)
         let images = tileSet.images
         let size = distToScreen(1)
-        let height = Math.ceil(images.length / columns)
+        let height = Math.ceil(images.quantity / columns)
         let x0 = distToScreen(0.5 * (tiles.width - columns))
         let y0 = distToScreen(0.5 * (tiles.height - height) - tiles.centerY)
-        for(let i = 0; i < images.length; i++) {
+        for(let i = 0; i < images.quantity; i++) {
             let x = x0 + size * (i % columns)
             let y = y0 + size * Math.floor(i / columns)
             images.image(i).drawResized(x, y, size, size)

@@ -2,6 +2,7 @@ import Point from "./point.js"
 import Canvas, {ctx, setCanvas, xFromScreen, yFromScreen} from "./canvas.js"
 import {project} from "./project.js"
 import {Function} from "./function/function.js"
+import {keys} from "./key.js"
 
 // global variables
 
@@ -186,10 +187,9 @@ function start() {
             project.scene.update()
         }
 
-        for (const key of Object.values(project.key)) {
-            if (!(key instanceof Object)) continue
-            key._wasPressed = false
-        }
+        keys.forEach(key => {
+            key.reset()
+        })
 
         let time = new Date().getTime()
         if (time >= apsTime) {
@@ -230,58 +230,32 @@ document.addEventListener("keydown", event => {
             break
     }
 
-    for(const key of Object.values(project.key)) {
-        key.items.forEach(item => {
-            if(event.code === item.code) {
-                if(!key._isDown) {
-                    key._wasPressed = true
-                }
-                key._isDown = true
-            }
-        })
-    }
+    keys.forEach(key => {
+        key.processKeyDownEvent(event)
+    })
 }, false)
 
 document.addEventListener("keyup", event => {
-    for(const key of Object.values(project.key)) {
-        key.items.forEach(item => {
-            if(event.code === item.code) {
-                key._isDown = false
-            }
-        })
-    }
+    keys.forEach(key => {
+        key.processKeyUpEvent(event)
+    })
 }, false)
 
 document.addEventListener("mousedown", event => {
-    for(const key of Object.values(project.key)) {
-        key.items.forEach(item => {
-            if(event.button === item.button) {
-                if(!key._isDown) {
-                    key._wasPressed = true
-                }
-                key._isDown = true
-            }
-        })
-    }
+    keys.forEach(key => {
+        key.processMouseDownEvent(event)
+    })
 })
 
 document.addEventListener("mouseup", event => {
-    for(const key of Object.values(project.key)) {
-        key.items.forEach(item => {
-            if(event.button === item.button) {
-                key._isDown = false
-            }
-        })
-    }
+    keys.forEach(key => {
+        key.processMouseUpEvent(event)
+    })
 }, false)
 
 document.addEventListener("wheel", event => {
     let dir = Math.sign(event.deltaY)
-    for(const key of Object.values(project.key)) {
-        key.items.forEach(item => {
-            if(dir === item.dir) {
-                key._wasPressed = true
-            }
-        })
-    }
+    keys.forEach(key => {
+        key.processWheelEvent(dir)
+    })
 }, false)

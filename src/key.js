@@ -1,6 +1,8 @@
-export let key = []
+export let keys = []
 
 export default class Key {
+    #_isDown = false
+    #_wasPressed = false
     constructor(...codes) {
         this.items = []
         codes.forEach(code => {
@@ -26,16 +28,64 @@ export default class Key {
             }
             this.items.push(item)
         })
-        this._wasPressed = false
-        this._isDown = false
-        key.push(this)
+        keys.push(this)
+    }
+
+    processKeyDownEvent(event) {
+        this.items.forEach(item => {
+            if(event.code === item.code) {
+                if(!this.#_isDown) {
+                    this.#_wasPressed = true
+                }
+                this.#_isDown = true
+            }
+        })
+    }
+
+    processKeyUpEvent(event) {
+        this.items.forEach(item => {
+            if(event.code === item.code) {
+                this.#_isDown = false
+            }
+        })
+    }
+
+    processMouseDownEvent(event) {
+        this.items.forEach(item => {
+            if(event.button === item.button) {
+                if(!this.#_isDown) {
+                    this.#_wasPressed = true
+                }
+                this.#_isDown = true
+            }
+        })
+    }
+
+    processMouseUpEvent(event) {
+        this.items.forEach(item => {
+            if(event.button === item.button) {
+                this.#_isDown = false
+            }
+        })
+    }
+
+    processWheelEvent(dir) {
+        this.items.forEach(item => {
+            if(dir === item.dir) {
+                this.#_wasPressed = true
+            }
+        })
     }
 
     get isDown() {
-        return this._isDown
+        return this.#_isDown
     }
 
     get wasPressed() {
-        return this._wasPressed
+        return this.#_wasPressed
+    }
+
+    reset() {
+        this.#_wasPressed = false
     }
 }
