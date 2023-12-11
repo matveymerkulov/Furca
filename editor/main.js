@@ -1,6 +1,6 @@
 import {project} from "../src/project.js"
-import Canvas, {distFromScreen, distToScreen, setCanvas, yToScreen} from "../src/canvas.js"
-import TileMap from "../src/tilemap.js"
+import Canvas, {distFromScreen, distToScreen, setCanvas} from "../src/canvas.js"
+import TileMap from "../src/tile_map.js"
 import ImageArray from "../src/image_array.js"
 import {Key, Layer, mouse} from "../src/index.js"
 import {canvasMouse, screenMouse} from "../src/system.js"
@@ -8,8 +8,8 @@ import {drawDashedRect} from "../src/draw_rect.js"
 import {boxWithPointCollision} from "../src/collisions.js"
 import MouseMove from "./mouse_move.js"
 import DashedRect from "./dashed_rect.js"
-import TileLayer from "../src/tilelayer.js"
-import TileSet from "../src/tileset.js"
+import TileLayer from "../src/tile_layer.js"
+import TileSet from "../src/tile_set.js"
 
 project.getAssets = () => {
     return {
@@ -108,7 +108,7 @@ project.init = (texture) => {
     tiles.scene.draw = function() {
         setCanvas(tiles)
         let columns = Math.floor(tiles.width)
-        let images = tileSet.images._images
+        let images = tileSet.images
         let size = distToScreen(1)
         let height = Math.ceil(images.length / columns)
         let x0 = distToScreen(0.5 * (tiles.width - columns))
@@ -116,7 +116,7 @@ project.init = (texture) => {
         for(let i = 0; i < images.length; i++) {
             let x = x0 + size * (i % columns)
             let y = y0 + size * Math.floor(i / columns)
-            images[i].drawResized(x, y, size, size)
+            images.image(i).drawResized(x, y, size, size)
             if(currentTile === i) {
                 drawDashedRect(Math.floor(x), Math.floor(y), Math.floor(size), Math.floor(size))
             }
@@ -159,8 +159,7 @@ project.init = (texture) => {
                 if(project.key.select.isDown) {
                     layer.array[tile] = currentTile
                 }
-                let sprite = layer.getTileSprite(currentTileMap.getTileColumn(tile)
-                    , currentTileMap.getTileRow(tile))
+                let sprite = layer.getTileSprite(currentTileMap.getTileColumn(tile), currentTileMap.getTileRow(tile))
                 if(sprite === undefined) break
                 sprite.drawDashedRect()
                 break

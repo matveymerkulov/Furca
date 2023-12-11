@@ -1,5 +1,5 @@
 import {project} from "../../src/project.js"
-import TileMap from "../../src/tilemap.js"
+import TileMap from "../../src/tile_map.js"
 import ImageArray from "../../src/image_array.js"
 import {apsk, defaultCanvas} from "../../src/system.js"
 import Key from "../../src/key.js"
@@ -7,9 +7,8 @@ import Sprite from "../../src/sprite.js"
 import {ShapeType} from "../../src/shape_type.js"
 import Layer from "../../src/layer.js"
 import {currentCanvas} from "../../src/index.js"
-import {tilemapFromImage} from "../../src/utils/tilemap_from_image.js"
-import TileLayer from "../../src/tilelayer.js"
-import TileSet from "../../src/tileset.js"
+import TileLayer from "../../src/tile_layer.js"
+import TileSet from "../../src/tile_set.js"
 
 project.getAssets = () => {
     return {

@@ -11,15 +11,15 @@ export default class Animate extends Action {
     }
 
     execute() {
-        let images = this.images._images
+        let quantity = this.images.quantity
         this.frame += apsk * this.speed
         while(this.frame < 0.0) {
-            this.frame += images.length
+            this.frame += quantity
         }
-        while(this.frame > images.length) {
-            this.frame -= images.length
+        while(this.frame > quantity) {
+            this.frame -= quantity
         }
-        this.sprite.image = images[Math.floor(this.frame)]
+        this.sprite.image = this.images.image(Math.floor(this.frame))
     }
 
     copy(from) {

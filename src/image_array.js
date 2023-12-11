@@ -2,6 +2,7 @@ import Img from "./image.js"
 import {getTexturePart} from "./texture.js"
 
 export default class ImageArray {
+    #_images
     constructor(texture, columns, rows, xMul = 0.5, yMul = 0.5
                 , widthMul = 1.0, heightMul = 1.0) {
         this.texture = texture
@@ -19,6 +20,14 @@ export default class ImageArray {
             images[i] = new Img(getTexturePart(texture, (i % columns) * width, Math.floor(i / columns) * height
                 , width, height), 0, 0, width, height, xMul, yMul, widthMul, heightMul)
         }
-        this._images = images
+        this.#_images = images
+    }
+
+    image(num) {
+        return this.#_images[num]
+    }
+
+    get quantity() {
+        return this.#_images.length
     }
 }

@@ -1,6 +1,5 @@
 import {ctx, distToScreen, xToScreen, yToScreen} from "./canvas.js"
 import Box from "./box.js"
-import Sprite from "./sprite.js"
 import {showCollisionShapes} from "./system.js"
 import Shape from "./shape.js"
 
@@ -33,7 +32,7 @@ export default class TileMap extends Box {
                     let tileNum = layer.getTile(column, row)
                     //if(tileNum === 0) continue
                     let x = x0 + width * column
-                    layer.tileSet.images._images[tileNum].drawResized(x, y, width, height)
+                    layer.tileSet.images.image(tileNum).drawResized(x, y, width, height)
                     if(!showCollisionShapes) continue
                     let shape = this.collision[tileNum]
                     if(shape === undefined) continue

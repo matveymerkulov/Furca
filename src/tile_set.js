@@ -1,7 +1,7 @@
 export default class TileSet {
     constructor(images) {
         this.images = images
-        this.collision = new Array(images._images.length)
+        this.collision = new Array(images.quantity)
     }
 
     setCollision(sprite, from, to) {

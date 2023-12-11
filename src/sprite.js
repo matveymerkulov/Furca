@@ -34,7 +34,7 @@ export default class Sprite extends Box {
         if(layer) layer.add(sprite)
         if(animationSpeed !== undefined) {
             sprite.actions = [new Animate(sprite, image, animationSpeed)]
-            sprite.image = image._images[0]
+            sprite.image = image.image(0)
         }
         return sprite
     }
@@ -45,7 +45,7 @@ export default class Sprite extends Box {
         if(template.layer !== undefined) template.layer.add(sprite)
         if(template.animationSpeed !== undefined) {
             sprite.actions = [new Animate(sprite, template.images, num(template.animationSpeed))]
-            sprite.image = template.images._images[0]
+            sprite.image = template.images.image(0)
         }
         if(template.parameters) {
             for(const [key, value] of Object.entries(template.parameters)) {

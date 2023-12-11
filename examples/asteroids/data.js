@@ -339,7 +339,7 @@ project.init = (texture) => {
     shipLayer.add(shipSprite)
 
     let flameImages = new ImageArray(texture.flame, 3, 3, 0.5, 1)
-    flameSprite = Sprite.create(shipLayer, flameImages._images[0], -0.6, 0
+    flameSprite = Sprite.create(shipLayer, flameImages.image(0), -0.6, 0
         , 1, 1, undefined, rad(-90))
 
     // weapon

@@ -1,5 +1,4 @@
 import Sprite from "./sprite.js"
-import Shape from "./shape.js"
 
 let collisionSprite = new Sprite()
 
@@ -24,7 +23,7 @@ export default class TileLayer {
         let x = map.leftX + map.cellWidth * (0.5 + column)
         let y = map.topY + map.cellHeight * (0.5 + row)
         let tileNum = this.getTile(column, row)
-        return new Sprite(this.tileSet.images._images[tileNum], x, y, map.cellWidth, map.cellHeight, shapeType)
+        return new Sprite(this.tileSet.images.image(tileNum), x, y, map.cellWidth, map.cellHeight, shapeType)
     }
 
     extract(tileNumber, shapeType) {
