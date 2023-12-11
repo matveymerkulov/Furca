@@ -21,20 +21,18 @@ project.getAssets = () => {
     }
 }
 
-project.key = {
-    select: new Key("LMB"),
-    move: new Key("ControlLeft", "MMB"),
-    zoomIn: new Key("WheelUp"),
-    zoomOut: new Key("WheelDown"),
-    switchMode: new Key("Space"),
-}
-
 const modes = {
     tiles: Symbol("tiles"),
     tileMaps: Symbol("tileMaps"),
 }
 
 project.init = (texture) => {
+    let select = new Key("LMB")
+    let move = new Key("ControlLeft", "MMB")
+    let zoomIn = new Key("WheelUp")
+    let zoomOut = new Key("WheelDown")
+    let switchMode = new Key("Space")
+
     let mode = modes.tiles
 
     let tileSet = new TileSet(new ImageArray(texture.tiles, 16, 21))
@@ -60,7 +58,6 @@ project.init = (texture) => {
     let tiles = Canvas.create(document.getElementById("tiles"), new Layer(), 8, 14)
     setCanvas(maps)
 
-    let move = project.key.move
     let mouseX0, mouseY0, cameraX0, cameraY0
     maps.zoom = -21
     tiles.zoom = -21
@@ -88,9 +85,9 @@ project.init = (texture) => {
                 canvas.update()
             }
 
-            if (project.key.zoomIn.wasPressed) {
+            if (zoomIn.wasPressed) {
                 canvas.zoom--
-            } else if (project.key.zoomOut.wasPressed) {
+            } else if (zoomOut.wasPressed) {
                 canvas.zoom++
             } else {
                 break
@@ -121,20 +118,20 @@ project.init = (texture) => {
                 drawDashedRect(Math.floor(x), Math.floor(y), Math.floor(size), Math.floor(size))
             }
             if(mouseCanvas !== tiles) continue
-            if(project.key.select.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
+            if(select.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
                 currentTile = i
             }
         }
     }
 
-    let moveMap = new MouseMove(undefined, project.key.select)
+    let moveMap = new MouseMove(undefined, select)
     let mapSelection = new DashedRect()
 
     project.update = () => {
         processCamera(maps)
         processCamera(tiles)
 
-        if(project.key.switchMode.wasPressed) {
+        if(switchMode.wasPressed) {
             mode = mode === modes.tiles ? modes.tileMaps : modes.tiles
         }
 
@@ -156,7 +153,7 @@ project.init = (texture) => {
                 let layer = currentTileMap.layer(0)
                 let tile = currentTileMap.tileForPoint(mouse)
                 if(tile < 0) break
-                if(project.key.select.isDown) {
+                if(select.isDown) {
                     layer.setTile(tile, currentTile)
                 }
                 let sprite = layer.tileSprite(tile)

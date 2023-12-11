@@ -5,11 +5,9 @@ import {ShapeType} from "../../src/index.js"
 import Shape from "../../src/shape.js"
 import Key from "../../src/key.js"
 
-project.key = {
-    switchType: new Key("Space", "LMB", "WheelUp", "WheelDown")
-}
-
 project.init = (texture) => {
+    let switchType = new Key("Space", "LMB", "WheelUp", "WheelDown")
+
     defaultCanvas()
     
     let defaultColor = "rgb(0, 128, 0)"
@@ -42,7 +40,7 @@ project.init = (texture) => {
             }
         }
 
-        if(project.key.switchType.wasPressed) {
+        if(switchType.wasPressed) {
             shapeNumber = (shapeNumber + 1) % shapeTypes.length
             mouseShape.shapeType = shapeTypes[shapeNumber]
             pushed.shapeType = shapeTypes[shapeNumber]

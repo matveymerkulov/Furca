@@ -58,16 +58,6 @@ project.locales.ru = {
     pause: "Пауза",
 }
 
-project.key = {
-    left: new Key("ArrowLeft"),
-    right: new Key("ArrowRight"),
-    forward: new Key("ArrowUp"),
-    fire: new Key("Space"),
-    fireMissile: new Key("KeyX"),
-    continue: new Key("Enter"),
-    pause: new Key("KeyP"),
-}
-
 project.getAssets = () => {
     return {
         texture: {
@@ -141,6 +131,9 @@ export const state = {
 }
 
 project.init = (texture) => {
+    let fire = new Key("Space")
+    let fireMissile = new Key("KeyX")
+
     let asteroidImages = new ImageArray(texture.asteroid, 8, 4
         , 0.5, 0.5, 1.5, 1.5)
 
@@ -248,7 +241,7 @@ project.init = (texture) => {
                     }
                 },
 
-                controller: new Turbo(project.key.fire, 0.15),
+                controller: new Turbo(fire, 0.15),
             },
 
             // double barreled turret
@@ -257,7 +250,7 @@ project.init = (texture) => {
                 sprite: new Sprite(new Img(texture.turret), 0, 0, 2, 2),
                 barrelEnd: [new Point(0.5, 0.4), new Point(0.5, -0.4)],
                 gunfire: [Sprite.createFromTemplate(gunfireTemplate), Sprite.createFromTemplate(gunfireTemplate)],
-                controller: new Turbo(project.key.fire, 0.10),
+                controller: new Turbo(fire, 0.10),
 
                 bullet: {
                     layer: bullets,
@@ -299,7 +292,7 @@ project.init = (texture) => {
                 ammo: new Num(3),
                 maxAmmo: 8,
 
-                controller: new Turbo(project.key.fireMissile, 0.5),
+                controller: new Turbo(fireMissile, 0.5),
             }
 
         },

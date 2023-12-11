@@ -3,10 +3,8 @@ import Layer from "./layer.js"
 export let project = {
     locale: "en",
     locales: {},
-    key: {},
     scene: new Layer(),
     actions: [],
-    registry: {},
     sound: {},
 
     draw() {

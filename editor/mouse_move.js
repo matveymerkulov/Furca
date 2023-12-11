@@ -15,12 +15,12 @@ export default class MouseMove extends Action {
     execute() {
         if(this.object === undefined) return
         if(this.rect) this.object.drawDashedRect()
-        if (project.key.select.wasPressed) {
+        if(this.key.wasPressed) {
             this.mouseX0 = screenMouse.centerX
             this.mouseY0 = screenMouse.centerY
             this.objectX0 = this.object.centerX
             this.objectY0 = this.object.centerY
-        } else if (project.key.select.isDown) {
+        } else if(this.key.isDown) {
             this.object.centerX = this.objectX0 + this.k * distFromScreen(screenMouse.centerX - this.mouseX0)
             this.object.centerY = this.objectY0 + this.k * distFromScreen(screenMouse.centerY - this.mouseY0)
         }

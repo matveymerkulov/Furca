@@ -21,12 +21,6 @@ project.getAssets = () => {
     }
 }
 
-project.key = {
-    left: new Key("KeyA"),
-    right: new Key("KeyD"),
-    jump: new Key("KeyW"),
-}
-
 let gravity = 10
 let jumpdy = -9.1
 let horizontalAcceleration = 20
@@ -42,6 +36,10 @@ let bombTile = 57
 let figureTile = 51
 
 project.init = (texture) => {
+    let left = new Key("KeyA")
+    let right = new Key("KeyD")
+    let jump = new Key("KeyW")
+
     //let tileMap = tilemapFromImage(texture.levels, texture.tiles, 16, 16, 16, 0, 0, 1, 1)
     let tileSet = new TileSet(new ImageArray(texture.tiles, 16, 21))
     tileSet.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.box), 2)
@@ -70,7 +68,7 @@ project.init = (texture) => {
             return
         }
         player.dy = 0
-        if(project.key.jump.isDown) {
+        if(jump.isDown) {
             player.dy = jumpdy
         }
     }
@@ -144,7 +142,7 @@ project.init = (texture) => {
             })
         }
 
-        horizontalMovement(player, project.key.left, project.key.right, horizontalAcceleration, maxHorizontalAcceleration)
+        horizontalMovement(player, left, right, horizontalAcceleration, maxHorizontalAcceleration)
 
         player.centerX += player.dx * apsk
 

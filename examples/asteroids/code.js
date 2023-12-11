@@ -38,10 +38,16 @@ import {
     template
 } from "./data.js"
 import {ShapeType} from "../../src/shape_type.js"
+import Key from "../../src/key.js"
 
 export function initUpdate() {
     let sound = project.sound
-    let key = project.key
+
+    let left = new Key("ArrowLeft")
+    let right = new Key("ArrowRight")
+    let forward = new Key("ArrowUp")
+    let newGame = new Key("Enter")
+    let pause = new Key("KeyP")
 
     let currentState = state.alive
 
@@ -286,7 +292,7 @@ export function initUpdate() {
     let invulnerable = false
 
     project.update = () => {
-        if(key.pause.wasPressed) {
+        if(pause.wasPressed) {
             togglePause()
             if(paused) {
                 messageLabel.show(loc("paused"))
@@ -297,15 +303,15 @@ export function initUpdate() {
         if(paused) return
 
         if(currentState === state.alive) {
-            if(key.left.isDown) {
+            if(left.isDown) {
                 LinearChange.execute(shipSprite, "angle", -rad(shipAngularSpeed))
             }
 
-            if(key.right.isDown) {
+            if(right.isDown) {
                 LinearChange.execute(shipSprite, "angle", rad(shipAngularSpeed))
             }
 
-            if(key.forward.isDown) {
+            if(forward.isDown) {
                 LinearChange.execute(shipSprite,"speed", shipAcceleration, 0, shipAccelerationLimit)
                 flameSound?.play()
             } else {
@@ -314,7 +320,7 @@ export function initUpdate() {
                 flameSound.currentTime = 0
             }
 
-            let thrust = key.forward.isDown
+            let thrust = forward.isDown
             flameSprite.visible = thrust
             if(thrust) {
 
@@ -326,7 +332,7 @@ export function initUpdate() {
                     destroyAsteroid(asteroid, 0)
                 })
             }
-        } else if(key.continue.wasPressed) {
+        } else if(newGame.wasPressed) {
             shipLayer.show()
             messageLabel.show()
             if(currentState === state.dead) {
