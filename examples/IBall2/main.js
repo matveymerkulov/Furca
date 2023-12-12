@@ -7,7 +7,6 @@ import Sprite from "../../src/sprite.js"
 import {ShapeType} from "../../src/shape_type.js"
 import Layer from "../../src/layer.js"
 import {currentCanvas} from "../../src/index.js"
-import TileLayer from "../../src/tile_layer.js"
 import TileSet from "../../src/tile_set.js"
 
 project.getAssets = () => {
@@ -46,8 +45,7 @@ project.init = (texture) => {
     tileSet.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.circle)
         , [keyTile, diamondTile, bombTile, figureTile])
 
-    let tileMap = new TileMap(13, 12, 0, 0, 1, 1)
-    let tiles = new TileLayer(tileMap, tileSet)
+    let tiles = new TileMap(tileSet, 13, 12, 0, 0, 1, 1)
     tiles.setArray([0,0,0,42,0,0,0,0,0,98,99,16,0,0,0,0,0,0,0,0,0,0,114,115,0,0,0,0,0,0,0,0,0,0,0,98,115,0,0,0,0,0,0,0,0
         ,0,0,0,114,99,0,0,1,0,0,0,0,64,0,241,0,0,0,0,0,0,0,0,0,0,98,99,0,0,0,0,0,0,0,0,0,0,0,114,99,0,0,0,0,0,100,0,0,0
         ,114,99,98,115,0,0,0,0,0,116,0,0,0,98,115,114,99,0,0,0,0,0,0,0,0,0,98,99,114,115,57,0,0,0,0,51,0,100,101,114,99
@@ -97,7 +95,7 @@ project.init = (texture) => {
         }
     })
 
-    project.scene.add(tileMap, player, panels)
+    project.scene.add(tiles, player, panels)
 
     function horizontalMovement(object, leftKey, rightKey, acceleration, maxAcceleration) {
         if(leftKey.isDown) {
@@ -115,9 +113,9 @@ project.init = (texture) => {
         player.dy += gravity * apsk
         player.centerY += player.dy * apsk
 
-        if(!tileMap.overlaps(player)) {
+        if(!tiles.overlaps(player)) {
             onGround()
-            player.limit(tileMap)
+            player.limit(tiles)
         }
 
         tiles.collisionWithSprite(player, (shape, tileNum, x, y) => {
@@ -127,9 +125,9 @@ project.init = (texture) => {
 
         for(let panel of panels.items) {
             panel.centerY += panel.dy * apsk
-            if(!tileMap.overlaps(panel)) {
+            if(!tiles.overlaps(panel)) {
                 panel.dy = -panel.dy
-                panel.limit(tileMap)
+                panel.limit(tiles)
             }
 
             if(panel.collidesWithSprite(player)) {
@@ -146,9 +144,9 @@ project.init = (texture) => {
 
         player.centerX += player.dx * apsk
 
-        if(!tileMap.overlaps(player)) {
+        if(!tiles.overlaps(player)) {
             player.dx = 0
-            player.limit(tileMap)
+            player.limit(tiles)
         }
 
         tiles.collisionWithSprite(player, (shape, tileNum, x, y) => {
