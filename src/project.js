@@ -1,4 +1,5 @@
 import Layer from "./layer.js"
+import {currentCanvas} from "./canvas.js"
 
 export let project = {
     locale: "en",
@@ -7,8 +8,8 @@ export let project = {
     actions: [],
     sound: {},
 
-    draw() {
-        if(this.canvas !== undefined) this.canvas.draw()
+    draw: () => {
+        if(currentCanvas !== undefined) currentCanvas.draw()
     },
     getAssets() {
         return {texture: {}, sound: {}}

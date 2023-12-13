@@ -57,6 +57,7 @@ export default class Canvas extends Sprite {
     }
 
     setZoom(zoom) {
+        this.zoom = zoom
         this.width = this.viewport.width * (zk ** zoom)
         this.update()
     }

@@ -1,5 +1,5 @@
 import {project} from "../src/project.js"
-import Canvas, {distFromScreen, distToScreen, setCanvas} from "../src/canvas.js"
+import Canvas, {ctx, currentCanvas, distFromScreen, distToScreen, setCanvas} from "../src/canvas.js"
 import TileMap from "../src/tile_map.js"
 import ImageArray from "../src/image_array.js"
 import {Key, Layer, mouse} from "../src/index.js"
@@ -13,7 +13,8 @@ import TileSet from "../src/tile_set.js"
 project.getAssets = () => {
     return {
         texture: {
-            tiles: "tiles.png",
+            floor: "small_farm_tiles.png",
+            objects: "farm_objects_tiles.png",
         },
         sound: {
         }
@@ -34,21 +35,14 @@ project.init = (texture) => {
 
     let mode = modes.tiles
 
-    let tileSet = new TileSet(new ImageArray(texture.tiles, 16, 21))
+    let floorSet = new TileSet(new ImageArray(texture.floor, 9, 7))
+    let objectsSet = new TileSet(new ImageArray(texture.objects, 10, 20))
+    let tileSets = [floorSet, objectsSet]
 
-    let tiles1 = new TileMap(tileSet, 13, 12, -7, 0, 1, 1)
-    tiles1.setArray([0,0,0,42,0,0,0,0,0,98,99,16,0,0,0,0,0,0,0,0,0,0,114,115,0,0,0,0,0,0,0,0,0,0,0,98,115,0,0,0,0,0,0
-        ,0,0,0,0,0,114,99,0,0,1,0,0,0,0,64,0,241,0,0,0,0,0,0,0,0,0,0,98,99,0,0,0,0,0,0,0,0,0,0,0,114,99,0,0,0,0,0,100
-        ,0,0,0,114,99,98,115,0,0,0,0,0,116,0,0,0,98,115,114,99,0,0,0,0,0,0,0,0,0,98,99,114,115,57,0,0,0,0,51,0,100,101
-        ,114,99,98,115,100,101,0,0,0,100,0,116,117,98,115,114,99,116,117,0,0,0,116])
+    let floor = new TileMap(floorSet, 16, 16, 0, 0, 1, 1)
+    let objects = new TileMap(objectsSet, 16, 16, 0, 0, 1, 1)
 
-    let tiles2 = new TileMap(tileSet, 13, 12, 7, 0, 1, 1)
-    tiles2.setArray([0,96,97,0,0,0,0,0,0,0,96,97,0,41,112,113,0,0,0,0,0,0,0,112,113,65,257,257,257,257,0,0,0,0,0,257
-        ,257,257,257,0,0,0,0,257,0,0,0,257,0,0,0,0,0,1,0,0,0,330,330,330,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-        ,0,0,0,0,0,0,0,0,0,0,0,0,0,257,257,257,257,257,0,0,0,0,0,0,257,257,87,0,0,0,87,257,257,0,0,0,0,0,87,0,0,0,0,0
-        ,87,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,17])
-
-    let tileMaps = new Layer(tiles1, tiles2)
+    let tileMaps = new Layer(floor, objects)
 
     let maps = Canvas.create(document.getElementById("map"), tileMaps, 30, 14)
     maps.background = "rgb(9, 44, 84)"
@@ -56,8 +50,8 @@ project.init = (texture) => {
     setCanvas(maps)
 
     let mouseX0, mouseY0, cameraX0, cameraY0
-    maps.zoom = -21
-    tiles.zoom = -21
+    maps.setZoom(-20)
+    tiles.setZoom(-17)
 
     let mouseCanvas
     maps.node.addEventListener("mouseover", (e) => {
@@ -83,9 +77,9 @@ project.init = (texture) => {
             }
 
             if (zoomIn.wasPressed) {
-                canvas.zoom--
+                canvas.setZoom(canvas.zoom - 1)
             } else if (zoomOut.wasPressed) {
-                canvas.zoom++
+                canvas.setZoom(canvas.zoom + 1)
             } else {
                 break
             }
@@ -99,30 +93,44 @@ project.init = (texture) => {
     }
 
     let currentTile = 0
+    let currentTileSet = floorSet
     tiles.scene.draw = function() {
+        let quantity = 0
+        tileSets.forEach(tileSet => {
+            quantity += tileSet.images.quantity
+        })
+
         setCanvas(tiles)
+        let start = 0
         let columns = Math.floor(tiles.width)
-        let images = tileSet.images
-        let size = distToScreen(1)
-        let height = Math.ceil(images.quantity / columns)
+        let height = Math.ceil(quantity / columns)
         let x0 = distToScreen(0.5 * (tiles.width - columns))
         let y0 = distToScreen(0.5 * (tiles.height - height) - tiles.centerY)
-        for(let i = 0; i < images.quantity; i++) {
-            let x = x0 + size * (i % columns)
-            let y = y0 + size * Math.floor(i / columns)
-            images.image(i).drawResized(x, y, size, size)
-            if(currentTile === i) {
-                drawDashedRect(Math.floor(x), Math.floor(y), Math.floor(size), Math.floor(size))
+        tileSets.forEach(tileSet => {
+            let images = tileSet.images
+            let size = distToScreen(1)
+            for(let i = 0; i < images.quantity; i++) {
+                let pos = start + i
+                let x = x0 + size * (pos % columns)
+                let y = y0 + size * Math.floor(pos / columns)
+                images.image(i).drawResized(x, y, size, size)
+                if(tileSet === currentTileSet && currentTile === i) {
+                    drawDashedRect(Math.floor(x), Math.floor(y), Math.floor(size), Math.floor(size))
+                }
+                if(mouseCanvas !== tiles) continue
+                if(select.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
+                    currentTile = i
+                    currentTileSet = tileSet
+                }
             }
-            if(mouseCanvas !== tiles) continue
-            if(select.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
-                currentTile = i
-            }
-        }
+            start += images.quantity
+        })
     }
 
     let moveMap = new MouseMove(undefined, select)
     let mapSelection = new DashedRect()
+
+    project.draw = () => {}
 
     project.update = () => {
         processCamera(maps)
@@ -138,7 +146,9 @@ project.init = (texture) => {
 
         let currentTileMap = undefined
         tileMaps.collisionWithPoint(mouse.centerX, mouse.centerY, (x, y, map) => {
-            currentTileMap = map
+            if(mode === modes.tileMaps || map.tileSet === currentTileSet) {
+                currentTileMap = map
+            }
         })
 
         moveMap.object = currentTileMap

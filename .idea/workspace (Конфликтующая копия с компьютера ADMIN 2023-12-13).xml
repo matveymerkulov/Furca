@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9a9f0c0e-0612-4f40-96e5-16959ffc34c2" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2Y3NuEctUIizYCsdkn1AZD8kQUN" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Dropbox/Furca&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.tabs&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Dropbox\Furca\editor" />
+    </key>
+    <key name="es6.move.members.recent.items">
+      <recent name="D:\Dropbox\Furca\src\draw_rect.js" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JavaScript Debug.index.html">
+    <configuration name="index.html (2)" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Furca/examples/IBall2/index.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="index.html (4)" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Furca/examples/snow/index.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="index.html (5)" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Furca/examples/asteroids/index.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Furca/editor/index.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="main.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/editor/main.js" working-dir="$PROJECT_DIR$/editor">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.index.html" />
+        <item itemvalue="JavaScript Debug.index.html (2)" />
+        <item itemvalue="Node.js.main.js" />
+        <item itemvalue="JavaScript Debug.index.html (5)" />
+        <item itemvalue="JavaScript Debug.index.html (4)" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9a9f0c0e-0612-4f40-96e5-16959ffc34c2" name="Changes" comment="" />
+      <created>1699750526250</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1699750526250</updated>
+      <workItem from="1699750528093" duration="2124000" />
+      <workItem from="1699829964636" duration="4624000" />
+      <workItem from="1699859591753" duration="594000" />
+      <workItem from="1699914515136" duration="1336000" />
+      <workItem from="1699933211407" duration="594000" />
+      <workItem from="1700175414999" duration="599000" />
+      <workItem from="1700273270229" duration="594000" />
+      <workItem from="1700332463573" duration="967000" />
+      <workItem from="1700354081973" duration="593000" />
+      <workItem from="1700462055555" duration="2097000" />
+      <workItem from="1700521011467" duration="9675000" />
+      <workItem from="1700549701926" duration="3940000" />
+      <workItem from="1700577433383" duration="812000" />
+      <workItem from="1700605583323" duration="10907000" />
+      <workItem from="1700620020723" duration="1947000" />
+      <workItem from="1700699087376" duration="3842000" />
+      <workItem from="1700727294340" duration="594000" />
+      <workItem from="1700778255057" duration="4361000" />
+      <workItem from="1700805141311" duration="594000" />
+      <workItem from="1700971766431" duration="593000" />
+      <workItem from="1701043746154" duration="600000" />
+      <workItem from="1701581283555" duration="1188000" />
+      <workItem from="1701678885226" duration="593000" />
+      <workItem from="1701733772134" duration="4269000" />
+      <workItem from="1701756599595" duration="594000" />
+      <workItem from="1701817034201" duration="5468000" />
+      <workItem from="1701848063137" duration="4001000" />
+      <workItem from="1701942478700" duration="625000" />
+      <workItem from="1702336025666" duration="1206000" />
+      <workItem from="1702423585551" duration="616000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

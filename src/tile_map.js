@@ -17,7 +17,7 @@ export default class TileMap extends Box {
         this.#tileSet = tileSet
         this.#columns = columns
         this.#rows = rows
-        this.#array = new Array(columns * rows)
+        this.#array = new Array(columns * rows).fill(0)
         this.cellWidth = cellWidth
         this.cellHeight = cellHeight
     }
@@ -75,8 +75,8 @@ export default class TileMap extends Box {
         let x0 = Math.floor(xToScreen(this.leftX))
         let y0 = Math.floor(yToScreen(this.topY))
 
-        ctx.fillStyle = "black"
-        ctx.fillRect(x0, y0, distToScreen(this.width), distToScreen((this.height)))
+        ctx.strokeStyle = "white"
+        ctx.strokeRect(x0, y0, distToScreen(this.width), distToScreen((this.height)))
 
         let width = distToScreen(this.cellWidth)
         let height = distToScreen(this.cellHeight)
@@ -87,7 +87,7 @@ export default class TileMap extends Box {
             let y = y0 + height * row
             for(let column = 0; column < this.#columns; column++) {
                 let tileNum = this.tile(column, row)
-                //if(tileNum === 0) continue
+                if(tileNum === 0) continue
                 let x = x0 + width * column
                 images.image(tileNum).drawResized(x, y, width, height)
                 if(!showCollisionShapes) continue

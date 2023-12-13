@@ -41,4 +41,5 @@ export default class Shape extends Renderable {
 
     drawRotated(sx, sy, swidth, sheight, shapeType, angle) {
         this.drawResized(sx - 0.5 * swidth, sy - 0.5 * sheight, swidth, sheight, shapeType)
-    }}
+    }
+}
