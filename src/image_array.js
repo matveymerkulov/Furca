@@ -7,7 +7,7 @@ export default class ImageArray {
                 , widthMul = 1.0, heightMul = 1.0) {
         this.texture = texture
         this.columns = columns
-        this.rows =  rows
+        this.rows = rows
         this.xMul = xMul
         this.yMul = yMul
         this.heightMul = heightMul
@@ -21,6 +21,11 @@ export default class ImageArray {
                 , width, height), 0, 0, width, height, xMul, yMul, widthMul, heightMul)
         }
         this.#images = images
+    }
+
+    toString() {
+        return `new ImageArray(${this.texture.src},${this.columns},${this.rows},${this.xMul},${this.yMul}`
+            + `,${this.heightMul},${this.widthMul})`
     }
 
     image(num) {

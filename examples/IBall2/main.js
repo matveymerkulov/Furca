@@ -40,12 +40,12 @@ project.init = (texture) => {
     let jump = new Key("KeyW")
 
     //let tileMap = tilemapFromImage(texture.levels, texture.tiles, 16, 16, 16, 0, 0, 1, 1)
-    let tileSet = new TileSet(new ImageArray(texture.tiles, 16, 21))
+    let tileSet = new TileSet("tiles", new ImageArray(texture.tiles, 16, 21))
     tileSet.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.box), 2)
     tileSet.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.circle)
         , [keyTile, diamondTile, bombTile, figureTile])
 
-    let tiles = new TileMap(tileSet, 13, 12, 0, 0, 1, 1)
+    let tiles = new TileMap("tiles", tileSet, 13, 12, 0, 0, 1, 1)
     tiles.setArray([0,0,0,42,0,0,0,0,0,98,99,16,0,0,0,0,0,0,0,0,0,0,114,115,0,0,0,0,0,0,0,0,0,0,0,98,115,0,0,0,0,0,0,0,0
         ,0,0,0,114,99,0,0,1,0,0,0,0,64,0,241,0,0,0,0,0,0,0,0,0,0,98,99,0,0,0,0,0,0,0,0,0,0,0,114,99,0,0,0,0,0,100,0,0,0
         ,114,99,98,115,0,0,0,0,0,116,0,0,0,98,115,114,99,0,0,0,0,0,0,0,0,0,98,99,114,115,57,0,0,0,0,51,0,100,101,114,99

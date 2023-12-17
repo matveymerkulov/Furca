@@ -3,6 +3,7 @@ import Canvas, {ctx, setCanvas, xFromScreen, yFromScreen} from "./canvas.js"
 import {project} from "./project.js"
 import {Function} from "./function/function.js"
 import {keys} from "./key.js"
+import {initInput} from "./input.js"
 
 // global variables
 
@@ -170,6 +171,7 @@ export function loadAssets(path, asset) {
 function start() {
     project.init(project._assets.texture)
     delete project._assets
+    initInput()
 
     document.onmousemove = (event) => {
         mouse.moveTo(xFromScreen(event.offsetX), yFromScreen(event.offsetY))
@@ -217,45 +219,3 @@ function start() {
         //ctx.fillText(`fps: ${realFps}, aps: ${realAps}`, 5, 5)
     }, 1000.0 / 150)
 }
-
-document.addEventListener("keydown", event => {
-    //event.preventDefault();
-
-    switch (event.code) {
-        case "KeyL":
-            project.locale = project.locale === "ru" ? "en" : "ru"
-            break
-        case "KeyO":
-            showCollisionShapes = !showCollisionShapes
-            break
-    }
-
-    keys.forEach(key => {
-        key.processKeyDownEvent(event)
-    })
-}, false)
-
-document.addEventListener("keyup", event => {
-    keys.forEach(key => {
-        key.processKeyUpEvent(event)
-    })
-}, false)
-
-document.addEventListener("mousedown", event => {
-    keys.forEach(key => {
-        key.processMouseDownEvent(event)
-    })
-})
-
-document.addEventListener("mouseup", event => {
-    keys.forEach(key => {
-        key.processMouseUpEvent(event)
-    })
-}, false)
-
-document.addEventListener("wheel", event => {
-    let dir = Math.sign(event.deltaY)
-    keys.forEach(key => {
-        key.processWheelEvent(dir)
-    })
-}, false)

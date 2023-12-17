@@ -3,6 +3,8 @@ import Box from "./box.js"
 import {showCollisionShapes} from "./system.js"
 import Shape from "./shape.js"
 import Sprite from "./sprite.js"
+import {arrayToString} from "./save_load.js"
+import {tileMap} from "../editor/main.js"
 
 let collisionShape = new Shape("rgb(255, 0, 255)", 0.5)
 let collisionSprite = new Sprite()
@@ -12,14 +14,20 @@ export default class TileMap extends Box {
     #columns
     #rows
     #array
-    constructor(tileSet, columns, rows, x, y, cellWidth, cellHeight) {
+    constructor(name, tileSet, columns, rows, x, y, cellWidth, cellHeight, array) {
         super(x, y, cellWidth * columns, cellHeight * rows)
+        this.name = name
         this.#tileSet = tileSet
         this.#columns = columns
         this.#rows = rows
-        this.#array = new Array(columns * rows).fill(0)
+        this.#array = array ?? new Array(columns * rows).fill(0)
         this.cellWidth = cellWidth
         this.cellHeight = cellHeight
+    }
+
+    toString() {
+        return `new TileMap(${this.#tileSet.name},${this.#columns},${this.#rows},${this.centerX},${this.centerY}`
+            + `,${this.cellWidth},${this.cellHeight},${arrayToString(this.#array)})`
     }
 
     get rows() {
