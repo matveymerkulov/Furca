@@ -9,12 +9,14 @@ import {boxWithPointCollision} from "../src/collisions.js"
 import MouseMove from "./mouse_move.js"
 import DashedRect from "./dashed_rect.js"
 import TileSet from "../src/tile_set.js"
+import {saveProject} from "../src/save_load.js"
+import {loadData, tileMap, tileSet} from "./data.js"
 
 project.getAssets = () => {
     return {
         texture: {
-            floor: "small_farm_tiles.png",
-            objects: "farm_objects_tiles.png",
+            floor: "farm_floor.png",
+            objects: "farm_furniture.png",
         },
         sound: {
         }
@@ -26,26 +28,17 @@ const modes = {
     tileMaps: Symbol("tileMaps"),
 }
 
-export let tileSet, tileMap
-
 project.init = (texture) => {
+    loadData(texture)
+
     let select = new Key("LMB")
     let move = new Key("ControlLeft", "MMB")
     let zoomIn = new Key("WheelUp")
     let zoomOut = new Key("WheelDown")
     let switchMode = new Key("Space")
+    let save = new Key("KeyS")
 
     let mode = modes.tiles
-
-    let tileSet = {
-        floor: new TileSet("floor", new ImageArray(texture.floor, 9, 7)),
-        objects: new TileSet("objects", new ImageArray(texture.objects, 10, 20)),
-    }
-
-    let tileMap = {
-        floor: new TileMap("floor", tileSet.floor, 16, 16, 0, 0, 1, 1),
-        objects: new TileMap("objects", tileSet.objects, 16, 16, 0, 0, 1, 1),
-    }
 
     let tileMaps = new Layer(tileMap.floor, tileMap.objects)
 
@@ -143,6 +136,10 @@ project.init = (texture) => {
 
         if(switchMode.wasPressed) {
             mode = mode === modes.tiles ? modes.tileMaps : modes.tiles
+        }
+
+        if(save.wasPressed) {
+            saveProject()
         }
 
         if(mouseCanvas !== maps) return

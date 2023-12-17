@@ -4,7 +4,6 @@ import {showCollisionShapes} from "./system.js"
 import Shape from "./shape.js"
 import Sprite from "./sprite.js"
 import {arrayToString} from "./save_load.js"
-import {tileMap} from "../editor/main.js"
 
 let collisionShape = new Shape("rgb(255, 0, 255)", 0.5)
 let collisionSprite = new Sprite()
@@ -26,7 +25,7 @@ export default class TileMap extends Box {
     }
 
     toString() {
-        return `new TileMap(${this.#tileSet.name},${this.#columns},${this.#rows},${this.centerX},${this.centerY}`
+        return `new TileMap("${this.name}",tileSet.${this.#tileSet.name},${this.#columns},${this.#rows},${this.centerX},${this.centerY}`
             + `,${this.cellWidth},${this.cellHeight},${arrayToString(this.#array)})`
     }
 
@@ -95,7 +94,7 @@ export default class TileMap extends Box {
             let y = y0 + height * row
             for(let column = 0; column < this.#columns; column++) {
                 let tileNum = this.tile(column, row)
-                if(tileNum === 0) continue
+                //if(tileNum === 0) continue
                 let x = x0 + width * column
                 images.image(tileNum).drawResized(x, y, width, height)
                 if(!showCollisionShapes) continue

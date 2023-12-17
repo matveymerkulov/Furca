@@ -4,6 +4,7 @@ import {project} from "./project.js"
 import {Function} from "./function/function.js"
 import {keys} from "./key.js"
 import {initInput} from "./input.js"
+import {loadData} from "../editor/data.js"
 
 // global variables
 
@@ -140,6 +141,7 @@ export function loadAssets(path, asset) {
             if(assetsToLoad <= 0) start()
         }
         texture.src = path + value
+        texture.id = key
         textures[key] = texture
         assetsToLoad++
     }
@@ -169,9 +171,9 @@ export function loadAssets(path, asset) {
 }
 
 function start() {
+    initInput()
     project.init(project._assets.texture)
     delete project._assets
-    initInput()
 
     document.onmousemove = (event) => {
         mouse.moveTo(xFromScreen(event.offsetX), yFromScreen(event.offsetY))

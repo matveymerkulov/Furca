@@ -9,8 +9,8 @@ export default class TileSet {
         this.#collision = new Array(images.quantity)
     }
 
-    export() {
-        return `new TileSet(${this.name},${this.#images.toString()},${arrayToString(this.#collision)})`
+    toString() {
+        return `new TileSet("${this.name}",${this.#images.toString()})`
     }
 
     get images() {
