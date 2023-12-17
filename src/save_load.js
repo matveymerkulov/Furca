@@ -19,12 +19,15 @@ export function toString(value) {
     return value
 }
 
-export function arrayToString(array) {
+export function arrayToString(array, columns) {
     let text = ""
-    for(let item of array) {
-        text += item + ","
+    for(let pos = 0; pos < array.length; pos++) {
+        if(columns !== undefined && (pos % columns) === 0) {
+            text +="\n\t\t\t"
+        }
+        text += array[pos].toString().padStart(3, " ") + ","
     }
-    return `[${text}]`
+    return `[${text}\n]`
 }
 
 export function projectToText() {

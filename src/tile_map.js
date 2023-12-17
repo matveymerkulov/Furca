@@ -26,7 +26,7 @@ export default class TileMap extends Box {
 
     toString() {
         return `new TileMap("${this.name}",tileSet.${this.#tileSet.name},${this.#columns},${this.#rows},${this.centerX},${this.centerY}`
-            + `,${this.cellWidth},${this.cellHeight},${arrayToString(this.#array)})`
+            + `,${this.cellWidth},${this.cellHeight},${arrayToString(this.#array, this.columns)})`
     }
 
     get rows() {
