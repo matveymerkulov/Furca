@@ -1,4 +1,7 @@
 import {tileMap, tileSet} from "../editor/data.js"
+import TileMap from "./tile_map.js"
+import TileSet from "./tile_set.js"
+import ImageArray from "./image_array.js"
 
 export function toString(value) {
     if(value instanceof Array) {
@@ -24,11 +27,8 @@ export function arrayToString(array) {
     return `[${text}]`
 }
 
-export function saveProject() {
+export function projectToText() {
     let text = ""
-    text += `import TileSet from "../src/tile_set.js"\n`
-    text += `import {ImageArray, TileMap} from "../src/index.js"\n\n`
-    text += `export let tileSet, tileMap\n\n`
     text += `export function loadData(texture) {\n`
 
     text += "\ttileSet = {\n"
@@ -44,6 +44,136 @@ export function saveProject() {
     text += "\t}\n"
 
     text += "}"
+    return text
+}
 
-    navigator.clipboard.writeText(text).then()
+
+
+let pos, text
+
+function getSymbol(symbol) {
+    while(text.charAt(pos) !== symbol) {
+        pos++
+    }
+    pos++
+}
+
+function isDigit(symbol) {
+    return symbol >= "0" && symbol <= "9"
+}
+
+function isTokenSymbol(symbol) {
+    if(symbol >= "0" && symbol <= "9") return true
+    if(symbol >= "A" && symbol <= "Z") return true
+    if(symbol >= "a" && symbol <= "z") return true
+    if(symbol === "_") return true
+    return false
+}
+
+function getSymbols(comparison, terminator) {
+    while(!comparison(text.charAt(pos))) {
+        if(text.charAt(pos) === terminator) return ""
+        pos++
+    }
+
+    let start = pos
+    while(comparison(text.charAt(pos))) pos++
+
+    return text.substring(start, pos)
+}
+
+function getToken(terminator) {
+    return getSymbols(symbol => {
+        return isTokenSymbol(symbol)
+    }, terminator)
+}
+
+function getInt(terminator) {
+    let num = getSymbols(symbol => {
+        return isDigit(symbol)
+    }, terminator)
+    return num === "" ? "" : parseInt(num)
+}
+
+function getFloat(terminator) {
+    let num = getSymbols(symbol => {
+        return isDigit(symbol) || symbol === "."
+    }, terminator)
+    return num === "" ? "" : parseFloat(num)
+}
+
+function getString() {
+    getSymbol('"')
+    return getSymbols(symbol => {
+        return symbol !== '"'
+    })
+}
+
+function getIntArray() {
+    getSymbol('[')
+    let array = []
+    while(true) {
+        let num = getInt("]")
+        if(num === "") return array
+        array.push(parseInt(num))
+    }
+}
+
+function getTileSet(texture) {
+    let name = getString()
+    getSymbol(".")
+    let textureName = getToken()
+    let columns = getInt()
+    let rows = getInt()
+    let xMul = getFloat()
+    let yMul = getFloat()
+    let heightMul = getFloat()
+    let widthMul = getFloat()
+    tileSet[name] = new TileSet(name, new ImageArray(texture[textureName], columns, rows, xMul, yMul, heightMul, widthMul))
+}
+
+function getTileMap() {
+    let name = getString()
+    getSymbol(".")
+    let tileSetName = getToken()
+    let mapTileSet = tileSet[tileSetName]
+    let columns = getInt()
+    let rows = getInt()
+    let x = getFloat()
+    let y = getFloat()
+    let cellWidth = getFloat()
+    let cellHeight = getFloat()
+    let array = getIntArray()
+    tileMap[name] = new TileMap(name, mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array)
+}
+
+export function projectFromText(data, texture) {
+    text = data
+    pos = 0
+    getSymbol("{")
+    getSymbol("{")
+
+    while(getToken("}") !== "") {
+        getSymbol("(")
+        getTileSet(texture)
+    }
+
+    pos++
+    while(getToken("}") !== "") {
+        getSymbol("(")
+        getTileMap()
+    }
+}
+
+export function projectToClipboard() {
+    navigator.clipboard.writeText(projectToText()).then()
+}
+
+export function projectToStorage() {
+    localStorage.setItem("project", projectToText())
+}
+
+export function projectFromStorage(texture) {
+    text = localStorage.getItem("project")
+    if(text !== null) projectFromText(text, texture)
 }

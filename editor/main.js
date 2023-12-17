@@ -1,15 +1,13 @@
 import {project} from "../src/project.js"
 import Canvas, {ctx, currentCanvas, distFromScreen, distToScreen, setCanvas} from "../src/canvas.js"
-import TileMap from "../src/tile_map.js"
-import ImageArray from "../src/image_array.js"
-import {Key, Layer, mouse} from "../src/index.js"
-import {canvasMouse, screenMouse} from "../src/system.js"
+import {canvasMouse, mouse, screenMouse} from "../src/system.js"
 import {drawDashedRect} from "../src/draw_rect.js"
 import {boxWithPointCollision} from "../src/collisions.js"
 import MouseMove from "./mouse_move.js"
 import DashedRect from "./dashed_rect.js"
-import TileSet from "../src/tile_set.js"
-import {saveProject} from "../src/save_load.js"
+import {projectFromStorage, projectFromText, projectToClipboard, projectToStorage} from "../src/save_load.js"
+import Key from "../src/key.js"
+import Layer from "../src/layer.js"
 import {loadData, tileMap, tileSet} from "./data.js"
 
 project.getAssets = () => {
@@ -29,7 +27,15 @@ const modes = {
 }
 
 project.init = (texture) => {
-    loadData(texture)
+    if(localStorage.getItem("project") === null) {
+        loadData(texture)
+    } else {
+        projectFromStorage(texture)
+    }
+
+    window.onbeforeunload = function() {
+        projectToStorage()
+    }
 
     let select = new Key("LMB")
     let move = new Key("ControlLeft", "MMB")
@@ -139,7 +145,7 @@ project.init = (texture) => {
         }
 
         if(save.wasPressed) {
-            saveProject()
+            projectToClipboard()
         }
 
         if(mouseCanvas !== maps) return

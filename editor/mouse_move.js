@@ -1,5 +1,4 @@
 import {Action} from "../src/actions/action.js"
-import {project} from "../src/index.js"
 import {screenMouse} from "../src/system.js"
 import {distFromScreen} from "../src/canvas.js"
 
