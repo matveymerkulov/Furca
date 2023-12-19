@@ -1,4 +1,4 @@
-import {tileMap, tileSet} from "../editor/data.js"
+import {tileMap, tileMaps, tileSet} from "../editor/data.js"
 import TileMap from "./tile_map.js"
 import TileSet from "./tile_set.js"
 import ImageArray from "./image_array.js"
@@ -38,13 +38,19 @@ export function projectToText() {
     for(const set of Object.values(tileSet)) {
         text += `\t\t${set.name}: ${set.toString()},\n`
     }
-    text += "}\n\n"
+    text += "\t}\n\n"
 
     text += "\ttileMap = {\n"
     for(const map of Object.values(tileMap)) {
         text += `\t\t${map.name}: ${map.toString()},\n`
     }
     text += "\t}\n"
+
+    text += "\ttileMaps = new Layer("
+    tileMaps.forEach(map => {
+        text += `tileMap.${map.name},`
+    })
+    text += ")\n"
 
     text += "}"
     return text
@@ -165,6 +171,13 @@ export function projectFromText(data, texture) {
     while(getToken("}") !== "") {
         getSymbol("(")
         getTileMap()
+    }
+
+    getSymbol("(")
+    while(getToken("}") !== "") {
+        getSymbol("(")
+        getSymbol(".")
+        tileMaps.add(tileMap[name])
     }
 }
 

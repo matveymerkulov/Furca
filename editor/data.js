@@ -1,8 +1,9 @@
 import TileSet from "../src/tile_set.js"
 import TileMap from "../src/tile_map.js"
 import ImageArray from "../src/image_array.js"
+import Layer from "../src/layer.js"
 
-export let tileSet = {}, tileMap = {}
+export let tileSet = {}, tileMap = {}, tileMaps
 
 export function loadData(texture) {
     tileSet = {
@@ -48,4 +49,6 @@ export function loadData(texture) {
             0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
         ]),
     }
+
+    tileMaps = new Layer(tileMap.floor, tileMap.objects)
 }

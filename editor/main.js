@@ -1,5 +1,13 @@
 import {project} from "../src/project.js"
-import Canvas, {ctx, currentCanvas, distFromScreen, distToScreen, setCanvas} from "../src/canvas.js"
+import Canvas, {
+    ctx,
+    currentCanvas,
+    distFromScreen,
+    distToScreen,
+    setCanvas,
+    xToScreen,
+    yToScreen
+} from "../src/canvas.js"
 import {canvasMouse, mouse, screenMouse} from "../src/system.js"
 import {drawDashedRect} from "../src/draw_rect.js"
 import {boxWithPointCollision} from "../src/collisions.js"
@@ -8,7 +16,7 @@ import DashedRect from "./dashed_rect.js"
 import {projectFromStorage, projectFromText, projectToClipboard, projectToStorage} from "../src/save_load.js"
 import Key from "../src/key.js"
 import Layer from "../src/layer.js"
-import {loadData, tileMap, tileSet} from "./data.js"
+import {loadData, tileMap, tileMaps, tileSet} from "./data.js"
 
 project.getAssets = () => {
     return {
@@ -43,10 +51,9 @@ project.init = (texture) => {
     let zoomOut = new Key("WheelDown")
     let switchMode = new Key("Space")
     let save = new Key("KeyS")
+    let rename = new Key("KeyR")
 
     let mode = modes.tiles
-
-    let tileMaps = new Layer(tileMap.floor, tileMap.objects)
 
     let maps = Canvas.create(document.getElementById("map"), tileMaps, 30, 14)
     maps.background = "rgb(9, 44, 84)"
@@ -58,10 +65,10 @@ project.init = (texture) => {
     tiles.setZoom(-17)
 
     let mouseCanvas
-    maps.node.addEventListener("mouseover", (e) => {
+    maps.node.addEventListener("mouseover", () => {
         mouseCanvas = maps
     })
-    tiles.node.addEventListener("mouseover", (e) => {
+    tiles.node.addEventListener("mouseover", () => {
         mouseCanvas = tiles
     })
 
@@ -134,6 +141,17 @@ project.init = (texture) => {
     let moveMap = new MouseMove(undefined, select)
     let mapSelection = new DashedRect()
 
+    maps.scene.draw = () => {
+        tileMaps.items.forEach(map => {
+            map.draw()
+            ctx.fillStyle = "white"
+            ctx.font = "16px serif"
+            let metrics = ctx.measureText(map.name)
+            ctx.fillText(map.name, xToScreen(map.centerX) - 0.5 * metrics.width
+                ,  + yToScreen(map.topY) - 0.5 * metrics.actualBoundingBoxDescent - 4)
+        })
+    }
+
     project.draw = () => {}
 
     project.update = () => {
@@ -179,6 +197,10 @@ project.init = (texture) => {
                 mapSelection.object = currentTileMap
                 moveMap.execute()
                 mapSelection.draw()
+
+                if(rename.wasPressed && currentTileMap !== undefined) {
+                    currentTileMap.name = prompt("Enter name of file map:")
+                }
                 break
         }
     }
