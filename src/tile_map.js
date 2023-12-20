@@ -25,7 +25,7 @@ export default class TileMap extends Box {
     }
 
     toString() {
-        return `new TileMap("${this.name}",tileSet.${this.#tileSet.name},${this.#columns},${this.#rows},${this.centerX},${this.centerY}`
+        return `new TileMap("${this.name}",tileSet.${this.#tileSet.name},${this.#columns},${this.#rows},${this.x},${this.y}`
             + `,${this.cellWidth},${this.cellHeight},${arrayToString(this.#array, this.columns)}\t\t)`
     }
 
@@ -38,9 +38,9 @@ export default class TileMap extends Box {
     }
 
     tileForPoint(point) {
-        let column = Math.floor((point.centerX - this.leftX) / this.cellWidth)
+        let column = Math.floor((point.x - this.leftX) / this.cellWidth)
         if(column < 0 || column >= this.#columns) return -1
-        let row = Math.floor((point.centerY - this.topY) / this.cellHeight)
+        let row = Math.floor((point.y - this.topY) / this.cellHeight)
         if(row < 0 || row >= this.#rows) return -1
         return column + row * this.#columns
     }
@@ -100,8 +100,8 @@ export default class TileMap extends Box {
                 if(!showCollisionShapes) continue
                 let shape = tileSet.collisionShape(tileNum)
                 if(shape === undefined) continue
-                collisionShape.drawResized(x + distToScreen(shape.centerX - shape.halfWidth)
-                    , y + distToScreen(shape.centerY - shape.halfHeight)
+                collisionShape.drawResized(x + distToScreen(shape.x - shape.halfWidth)
+                    , y + distToScreen(shape.y - shape.halfHeight)
                     , width * shape.width, height * shape.height, shape.shapeType)
             }
         }
@@ -164,8 +164,8 @@ export default class TileMap extends Box {
                 let shape = tileSet.collisionShape(tileNum)
                 if(shape === undefined) continue
                 collisionSprite.shapeType = shape.shapeType
-                collisionSprite.moveTo(this.leftX + (shape.centerX + x) * this.cellWidth
-                    , this.topY + (shape.centerY + y) * this.cellHeight)
+                collisionSprite.moveTo(this.leftX + (shape.x + x) * this.cellWidth
+                    , this.topY + (shape.y + y) * this.cellHeight)
                 collisionSprite.setSize(this.cellWidth * shape.width, this.cellHeight * shape.height)
                 if(!sprite.collidesWithSprite(collisionSprite)) continue
                 code.call(null, collisionSprite, tileNum, x, y)

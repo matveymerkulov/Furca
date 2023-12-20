@@ -128,7 +128,7 @@ export function initUpdate() {
             inExplosion.push(asteroid)
         })
         inExplosion.forEach((asteroid) => {
-            destroyAsteroid(asteroid, sprite.angleTo(asteroid.centerX, asteroid.centerY))
+            destroyAsteroid(asteroid, sprite.angleTo(asteroid.x, asteroid.y))
         })
     }
 
@@ -137,7 +137,7 @@ export function initUpdate() {
     function createSingleExplosion(sprite, size, playSnd = true) {
         let explosion = Sprite.createFromTemplate(template.explosion)
         explosion.size = size
-        explosion.moveTo(sprite.centerX, sprite.centerY)
+        explosion.moveTo(sprite.x, sprite.y)
         explosion.add(new DelayedRemove(explosion, explosions, 1.0))
         if(playSnd) play(sound.explosion)
     }
@@ -153,7 +153,7 @@ export function initUpdate() {
             let particleSize = first ? size : (1 - length / 2) * size
 
             let explosion = Sprite.create(explosions, template.explosion.images
-                , sprite.centerX + length * Math.cos(angle), sprite.centerY + length * Math.sin(angle)
+                , sprite.x + length * Math.cos(angle), sprite.y + length * Math.sin(angle)
                 , particleSize, particleSize, ShapeType.circle, rad(rnd(360)), 0, 16)
             explosion.add(new DelayedRemove(explosion, explosions, 1))
             times--

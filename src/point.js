@@ -2,10 +2,10 @@ import {Renderable} from "./renderable.js"
 import {rad, rnd, rndi} from "./system.js"
 
 export default class Point extends Renderable {
-    constructor(centerX = 0.0, centerY = 0.0) {
+    constructor(x = 0.0, y = 0.0) {
         super()
-        this.centerX = centerX
-        this.centerY = centerY
+        this.x = x
+        this.y = y
     }
 
     draw() {}
@@ -15,48 +15,48 @@ export default class Point extends Renderable {
     move() {}
 
     moveTo(x, y) {
-        this.centerX = x
-        this.centerY = y
+        this.x = x
+        this.y = y
     }
 
     setPositionAs(point) {
-        this.centerX = point.centerX
-        this.centerY = point.centerY
+        this.x = point.x
+        this.y = point.y
     }
 
     moveToCircle(x, y, radius) {
         let angle = rad(rnd(360))
         radius = Math.sqrt(rnd(radius))
-        this.centerX = x + radius * Math.cos(angle)
-        this.centerY = y + radius * Math.sin(angle)
+        this.x = x + radius * Math.cos(angle)
+        this.y = y + radius * Math.sin(angle)
     }
 
     moveToPerimeter(bounds) {
         let dx = bounds.rightX - bounds.leftX
         let dy = bounds.bottomY - bounds.topY
         if (rnd(dx + dy) < dx) {
-            this.centerX = rnd(bounds.leftX, bounds.rightX)
-            this.centerY = rndi(2) ? bounds.topY : bounds.bottomY
+            this.x = rnd(bounds.leftX, bounds.rightX)
+            this.y = rndi(2) ? bounds.topY : bounds.bottomY
         } else {
-            this.centerX = rndi(2) ? bounds.leftX : bounds.rightX
-            this.centerY = rnd(bounds.topY, bounds.bottomY)
+            this.x = rndi(2) ? bounds.leftX : bounds.rightX
+            this.y = rnd(bounds.topY, bounds.bottomY)
         }
     }
 
     loop(bounds) {
-        if(this.centerX < bounds.leftX) this.centerX += bounds.width
-        if(this.centerX >= bounds.rightX) this.centerX -= bounds.width
-        if(this.centerY < bounds.topY) this.centerY += bounds.height
-        if(this.centerY >= bounds.bottomY) this.centerY -= bounds.height
+        if(this.x < bounds.leftX) this.x += bounds.width
+        if(this.x >= bounds.rightX) this.x -= bounds.width
+        if(this.y < bounds.topY) this.y += bounds.height
+        if(this.y >= bounds.bottomY) this.y -= bounds.height
     }
 
     distanceTo(point) {
-        let dx = this.centerX - point.centerX
-        let dy = this.centerY - point.centerY
+        let dx = this.x - point.x
+        let dy = this.y - point.y
         return Math.sqrt(dx * dx + dy * dy)
     }
 
     angleTo(x, y) {
-        return Math.atan2(this.centerY - y, this.centerX - x)
+        return Math.atan2(this.y - y, this.x - x)
     }
 }

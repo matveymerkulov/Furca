@@ -10,8 +10,8 @@ export function setCanvas(canvas) {
 }
 
 export default class Canvas extends Sprite {
-    constructor(node, scene, centerX, centerY, width, height, active, viewport) {
-        super(undefined, centerX, centerY, width, height, 0.0, 0.0, 0, active)
+    constructor(node, scene, x, y, width, height, active, viewport) {
+        super(undefined, x, y, width, height, 0.0, 0.0, 0, active)
         this.node = node
         this.scene = scene
         this.viewport = viewport
@@ -52,8 +52,8 @@ export default class Canvas extends Sprite {
         let k = 1.0 * viewport.width / this.width
         this._k = k
         this.height = 1.0 * viewport.height / k
-        this._vdx = 0.5 * viewport.width - this.centerX * k
-        this._vdy = 0.5 * viewport.height - this.centerY * k
+        this._vdx = 0.5 * viewport.width - this.x * k
+        this._vdy = 0.5 * viewport.height - this.y * k
     }
 
     setZoom(zoom) {
@@ -68,24 +68,24 @@ export default class Canvas extends Sprite {
         this.setZoom(zoom)
         let fx2 = xFromScreen(x)
         let fy2 = yFromScreen(y)
-        this.centerX += fx1 - fx2
-        this.centerY += fy1 - fy2
+        this.x += fx1 - fx2
+        this.y += fy1 - fy2
         this.update()
     }
 
     hasMouse() {
-        return this.viewport.collidesWithPoint(mouse.centerX, mouse.centerY)
+        return this.viewport.collidesWithPoint(mouse.x, mouse.y)
     }
 
     setDefaultPosition() {
         this._oldZoom = this.zoom
-        this._defaultPosition = new Sprite(undefined, undefined, this.centerX, this.centerY, this.width, this.height)
+        this._defaultPosition = new Sprite(undefined, undefined, this.x, this.y, this.width, this.height)
     }
 
     restorePosition() {
         let defaultPosition = this._defaultPosition
-        this.centerX = defaultPosition.centerX
-        this.centerY = defaultPosition.centerY
+        this.x = defaultPosition.x
+        this.y = defaultPosition.y
         this.width = defaultPosition.width
         this.height = defaultPosition.height
         this.zoom = this._oldZoom

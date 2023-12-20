@@ -4,7 +4,7 @@ import {ctx, xToScreen, yToScreen} from "../canvas.js"
 
 export default class Label extends Box {
     constructor(sprite, items, horizontalAlign, verticalAlign, format, image) {
-        super(sprite.centerX, sprite.centerY, sprite.width, sprite.height)
+        super(sprite.x, sprite.y, sprite.width, sprite.height)
         this.items = items
         this.horizontalAlign = horizontalAlign
         this.verticalAlign = verticalAlign
@@ -44,7 +44,7 @@ export default class Label extends Box {
                 x = xToScreen(this.leftX)
                 break
             case align.center:
-                x = xToScreen(this.centerX) - 0.5 * width
+                x = xToScreen(this.x) - 0.5 * width
                 break
             case align.right:
                 x = xToScreen(this.rightX) - width
@@ -56,7 +56,7 @@ export default class Label extends Box {
                 y = yToScreen(this.topY)
                 break
             case align.center:
-                y = yToScreen(this.centerY) - 0.5 * height
+                y = yToScreen(this.y) - 0.5 * height
                 break
             case align.bottom:
                 y = yToScreen(this.bottomY) - height

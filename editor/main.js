@@ -78,13 +78,13 @@ project.init = (texture) => {
             if (mouseCanvas !== canvas) break
 
             if (move.wasPressed) {
-                mouseX0 = screenMouse.centerX
-                mouseY0 = screenMouse.centerY
-                cameraX0 = canvas.centerX
-                cameraY0 = canvas.centerY
+                mouseX0 = screenMouse.x
+                mouseY0 = screenMouse.y
+                cameraX0 = canvas.x
+                cameraY0 = canvas.y
             } else if (move.isDown) {
-                canvas.centerX = cameraX0 + distFromScreen(mouseX0 - screenMouse.centerX)
-                canvas.centerY = cameraY0 + distFromScreen(mouseY0 - screenMouse.centerY)
+                canvas.x = cameraX0 + distFromScreen(mouseX0 - screenMouse.x)
+                canvas.y = cameraY0 + distFromScreen(mouseY0 - screenMouse.y)
                 canvas.update()
             }
 
@@ -96,7 +96,7 @@ project.init = (texture) => {
                 break
             }
 
-            canvas.setZoomXY(canvas.zoom, screenMouse.centerX, screenMouse.centerY)
+            canvas.setZoomXY(canvas.zoom, screenMouse.x, screenMouse.y)
             break
         }
 
@@ -117,7 +117,7 @@ project.init = (texture) => {
         let columns = Math.floor(tiles.width)
         let height = Math.ceil(quantity / columns)
         let x0 = distToScreen(0.5 * (tiles.width - columns))
-        let y0 = distToScreen(0.5 * (tiles.height - height) - tiles.centerY)
+        let y0 = distToScreen(0.5 * (tiles.height - height) - tiles.y)
         for (const set of Object.values(tileSet)) {
             let images = set.images
             let size = distToScreen(1)
@@ -148,7 +148,7 @@ project.init = (texture) => {
             ctx.fillStyle = "white"
             ctx.font = "16px serif"
             let metrics = ctx.measureText(map.name)
-            ctx.fillText(map.name, xToScreen(map.centerX) - 0.5 * metrics.width
+            ctx.fillText(map.name, xToScreen(map.x) - 0.5 * metrics.width
                 ,  + yToScreen(map.topY) - 0.5 * metrics.actualBoundingBoxDescent - 4)
         })
     }
@@ -172,7 +172,7 @@ project.init = (texture) => {
         setCanvas(maps)
 
         let currentTileMap = undefined
-        tileMaps.collisionWithPoint(mouse.centerX, mouse.centerY, (x, y, map) => {
+        tileMaps.collisionWithPoint(mouse.x, mouse.y, (x, y, map) => {
             if(mode === modes.tileMaps || map.tileSet === currentTileSet) {
                 currentTileMap = map
             }

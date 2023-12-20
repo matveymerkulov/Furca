@@ -38,8 +38,8 @@ project.init = (texture) => {
     let image = new Img(texture.particle, 0, 0)
     let draw = function () {
         ctx.globalAlpha = this.opacity
-        let x = xToScreen(this.centerX)
-        let y = yToScreen(this.centerY)
+        let x = xToScreen(this.x)
+        let y = yToScreen(this.y)
         const gradient = ctx.createRadialGradient(x, y, 0, x, y, distToScreen(this.halfWidth));
         gradient.addColorStop(0, `rgba(${this.color},255)`)
         gradient.addColorStop(1, `rgba(${this.color},0)`)
@@ -86,7 +86,7 @@ project.init = (texture) => {
 
         for(let layer of project.scene.items) {
             for (let shot of layer.items) {
-                shot.moveTo(shot.centerX + shot.dx * apsk, shot.centerY + shot.dy * apsk)
+                shot.moveTo(shot.x + shot.dx * apsk, shot.y + shot.dy * apsk)
                 shot.dy = shot.dy + apsk * gravity
                 if(shot.fadingSpeed !== undefined) {
                     shot.opacity -= shot.fadingSpeed * apsk
@@ -97,7 +97,7 @@ project.init = (texture) => {
                     let quantity = particlesQuantity.toNumber()
                     for (let i = 0; i < quantity; i++) {
                         let size = particleSize.toNumber()
-                        let particle = new Sprite(image, shot.centerX, shot.centerY, size, size)
+                        let particle = new Sprite(image, shot.x, shot.y, size, size)
                         particle.draw = draw
                         let angle = rnd(rad(360))
                         let length = Math.sqrt(rnd(0, 1)) * particleSpeed.toNumber()

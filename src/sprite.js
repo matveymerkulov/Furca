@@ -7,10 +7,10 @@ import {ShapeType} from "./shape_type.js"
 import {pushBoxFromBox, pushBoxFromCircle, pushCircleFromBox, pushCircleFromCircle} from "./physics.js"
 
 export default class Sprite extends Box {
-    constructor(image, centerX = 0.0, centerY = 0.0, width = 1.0, height = 1.0
+    constructor(image, x = 0.0, y = 0.0, width = 1.0, height = 1.0
                 , shapeType = ShapeType.circle, angle = 0.0, speed = 0.0, imageAngle
                 , active = true, visible = true) {
-        super(centerX, centerY, width, height)
+        super(x, y, width, height)
         this.shapeType = shapeType
         this.image = image
         this.imageAngle = imageAngle
@@ -23,14 +23,14 @@ export default class Sprite extends Box {
         this.flipped = false
     }
 
-    static create(layer, image, centerX, centerY, width, height, shapeType, angle, speed, animationSpeed, imageAngle
+    static create(layer, image, x, y, width, height, shapeType, angle, speed, animationSpeed, imageAngle
                   , active, visible) {
-        if(typeof centerX === "object") {
-            let pos = centerX
-            centerX = pos.centerX
-            centerY = pos.centerY
+        if(typeof x === "object") {
+            let pos = x
+            x = pos.x
+            y = pos.y
         }
-        let sprite = new Sprite(image, centerX, centerY, width, height, shapeType, angle, speed, imageAngle, active, visible)
+        let sprite = new Sprite(image, x, y, width, height, shapeType, angle, speed, imageAngle, active, visible)
         if(layer) layer.add(sprite)
         if(animationSpeed !== undefined) {
             sprite.actions = [new Animate(sprite, image, animationSpeed)]
@@ -60,11 +60,11 @@ export default class Sprite extends Box {
         if(template.image !== undefined) this.image = template.image
         if(template.pos !== undefined) {
             let pos = template.pos.toSprite()
-            this.centerX = pos.centerX
-            this.centerY = pos.centerY
+            this.x = pos.x
+            this.y = pos.y
         } else {
-            if(template.centerX !== undefined) this.centerX = num(template.centerX)
-            if(template.centerY !== undefined) this.centerY = num(template.centerY)
+            if(template.x !== undefined) this.x = num(template.x)
+            if(template.y !== undefined) this.y = num(template.y)
         }
         if(template.size !== undefined) {
             this.width = this.height = num(template.size)
@@ -83,7 +83,7 @@ export default class Sprite extends Box {
         if(!this.image || !this.visible) return
         ctx.globalAlpha = this.opacity
 
-        this.image.drawRotated(xToScreen(this.centerX), yToScreen(this.centerY)
+        this.image.drawRotated(xToScreen(this.x), yToScreen(this.y)
             , distToScreen(this.width), distToScreen(this.height), this.shapeType, this.imageAngle ?? this.angle
             , this.flipped)
 
@@ -97,8 +97,8 @@ export default class Sprite extends Box {
     }
 
     move() {
-        this.centerX += Math.cos(this.angle) * this.speed * apsk
-        this.centerY += Math.sin(this.angle) * this.speed * apsk
+        this.x += Math.cos(this.angle) * this.speed * apsk
+        this.y += Math.sin(this.angle) * this.speed * apsk
     }
 
     setAngleAs(sprite) {

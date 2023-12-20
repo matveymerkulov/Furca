@@ -4,8 +4,8 @@ import {drawDashedRect} from "./draw_rect.js"
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
 
 export default class Box extends Point {
-    constructor(centerX = 0.0, centerY = 0.0, width = 1.0, height = 1.0) {
-        super(centerX, centerY)
+    constructor(x = 0.0, y = 0.0, width = 1.0, height = 1.0) {
+        super(x, y)
         this.halfWidth = 0.5 * width
         this.halfHeight = 0.5 * height
     }
@@ -37,31 +37,31 @@ export default class Box extends Point {
     }
 
     get leftX() {
-        return this.centerX - this.halfWidth
+        return this.x - this.halfWidth
     }
     set leftX(value) {
-        this.centerX = value + this.halfWidth
+        this.x = value + this.halfWidth
     }
 
     get topY() {
-        return this.centerY - this.halfHeight
+        return this.y - this.halfHeight
     }
     set topY(value) {
-        this.centerY = value + this.halfHeight
+        this.y = value + this.halfHeight
     }
 
     get rightX() {
-        return this.centerX + this.halfWidth
+        return this.x + this.halfWidth
     }
     set rightX(value) {
-        this.centerX = value - this.halfWidth
+        this.x = value - this.halfWidth
     }
 
     get bottomY() {
-        return this.centerY + this.halfHeight
+        return this.y + this.halfHeight
     }
     set bottomY(value) {
-        this.centerY = value - this.halfHeight
+        this.y = value - this.halfHeight
     }
 
     setSize(width, height) {

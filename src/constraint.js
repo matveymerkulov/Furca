@@ -7,8 +7,8 @@ export default class Constraint extends Action {
         this.parent = parent
         this.dAngle = sprite.angle - parent.angle
 
-        let dx = sprite.centerX - parent.centerX
-        let dy = sprite.centerY - parent.centerY
+        let dx = sprite.x - parent.x
+        let dy = sprite.y - parent.y
         this.distance = Math.sqrt(dx * dx + dy * dy)
         this.dAngle2 = Math.atan2(dy, dx) - parent.angle
     }
@@ -17,7 +17,7 @@ export default class Constraint extends Action {
         let parent = this.parent
         this.sprite.angle = parent.angle + this.dAngle
         let angle = parent.angle + this.dAngle2
-        this.sprite.centerX = parent.centerX + this.distance * Math.cos(angle)
-        this.sprite.centerY = parent.centerY + this.distance * Math.sin(angle)
+        this.sprite.x = parent.x + this.distance * Math.cos(angle)
+        this.sprite.y = parent.y + this.distance * Math.sin(angle)
     }
 }

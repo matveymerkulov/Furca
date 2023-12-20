@@ -111,7 +111,7 @@ project.init = (texture) => {
 
     project.update = () => {
         player.dy += gravity * apsk
-        player.centerY += player.dy * apsk
+        player.y += player.dy * apsk
 
         if(!tiles.overlaps(player)) {
             onGround()
@@ -124,7 +124,7 @@ project.init = (texture) => {
         })
 
         for(let panel of panels.items) {
-            panel.centerY += panel.dy * apsk
+            panel.y += panel.dy * apsk
             if(!tiles.overlaps(panel)) {
                 panel.dy = -panel.dy
                 panel.limit(tiles)
@@ -142,7 +142,7 @@ project.init = (texture) => {
 
         horizontalMovement(player, left, right, horizontalAcceleration, maxHorizontalAcceleration)
 
-        player.centerX += player.dx * apsk
+        player.x += player.dx * apsk
 
         if(!tiles.overlaps(player)) {
             player.dx = 0
