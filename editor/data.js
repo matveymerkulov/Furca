@@ -5,6 +5,10 @@ import Layer from "../src/layer.js"
 
 export let tileSet = {}, tileMap = {}, tileMaps
 
+export function init() {
+    tileMaps = new Layer()
+}
+
 export function loadData(texture) {
     tileSet = {
         floor: new TileSet("floor",new ImageArray(texture.floor,9,11,0.5,0.5,1,1)),

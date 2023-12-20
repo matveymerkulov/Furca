@@ -40,17 +40,11 @@ export function projectToText() {
     }
     text += "\t}\n\n"
 
-    text += "\ttileMap = {\n"
-    for(const map of Object.values(tileMap)) {
-        text += `\t\t${map.name}: ${map.toString()},\n`
-    }
-    text += "\t}\n"
-
-    text += "\ttileMaps = new Layer("
-    tileMaps.forEach(map => {
-        text += `tileMap.${map.name},`
+    text += "\ttileMaps = [\n"
+    tileMaps.items.forEach(map => {
+        text += `\t\t${map.toString()},\n`
     })
-    text += ")\n"
+    text += "\t]\n"
 
     text += "}"
     return text
@@ -153,7 +147,9 @@ function getTileMap() {
     let cellWidth = getFloat()
     let cellHeight = getFloat()
     let array = getIntArray()
-    tileMap[name] = new TileMap(name, mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array)
+    let map = new TileMap(name, mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array)
+    tileMap[name] = map
+    tileMaps.add(map)
 }
 
 export function projectFromText(data, texture) {
@@ -171,13 +167,6 @@ export function projectFromText(data, texture) {
     while(getToken("}") !== "") {
         getSymbol("(")
         getTileMap()
-    }
-
-    getSymbol("(")
-    while(getToken("}") !== "") {
-        getSymbol("(")
-        getSymbol(".")
-        tileMaps.add(tileMap[name])
     }
 }
 
