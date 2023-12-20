@@ -40,11 +40,17 @@ export function projectToText() {
     }
     text += "\t}\n\n"
 
-    text += "\ttileMaps = [\n"
+    text += "\ttileMap = {\n"
+    for(let map of Object.values(tileMap)) {
+        text += `\t\t${map.name}: ${map.toString()},\n`
+    }
+    text += "\t}\n\n"
+
+    text += "\ttileMaps = new Layer("
     tileMaps.items.forEach(map => {
-        text += `\t\t${map.toString()},\n`
+        text += `tileMap.${map.name},`
     })
-    text += "\t]\n"
+    text += ")\n"
 
     text += "}"
     return text
@@ -149,7 +155,6 @@ function getTileMap() {
     let array = getIntArray()
     let map = new TileMap(name, mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array)
     tileMap[name] = map
-    tileMaps.add(map)
 }
 
 export function projectFromText(data, texture) {
@@ -167,6 +172,12 @@ export function projectFromText(data, texture) {
     while(getToken("}") !== "") {
         getSymbol("(")
         getTileMap()
+    }
+
+    getSymbol("(")
+    while(getToken(")") !== "") {
+        getSymbol(".")
+        tileMaps.add(tileMap[getToken()])
     }
 }
 

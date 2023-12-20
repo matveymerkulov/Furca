@@ -38,6 +38,7 @@ project.init = (texture) => {
     if(localStorage.getItem("project") === null) {
         loadData(texture)
     } else {
+        //loadData(texture)
         projectFromStorage(texture)
     }
 
@@ -177,8 +178,8 @@ project.init = (texture) => {
             }
         })
 
-        moveMap.object = tileMap.floor
-        tileMap.objects.setPositionAs(tileMap.floor)
+        moveMap.object = tileMaps.items[0]
+        tileMaps.items[1].setPositionAs(tileMaps.items[0])
         mapSelection.object = undefined
         if(currentTileMap === undefined) return
 
