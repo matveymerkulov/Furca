@@ -38,12 +38,18 @@ project.init = (texture) => {
     if(localStorage.getItem("project") === null) {
         loadData(texture)
     } else {
-        //loadData(texture)
-        projectFromStorage(texture)
+        loadData(texture)
+        //projectFromStorage(texture)
     }
 
     window.onbeforeunload = function() {
         projectToStorage()
+        projectToClipboard()
+    }
+
+    let objectName = new Map()
+    for(const[name, object] of Object.entries(tileMap)) {
+        objectName.set(object, name)
     }
 
     let select = new Key("LMB")
@@ -145,11 +151,13 @@ project.init = (texture) => {
     maps.scene.draw = () => {
         tileMaps.items.forEach(map => {
             map.draw()
+            let name = objectName.get(map)
+            if(map instanceof Layer) map = map.items[0]
             ctx.fillStyle = "white"
             ctx.font = "16px serif"
-            let metrics = ctx.measureText(map.name)
-            ctx.fillText(map.name, xToScreen(map.x) - 0.5 * metrics.width
-                ,  + yToScreen(map.topY) - 0.5 * metrics.actualBoundingBoxDescent - 4)
+            let metrics = ctx.measureText(name)
+            ctx.fillText(name, xToScreen(map.x) - 0.5 * metrics.width
+                ,  yToScreen(map.topY) - 0.5 * metrics.actualBoundingBoxDescent - 4)
         })
     }
 
@@ -178,8 +186,8 @@ project.init = (texture) => {
             }
         })
 
-        moveMap.object = tileMaps.items[0]
-        tileMaps.items[1].setPositionAs(tileMaps.items[0])
+        moveMap.object = tileMap.main.items[0]
+        tileMap.main.items[1].setPositionAs(tileMap.main.items[0])
         mapSelection.object = undefined
         if(currentTileMap === undefined) return
 
@@ -200,7 +208,7 @@ project.init = (texture) => {
                 mapSelection.draw()
 
                 if(rename.wasPressed && currentTileMap !== undefined) {
-                    currentTileMap.name = prompt("Enter name of file map:")
+                    objectName[currentTileMap] = prompt("Enter name of file map:", objectName[currentTileMap])
                 }
                 break
         }

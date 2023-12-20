@@ -24,8 +24,8 @@ export default class ImageArray {
     }
 
     toString() {
-        return `new ImageArray(texture.${this.texture.id},${this.columns},${this.rows},${this.xMul},${this.yMul}`
-            + `,${this.heightMul},${this.widthMul})`
+        return `new ImageArray(texture.${this.texture.id}, ${this.columns}, ${this.rows}, ${this.xMul}, ${this.yMul}`
+            + `, ${this.heightMul}, ${this.widthMul})`
     }
 
     image(num) {

@@ -3,6 +3,16 @@ import TileMap from "./tile_map.js"
 import TileSet from "./tile_set.js"
 import ImageArray from "./image_array.js"
 
+export let indent = ""
+
+export function addIndent() {
+    indent += "\t"
+}
+
+export function removeIndent() {
+    indent = indent.substring(1)
+}
+
 export function toString(value) {
     if(value instanceof Array) {
         let text = ""
@@ -21,13 +31,15 @@ export function toString(value) {
 
 export function arrayToString(array, columns) {
     let text = ""
+    addIndent()
     for(let pos = 0; pos < array.length; pos++) {
         if(columns !== undefined && (pos % columns) === 0) {
-            text +="\n\t\t\t"
+            text +=`\n${indent}`
         }
         text += array[pos].toString().padStart(3, " ") + ","
     }
-    return `[${text}\n]`
+    removeIndent()
+    return `[${text}\n${indent}]`
 }
 
 export function projectToText() {
@@ -35,6 +47,7 @@ export function projectToText() {
     text += `export function loadData(texture) {\n`
 
     text += "\ttileSet = {\n"
+    indent = "\t\t"
     for(const set of Object.values(tileSet)) {
         text += `\t\t${set.name}: ${set.toString()},\n`
     }
@@ -138,11 +151,10 @@ function getTileSet(texture) {
     let yMul = getFloat()
     let heightMul = getFloat()
     let widthMul = getFloat()
-    tileSet[name] = new TileSet(name, new ImageArray(texture[textureName], columns, rows, xMul, yMul, heightMul, widthMul))
+    tileSet[name] = new TileSet(new ImageArray(texture[textureName], columns, rows, xMul, yMul, heightMul, widthMul))
 }
 
 function getTileMap() {
-    let name = getString()
     getSymbol(".")
     let tileSetName = getToken()
     let mapTileSet = tileSet[tileSetName]
@@ -153,7 +165,7 @@ function getTileMap() {
     let cellWidth = getFloat()
     let cellHeight = getFloat()
     let array = getIntArray()
-    let map = new TileMap(name, mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array)
+    let map = new TileMap(mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array)
     tileMap[name] = map
 }
 

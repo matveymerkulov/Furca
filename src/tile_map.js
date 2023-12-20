@@ -13,9 +13,8 @@ export default class TileMap extends Box {
     #columns
     #rows
     #array
-    constructor(name, tileSet, columns, rows, x, y, cellWidth, cellHeight, array) {
+    constructor(tileSet, columns, rows, x, y, cellWidth, cellHeight, array) {
         super(x, y, cellWidth * columns, cellHeight * rows)
-        this.name = name
         this.#tileSet = tileSet
         this.#columns = columns
         this.#rows = rows
@@ -25,8 +24,8 @@ export default class TileMap extends Box {
     }
 
     toString() {
-        return `new TileMap("${this.name}",tileSet.${this.#tileSet.name},${this.#columns},${this.#rows},${this.x},${this.y}`
-            + `,${this.cellWidth},${this.cellHeight},${arrayToString(this.#array, this.columns)}\t\t)`
+        return `new TileMap(tileSet.${this.#tileSet.name}, ${this.#columns}, ${this.#rows}, ${this.x}`
+            + `, ${this.y}, ${this.cellWidth}, ${this.cellHeight}, ${arrayToString(this.#array, this.columns)})`
     }
 
     get rows() {

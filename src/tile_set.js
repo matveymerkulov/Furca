@@ -3,14 +3,13 @@ import {arrayToString} from "./save_load.js"
 export default class TileSet {
     #images
     #collision
-    constructor(name, images) {
-        this.name = name
+    constructor(images) {
         this.#images = images
         this.#collision = new Array(images.quantity)
     }
 
     toString() {
-        return `new TileSet("${this.name}",${this.#images.toString()})`
+        return `new TileSet(${this.#images.toString()})`
     }
 
     get images() {

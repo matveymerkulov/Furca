@@ -1,5 +1,6 @@
 import {removeFromArray} from "./system.js"
 import {Renderable} from "./renderable.js"
+import {addIndent, indent, removeIndent} from "./save_load.js"
 
 export default class Layer extends Renderable {
     constructor(...items) {
@@ -7,6 +8,16 @@ export default class Layer extends Renderable {
         this.items = items
         this.visible = true
         this.active = true
+    }
+
+    toString() {
+        let text = `new Layer(`
+        addIndent()
+        this.items.forEach(item => {
+            text += `\n${indent}${item.toString()},`
+        })
+        removeIndent()
+        return `${text}${indent})`
     }
 
     draw() {
