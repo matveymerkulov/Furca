@@ -17,6 +17,7 @@ import {projectFromStorage, projectFromText, projectToClipboard, projectToStorag
 import Key from "../src/key.js"
 import Layer from "../src/layer.js"
 import {loadData, tileMap, tileMaps, tileSet} from "./data.js"
+import TileMap from "../src/tile_map.js"
 
 project.getAssets = () => {
     return {
@@ -29,9 +30,13 @@ project.getAssets = () => {
     }
 }
 
-const modes = {
+const mode = {
     tiles: Symbol("tiles"),
     tileMaps: Symbol("tileMaps"),
+}
+
+function element(name) {
+    return document.getElementById(name)
 }
 
 project.init = (texture) => {
@@ -59,12 +64,14 @@ project.init = (texture) => {
     let switchMode = new Key("Space")
     let save = new Key("KeyS")
     let rename = new Key("KeyR")
+    let newMap = new Key("KeyN")
 
-    let mode = modes.tiles
+    let currentMode = mode.tiles
+    let currentName = "", currentPopup
 
-    let maps = Canvas.create(document.getElementById("map"), tileMaps, 30, 14)
+    let maps = Canvas.create(element("map"), tileMaps, 30, 14)
     maps.background = "rgb(9, 44, 84)"
-    let tiles = Canvas.create(document.getElementById("tiles"), new Layer(), 8, 14)
+    let tiles = Canvas.create(element("tiles"), new Layer(), 8, 14)
     setCanvas(maps)
 
     let mouseX0, mouseY0, cameraX0, cameraY0
@@ -108,6 +115,17 @@ project.init = (texture) => {
 
         setCanvas(canvas)
         canvas.draw()
+    }
+
+    function showPopup(name) {
+        hidePopup()
+        currentPopup = document.getElementById(name)
+        currentPopup.style.visibility = "visible"
+    }
+
+    function hidePopup() {
+        if(currentPopup !== undefined) currentPopup.style.visibility = "hidden"
+        currentPopup = undefined
     }
 
     let currentTile = 0
@@ -168,7 +186,7 @@ project.init = (texture) => {
         processCamera(tiles)
 
         if(switchMode.wasPressed) {
-            mode = mode === modes.tiles ? modes.tileMaps : modes.tiles
+            currentMode = currentMode === mode.tiles ? mode.tileMaps : mode.tiles
         }
 
         if(save.wasPressed) {
@@ -181,18 +199,18 @@ project.init = (texture) => {
 
         let currentTileMap = undefined
         tileMaps.collisionWithPoint(mouse.x, mouse.y, (x, y, map) => {
-            if(mode === modes.tileMaps || map.tileSet === currentTileSet) {
+            if(currentMode === mode.tileMaps || map.tileSet === currentTileSet) {
                 currentTileMap = map
             }
         })
 
-        moveMap.object = tileMap.main.items[0]
-        tileMap.main.items[1].setPositionAs(tileMap.main.items[0])
+        moveMap.object = currentTileMap
+        tileMap.main.items[0].setPositionAs(tileMap.main.items[1])
         mapSelection.object = undefined
         if(currentTileMap === undefined) return
 
-        switch(mode) {
-            case modes.tiles:
+        switch(currentMode) {
+            case mode.tiles:
                 let tile = currentTileMap.tileForPoint(mouse)
                 if(tile < 0) break
                 if(select.isDown) {
@@ -202,15 +220,50 @@ project.init = (texture) => {
                 if(sprite === undefined) break
                 sprite.drawDashedRect()
                 break
-            case modes.tileMaps:
+            case mode.tileMaps:
                 mapSelection.object = currentTileMap
                 moveMap.execute()
                 mapSelection.draw()
 
                 if(rename.wasPressed && currentTileMap !== undefined) {
-                    objectName[currentTileMap] = prompt("Enter name of file map:", objectName[currentTileMap])
+                    objectName.set(currentTileMap, prompt("Enter name of tile map:", objectName.get(currentTileMap)))
                 }
                 break
         }
+
+        if(newMap.wasPressed) {
+            currentName = prompt("Введите имя новой карты:")
+            if(currentName === null) {
+                hidePopup()
+            } else {
+                showPopup("map_size")
+            }
+        }
+    }
+
+    let tileSets = element("tile_sets")
+    let columnsField = element("columns")
+    let rowsField = element("rows")
+    element("map_size_ok").onclick = () => {
+        tileSets.innerHTML = ""
+        for(const[name, set] of Object.entries(tileSet)) {
+            let button = document.createElement("button")
+            button.innerText = name
+            button.tileSet = set
+            button.onclick = (event) => {
+                let map = new TileMap(event.target.tileSet, parseInt(columnsField.value), parseInt(rowsField.value)
+                    , mouse.x, mouse.y, 1, 1)
+                tileMap[currentName] = map
+                objectName.set(map, currentName)
+                tileMaps.add(map)
+                hidePopup()
+            }
+            tileSets.appendChild(button)
+        }
+        showPopup("select_tile_set")
+    }
+
+    for(element of document.getElementsByClassName("cancel")) {
+        element.onclick = () => hidePopup()
     }
 }
