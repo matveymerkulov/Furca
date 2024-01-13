@@ -63,9 +63,10 @@ project.init = (texture) => {
     let zoomOut = new Key("WheelDown")
     let switchMode = new Key("Space")
     let save = new Key("KeyS")
-    let rename = new Key("KeyR")
+    let renameMap = new Key("KeyR")
     let newMap = new Key("KeyN")
     let copyMap = new Key("KeyC")
+    let turnMap = new Key("KeyT")
 
     let currentMode = mode.tiles
     let currentPopup
@@ -249,10 +250,14 @@ project.init = (texture) => {
                     tileMaps.add(map)
                 }
 
-                if(rename.wasPressed) {
+                if(renameMap.wasPressed) {
                     let name = prompt("Enter name of tile map:", objectName.get(currentTileMap))
                     if(name === null) break
                     objectName.set(currentTileMap, name)
+                }
+
+                if(turnMap.wasPressed) {
+                    currentTileMap.turn()
                 }
 
                 break

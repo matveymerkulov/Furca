@@ -1,6 +1,7 @@
 import {project} from "./project.js"
 import {keys} from "./key.js"
-import {showCollisionShapes} from "./system.js"
+
+export let showCollisionShapes = false
 
 export function initInput() {
     document.addEventListener("keydown", event => {

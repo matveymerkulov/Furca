@@ -8,7 +8,7 @@ import {init, loadData} from "../editor/data.js"
 
 // global variables
 
-export let zk = 1.2, fps = 60, aps = 150, showCollisionShapes = false, paused = false
+export let zk = 1.2, fps = 60, aps = 150, paused = false
 export let mouse, screenMouse, canvasMouse, apsk = 1 / aps, unc = 0.0000001
 
 // enums

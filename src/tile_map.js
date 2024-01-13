@@ -1,9 +1,9 @@
 import {ctx, distToScreen, xToScreen, yToScreen} from "./canvas.js"
 import Box from "./box.js"
-import {showCollisionShapes} from "./system.js"
 import Shape from "./shape.js"
 import Sprite from "./sprite.js"
 import {arrayToString} from "./save_load.js"
+import {showCollisionShapes} from "./input.js"
 
 let collisionShape = new Shape("rgb(255, 0, 255)", 0.5)
 let collisionSprite = new Sprite()
@@ -26,6 +26,18 @@ export default class TileMap extends Box {
     copy() {
         return new TileMap(this.#tileSet, this.#columns, this.#rows, this.x + 1 + this.width, this.y
             , this.cellWidth, this.cellHeight, [...this.#array])
+    }
+
+    turn() {
+        let newArray = new Array(this.#array.length)
+        for(let y = 0; y < this.#rows; y++) {
+            for(let x = 0; x < this.#columns; x++) {
+                let newX = this.#rows - 1 - y
+                let newY = x
+                newArray[newX + this.#rows * newY] = this.#array[x + this.#columns * y]
+            }
+        }
+        this.#array = newArray
     }
 
     toString() {
