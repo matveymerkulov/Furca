@@ -65,9 +65,10 @@ project.init = (texture) => {
     let save = new Key("KeyS")
     let rename = new Key("KeyR")
     let newMap = new Key("KeyN")
+    let copyMap = new Key("KeyC")
 
     let currentMode = mode.tiles
-    let currentName = "", currentPopup
+    let currentPopup
 
     let maps = Canvas.create(element("map"), tileMaps, 30, 14)
     maps.background = "rgb(9, 44, 84)"
@@ -181,6 +182,8 @@ project.init = (texture) => {
 
     project.draw = () => {}
 
+    let currentName = "", newX, newY
+
     project.update = () => {
         processCamera(maps)
         processCamera(tiles)
@@ -191,6 +194,17 @@ project.init = (texture) => {
 
         if(save.wasPressed) {
             projectToClipboard()
+        }
+
+        if(newMap.wasPressed) {
+            newX = mouse.x
+            newY = mouse.y
+            currentName = prompt("Введите имя новой карты:")
+            if(currentName === null) {
+                hidePopup()
+            } else {
+                showPopup("map_size")
+            }
         }
 
         if(mouseCanvas !== maps) return
@@ -225,19 +239,23 @@ project.init = (texture) => {
                 moveMap.execute()
                 mapSelection.draw()
 
-                if(rename.wasPressed && currentTileMap !== undefined) {
-                    objectName.set(currentTileMap, prompt("Enter name of tile map:", objectName.get(currentTileMap)))
-                }
-                break
-        }
+                if(currentTileMap === undefined) break
 
-        if(newMap.wasPressed) {
-            currentName = prompt("Введите имя новой карты:")
-            if(currentName === null) {
-                hidePopup()
-            } else {
-                showPopup("map_size")
-            }
+                if(copyMap.wasPressed) {
+                    let name = prompt("Enter name of new tile map:", objectName.get(currentTileMap))
+                    if(name === null) break
+                    let map = currentTileMap.copy()
+                    objectName.set(map, name)
+                    tileMaps.add(map)
+                }
+
+                if(rename.wasPressed) {
+                    let name = prompt("Enter name of tile map:", objectName.get(currentTileMap))
+                    if(name === null) break
+                    objectName.set(currentTileMap, name)
+                }
+
+                break
         }
     }
 
@@ -252,7 +270,7 @@ project.init = (texture) => {
             button.tileSet = set
             button.onclick = (event) => {
                 let map = new TileMap(event.target.tileSet, parseInt(columnsField.value), parseInt(rowsField.value)
-                    , mouse.x, mouse.y, 1, 1)
+                    , newX, newY, 1, 1)
                 tileMap[currentName] = map
                 objectName.set(map, currentName)
                 tileMaps.add(map)

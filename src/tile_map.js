@@ -23,6 +23,11 @@ export default class TileMap extends Box {
         this.cellHeight = cellHeight
     }
 
+    copy() {
+        return new TileMap(this.#tileSet, this.#columns, this.#rows, this.x + 1 + this.width, this.y
+            , this.cellWidth, this.cellHeight, [...this.#array])
+    }
+
     toString() {
         return `new TileMap(tileSet.${this.#tileSet.name}, ${this.#columns}, ${this.#rows}, ${this.x}`
             + `, ${this.y}, ${this.cellWidth}, ${this.cellHeight}, ${arrayToString(this.#array, this.columns)})`
