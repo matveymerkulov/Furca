@@ -212,15 +212,10 @@ project.init = (texture) => {
 
         setCanvas(maps)
 
-        let currentTileMap = undefined
-        tileMaps.collisionWithPoint(mouse.x, mouse.y, (x, y, map) => {
-            if(currentMode === mode.tileMaps || map.tileSet === currentTileSet) {
-                currentTileMap = map
-            }
-        })
+        let currentTileMap = tileMaps.firstCollisionWithPoint(mouse.x, mouse.y)
 
         moveMap.object = currentTileMap
-        tileMap.main.items[0].setPositionAs(tileMap.main.items[1])
+        tileMap.main.items[1].setPositionAs(tileMap.main.items[0])
         mapSelection.object = undefined
         if(currentTileMap === undefined) return
 

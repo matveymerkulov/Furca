@@ -38,6 +38,9 @@ export default class TileMap extends Box {
             }
         }
         this.#array = newArray
+        let oldRows = this.#rows
+        this.#rows = this.#columns
+        this.#columns = oldRows
     }
 
     toString() {

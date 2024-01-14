@@ -17,9 +17,15 @@ export default class Box extends Point {
     get size() {
         return this.halfWidth * 2.0
     }
-
     set size(value) {
         this.halfWidth = this.halfHeight = value * 0.5
+    }
+
+    get radius() {
+        return this.halfWidth
+    }
+    set radius(value) {
+        this.halfWidth = this.halfHeight = value
     }
 
     get width() {
@@ -87,6 +93,10 @@ export default class Box extends Point {
 
     collidesWithPoint(x, y) {
         return x >= this.leftX && x < this.rightX && y >= this.topY && y < this.bottomY
+    }
+
+    firstCollisionWithPoint(x, y) {
+        return this.collidesWithPoint(x, y) ? this : undefined
     }
 
     collisionWithPoint(x, y, code) {

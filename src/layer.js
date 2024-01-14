@@ -82,6 +82,16 @@ export default class Layer extends Renderable {
 
     // collisions
 
+    firstCollisionWithPoint(x, y) {
+        for(let item of this.items) {
+            let collided = item.firstCollisionWithPoint(x, y)
+            if(collided !== undefined) {
+                return collided
+            }
+        }
+        return undefined
+    }
+
     collisionWith(object, code) {
         this.items.forEach(item => item.collisionWith(object, code))
     }
