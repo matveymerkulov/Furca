@@ -28,19 +28,35 @@ export default class TileMap extends Box {
             , this.cellWidth, this.cellHeight, [...this.#array])
     }
 
-    turn() {
+    transform(mirrorHorizontally, mirrorVertically, swap) {
         let newArray = new Array(this.#array.length)
         for(let y = 0; y < this.#rows; y++) {
             for(let x = 0; x < this.#columns; x++) {
-                let newX = this.#rows - 1 - y
-                let newY = x
-                newArray[newX + this.#rows * newY] = this.#array[x + this.#columns * y]
+                let newX = mirrorHorizontally ? this.#columns - 1 - x : x
+                let newY = mirrorVertically ? this.#rows - 1 - y : y
+                if(swap) [newX, newY] = [newY, newX]
+                let newK = swap ? this.#columns : this.#rows
+                newArray[newX + newK * newY] = this.#array[x + this.#columns * y]
             }
         }
+        if(swap) [this.#columns, this.#rows] = [this.#rows, this.#columns]
         this.#array = newArray
-        let oldRows = this.#rows
-        this.#rows = this.#columns
-        this.#columns = oldRows
+    }
+
+    turnClockwise() {
+        this.transform(false, true, true)
+    }
+
+    turnCounterclockwise() {
+        this.transform(true, false, true)
+    }
+
+    mirrorHorizontally() {
+        this.transform(true, false, false)
+    }
+
+    mirrorVertically() {
+        this.transform(false, true, false)
     }
 
     toString() {
@@ -54,6 +70,10 @@ export default class TileMap extends Box {
 
     get columns() {
         return this.#columns
+    }
+
+    get tileSet() {
+        return this.#tileSet
     }
 
     tileForPoint(point) {

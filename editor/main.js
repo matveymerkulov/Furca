@@ -67,6 +67,7 @@ project.init = (texture) => {
     let newMap = new Key("KeyN")
     let copyMap = new Key("KeyC")
     let turnMap = new Key("KeyT")
+    let tileSetProperties = new Key("KeyI")
 
     let currentMode = mode.tiles
     let currentPopup
@@ -74,6 +75,7 @@ project.init = (texture) => {
     let maps = Canvas.create(element("map"), tileMaps, 30, 14)
     maps.background = "rgb(9, 44, 84)"
     let tiles = Canvas.create(element("tiles"), new Layer(), 8, 14)
+    let tileSetCanvas = element("tile_set")
     setCanvas(maps)
 
     let mouseX0, mouseY0, cameraX0, cameraY0
@@ -121,7 +123,7 @@ project.init = (texture) => {
 
     function showPopup(name) {
         hidePopup()
-        currentPopup = document.getElementById(name)
+        currentPopup = element(name)
         currentPopup.style.visibility = "visible"
     }
 
@@ -235,8 +237,6 @@ project.init = (texture) => {
                 moveMap.execute()
                 mapSelection.draw()
 
-                if(currentTileMap === undefined) break
-
                 if(copyMap.wasPressed) {
                     let name = prompt("Enter name of new tile map:", objectName.get(currentTileMap))
                     if(name === null) break
@@ -246,13 +246,19 @@ project.init = (texture) => {
                 }
 
                 if(renameMap.wasPressed) {
-                    let name = prompt("Enter name of tile map:", objectName.get(currentTileMap))
+                    let name = prompt("Enter new name of tile map:", objectName.get(currentTileMap))
                     if(name === null) break
                     objectName.set(currentTileMap, name)
                 }
 
                 if(turnMap.wasPressed) {
-                    currentTileMap.turn()
+                    currentTileMap.turnClockwise()
+                }
+
+                if(tileSetProperties.wasPressed) {
+                    tileSetCanvas.style.height = (document.body.offsetHeight - 100) + "px"
+                    currentTileSet = currentTileMap.tileSet
+                    showPopup("tile_set_properties")
                 }
 
                 break
@@ -281,7 +287,7 @@ project.init = (texture) => {
         showPopup("select_tile_set")
     }
 
-    for(element of document.getElementsByClassName("cancel")) {
-        element.onclick = () => hidePopup()
+    for(let item of document.getElementsByClassName("cancel")) {
+        item.onclick = () => hidePopup()
     }
 }
