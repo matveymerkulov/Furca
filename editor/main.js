@@ -214,10 +214,15 @@ project.init = (texture) => {
 
         setCanvas(maps)
 
-        let currentTileMap = tileMaps.firstCollisionWithPoint(mouse.x, mouse.y)
+        let currentTileMap = undefined
+        tileMaps.collisionWithPoint(mouse.x, mouse.y, (x, y, map) => {
+            if(currentMode === mode.tileMaps || map.tileSet === currentTileSet) {
+                currentTileMap = map
+            }
+        })
 
         moveMap.object = currentTileMap
-        tileMap.main.items[1].setPositionAs(tileMap.main.items[0])
+        tileMap.main.items[0].setPositionAs(tileMap.main.items[1])
         mapSelection.object = undefined
         if(currentTileMap === undefined) return
 
@@ -257,7 +262,6 @@ project.init = (texture) => {
 
                 if(tileSetProperties.wasPressed) {
                     tileSetCanvas.style.height = (document.body.offsetHeight - 100) + "px"
-                    currentTileSet = currentTileMap.tileSet
                     showPopup("tile_set_properties")
                 }
 

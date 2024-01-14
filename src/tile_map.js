@@ -13,7 +13,8 @@ export default class TileMap extends Box {
     #columns
     #rows
     #array
-    constructor(tileSet, columns, rows, x, y, cellWidth, cellHeight, array) {
+    emptyTile
+    constructor(tileSet, columns, rows, x, y, cellWidth, cellHeight, array, emptyTile = -1) {
         super(x, y, cellWidth * columns, cellHeight * rows)
         this.#tileSet = tileSet
         this.#columns = columns
@@ -21,6 +22,7 @@ export default class TileMap extends Box {
         this.#array = array ?? new Array(columns * rows).fill(0)
         this.cellWidth = cellWidth
         this.cellHeight = cellHeight
+        this.emptyTile = emptyTile
     }
 
     copy() {
@@ -28,40 +30,10 @@ export default class TileMap extends Box {
             , this.cellWidth, this.cellHeight, [...this.#array])
     }
 
-    transform(mirrorHorizontally, mirrorVertically, swap) {
-        let newArray = new Array(this.#array.length)
-        for(let y = 0; y < this.#rows; y++) {
-            for(let x = 0; x < this.#columns; x++) {
-                let newX = mirrorHorizontally ? this.#columns - 1 - x : x
-                let newY = mirrorVertically ? this.#rows - 1 - y : y
-                if(swap) [newX, newY] = [newY, newX]
-                let newK = swap ? this.#columns : this.#rows
-                newArray[newX + newK * newY] = this.#array[x + this.#columns * y]
-            }
-        }
-        if(swap) [this.#columns, this.#rows] = [this.#rows, this.#columns]
-        this.#array = newArray
-    }
-
-    turnClockwise() {
-        this.transform(false, true, true)
-    }
-
-    turnCounterclockwise() {
-        this.transform(true, false, true)
-    }
-
-    mirrorHorizontally() {
-        this.transform(true, false, false)
-    }
-
-    mirrorVertically() {
-        this.transform(false, true, false)
-    }
-
     toString() {
         return `new TileMap(tileSet.${this.#tileSet.name}, ${this.#columns}, ${this.#rows}, ${this.x}`
-            + `, ${this.y}, ${this.cellWidth}, ${this.cellHeight}, ${arrayToString(this.#array, this.columns)})`
+            + `, ${this.y}, ${this.cellWidth}, ${this.cellHeight}, ${arrayToString(this.#array, this.#columns)}`
+            + `, ${this.emptyTile})`
     }
 
     get rows() {
@@ -133,7 +105,7 @@ export default class TileMap extends Box {
             let y = y0 + height * row
             for(let column = 0; column < this.#columns; column++) {
                 let tileNum = this.tile(column, row)
-                //if(tileNum === 0) continue
+                if(tileNum === this.emptyTile) continue
                 let x = x0 + width * column
                 images.image(tileNum).drawResized(x, y, width, height)
                 if(!showCollisionShapes) continue
@@ -189,6 +161,37 @@ export default class TileMap extends Box {
                 code.call(null, column, row, this.tile(column, row))
             }
         }
+    }
+
+    transform(mirrorHorizontally, mirrorVertically, swap) {
+        let newArray = new Array(this.#array.length)
+        for(let y = 0; y < this.#rows; y++) {
+            for(let x = 0; x < this.#columns; x++) {
+                let newX = mirrorHorizontally ? this.#columns - 1 - x : x
+                let newY = mirrorVertically ? this.#rows - 1 - y : y
+                if(swap) [newX, newY] = [newY, newX]
+                let newK = swap ? this.#columns : this.#rows
+                newArray[newX + newK * newY] = this.#array[x + this.#columns * y]
+            }
+        }
+        if(swap) [this.#columns, this.#rows] = [this.#rows, this.#columns]
+        this.#array = newArray
+    }
+
+    turnClockwise() {
+        this.transform(false, true, true)
+    }
+
+    turnCounterclockwise() {
+        this.transform(true, false, true)
+    }
+
+    mirrorHorizontally() {
+        this.transform(true, false, false)
+    }
+
+    mirrorVertically() {
+        this.transform(false, true, false)
     }
 
     collisionWithSprite(sprite, code) {
