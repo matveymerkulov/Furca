@@ -5,6 +5,7 @@ import {Function} from "./function/function.js"
 import {keys} from "./key.js"
 import {initInput} from "./input.js"
 import {init, loadData} from "../editor/data.js"
+import Drag from "./drag.js"
 
 // global variables
 
@@ -52,6 +53,10 @@ export function num(value) {
 
 export function togglePause() {
     paused = !paused
+}
+
+export function element(name) {
+    return document.getElementById(name)
 }
 
 // sound
@@ -188,6 +193,7 @@ function start() {
             project.update()
         } else {
             project.actions.forEach(action => action.execute())
+            Drag.execute()
             project.update()
             project.scene.update()
         }

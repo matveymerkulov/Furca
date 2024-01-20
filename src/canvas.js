@@ -1,5 +1,5 @@
 import Sprite from "./sprite.js"
-import {mouse} from "./system.js"
+import {mouse, screenMouse} from "./system.js"
 import Box from "./box.js"
 
 export let currentCanvas, ctx, zk = 1.2
@@ -7,6 +7,7 @@ export let currentCanvas, ctx, zk = 1.2
 export function setCanvas(canvas) {
     currentCanvas = canvas
     ctx = canvas.node.getContext("2d")
+    mouse.moveTo(xFromScreen(screenMouse.x), yFromScreen(screenMouse.y))
 }
 
 export default class Canvas extends Sprite {
@@ -41,10 +42,10 @@ export default class Canvas extends Sprite {
         ctx.fillStyle = this.background
         //g.setClip(viewport.leftX, viewport.topY, viewport.width, viewport.height)
         ctx.fillRect(0, 0, viewport.width, viewport.height)
-        
-        this.scene.draw()
 
         ctx.fillStyle = "white"
+
+        this.scene.draw()
     }
 
     update() {

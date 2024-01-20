@@ -8,16 +8,18 @@ import Canvas, {
     xToScreen,
     yToScreen
 } from "../src/canvas.js"
-import {canvasMouse, mouse, screenMouse} from "../src/system.js"
+import {canvasMouse, element, mouse, screenMouse} from "../src/system.js"
 import {drawDashedRect} from "../src/draw_rect.js"
 import {boxWithPointCollision} from "../src/collisions.js"
-import MouseMove from "./mouse_move.js"
+import MoveBox from "./move_box.js"
 import DashedRect from "./dashed_rect.js"
 import {projectFromStorage, projectFromText, projectToClipboard, projectToStorage} from "../src/save_load.js"
 import Key from "../src/key.js"
 import Layer from "../src/layer.js"
 import {loadData, tileMap, tileMaps, tileSet} from "./data.js"
 import TileMap from "../src/tile_map.js"
+import Drag from "../src/drag.js"
+import {hidePopup, showPopup} from "../src/gui/popup.js"
 
 project.getAssets = () => {
     return {
@@ -30,14 +32,12 @@ project.getAssets = () => {
     }
 }
 
-const mode = {
+export const mode = {
     tiles: Symbol("tiles"),
-    tileMaps: Symbol("tileMaps"),
+    maps: Symbol("maps"),
 }
 
-function element(name) {
-    return document.getElementById(name)
-}
+export let currentTileMap, currentMode = mode.tiles, currentTileSprite, maps, tiles
 
 project.init = (texture) => {
     if(localStorage.getItem("project") === null) {
@@ -69,12 +69,11 @@ project.init = (texture) => {
     let turnMap = new Key("KeyT")
     let tileSetProperties = new Key("KeyI")
 
-    let currentMode = mode.tiles
-    let currentPopup
+    Drag.add(new MoveBox(), select)
 
-    let maps = Canvas.create(element("map"), tileMaps, 30, 14)
+    maps = Canvas.create(element("map"), tileMaps, 30, 14)
     maps.background = "rgb(9, 44, 84)"
-    let tiles = Canvas.create(element("tiles"), new Layer(), 8, 14)
+    tiles = Canvas.create(element("tiles"), new Layer(), 8, 14)
     let tileSetCanvas = element("tile_set")
     setCanvas(maps)
 
@@ -118,18 +117,6 @@ project.init = (texture) => {
         }
 
         setCanvas(canvas)
-        canvas.draw()
-    }
-
-    function showPopup(name) {
-        hidePopup()
-        currentPopup = element(name)
-        currentPopup.style.visibility = "visible"
-    }
-
-    function hidePopup() {
-        if(currentPopup !== undefined) currentPopup.style.visibility = "hidden"
-        currentPopup = undefined
     }
 
     let currentTile = 0
@@ -167,10 +154,8 @@ project.init = (texture) => {
         }
     }
 
-    let moveMap = new MouseMove(undefined, select)
-    let mapSelection = new DashedRect()
-
     maps.scene.draw = () => {
+        setCanvas(maps)
         tileMaps.items.forEach(map => {
             map.draw()
             let name = objectName.get(map)
@@ -181,9 +166,20 @@ project.init = (texture) => {
             ctx.fillText(name, xToScreen(map.x) - 0.5 * metrics.width
                 ,  yToScreen(map.topY) - 0.5 * metrics.actualBoundingBoxDescent - 4)
         })
+        switch(currentMode) {
+            case mode.tiles:
+                if(currentTileSprite !== undefined) currentTileSprite.drawDashedRect()
+                break
+            case mode.maps:
+                if(currentTileMap !== undefined) currentTileMap.drawDashedRect()
+                break
+        }
     }
 
-    project.draw = () => {}
+    project.draw = () => {
+        maps.draw()
+        tiles.draw()
+    }
 
     let currentName = "", newX, newY
 
@@ -192,7 +188,7 @@ project.init = (texture) => {
         processCamera(tiles)
 
         if(switchMode.wasPressed) {
-            currentMode = currentMode === mode.tiles ? mode.tileMaps : mode.tiles
+            currentMode = currentMode === mode.tiles ? mode.maps : mode.tiles
         }
 
         if(save.wasPressed) {
@@ -214,16 +210,14 @@ project.init = (texture) => {
 
         setCanvas(maps)
 
-        let currentTileMap = undefined
+        currentTileMap = undefined, currentTileSprite = undefined
         tileMaps.collisionWithPoint(mouse.x, mouse.y, (x, y, map) => {
-            if(currentMode === mode.tileMaps || map.tileSet === currentTileSet) {
+            if(currentMode === mode.maps || map.tileSet === currentTileSet) {
                 currentTileMap = map
             }
         })
 
-        moveMap.object = currentTileMap
         tileMap.main.items[0].setPositionAs(tileMap.main.items[1])
-        mapSelection.object = undefined
         if(currentTileMap === undefined) return
 
         switch(currentMode) {
@@ -233,15 +227,9 @@ project.init = (texture) => {
                 if(select.isDown) {
                     currentTileMap.setTile(tile, currentTile)
                 }
-                let sprite = currentTileMap.tileSprite(tile)
-                if(sprite === undefined) break
-                sprite.drawDashedRect()
+                currentTileSprite = currentTileMap.tileSprite(tile)
                 break
-            case mode.tileMaps:
-                mapSelection.object = currentTileMap
-                moveMap.execute()
-                mapSelection.draw()
-
+            case mode.maps:
                 if(copyMap.wasPressed) {
                     let name = prompt("Enter name of new tile map:", objectName.get(currentTileMap))
                     if(name === null) break
