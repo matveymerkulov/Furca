@@ -1,6 +1,7 @@
 import Sprite from "./sprite.js"
 import {mouse, screenMouse} from "./system.js"
 import Box from "./box.js"
+import {project} from "./project.js"
 
 export let currentCanvas, ctx, zk = 1.2
 
@@ -11,10 +12,9 @@ export function setCanvas(canvas) {
 }
 
 export default class Canvas extends Sprite {
-    constructor(node, scene, x, y, width, height, active, viewport) {
+    constructor(node, x, y, width, height, active, viewport) {
         super(undefined, x, y, width, height, 0.0, 0.0, 0, active)
         this.node = node
-        this.scene = scene
         this.viewport = viewport
         this._vdx = 1.0
         this._vdy = 1.0
@@ -22,22 +22,22 @@ export default class Canvas extends Sprite {
         this._oldZoom = 0
         this._defaultPosition = this
         this.background = "black"
-        this.update()
+        this.updateParameters()
     }
 
-    static create(node, scene, fwidth, fheight, active = true) {
+    static create(node, fwidth, fheight, active = true) {
         node.width = node.clientWidth
         node.height = node.clientHeight
-        return new Canvas(node, scene,0.0, 0.0, fwidth, fheight, active, Box.fromArea(node.offsetLeft
+        return new Canvas(node,0.0, 0.0, fwidth, fheight, active, Box.fromArea(node.offsetLeft
             , node.offsetTop, node.width, node.height))
     }
 
-    draw() {
+    render() {
         if(!this.active) return
 
+        this.updateParameters()
         let viewport = this.viewport
         setCanvas(this)
-        this.update()
 
         ctx.fillStyle = this.background
         //g.setClip(viewport.leftX, viewport.topY, viewport.width, viewport.height)
@@ -45,10 +45,14 @@ export default class Canvas extends Sprite {
 
         ctx.fillStyle = "white"
 
-        this.scene.draw()
+        this.renderContents()
     }
 
-    update() {
+    renderContents() {
+        project.scene.draw()
+    }
+
+    updateParameters() {
         let viewport = this.viewport
         let k = 1.0 * viewport.width / this.width
         this._k = k
@@ -60,7 +64,7 @@ export default class Canvas extends Sprite {
     setZoom(zoom) {
         this.zoom = zoom
         this.width = this.viewport.width * (zk ** zoom)
-        this.update()
+        this.updateParameters()
     }
 
     setZoomXY(zoom, x, y) {
@@ -71,7 +75,7 @@ export default class Canvas extends Sprite {
         let fy2 = yFromScreen(y)
         this.x += fx1 - fx2
         this.y += fy1 - fy2
-        this.update()
+        this.updateParameters()
     }
 
     hasMouse() {
@@ -90,7 +94,7 @@ export default class Canvas extends Sprite {
         this.width = defaultPosition.width
         this.height = defaultPosition.height
         this.zoom = this._oldZoom
-        this.update()
+        this.updateParameters()
     }
 
     drawDefaultCamera() {

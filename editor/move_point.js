@@ -4,13 +4,14 @@ import {distFromScreen, setCanvas} from "../src/canvas.js"
 import Drag from "../src/drag.js"
 import {currentMode, currentTileMap, maps, mode as modes} from "./main.js"
 
-export default class MoveBox extends Drag {
-    conditions() {
-        return currentTileMap !== undefined && currentMode === modes.maps
+export default class MovePoint extends Drag {
+    constructor(canvas, direction = 1) {
+        super()
+        this.canvas = canvas
+        this.direction = direction
     }
 
     start() {
-        this.object = currentTileMap
         this.mouseX0 = screenMouse.x
         this.mouseY0 = screenMouse.y
         this.objectX0 = this.object.x
@@ -18,8 +19,8 @@ export default class MoveBox extends Drag {
     }
 
     process() {
-        setCanvas(maps)
-        this.object.x = this.objectX0 + distFromScreen(screenMouse.x - this.mouseX0)
-        this.object.y = this.objectY0 + distFromScreen(screenMouse.y - this.mouseY0)
+        setCanvas(this.canvas)
+        this.object.x = this.objectX0 + this.direction * distFromScreen(screenMouse.x - this.mouseX0)
+        this.object.y = this.objectY0 + this.direction * distFromScreen(screenMouse.y - this.mouseY0)
     }
 }

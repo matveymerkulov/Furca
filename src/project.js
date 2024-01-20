@@ -8,12 +8,14 @@ export let project = {
     actions: [],
     sound: {},
 
-    draw: () => {
-        if(currentCanvas !== undefined) currentCanvas.draw()
+    render() {
+        currentCanvas.render()
     },
     getAssets() {
         return {texture: {}, sound: {}}
     },
     init: (texture) => {},
-    update: () => {},
+    update: () => {
+        this.scene.update()
+    },
 }

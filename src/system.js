@@ -119,8 +119,7 @@ export function defaultCanvas() {
     canvas.style.display = "flex"
     canvas.focus()
 
-    project.canvas = Canvas.create(canvas, project.scene, square ? 16 : 9, 16)
-    setCanvas(project.canvas)
+    setCanvas(Canvas.create(canvas, square ? 16 : 9, 16))
     ctx.fillStyle = "white"
     ctx.font = canvas.width / 24 + "px monospace"
     ctx.textBaseline = "top"
@@ -223,7 +222,7 @@ function start() {
             fpsCounter++
         }
 
-        project.draw()
+        project.render()
 
         //ctx.fillText(`fps: ${realFps}, aps: ${realAps}`, 5, 5)
     }, 1000.0 / 150)

@@ -11,7 +11,7 @@ import Canvas, {
 import {canvasMouse, element, mouse, screenMouse} from "../src/system.js"
 import {drawDashedRect} from "../src/draw_rect.js"
 import {boxWithPointCollision} from "../src/collisions.js"
-import MoveBox from "./move_box.js"
+import MoveBox from "./move_point.js"
 import DashedRect from "./dashed_rect.js"
 import {projectFromStorage, projectFromText, projectToClipboard, projectToStorage} from "../src/save_load.js"
 import Key from "../src/key.js"
@@ -20,6 +20,8 @@ import {loadData, tileMap, tileMaps, tileSet} from "./data.js"
 import TileMap from "../src/tile_map.js"
 import Drag from "../src/drag.js"
 import {hidePopup, showPopup} from "../src/gui/popup.js"
+import MoveTileMap from "./move_tile_map.js"
+import {Pan} from "./pan.js"
 
 project.getAssets = () => {
     return {
@@ -37,7 +39,7 @@ export const mode = {
     maps: Symbol("maps"),
 }
 
-export let currentTileMap, currentMode = mode.tiles, currentTileSprite, maps, tiles
+export let currentTileMap, currentMode = mode.tiles, currentTileSprite, maps, tiles, mouseCanvas
 
 project.init = (texture) => {
     if(localStorage.getItem("project") === null) {
@@ -69,8 +71,6 @@ project.init = (texture) => {
     let turnMap = new Key("KeyT")
     let tileSetProperties = new Key("KeyI")
 
-    Drag.add(new MoveBox(), select)
-
     maps = Canvas.create(element("map"), tileMaps, 30, 14)
     maps.background = "rgb(9, 44, 84)"
     tiles = Canvas.create(element("tiles"), new Layer(), 8, 14)
@@ -81,7 +81,6 @@ project.init = (texture) => {
     maps.setZoom(-19)
     tiles.setZoom(-17)
 
-    let mouseCanvas
     maps.node.addEventListener("mouseover", () => {
         mouseCanvas = maps
     })
@@ -89,30 +88,24 @@ project.init = (texture) => {
         mouseCanvas = tiles
     })
 
+    Drag.add(new MoveTileMap(maps), select)
+    Drag.add(new Pan(maps), move)
+    Drag.add(new Pan(tiles), move)
+
     function processCamera(canvas) {
         while(true) {
             if (mouseCanvas !== canvas) break
 
-            if (move.wasPressed) {
-                mouseX0 = screenMouse.x
-                mouseY0 = screenMouse.y
-                cameraX0 = canvas.x
-                cameraY0 = canvas.y
-            } else if (move.isDown) {
-                canvas.x = cameraX0 + distFromScreen(mouseX0 - screenMouse.x)
-                canvas.y = cameraY0 + distFromScreen(mouseY0 - screenMouse.y)
-                canvas.update()
-            }
-
+            let zoom = canvas.zoom
             if (zoomIn.wasPressed) {
-                canvas.setZoom(canvas.zoom - 1)
+                zoom--
             } else if (zoomOut.wasPressed) {
-                canvas.setZoom(canvas.zoom + 1)
+                zoom++
             } else {
                 break
             }
 
-            canvas.setZoomXY(canvas.zoom, screenMouse.x, screenMouse.y)
+            canvas.setZoomXY(zoom, screenMouse.x, screenMouse.y)
             break
         }
 
@@ -121,13 +114,12 @@ project.init = (texture) => {
 
     let currentTile = 0
     let currentTileSet
-    tiles.scene.draw = function() {
+    tiles.renderContents = function() {
         let quantity = 0
         for (const set of Object.values(tileSet)) {
             quantity += set.images.quantity
         }
 
-        setCanvas(tiles)
         let start = 0
         let columns = Math.floor(tiles.width)
         let height = Math.ceil(quantity / columns)
@@ -154,8 +146,7 @@ project.init = (texture) => {
         }
     }
 
-    maps.scene.draw = () => {
-        setCanvas(maps)
+    maps.renderContents = () => {
         tileMaps.items.forEach(map => {
             map.draw()
             let name = objectName.get(map)
@@ -166,19 +157,24 @@ project.init = (texture) => {
             ctx.fillText(name, xToScreen(map.x) - 0.5 * metrics.width
                 ,  yToScreen(map.topY) - 0.5 * metrics.actualBoundingBoxDescent - 4)
         })
+
         switch(currentMode) {
             case mode.tiles:
-                if(currentTileSprite !== undefined) currentTileSprite.drawDashedRect()
+                if(currentTileSprite !== undefined) {
+                    currentTileSprite.drawDashedRect()
+                }
                 break
             case mode.maps:
-                if(currentTileMap !== undefined) currentTileMap.drawDashedRect()
+                if(currentTileMap !== undefined) {
+                    currentTileMap.drawDashedRect()
+                }
                 break
         }
     }
 
-    project.draw = () => {
-        maps.draw()
-        tiles.draw()
+    project.render = () => {
+        maps.render()
+        tiles.render()
     }
 
     let currentName = "", newX, newY
@@ -195,6 +191,10 @@ project.init = (texture) => {
             projectToClipboard()
         }
 
+        if(mouseCanvas !== maps) return
+
+        setCanvas(maps)
+
         if(newMap.wasPressed) {
             newX = mouse.x
             newY = mouse.y
@@ -206,11 +206,9 @@ project.init = (texture) => {
             }
         }
 
-        if(mouseCanvas !== maps) return
+        currentTileMap = undefined
+        currentTileSprite = undefined
 
-        setCanvas(maps)
-
-        currentTileMap = undefined, currentTileSprite = undefined
         tileMaps.collisionWithPoint(mouse.x, mouse.y, (x, y, map) => {
             if(currentMode === mode.maps || map.tileSet === currentTileSet) {
                 currentTileMap = map
