@@ -1,4 +1,3 @@
-import {arrayToString} from "./save_load.js"
 import {removeFromArray} from "./system.js"
 
 class Block {

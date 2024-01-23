@@ -1,7 +1,7 @@
-import {current} from "./variable/sprite.js"
+import {Action} from "./actions/action.js"
 
-export default class Drag {
-    #key
+export default class Drag extends Action {
+    key
 
     conditions() {
         return true
@@ -11,31 +11,23 @@ export default class Drag {
     process() {}
     end() {}
 
-    static #drags = []
-    static #current
+    static current
 
-    static add(drag, key) {
-        drag.#key = key
-        this.#drags.push(drag)
-    }
-
-    static execute() {
-        if(this.#current === undefined) {
-            for(let drag of this.#drags) {
-                if(drag.#key.wasPressed && drag.conditions()) {
-                    drag.start()
-                    this.#current = drag
-                    break
-                }
+    execute() {
+        if(this.current === undefined) {
+            if(this.key.wasPressed && this.conditions()) {
+                this.start()
+                this.current = this
             }
             return
         }
+        if(this.current !== this) return
 
-        this.#current.process()
+        this.current.process()
 
-        if(this.#current.#key.isDown) return
+        if(this.current.key.isDown) return
 
-        this.#current.end()
-        this.#current = undefined
+        this.current.end()
+        this.current = undefined
     }
 }

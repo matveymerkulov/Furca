@@ -1,24 +1,13 @@
 import {project} from "../src/project.js"
-import Canvas, {
-    ctx,
-    currentCanvas,
-    distFromScreen,
-    distToScreen,
-    setCanvas,
-    xToScreen,
-    yToScreen
-} from "../src/canvas.js"
+import Canvas, {ctx, distToScreen, setCanvas, xToScreen, yToScreen} from "../src/canvas.js"
 import {canvasMouse, element, mouse, screenMouse} from "../src/system.js"
 import {drawDashedRect} from "../src/draw_rect.js"
 import {boxWithPointCollision} from "../src/collisions.js"
-import MoveBox from "./move_point.js"
-import DashedRect from "./dashed_rect.js"
-import {projectFromStorage, projectFromText, projectToClipboard, projectToStorage} from "../src/save_load.js"
+import {projectToClipboard, projectToStorage} from "../src/save_load.js"
 import Key from "../src/key.js"
 import Layer from "../src/layer.js"
 import {loadData, tileMap, tileMaps, tileSet} from "./data.js"
 import TileMap from "../src/tile_map.js"
-import Drag from "../src/drag.js"
 import {hidePopup, showPopup} from "../src/gui/popup.js"
 import MoveTileMap from "./move_tile_map.js"
 import {Pan} from "./pan.js"
@@ -73,28 +62,28 @@ project.init = (texture) => {
 
     maps = Canvas.create(element("map"), tileMaps, 30, 14)
     maps.background = "rgb(9, 44, 84)"
-    tiles = Canvas.create(element("tiles"), new Layer(), 8, 14)
-    let tileSetCanvas = element("tile_set")
-    setCanvas(maps)
-
-    let mouseX0, mouseY0, cameraX0, cameraY0
     maps.setZoom(-19)
-    tiles.setZoom(-17)
+    maps.add(new MoveTileMap(), select)
+    maps.add(new Pan(), move)
+    setCanvas(maps)
 
     maps.node.addEventListener("mouseover", () => {
         mouseCanvas = maps
     })
+
+    tiles = Canvas.create(element("tiles"), new Layer(), 8, 14)
+    let tileSetCanvas = element("tile_set")
+    tiles.add(new Pan(tiles), move)
+    tiles.setZoom(-17)
+
     tiles.node.addEventListener("mouseover", () => {
         mouseCanvas = tiles
     })
 
-    Drag.add(new MoveTileMap(maps), select)
-    Drag.add(new Pan(maps), move)
-    Drag.add(new Pan(tiles), move)
-
     function processCamera(canvas) {
         while(true) {
             if (mouseCanvas !== canvas) break
+            setCanvas(canvas)
 
             let zoom = canvas.zoom
             if (zoomIn.wasPressed) {
@@ -108,8 +97,6 @@ project.init = (texture) => {
             canvas.setZoomXY(zoom, screenMouse.x, screenMouse.y)
             break
         }
-
-        setCanvas(canvas)
     }
 
     let currentTile = 0
@@ -182,6 +169,9 @@ project.init = (texture) => {
     project.update = () => {
         processCamera(maps)
         processCamera(tiles)
+
+        maps.update()
+        tiles.update()
 
         if(switchMode.wasPressed) {
             currentMode = currentMode === mode.tiles ? mode.maps : mode.tiles

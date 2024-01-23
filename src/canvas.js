@@ -22,6 +22,7 @@ export default class Canvas extends Sprite {
         this._oldZoom = 0
         this._defaultPosition = this
         this.background = "black"
+        this.actions = []
         this.updateParameters()
     }
 
@@ -50,6 +51,18 @@ export default class Canvas extends Sprite {
 
     renderContents() {
         project.scene.draw()
+    }
+
+    update() {
+        setCanvas(this)
+        for(let action of this.actions) {
+            action.execute()
+        }
+    }
+
+    add(drag, key) {
+        drag.key = key
+        this.actions.push(drag)
     }
 
     updateParameters() {

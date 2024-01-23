@@ -1,5 +1,5 @@
 import Box from "./box.js"
-import {ctx, distToScreen, xToScreen, yToScreen} from "./canvas.js"
+import {ctx, distToScreen, setCanvas, xToScreen, yToScreen} from "./canvas.js"
 import {apsk, num, rad} from "./system.js"
 import Animate from "./actions/sprite/animate.js"
 import {boxWithBoxCollision, circleWithBoxCollision, circleWithCircleCollision} from "./collisions.js"
@@ -90,7 +90,13 @@ export default class Sprite extends Box {
         ctx.globalAlpha = 1.0
     }
 
+    add(action, key) {
+        action.key = key
+        this.actions.push(action)
+    }
+
     update() {
+        setCanvas(this)
         if(this.active) {
             this.actions.forEach(action => action.execute())
         }
@@ -119,10 +125,6 @@ export default class Sprite extends Box {
 
     show() {
         this.visible = true
-    }
-
-    add(action) {
-        this.actions.push(action)
     }
 
     // collisions
