@@ -137,7 +137,7 @@ export function initUpdate() {
     function createSingleExplosion(sprite, size, playSnd = true) {
         let explosion = Sprite.createFromTemplate(template.explosion)
         explosion.size = size
-        explosion.moveTo(sprite.x, sprite.y)
+        explosion.setPosition(sprite.x, sprite.y)
         explosion.add(new DelayedRemove(explosion, explosions, 1.0))
         if(playSnd) play(sound.explosion)
     }

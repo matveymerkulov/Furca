@@ -12,6 +12,7 @@ import {hidePopup, showPopup} from "../src/gui/popup.js"
 import MoveTileMap from "./move_tile_map.js"
 import {Pan} from "./pan.js"
 import Zoom from "./zoom.js"
+import Select from "./select.js"
 
 project.getAssets = () => {
     return {
@@ -50,7 +51,7 @@ project.init = (texture) => {
     }
 
     let select = new Key("LMB")
-    let move = new Key("ControlLeft", "MMB")
+    let pan = new Key("ControlLeft", "MMB")
     let zoomIn = new Key("WheelUp")
     let zoomOut = new Key("WheelDown")
     let switchMode = new Key("Space")
@@ -65,14 +66,15 @@ project.init = (texture) => {
     maps.background = "rgb(9, 44, 84)"
     maps.setZoom(-19)
     maps.add(new MoveTileMap(), select)
-    maps.add(new Pan(), move)
-    maps.add(new Zoom(zoomIn, zoomOut), move)
+    maps.add(new Pan(), pan)
+    maps.add(new Zoom(zoomIn, zoomOut), pan)
+    maps.add(new Select(), select)
     setCanvas(maps)
 
     tiles = Canvas.create(element("tiles"), new Layer(), 8, 14)
     let tileSetCanvas = element("tile_set")
-    tiles.add(new Pan(tiles), move)
-    tiles.add(new Zoom(zoomIn, zoomOut), move)
+    tiles.add(new Pan(tiles), pan)
+    tiles.add(new Zoom(zoomIn, zoomOut), pan)
     tiles.setZoom(-17)
 
     let currentTile = 0
@@ -128,7 +130,9 @@ project.init = (texture) => {
                 }
                 break
             case mode.maps:
-                if(currentTileMap !== undefined) {
+                if(Select.shape !== undefined) {
+                    Select.shape.drawDashedRect()
+                } else if(currentTileMap !== undefined) {
                     currentTileMap.drawDashedRect()
                 }
                 break
@@ -172,11 +176,13 @@ project.init = (texture) => {
         currentTileMap = undefined
         currentTileSprite = undefined
 
-        tileMaps.collisionWithPoint(mouse.x, mouse.y, (x, y, map) => {
-            if(currentMode === mode.maps || map.tileSet === currentTileSet) {
-                currentTileMap = map
-            }
-        })
+        if(currentMode === mode.maps && Select.shape === undefined) {
+            tileMaps.collisionWithPoint(mouse.x, mouse.y, (x, y, map) => {
+                 if(map.tileSet === currentTileSet) {
+                    currentTileMap = map
+                }
+            })
+        }
 
         tileMap.main.items[0].setPositionAs(tileMap.main.items[1])
         if(currentTileMap === undefined) return

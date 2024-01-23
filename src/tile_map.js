@@ -206,7 +206,7 @@ export default class TileMap extends Box {
                 let shape = tileSet.collisionShape(tileNum)
                 if(shape === undefined) continue
                 collisionSprite.shapeType = shape.shapeType
-                collisionSprite.moveTo(this.leftX + (shape.x + x) * this.cellWidth
+                collisionSprite.setPosition(this.leftX + (shape.x + x) * this.cellWidth
                     , this.topY + (shape.y + y) * this.cellHeight)
                 collisionSprite.setSize(this.cellWidth * shape.width, this.cellHeight * shape.height)
                 if(!sprite.collidesWithSprite(collisionSprite)) continue

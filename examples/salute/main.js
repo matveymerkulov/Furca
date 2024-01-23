@@ -86,7 +86,7 @@ project.init = (texture) => {
 
         for(let layer of project.scene.items) {
             for (let shot of layer.items) {
-                shot.moveTo(shot.x + shot.dx * apsk, shot.y + shot.dy * apsk)
+                shot.setPosition(shot.x + shot.dx * apsk, shot.y + shot.dy * apsk)
                 shot.dy = shot.dy + apsk * gravity
                 if(shot.fadingSpeed !== undefined) {
                     shot.opacity -= shot.fadingSpeed * apsk

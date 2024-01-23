@@ -14,7 +14,7 @@ export default class Point extends Renderable {
 
     move() {}
 
-    moveTo(x, y) {
+    setPosition(x, y) {
         this.x = x
         this.y = y
     }

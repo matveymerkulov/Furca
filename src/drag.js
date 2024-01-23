@@ -1,5 +1,7 @@
 import {Action} from "./actions/action.js"
 
+let current
+
 export default class Drag extends Action {
     key
 
@@ -11,23 +13,20 @@ export default class Drag extends Action {
     process() {}
     end() {}
 
-    static current
-
     execute() {
-        if(this.current === undefined) {
+        if(current === undefined) {
             if(this.key.wasPressed && this.conditions()) {
                 this.start()
-                this.current = this
+                current = this
             }
-            return
         }
-        if(this.current !== this) return
+        if(current !== this) return
 
-        this.current.process()
+        current.process()
 
-        if(this.current.key.isDown) return
+        if(current.key.isDown) return
 
-        this.current.end()
-        this.current = undefined
+        current.end()
+        current = undefined
     }
 }

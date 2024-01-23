@@ -8,7 +8,7 @@ export let currentCanvas, canvasUnderCursor, ctx, zk = 1.2
 export function setCanvas(canvas) {
     currentCanvas = canvas
     ctx = canvas.node.getContext("2d")
-    mouse.moveTo(xFromScreen(screenMouse.x), yFromScreen(screenMouse.y))
+    mouse.setPosition(xFromScreen(screenMouse.x), yFromScreen(screenMouse.y))
 }
 
 export default class Canvas extends Sprite {

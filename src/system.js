@@ -180,9 +180,9 @@ function start() {
     delete project._assets
 
     document.onmousemove = (event) => {
-        mouse.moveTo(xFromScreen(event.offsetX), yFromScreen(event.offsetY))
-        screenMouse.moveTo(event.clientX, event.clientY)
-        canvasMouse.moveTo(event.offsetX, event.offsetY)
+        mouse.setPosition(xFromScreen(event.offsetX), yFromScreen(event.offsetY))
+        screenMouse.setPosition(event.clientX, event.clientY)
+        canvasMouse.setPosition(event.offsetX, event.offsetY)
     }
 
     let apsTime = 0, realAps = 0, apsCounter = 0
