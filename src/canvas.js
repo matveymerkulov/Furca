@@ -3,7 +3,7 @@ import {mouse, screenMouse} from "./system.js"
 import Box from "./box.js"
 import {project} from "./project.js"
 
-export let currentCanvas, ctx, zk = 1.2
+export let currentCanvas, canvasUnderCursor, ctx, zk = 1.2
 
 export function setCanvas(canvas) {
     currentCanvas = canvas
@@ -14,7 +14,12 @@ export function setCanvas(canvas) {
 export default class Canvas extends Sprite {
     constructor(node, x, y, width, height, active, viewport) {
         super(undefined, x, y, width, height, 0.0, 0.0, 0, active)
+
         this.node = node
+        node.addEventListener("mouseover", () => {
+            canvasUnderCursor = this
+        })
+
         this.viewport = viewport
         this._vdx = 1.0
         this._vdy = 1.0

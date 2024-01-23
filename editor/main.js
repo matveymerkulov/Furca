@@ -1,5 +1,5 @@
 import {project} from "../src/project.js"
-import Canvas, {ctx, distToScreen, setCanvas, xToScreen, yToScreen} from "../src/canvas.js"
+import Canvas, {canvasUnderCursor, ctx, distToScreen, setCanvas, xToScreen, yToScreen} from "../src/canvas.js"
 import {canvasMouse, element, mouse, screenMouse} from "../src/system.js"
 import {drawDashedRect} from "../src/draw_rect.js"
 import {boxWithPointCollision} from "../src/collisions.js"
@@ -11,6 +11,7 @@ import TileMap from "../src/tile_map.js"
 import {hidePopup, showPopup} from "../src/gui/popup.js"
 import MoveTileMap from "./move_tile_map.js"
 import {Pan} from "./pan.js"
+import Zoom from "./zoom.js"
 
 project.getAssets = () => {
     return {
@@ -28,7 +29,7 @@ export const mode = {
     maps: Symbol("maps"),
 }
 
-export let currentTileMap, currentMode = mode.tiles, currentTileSprite, maps, tiles, mouseCanvas
+export let currentTileMap, currentMode = mode.tiles, currentTileSprite, maps, tiles
 
 project.init = (texture) => {
     if(localStorage.getItem("project") === null) {
@@ -65,39 +66,14 @@ project.init = (texture) => {
     maps.setZoom(-19)
     maps.add(new MoveTileMap(), select)
     maps.add(new Pan(), move)
+    maps.add(new Zoom(zoomIn, zoomOut), move)
     setCanvas(maps)
-
-    maps.node.addEventListener("mouseover", () => {
-        mouseCanvas = maps
-    })
 
     tiles = Canvas.create(element("tiles"), new Layer(), 8, 14)
     let tileSetCanvas = element("tile_set")
     tiles.add(new Pan(tiles), move)
+    tiles.add(new Zoom(zoomIn, zoomOut), move)
     tiles.setZoom(-17)
-
-    tiles.node.addEventListener("mouseover", () => {
-        mouseCanvas = tiles
-    })
-
-    function processCamera(canvas) {
-        while(true) {
-            if (mouseCanvas !== canvas) break
-            setCanvas(canvas)
-
-            let zoom = canvas.zoom
-            if (zoomIn.wasPressed) {
-                zoom--
-            } else if (zoomOut.wasPressed) {
-                zoom++
-            } else {
-                break
-            }
-
-            canvas.setZoomXY(zoom, screenMouse.x, screenMouse.y)
-            break
-        }
-    }
 
     let currentTile = 0
     let currentTileSet
@@ -123,7 +99,7 @@ project.init = (texture) => {
                 if(set === currentTileSet && currentTile === i) {
                     drawDashedRect(Math.floor(x), Math.floor(y), Math.floor(size), Math.floor(size))
                 }
-                if(mouseCanvas !== tiles) continue
+                if(canvasUnderCursor !== tiles) continue
                 if(select.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
                     currentTile = i
                     currentTileSet = set
@@ -167,9 +143,6 @@ project.init = (texture) => {
     let currentName = "", newX, newY
 
     project.update = () => {
-        processCamera(maps)
-        processCamera(tiles)
-
         maps.update()
         tiles.update()
 
@@ -181,7 +154,7 @@ project.init = (texture) => {
             projectToClipboard()
         }
 
-        if(mouseCanvas !== maps) return
+        if(canvasUnderCursor !== maps) return
 
         setCanvas(maps)
 

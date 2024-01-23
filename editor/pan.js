@@ -1,6 +1,5 @@
 import MovePoint from "./move_point.js"
-import {mouseCanvas} from "./main.js"
-import {currentCanvas} from "../src/canvas.js"
+import {canvasUnderCursor, currentCanvas} from "../src/canvas.js"
 
 export class Pan extends MovePoint {
     constructor() {
@@ -8,7 +7,7 @@ export class Pan extends MovePoint {
     }
 
     conditions() {
-        return mouseCanvas === currentCanvas
+        return canvasUnderCursor === currentCanvas
     }
 
     start() {
