@@ -50,7 +50,7 @@ export function projectToText() {
     text += "\ttileSet = {\n"
     indent = "\t\t"
     for(const set of Object.values(tileSet)) {
-        text += `\t\t${objectName.get(set)}: ${set.toString()},\n`
+        text += `\t\t"${objectName.get(set)}": ${set.toString()},\n`
     }
     text += "\t}\n\n"
 
@@ -62,7 +62,7 @@ export function projectToText() {
 
     text += "\ttileMaps = new Layer("
     tileMaps.items.forEach(map => {
-        text += `tileMap.${map.name},`
+        text += `tileMap["${objectName.get(map)}"], `
     })
     text += ")\n"
 

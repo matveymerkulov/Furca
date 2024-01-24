@@ -19,6 +19,7 @@ project.getAssets = () => {
         texture: {
             floor: "farm_floor.png",
             objects: "farm_furniture.png",
+            blocks: "tetris.png",
         },
         sound: {
         }
@@ -46,11 +47,16 @@ project.init = (texture) => {
         projectToClipboard()
     }
 
+    for(const[name, object] of Object.entries(tileSet)) {
+        objectName.set(object, name)
+    }
+
     for(const[name, object] of Object.entries(tileMap)) {
         objectName.set(object, name)
     }
 
     let select = new Key("LMB")
+    let del = new Key("Delete")
     let pan = new Key("ControlLeft", "MMB")
     let zoomIn = new Key("WheelUp")
     let zoomOut = new Key("WheelDown")
@@ -68,7 +74,7 @@ project.init = (texture) => {
     maps.setZoom(-19)
     maps.add(new MoveTileMap(), select)
     maps.add(new Pan(), pan)
-    maps.add(new Zoom(zoomIn, zoomOut), pan)
+    maps.add(new Zoom(zoomIn, zoomOut))
     maps.add(new Select(), select)
     setCanvas(maps)
 
@@ -78,44 +84,10 @@ project.init = (texture) => {
     tiles.add(new Zoom(zoomIn, zoomOut), pan)
     tiles.setZoom(-17)
 
-    let currentTile = 0
-    tiles.renderContents = function() {
-        let quantity = 0
-        for (const set of Object.values(tileSet)) {
-            quantity += set.images.quantity
-        }
-
-        let start = 0
-        let columns = Math.floor(tiles.width)
-        let height = Math.ceil(quantity / columns)
-        let x0 = distToScreen(0.5 * (tiles.width - columns))
-        let y0 = distToScreen(0.5 * (tiles.height - height) - tiles.y)
-        for (const set of Object.values(tileSet)) {
-            let images = set.images
-            let size = distToScreen(1)
-            for(let i = 0; i < images.quantity; i++) {
-                let pos = start + i
-                let x = x0 + size * (pos % columns)
-                let y = y0 + size * Math.floor(pos / columns)
-                images.image(i).drawResized(x, y, size, size)
-                if(set === currentTileSet && currentTile === i) {
-                    drawDashedRect(x, y, size, size)
-                }
-                if(canvasUnderCursor !== tiles) continue
-                if(select.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
-                    currentTile = i
-                    currentTileSet = set
-                }
-            }
-            start += images.quantity
-        }
-    }
-
     maps.renderContents = () => {
         tileMaps.items.forEach(map => {
             map.draw()
             let name = objectName.get(map)
-            if(map instanceof Layer) map = map.items[0]
             ctx.fillStyle = "white"
             ctx.font = "16px serif"
             let metrics = ctx.measureText(name)
@@ -143,6 +115,39 @@ project.init = (texture) => {
         }
     }
 
+    let currentTile = 1, altTile = 0
+    tiles.renderContents = function() {
+        let quantity = 0
+        for (const set of Object.values(tileSet)) {
+            quantity += set.images.quantity
+        }
+
+        let start = 0
+        let columns = Math.floor(tiles.width)
+        let height = Math.ceil(quantity / columns)
+        let x0 = distToScreen(0.5 * (tiles.width - columns))
+        let y0 = distToScreen(0.5 * (tiles.height - height) - tiles.y)
+        for (const set of Object.values(tileSet)) {
+            let images = set.images
+            let size = distToScreen(1)
+            for(let i = 0; i < images.quantity; i++) {
+                let pos = start + i
+                let x = x0 + size * (pos % columns)
+                let y = y0 + size * Math.floor(pos / columns)
+                images.image(i).drawResized(x, y, size, size)
+                if(set === currentTileSet && (currentTile === i || altTile === i)) {
+                    drawDashedRect(x, y, size, size)
+                }
+                if(canvasUnderCursor !== tiles) continue
+                if(select.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
+                    currentTile = i
+                    currentTileSet = set
+                }
+            }
+            start += images.quantity
+        }
+    }
+
     project.render = () => {
         maps.render()
         tiles.render()
@@ -163,7 +168,7 @@ project.init = (texture) => {
         }
 
         if(save.wasPressed) {
-            projectToClipboard()
+            projectToStorage()
         }
 
         if(canvasUnderCursor !== maps) return
@@ -171,8 +176,8 @@ project.init = (texture) => {
         setCanvas(maps)
 
         if(newMap.wasPressed) {
-            newX = mouse.x
-            newY = mouse.y
+            newX = Math.round(mouse.x)
+            newY = Math.round(mouse.y)
             currentName = prompt("Введите имя новой карты:")
             if(currentName === null) {
                 hidePopup()
@@ -186,12 +191,37 @@ project.init = (texture) => {
         currentTileSprite = undefined
         tileMaps.collisionWithPoint(mouse.x, mouse.y, (x, y, map) => {
             tileMapUnderCursor = map
-            if(currentTileSet === map.tileSet) {
+            if(currentTileSet === map.tileSet || currentMode === mode.maps) {
                 currentTileMap = map
             }
         })
 
         if(currentTileMap === undefined) return
+
+        if(copyMap.wasPressed) {
+            let name = prompt("Enter name of new tile map:", objectName.get(currentTileMap))
+            if(name !== null) {
+                let map = currentTileMap.copy()
+                objectName.set(map, name)
+                tileMaps.add(map)
+            }
+        }
+
+        if(renameMap.wasPressed) {
+            let name = prompt("Enter new name of tile map:", objectName.get(currentTileMap))
+            if(name !== null) {
+                objectName.set(currentTileMap, name)
+            }
+        }
+
+        if(turnMap.wasPressed) {
+            currentTileMap.turnClockwise()
+        }
+
+        if(tileSetProperties.wasPressed) {
+            tileSetCanvas.style.height = (document.body.offsetHeight - 100) + "px"
+            showPopup("tile_set_properties")
+        }
 
         switch(currentMode) {
             case mode.tiles:
@@ -199,33 +229,13 @@ project.init = (texture) => {
                 if(tile < 0) break
                 if(select.isDown) {
                     currentTileMap.setTile(tile, currentTile)
+                } else if(del.isDown) {
+                    currentTileMap.setTile(tile, altTile)
                 }
                 currentTileSprite = currentTileMap.tileSprite(tile)
+
                 break
             case mode.maps:
-                if(copyMap.wasPressed) {
-                    let name = prompt("Enter name of new tile map:", objectName.get(currentTileMap))
-                    if(name === null) break
-                    let map = currentTileMap.copy()
-                    objectName.set(map, name)
-                    tileMaps.add(map)
-                }
-
-                if(renameMap.wasPressed) {
-                    let name = prompt("Enter new name of tile map:", objectName.get(currentTileMap))
-                    if(name === null) break
-                    objectName.set(currentTileMap, name)
-                }
-
-                if(turnMap.wasPressed) {
-                    currentTileMap.turnClockwise()
-                }
-
-                if(tileSetProperties.wasPressed) {
-                    tileSetCanvas.style.height = (document.body.offsetHeight - 100) + "px"
-                    showPopup("tile_set_properties")
-                }
-
                 break
         }
     }

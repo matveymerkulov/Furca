@@ -4,6 +4,7 @@ import Shape from "./shape.js"
 import Sprite from "./sprite.js"
 import {arrayToString} from "./save_load.js"
 import {showCollisionShapes} from "./input.js"
+import {objectName} from "../editor/main.js"
 
 let collisionShape = new Shape("rgb(255, 0, 255)", 0.5)
 let collisionSprite = new Sprite()
@@ -31,7 +32,7 @@ export default class TileMap extends Box {
     }
 
     toString() {
-        return `new TileMap(tileSet.${this.#tileSet.name}, ${this.#columns}, ${this.#rows}, ${this.x}`
+        return `new TileMap(tileSet["${objectName.get(this.#tileSet)}"], ${this.#columns}, ${this.#rows}, ${this.x}`
             + `, ${this.y}, ${this.cellWidth}, ${this.cellHeight}, ${arrayToString(this.#array, this.#columns)}`
             + `, ${this.emptyTile})`
     }

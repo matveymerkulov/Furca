@@ -39,6 +39,11 @@ export function initInput() {
         })
     }, false)
 
+    document.addEventListener('contextmenu', (event) =>  {
+        event.preventDefault();
+        return false;
+    }, false);
+
     document.addEventListener("wheel", event => {
         let dir = Math.sign(event.deltaY)
         keys.forEach(key => {
