@@ -2,11 +2,13 @@ import Drag from "../src/drag.js"
 import Box from "../src/box.js"
 import {mouse, screenMouse} from "../src/system.js"
 import {currentMode, currentTileMap, mode as modes} from "./main.js"
+import {tileMap, tileMaps} from "./data.js"
+
+export let selected = [], selector
 
 export default class Select extends Drag {
     #x
     #y
-    static shape
 
     conditions() {
         return currentTileMap === undefined && currentMode === modes.maps
@@ -16,15 +18,21 @@ export default class Select extends Drag {
         super.start()
         this.#x = mouse.x
         this.#y = mouse.y
-        Select.shape = new Box(0, 0, 0, 0)
+        selector = new Box(0, 0, 0, 0)
     }
 
     process() {
-        Select.shape.setSize(mouse.x - this.#x, mouse.y - this.#y)
-        Select.shape.setCorner(this.#x, this.#y)
+        selector.setSize(mouse.x - this.#x, mouse.y - this.#y)
+        selector.setCorner(this.#x, this.#y)
     }
 
     end() {
-        Select.shape = undefined
+        selected = []
+        for(const map of Object.values(tileMap)) {
+            if(map.isInside(selector)) {
+                selected.push(map)
+            }
+        }
+        selector = undefined
     }
 }

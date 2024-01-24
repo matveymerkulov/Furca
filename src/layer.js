@@ -107,4 +107,16 @@ export default class Layer extends Renderable {
     collisionWithPoint(x, y, code) {
         this.items.forEach(item => item.collisionWithPoint(x, y, code))
     }
+
+    overlaps(box) {
+        for(let item of this.items) {
+            if(item.overlaps(box)) return true
+        }
+    }
+
+    isInside(box) {
+        for(let item of this.items) {
+            if(item.isInside(box)) return true
+        }
+    }
 }

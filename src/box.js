@@ -112,4 +112,8 @@ export default class Box extends Point {
         return box.leftX >= this.leftX && box.topY >= this.topY && box.rightX < this.rightX
             && box.bottomY < this.bottomY
     }
+
+    isInside(box) {
+        return box.overlaps(this)
+    }
 }

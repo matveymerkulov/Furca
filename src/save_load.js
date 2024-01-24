@@ -2,6 +2,7 @@ import {tileMap, tileMaps, tileSet} from "../editor/data.js"
 import TileMap from "./tile_map.js"
 import TileSet from "./tile_set.js"
 import ImageArray from "./image_array.js"
+import {objectName} from "../editor/main.js"
 
 export let indent = ""
 
@@ -49,13 +50,13 @@ export function projectToText() {
     text += "\ttileSet = {\n"
     indent = "\t\t"
     for(const set of Object.values(tileSet)) {
-        text += `\t\t${set.name}: ${set.toString()},\n`
+        text += `\t\t${objectName.get(set)}: ${set.toString()},\n`
     }
     text += "\t}\n\n"
 
     text += "\ttileMap = {\n"
     for(let map of Object.values(tileMap)) {
-        text += `\t\t${map.name}: ${map.toString()},\n`
+        text += `\t\t"${objectName.get(map)}": ${map.toString()},\n`
     }
     text += "\t}\n\n"
 

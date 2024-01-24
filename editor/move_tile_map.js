@@ -10,4 +10,10 @@ export default class MoveTileMap extends MovePoint {
         this.object = currentTileMap
         super.start()
     }
+
+    process() {
+        super.process()
+        this.object.leftX = Math.round(this.object.leftX)
+        this.object.topY = Math.round(this.object.topY)
+    }
 }

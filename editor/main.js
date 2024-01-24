@@ -3,7 +3,7 @@ import Canvas, {canvasUnderCursor, ctx, distToScreen, setCanvas, xToScreen, yToS
 import {canvasMouse, element, mouse, screenMouse} from "../src/system.js"
 import {drawDashedRect} from "../src/draw_rect.js"
 import {boxWithPointCollision} from "../src/collisions.js"
-import {projectToClipboard, projectToStorage} from "../src/save_load.js"
+import {projectFromStorage, projectToClipboard, projectToStorage} from "../src/save_load.js"
 import Key from "../src/key.js"
 import Layer from "../src/layer.js"
 import {loadData, tileMap, tileMaps, tileSet} from "./data.js"
@@ -12,7 +12,7 @@ import {hidePopup, showPopup} from "../src/gui/popup.js"
 import MoveTileMap from "./move_tile_map.js"
 import {Pan} from "./pan.js"
 import Zoom from "./zoom.js"
-import Select from "./select.js"
+import Select, {selected, selector} from "./select.js"
 
 project.getAssets = () => {
     return {
@@ -31,6 +31,7 @@ export const mode = {
 }
 
 export let currentTileMap, currentMode = mode.tiles, currentTileSprite, maps, tiles
+export let objectName = new Map()
 
 project.init = (texture) => {
     if(localStorage.getItem("project") === null) {
@@ -45,7 +46,6 @@ project.init = (texture) => {
         projectToClipboard()
     }
 
-    let objectName = new Map()
     for(const[name, object] of Object.entries(tileMap)) {
         objectName.set(object, name)
     }
@@ -56,6 +56,7 @@ project.init = (texture) => {
     let zoomOut = new Key("WheelDown")
     let switchMode = new Key("Space")
     let save = new Key("KeyS")
+    let load = new Key("KeyL")
     let renameMap = new Key("KeyR")
     let newMap = new Key("KeyN")
     let copyMap = new Key("KeyC")
@@ -130,10 +131,13 @@ project.init = (texture) => {
                 }
                 break
             case mode.maps:
-                if(Select.shape !== undefined) {
-                    Select.shape.drawDashedRect()
+                if(selector !== undefined) {
+                    selector.drawDashedRect()
                 } else if(currentTileMap !== undefined) {
                     currentTileMap.drawDashedRect()
+                    for(let map of selected) {
+                        map.drawDashedRect()
+                    }
                 }
                 break
         }
@@ -152,6 +156,10 @@ project.init = (texture) => {
 
         if(switchMode.wasPressed) {
             currentMode = currentMode === mode.tiles ? mode.maps : mode.tiles
+        }
+
+        if(load.wasPressed) {
+            projectFromStorage(texture)
         }
 
         if(save.wasPressed) {
@@ -176,7 +184,7 @@ project.init = (texture) => {
         currentTileMap = undefined
         currentTileSprite = undefined
 
-        if(currentMode === mode.maps && Select.shape === undefined) {
+        if(currentMode === mode.maps && selector === undefined && selected.length === 0) {
             tileMaps.collisionWithPoint(mouse.x, mouse.y, (x, y, map) => {
                  if(map.tileSet === currentTileSet) {
                     currentTileMap = map
@@ -184,8 +192,7 @@ project.init = (texture) => {
             })
         }
 
-        tileMap.main.items[0].setPositionAs(tileMap.main.items[1])
-        if(currentTileMap === undefined) return
+        if(currentTileMap === undefined ) return
 
         switch(currentMode) {
             case mode.tiles:
