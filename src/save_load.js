@@ -55,7 +55,7 @@ export function projectToText() {
     text += "\t}\n\n"
 
     text += "\ttileMap = {\n"
-    for(let map of Object.values(tileMap)) {
+    for(let map of tileMaps.items) {
         text += `\t\t"${objectName.get(map)}": ${map.toString()},\n`
     }
     text += "\t}\n\n"

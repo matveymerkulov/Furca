@@ -1,6 +1,6 @@
 import {project} from "../src/project.js"
 import Canvas, {canvasUnderCursor, ctx, distToScreen, setCanvas, xFromScreen, xToScreen, yFromScreen, yToScreen} from "../src/canvas.js"
-import {canvasMouse, element, mouse, screenMouse} from "../src/system.js"
+import {canvasMouse, element, mouse, removeFromArray, screenMouse} from "../src/system.js"
 import {drawDashedRect} from "../src/draw_rect.js"
 import {boxWithPointCollision} from "../src/collisions.js"
 import {projectFromStorage, projectToClipboard, projectToStorage} from "../src/save_load.js"
@@ -267,6 +267,10 @@ project.init = (texture) => {
                 currentTileSprite = currentTileMap.tileSprite(tile)
                 break
             case mode.maps:
+                if(del.wasPressed) {
+                    removeFromArray(tileMapUnderCursor, tileMaps.items)
+                }
+
                 break
         }
     }
