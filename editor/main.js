@@ -132,12 +132,12 @@ project.init = (texture) => {
             case mode.maps:
                 if(selector !== undefined) {
                     selector.drawDashedRect()
-                } else if(tileMapUnderCursor !== undefined) {
-                    tileMapUnderCursor.drawDashedRect()
-                } else {
+                } else if(selected.length > 0) {
                     for(let map of selected) {
                         map.drawDashedRect()
                     }
+                } else if(tileMapUnderCursor !== undefined) {
+                    tileMapUnderCursor.drawDashedRect()
                 }
                 break
         }

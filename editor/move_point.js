@@ -8,15 +8,23 @@ export default class MovePoint extends Drag {
         this.direction = direction
     }
 
-    start() {
+    prepareObject(object) {
         this.mouseX0 = screenMouse.x
         this.mouseY0 = screenMouse.y
-        this.objectX0 = this.object.x
-        this.objectY0 = this.object.y
+        this.objectX0 = object.x
+        this.objectY0 = object.y
+    }
+
+    start() {
+        this.prepareObject(this.object)
+    }
+
+    updateObject(object, x0, y0) {
+        object.x = x0 + this.direction * distFromScreen(screenMouse.x - this.mouseX0)
+        object.y = y0 + this.direction * distFromScreen(screenMouse.y - this.mouseY0)
     }
 
     process() {
-        this.object.x = this.objectX0 + this.direction * distFromScreen(screenMouse.x - this.mouseX0)
-        this.object.y = this.objectY0 + this.direction * distFromScreen(screenMouse.y - this.mouseY0)
+        this.updateObject(this.object, this.objectX0, this.objectY0)
     }
 }
