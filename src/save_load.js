@@ -1,4 +1,4 @@
-import {tileMap, tileMaps, tileSet} from "../editor/data.js"
+import {init, tileMap, tileMaps, tileSet} from "../editor/data.js"
 import TileMap from "./tile_map.js"
 import TileSet from "./tile_set.js"
 import ImageArray from "./image_array.js"
@@ -74,15 +74,18 @@ export function projectToText() {
 
 let pos, text
 
-function getSymbol(symbol) {
+function getSymbol(symbol, terminator) {
     while(text.charAt(pos) !== symbol) {
+        if(text.charAt(pos) === terminator) return false
+        if(pos > text.length) throw new Error("file end reached")
         pos++
     }
     pos++
+    return true
 }
 
 function isDigit(symbol) {
-    return symbol >= "0" && symbol <= "9"
+    return (symbol >= "0" && symbol <= "9") || symbol === '-'
 }
 
 function isTokenSymbol(symbol) {
@@ -95,6 +98,7 @@ function isTokenSymbol(symbol) {
 
 function getSymbols(comparison, terminator) {
     while(!comparison(text.charAt(pos))) {
+        if(pos > text.length) throw new Error("file end reached")
         if(text.charAt(pos) === terminator) return ""
         pos++
     }
@@ -125,11 +129,11 @@ function getFloat(terminator) {
     return num === "" ? "" : parseFloat(num)
 }
 
-function getString() {
-    getSymbol('"')
+function getString(terminator) {
+    if(getSymbol('"', terminator) === false) return ""
     return getSymbols(symbol => {
         return symbol !== '"'
-    })
+    }, terminator)
 }
 
 function getIntArray() {
@@ -142,8 +146,7 @@ function getIntArray() {
     }
 }
 
-function getTileSet(texture) {
-    let name = getString()
+function getTileSet(texture, name) {
     getSymbol(".")
     let textureName = getToken()
     let columns = getInt()
@@ -155,9 +158,8 @@ function getTileSet(texture) {
     tileSet[name] = new TileSet(new ImageArray(texture[textureName], columns, rows, xMul, yMul, heightMul, widthMul))
 }
 
-function getTileMap() {
-    getSymbol(".")
-    let tileSetName = getToken()
+function getTileMap(name) {
+    let tileSetName = getString()
     let mapTileSet = tileSet[tileSetName]
     let columns = getInt()
     let rows = getInt()
@@ -166,8 +168,7 @@ function getTileMap() {
     let cellWidth = getFloat()
     let cellHeight = getFloat()
     let array = getIntArray()
-    let map = new TileMap(mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array)
-    tileMap[name] = map
+    tileMap[name] = new TileMap(mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array)
 }
 
 export function projectFromText(data, texture) {
@@ -176,21 +177,25 @@ export function projectFromText(data, texture) {
     getSymbol("{")
     getSymbol("{")
 
-    while(getToken("}") !== "") {
+    while(true) {
+        let name = getString("}")
+        if(name === "") break
         getSymbol("(")
-        getTileSet(texture)
+        getTileSet(texture, name)
     }
 
     pos++
-    while(getToken("}") !== "") {
+    while(true) {
+        let name = getString("}")
+        if(name === "") break
         getSymbol("(")
-        getTileMap()
+        getTileMap(name)
     }
 
     getSymbol("(")
     while(getToken(")") !== "") {
-        getSymbol(".")
-        tileMaps.add(tileMap[getToken()])
+        getSymbol("[")
+        tileMaps.add(tileMap[getString()])
     }
 }
 
@@ -203,6 +208,7 @@ export function projectToStorage() {
 }
 
 export function projectFromStorage(texture) {
+    init()
     text = localStorage.getItem("project")
     if(text !== null) projectFromText(text, texture)
 }

@@ -3,9 +3,11 @@ import TileMap from "../src/tile_map.js"
 import ImageArray from "../src/image_array.js"
 import Layer from "../src/layer.js"
 
-export let tileSet = {}, tileMap = {}, tileMaps
+export let tileSet, tileMap, tileMaps
 
 export function init() {
+    tileSet = {}
+    tileMap = {}
     tileMaps = new Layer()
 }
 

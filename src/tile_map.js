@@ -49,10 +49,18 @@ export default class TileMap extends Box {
         return this.#tileSet
     }
 
+    fColumn(point) {
+        return (point.x - this.leftX) / this.cellWidth
+    }
+
+    fRow(point) {
+        return (point.y - this.topY) / this.cellHeight
+    }
+
     tileForPoint(point) {
-        let column = Math.floor((point.x - this.leftX) / this.cellWidth)
+        let column = Math.floor(this.fColumn(point))
         if(column < 0 || column >= this.#columns) return -1
-        let row = Math.floor((point.y - this.topY) / this.cellHeight)
+        let row = Math.floor(this.fRow(point))
         if(row < 0 || row >= this.#rows) return -1
         return column + row * this.#columns
     }

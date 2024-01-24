@@ -1,5 +1,5 @@
 import {project} from "../src/project.js"
-import Canvas, {canvasUnderCursor, ctx, distToScreen, setCanvas, xToScreen, yToScreen} from "../src/canvas.js"
+import Canvas, {canvasUnderCursor, ctx, distToScreen, setCanvas, xFromScreen, xToScreen, yFromScreen, yToScreen} from "../src/canvas.js"
 import {canvasMouse, element, mouse, screenMouse} from "../src/system.js"
 import {drawDashedRect} from "../src/draw_rect.js"
 import {boxWithPointCollision} from "../src/collisions.js"
@@ -31,8 +31,19 @@ export const mode = {
     maps: Symbol("maps"),
 }
 
-export let currentTileMap, currentTileSet, tileMapUnderCursor, currentMode = mode.tiles, currentTileSprite, maps, tiles
-export let objectName = new Map()
+export let maps, tiles
+export let currentTileMap, currentTileSet, tileMapUnderCursor, currentTileSprite
+export let objectName = new Map(), currentMode = mode.tiles, centerX, centerY
+
+function initData() {
+    for(const[name, object] of Object.entries(tileSet)) {
+        objectName.set(object, name)
+    }
+
+    for(const[name, object] of Object.entries(tileMap)) {
+        objectName.set(object, name)
+    }
+}
 
 project.init = (texture) => {
     if(localStorage.getItem("project") === null) {
@@ -47,13 +58,7 @@ project.init = (texture) => {
         projectToClipboard()
     }
 
-    for(const[name, object] of Object.entries(tileSet)) {
-        objectName.set(object, name)
-    }
-
-    for(const[name, object] of Object.entries(tileMap)) {
-        objectName.set(object, name)
-    }
+    initData()
 
     let select = new Key("LMB")
     let del = new Key("Delete")
@@ -95,6 +100,17 @@ project.init = (texture) => {
                 ,  yToScreen(map.topY) - 0.5 * metrics.actualBoundingBoxDescent - 4)
         })
 
+        function drawCross(x, y, width, color) {
+            ctx.strokeStyle = color
+            ctx.lineWidth = width
+            x = xFromScreen(x)
+            y = yFromScreen(y)
+            ctx.moveTo(x - 5, y)
+            ctx.lineTo(x + 5, y)
+            ctx.moveTo(x, y - 5)
+            ctx.lineTo(x, y + 5)
+        }
+
         switch(currentMode) {
             case mode.tiles:
                 if(currentTileSprite !== undefined) {
@@ -110,6 +126,8 @@ project.init = (texture) => {
                     }
                 } else if(tileMapUnderCursor !== undefined) {
                     tileMapUnderCursor.drawDashedRect()
+                    drawCross(centerX, centerY, 2, "black")
+                    drawCross(centerX, centerY, 1, "white")
                 }
                 break
         }
@@ -165,6 +183,7 @@ project.init = (texture) => {
 
         if(load.wasPressed) {
             projectFromStorage(texture)
+            initData()
         }
 
         if(save.wasPressed) {
@@ -198,11 +217,15 @@ project.init = (texture) => {
 
         if(currentTileMap === undefined) return
 
+        centerX = Math.floor(2.0 * currentTileMap.fColumn(mouse)) * 0.5
+        centerY = Math.floor(2.0 * currentTileMap.fRow(mouse)) * 0.5
+
         if(copyMap.wasPressed) {
             let name = prompt("Enter name of new tile map:", objectName.get(currentTileMap))
             if(name !== null) {
                 let map = currentTileMap.copy()
                 objectName.set(map, name)
+                tileMap[name] = map
                 tileMaps.add(map)
             }
         }
@@ -232,8 +255,8 @@ project.init = (texture) => {
                 } else if(del.isDown) {
                     currentTileMap.setTile(tile, altTile)
                 }
-                currentTileSprite = currentTileMap.tileSprite(tile)
 
+                currentTileSprite = currentTileMap.tileSprite(tile)
                 break
             case mode.maps:
                 break
