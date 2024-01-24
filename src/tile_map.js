@@ -172,35 +172,45 @@ export default class TileMap extends Box {
         }
     }
 
-    transform(mirrorHorizontally, mirrorVertically, swap) {
-        let newArray = new Array(this.#array.length)
+    transform(centerX, centerY, mirrorHorizontally, mirrorVertically, swap) {
+        if(centerX === undefined) centerX = 0.5 * this.#columns
+        if(centerY === undefined) centerY = 0.5 * this.#rows
+        centerX -= 0.5
+        centerY -= 0.5
+        let newArray = new Array(this.#array.length).fill(-1)
+        let newK = swap ? this.#columns : this.#rows
         for(let y = 0; y < this.#rows; y++) {
             for(let x = 0; x < this.#columns; x++) {
-                let newX = mirrorHorizontally ? this.#columns - 1 - x : x
-                let newY = mirrorVertically ? this.#rows - 1 - y : y
+                let newX = x - centerX
+                let newY = y - centerY
+                newX = mirrorHorizontally ? -newX : newX
+                newY = mirrorVertically ? -newY : newY
                 if(swap) [newX, newY] = [newY, newX]
-                let newK = swap ? this.#columns : this.#rows
+                newX += centerX
+                newY += centerY
+                if(newX < 0 || newX >= this.#columns) continue
+                if(newY < 0 || newY >= this.#rows) continue
                 newArray[newX + newK * newY] = this.#array[x + this.#columns * y]
             }
         }
-        if(swap) [this.#columns, this.#rows] = [this.#rows, this.#columns]
+        //if(swap) [this.#columns, this.#rows] = [this.#rows, this.#columns]
         this.#array = newArray
     }
 
-    turnClockwise() {
-        this.transform(false, true, true)
+    turnClockwise(centerX, centerY) {
+        this.transform(centerX, centerY, false, true, true)
     }
 
-    turnCounterclockwise() {
-        this.transform(true, false, true)
+    turnCounterclockwise(centerX, centerY) {
+        this.transform(centerX, centerY, true, false, true)
     }
 
-    mirrorHorizontally() {
-        this.transform(true, false, false)
+    mirrorHorizontally(centerX, centerY) {
+        this.transform(centerX, centerY, true, false, false)
     }
 
-    mirrorVertically() {
-        this.transform(false, true, false)
+    mirrorVertically(centerX, centerY) {
+        this.transform(centerX, centerY, false, true, false)
     }
 
     collisionWithSprite(sprite, code) {

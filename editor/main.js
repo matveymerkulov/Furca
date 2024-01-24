@@ -101,20 +101,30 @@ project.init = (texture) => {
         })
 
         function drawCross(x, y, width, color) {
+            ctx.beginPath()
             ctx.strokeStyle = color
             ctx.lineWidth = width
-            x = xFromScreen(x)
-            y = yFromScreen(y)
+            x = xToScreen(x)
+            y = yToScreen(y)
             ctx.moveTo(x - 5, y)
             ctx.lineTo(x + 5, y)
             ctx.moveTo(x, y - 5)
             ctx.lineTo(x, y + 5)
+            ctx.stroke()
+            ctx.strokeStyle = "white"
         }
 
         switch(currentMode) {
             case mode.tiles:
                 if(currentTileSprite !== undefined) {
                     currentTileSprite.drawDashedRect()
+                }
+
+                if(tileMapUnderCursor !== undefined) {
+                    let x = tileMapUnderCursor.leftX + centerX
+                    let y = tileMapUnderCursor.topY + centerY
+                    drawCross(x, y, 2, "black")
+                    drawCross(x, y, 1, "white")
                 }
                 break
             case mode.maps:
@@ -126,8 +136,6 @@ project.init = (texture) => {
                     }
                 } else if(tileMapUnderCursor !== undefined) {
                     tileMapUnderCursor.drawDashedRect()
-                    drawCross(centerX, centerY, 2, "black")
-                    drawCross(centerX, centerY, 1, "white")
                 }
                 break
         }
@@ -217,8 +225,8 @@ project.init = (texture) => {
 
         if(currentTileMap === undefined) return
 
-        centerX = Math.floor(2.0 * currentTileMap.fColumn(mouse)) * 0.5
-        centerY = Math.floor(2.0 * currentTileMap.fRow(mouse)) * 0.5
+        centerX = Math.round(2.0 * currentTileMap.fColumn(mouse)) * 0.5
+        centerY = Math.round(2.0 * currentTileMap.fRow(mouse)) * 0.5
 
         if(copyMap.wasPressed) {
             let name = prompt("Enter name of new tile map:", objectName.get(currentTileMap))
@@ -238,7 +246,7 @@ project.init = (texture) => {
         }
 
         if(turnMap.wasPressed) {
-            currentTileMap.turnClockwise()
+            currentTileMap.turnClockwise(centerX, centerY)
         }
 
         if(tileSetProperties.wasPressed) {
