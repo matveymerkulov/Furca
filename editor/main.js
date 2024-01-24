@@ -30,7 +30,7 @@ export const mode = {
     maps: Symbol("maps"),
 }
 
-export let currentTileMap, currentMode = mode.tiles, currentTileSprite, maps, tiles
+export let currentTileMap, currentTileSet, tileMapUnderCursor, currentMode = mode.tiles, currentTileSprite, maps, tiles
 export let objectName = new Map()
 
 project.init = (texture) => {
@@ -79,7 +79,6 @@ project.init = (texture) => {
     tiles.setZoom(-17)
 
     let currentTile = 0
-    let currentTileSet
     tiles.renderContents = function() {
         let quantity = 0
         for (const set of Object.values(tileSet)) {
@@ -100,7 +99,7 @@ project.init = (texture) => {
                 let y = y0 + size * Math.floor(pos / columns)
                 images.image(i).drawResized(x, y, size, size)
                 if(set === currentTileSet && currentTile === i) {
-                    drawDashedRect(Math.floor(x), Math.floor(y), Math.floor(size), Math.floor(size))
+                    drawDashedRect(x, y, size, size)
                 }
                 if(canvasUnderCursor !== tiles) continue
                 if(select.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
@@ -133,8 +132,9 @@ project.init = (texture) => {
             case mode.maps:
                 if(selector !== undefined) {
                     selector.drawDashedRect()
-                } else if(currentTileMap !== undefined) {
-                    currentTileMap.drawDashedRect()
+                } else if(tileMapUnderCursor !== undefined) {
+                    tileMapUnderCursor.drawDashedRect()
+                } else {
                     for(let map of selected) {
                         map.drawDashedRect()
                     }
@@ -182,17 +182,16 @@ project.init = (texture) => {
         }
 
         currentTileMap = undefined
+        tileMapUnderCursor = undefined
         currentTileSprite = undefined
+        tileMaps.collisionWithPoint(mouse.x, mouse.y, (x, y, map) => {
+            tileMapUnderCursor = map
+            if(currentTileSet === map.tileSet) {
+                currentTileMap = map
+            }
+        })
 
-        if(currentMode === mode.maps && selector === undefined && selected.length === 0) {
-            tileMaps.collisionWithPoint(mouse.x, mouse.y, (x, y, map) => {
-                 if(map.tileSet === currentTileSet) {
-                    currentTileMap = map
-                }
-            })
-        }
-
-        if(currentTileMap === undefined ) return
+        if(currentTileMap === undefined) return
 
         switch(currentMode) {
             case mode.tiles:

@@ -12,6 +12,10 @@ let dashes = [
 ]
 
 export function drawDashedRect(x, y, width, height) {
+    x = Math.floor(x)
+    y = Math.floor(y)
+    width = Math.floor(width)
+    height = Math.floor(height)
     ctx.strokeStyle = "black"
     ctx.lineWidth = 2
     ctx.strokeRect(x, y, width, height)

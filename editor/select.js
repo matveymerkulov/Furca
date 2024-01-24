@@ -1,7 +1,7 @@
 import Drag from "../src/drag.js"
 import Box from "../src/box.js"
 import {mouse, screenMouse} from "../src/system.js"
-import {currentMode, currentTileMap, mode as modes} from "./main.js"
+import {currentMode, mode as modes, tileMapUnderCursor,} from "./main.js"
 import {tileMap, tileMaps} from "./data.js"
 
 export let selected = [], selector
@@ -11,11 +11,10 @@ export default class Select extends Drag {
     #y
 
     conditions() {
-        return currentTileMap === undefined && currentMode === modes.maps
+        return tileMapUnderCursor === undefined && currentMode === modes.maps
     }
 
     start() {
-        super.start()
         this.#x = mouse.x
         this.#y = mouse.y
         selector = new Box(0, 0, 0, 0)
