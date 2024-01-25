@@ -13,6 +13,7 @@ import MoveTileMap from "./move_tile_map.js"
 import {Pan} from "./pan.js"
 import Zoom from "./zoom.js"
 import Select, {selected, selector} from "./select.js"
+import {createTileMap} from "./create_tile_map.js"
 
 project.getAssets = () => {
     return {
@@ -284,11 +285,8 @@ project.init = (texture) => {
             button.innerText = name
             button.tileSet = set
             button.onclick = (event) => {
-                let map = new TileMap(event.target.tileSet, parseInt(columnsField.value), parseInt(rowsField.value)
-                    , newX, newY, 1, 1)
-                tileMap[currentName] = map
-                objectName.set(map, currentName)
-                tileMaps.add(map)
+                createTileMap(currentName, event.target.tileSet
+                    , parseInt(columnsField.value), parseInt(rowsField.value), newX, newY)
                 hidePopup()
             }
             tileSets.appendChild(button)

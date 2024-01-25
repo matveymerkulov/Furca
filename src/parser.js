@@ -82,8 +82,14 @@ export function getIntArray() {
     }
 }
 
-export function incrementPos() {
+export function readSymbol() {
+    let char = text.charAt(pos)
     pos++
+    return char
+}
+
+export function eof() {
+    return pos >= text.length
 }
 
 

@@ -1,6 +1,6 @@
 import {initData, tileMap, tileMaps, tileSet} from "../editor/data.js"
 import {objectName} from "../editor/main.js"
-import {getString, getSymbol, getTileMap, getTileSet, getToken, incrementPos, initParser} from "./parser.js"
+import {getString, getSymbol, getTileMap, getTileSet, getToken, initParser, readSymbol} from "./parser.js"
 
 export let indent = ""
 
@@ -80,7 +80,7 @@ export function projectFromText(data, texture) {
         getTileSet(texture, name)
     }
 
-    incrementPos()
+    readSymbol()
     while(true) {
         let name = getString("}")
         if(name === "") break
