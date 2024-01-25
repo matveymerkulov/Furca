@@ -5,7 +5,7 @@ import Layer from "../src/layer.js"
 
 export let tileSet, tileMap, tileMaps
 
-export function init() {
+export function initData() {
     tileSet = {}
     tileMap = {}
     tileMaps = new Layer()
@@ -27,5 +27,5 @@ export function loadData(texture) {
         ], -1),
     }
 
-    tileMaps = new Layer(tileMap["0-0"], )
+    tileMaps = new Layer()
 }

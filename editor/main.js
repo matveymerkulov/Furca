@@ -112,6 +112,7 @@ project.init = (texture) => {
             ctx.lineTo(x, y + 5)
             ctx.stroke()
             ctx.strokeStyle = "white"
+            ctx.lineWidth = 1
         }
 
         switch(currentMode) {
@@ -263,14 +264,12 @@ project.init = (texture) => {
                 } else if(del.isDown) {
                     currentTileMap.setTile(tile, altTile)
                 }
-
                 currentTileSprite = currentTileMap.tileSprite(tile)
                 break
             case mode.maps:
                 if(del.wasPressed) {
                     removeFromArray(tileMapUnderCursor, tileMaps.items)
                 }
-
                 break
         }
     }

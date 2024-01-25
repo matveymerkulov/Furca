@@ -4,7 +4,7 @@ import {project} from "./project.js"
 import {Function} from "./function/function.js"
 import {keys} from "./key.js"
 import {initInput} from "./input.js"
-import {init} from "../editor/data.js"
+import {initData} from "../editor/data.js"
 
 // global variables
 
@@ -175,7 +175,7 @@ export function loadAssets(path, asset) {
 
 function start() {
     initInput()
-    init()
+    initData()
     project.init(project._assets.texture)
     delete project._assets
 

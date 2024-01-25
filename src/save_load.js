@@ -1,8 +1,6 @@
-import {init, tileMap, tileMaps, tileSet} from "../editor/data.js"
-import TileMap from "./tile_map.js"
-import TileSet from "./tile_set.js"
-import ImageArray from "./image_array.js"
+import {initData, tileMap, tileMaps, tileSet} from "../editor/data.js"
 import {objectName} from "../editor/main.js"
+import {getString, getSymbol, getTileMap, getTileSet, getToken, incrementPos, initParser} from "./parser.js"
 
 export let indent = ""
 
@@ -70,110 +68,8 @@ export function projectToText() {
     return text
 }
 
-
-
-let pos, text
-
-function getSymbol(symbol, terminator) {
-    while(text.charAt(pos) !== symbol) {
-        if(text.charAt(pos) === terminator) return false
-        if(pos > text.length) throw new Error("file end reached")
-        pos++
-    }
-    pos++
-    return true
-}
-
-function isDigit(symbol) {
-    return (symbol >= "0" && symbol <= "9") || symbol === '-'
-}
-
-function isTokenSymbol(symbol) {
-    if(symbol >= "0" && symbol <= "9") return true
-    if(symbol >= "A" && symbol <= "Z") return true
-    if(symbol >= "a" && symbol <= "z") return true
-    if(symbol === "_") return true
-    return false
-}
-
-function getSymbols(comparison, terminator) {
-    while(!comparison(text.charAt(pos))) {
-        if(pos > text.length) throw new Error("file end reached")
-        if(text.charAt(pos) === terminator) return ""
-        pos++
-    }
-
-    let start = pos
-    while(comparison(text.charAt(pos))) pos++
-
-    return text.substring(start, pos)
-}
-
-function getToken(terminator) {
-    return getSymbols(symbol => {
-        return isTokenSymbol(symbol)
-    }, terminator)
-}
-
-function getInt(terminator) {
-    let num = getSymbols(symbol => {
-        return isDigit(symbol)
-    }, terminator)
-    return num === "" ? "" : parseInt(num)
-}
-
-function getFloat(terminator) {
-    let num = getSymbols(symbol => {
-        return isDigit(symbol) || symbol === "."
-    }, terminator)
-    return num === "" ? "" : parseFloat(num)
-}
-
-function getString(terminator) {
-    if(getSymbol('"', terminator) === false) return ""
-    return getSymbols(symbol => {
-        return symbol !== '"'
-    }, terminator)
-}
-
-function getIntArray() {
-    getSymbol('[')
-    let array = []
-    while(true) {
-        let num = getInt("]")
-        if(num === "") return array
-        array.push(parseInt(num))
-    }
-}
-
-function getTileSet(texture, name) {
-    getSymbol(".")
-    let textureName = getToken()
-    let columns = getInt()
-    let rows = getInt()
-    let xMul = getFloat()
-    let yMul = getFloat()
-    let heightMul = getFloat()
-    let widthMul = getFloat()
-    tileSet[name] = new TileSet(new ImageArray(texture[textureName], columns, rows, xMul, yMul, heightMul, widthMul))
-}
-
-function getTileMap(name) {
-    let tileSetName = getString()
-    let mapTileSet = tileSet[tileSetName]
-    let columns = getInt()
-    let rows = getInt()
-    let x = getFloat()
-    let y = getFloat()
-    let cellWidth = getFloat()
-    let cellHeight = getFloat()
-    let array = getIntArray()
-    tileMap[name] = new TileMap(mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array)
-}
-
 export function projectFromText(data, texture) {
-    text = data
-    pos = 0
+    initParser(data)
     getSymbol("{")
     getSymbol("{")
 
@@ -184,7 +80,7 @@ export function projectFromText(data, texture) {
         getTileSet(texture, name)
     }
 
-    pos++
+    incrementPos()
     while(true) {
         let name = getString("}")
         if(name === "") break
@@ -208,7 +104,7 @@ export function projectToStorage() {
 }
 
 export function projectFromStorage(texture) {
-    init()
-    text = localStorage.getItem("project")
+    initData()
+    let text = localStorage.getItem("project")
     if(text !== null) projectFromText(text, texture)
 }

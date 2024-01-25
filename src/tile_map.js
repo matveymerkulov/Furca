@@ -172,12 +172,10 @@ export default class TileMap extends Box {
         }
     }
 
-    transform(centerX, centerY, mirrorHorizontally, mirrorVertically, swap) {
-        if(centerX === undefined) centerX = 0.5 * this.#columns
-        if(centerY === undefined) centerY = 0.5 * this.#rows
+    transform(centerX = 0.5 * this.#columns, centerY = 0.5 * this.#rows, mirrorHorizontally, mirrorVertically, swap) {
         centerX -= 0.5
         centerY -= 0.5
-        let newArray = new Array(this.#array.length).fill(-1)
+        let newArray = new Array(this.#array.length).fill(0)
         let newK = swap ? this.#columns : this.#rows
         for(let y = 0; y < this.#rows; y++) {
             for(let x = 0; x < this.#columns; x++) {
