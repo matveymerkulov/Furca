@@ -104,6 +104,7 @@ export function getTileSet(texture, name) {
     let heightMul = getFloat()
     let widthMul = getFloat()
     tileSet[name] = new TileSet(new ImageArray(texture[textureName], columns, rows, xMul, yMul, heightMul, widthMul))
+    getSymbol(")")
 }
 
 export function getTileMap(name) {
@@ -116,5 +117,7 @@ export function getTileMap(name) {
     let cellWidth = getFloat()
     let cellHeight = getFloat()
     let array = getIntArray()
-    tileMap[name] = new TileMap(mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array)
+    let emptyTile = getInt()
+    tileMap[name] = new TileMap(mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array, emptyTile)
+    getSymbol(")")
 }

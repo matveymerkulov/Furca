@@ -9,18 +9,6 @@ export function initData() {
     tileMaps = new Layer()
 }
 
-export function setTileSets(tiles) {
-    tileSet = tiles
-}
-
-export function setTileMaps(map) {
-    tileMap = map
-}
-
-export function setScene(scene) {
-    tileMaps = scene
-}
-
 export let project = {
     locale: "en",
     locales: {},

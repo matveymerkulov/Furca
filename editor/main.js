@@ -47,7 +47,7 @@ function initData() {
 }
 
 project.init = (texture) => {
-    if(localStorage.getItem("project") === null) {
+    /*if(localStorage.getItem("project") === null) {
         loadData(texture)
     } else {
         loadData(texture)
@@ -57,8 +57,9 @@ project.init = (texture) => {
     window.onbeforeunload = function() {
         projectToStorage()
         projectToClipboard()
-    }
+    }*/
 
+    loadData(texture)
     initData()
 
     let select = new Key("LMB")

@@ -45,20 +45,18 @@ export function projectToText() {
     let text = ""
     text += `export function loadData(texture) {\n`
 
-    text += "\tsetTileSets({\n"
-    indent = "\t\t"
+    indent = "\t"
     for(const set of Object.values(tileSet)) {
-        text += `\t\t"${getName(set)}": ${set.toString()},\n`
+        text += `\ttileSet["${getName(set)}"] = ${set.toString()}\n`
     }
-    text += "\t})\n\n"
 
-    text += "\tsetTileMaps({\n"
+    text += "\t\n"
+
     for(let map of tileMaps.items) {
-        text += `\t\t"${getName(map)}": ${map.toString()},\n`
+        text += `\ttileMap["${getName(map)}"] = ${map.toString()}\n`
     }
-    text += "\t})\n\n"
 
-    text += "\ttileMaps = new Layer("
+    text += "\t\n\ttileMaps.add("
     tileMaps.items.forEach(map => {
         text += `tileMap["${getName(map)}"], `
     })
@@ -71,29 +69,28 @@ export function projectToText() {
 export function projectFromText(data, texture) {
     initParser(data)
     getSymbol("{")
-    getSymbol("{")
 
     while(true) {
-        let name = getString("}")
-        if(name === "") break
-        getSymbol("(")
-        getTileSet(texture, name)
-    }
-    readSymbol()
-
-    readSymbol()
-    while(true) {
-        let name = getString("}")
-        if(name === "") break
-        getSymbol("(")
-        getTileMap(name)
-    }
-    readSymbol()
-
-    getSymbol("(")
-    while(getToken(")") !== "") {
-        getSymbol("[")
-        tileMaps.add(tileMap[getString()])
+        switch(getToken()) {
+            case "tileSet":
+                getSymbol("[")
+                let tileSetName = getString()
+                getSymbol("(")
+                getTileSet(texture, tileSetName)
+                break
+            case "tileMap":
+                getSymbol("[")
+                let tileMapName = getString()
+                getSymbol("(")
+                getTileMap(tileMapName)
+                break
+            case "tileMaps":
+                while(getToken(")") !== "") {
+                    getSymbol("[")
+                    tileMaps.add(tileMap[getString()])
+                }
+                return
+        }
     }
 }
 
