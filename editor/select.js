@@ -35,3 +35,7 @@ export default class Select extends Drag {
         selector = undefined
     }
 }
+
+export function clearSelection() {
+    selected = []
+}

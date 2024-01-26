@@ -10,7 +10,7 @@ import {hidePopup, showPopup} from "../src/gui/popup.js"
 import MoveTileMap from "./move_tile_map.js"
 import {Pan} from "./pan.js"
 import Zoom from "./zoom.js"
-import Select, {selected, selector} from "./select.js"
+import Select, {clearSelection, selected, selector} from "./select.js"
 import {addTileMap, createTileMap} from "./create_tile_map.js"
 import {getName, incrementName, setName} from "./names.js"
 import {loadData} from "./data.js"
@@ -98,7 +98,9 @@ project.init = (texture) => {
             let name = getName(map)
             ctx.fillStyle = "white"
             ctx.font = "16px serif"
+            // noinspection JSCheckFunctionSignatures
             let metrics = ctx.measureText(name)
+            // noinspection JSCheckFunctionSignatures
             ctx.fillText(name, xToScreen(map.x) - 0.5 * metrics.width
                 ,  yToScreen(map.topY) - 0.5 * metrics.actualBoundingBoxDescent - 4)
         })
@@ -202,6 +204,14 @@ project.init = (texture) => {
             projectToStorage()
         }
 
+        if(del.wasPressed && !select.isDown && currentMode === mode.maps && selected.length > 0) {
+            for(let map of selected) {
+                removeFromArray(map, tileMaps.items)
+                delete tileMap[getName(map)]
+            }
+            clearSelection()
+        }
+
         if(canvasUnderCursor !== maps) return
 
         setCanvas(maps)
@@ -279,8 +289,9 @@ project.init = (texture) => {
                 currentTileSprite = currentTileMap.tileSprite(tile)
                 break
             case mode.maps:
-                if(del.wasPressed) {
+                if(del.wasPressed && selected.length === 0) {
                     removeFromArray(tileMapUnderCursor, tileMaps.items)
+                    delete tileMap[getName(tileMapUnderCursor)]
                 }
                 break
         }

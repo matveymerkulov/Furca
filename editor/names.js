@@ -2,10 +2,6 @@ import {isDigit} from "../src/parser.js"
 
 let objectName = new Map()
 
-function setTypeForIDE() {
-    objectName.set("", "")
-}
-
 export function getName(object) {
     return objectName.get(object)
 }
