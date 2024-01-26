@@ -2,9 +2,9 @@ import {ctx, distToScreen, xToScreen, yToScreen} from "./canvas.js"
 import Box from "./box.js"
 import Shape from "./shape.js"
 import Sprite from "./sprite.js"
-import {arrayToString} from "./save_load.js"
+import {arrayToString} from "../editor/save_load.js"
 import {showCollisionShapes} from "./input.js"
-import {objectName} from "../editor/main.js"
+import {tileMap} from "./project.js"
 
 let collisionShape = new Shape("rgb(255, 0, 255)", 0.5)
 let collisionSprite = new Sprite()
@@ -32,7 +32,7 @@ export default class TileMap extends Box {
     }
 
     toString() {
-        return `new TileMap(tileSet["${objectName.get(this.#tileSet)}"], ${this.#columns}, ${this.#rows}, ${this.x}`
+        return `new TileMap(tileSet["${this.#tileSet.name}"], ${this.#columns}, ${this.#rows}, ${this.x}`
             + `, ${this.y}, ${this.cellWidth}, ${this.cellHeight}, ${arrayToString(this.#array, this.#columns)}`
             + `, ${this.emptyTile})`
     }
@@ -47,6 +47,13 @@ export default class TileMap extends Box {
 
     get tileSet() {
         return this.#tileSet
+    }
+
+    get name() {
+        for(let [key, map] of Object.entries(tileMap)) {
+            if(this === map) return key
+        }
+        return ""
     }
 
     fColumn(point) {
@@ -71,10 +78,6 @@ export default class TileMap extends Box {
 
     tileRow(tileNum) {
         return Math.floor(tileNum / this.#columns)
-    }
-
-    get tileSet() {
-        return this.#tileSet
     }
 
     image(num) {

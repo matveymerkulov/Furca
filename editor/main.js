@@ -1,19 +1,19 @@
-import {project} from "../src/project.js"
-import Canvas, {canvasUnderCursor, ctx, distToScreen, setCanvas, xFromScreen, xToScreen, yFromScreen, yToScreen} from "../src/canvas.js"
-import {canvasMouse, element, mouse, removeFromArray, screenMouse} from "../src/system.js"
+import {project, tileMap, tileMaps, tileSet} from "../src/project.js"
+import Canvas, {canvasUnderCursor, ctx, distToScreen, setCanvas, xToScreen, yToScreen} from "../src/canvas.js"
+import {canvasMouse, element, mouse, removeFromArray} from "../src/system.js"
 import {drawDashedRect} from "../src/draw_rect.js"
 import {boxWithPointCollision} from "../src/collisions.js"
-import {projectFromStorage, projectToClipboard, projectToStorage} from "../src/save_load.js"
+import {projectFromStorage, projectToClipboard, projectToStorage} from "./save_load.js"
 import Key from "../src/key.js"
 import Layer from "../src/layer.js"
-import {loadData, tileMap, tileMaps, tileSet} from "./data.js"
-import TileMap from "../src/tile_map.js"
 import {hidePopup, showPopup} from "../src/gui/popup.js"
 import MoveTileMap from "./move_tile_map.js"
 import {Pan} from "./pan.js"
 import Zoom from "./zoom.js"
 import Select, {selected, selector} from "./select.js"
-import {createTileMap} from "./create_tile_map.js"
+import {addTileMap, createTileMap} from "./create_tile_map.js"
+import {getName, incrementName, setName} from "./names.js"
+import {loadData} from "./data.js"
 
 project.getAssets = () => {
     return {
@@ -34,15 +34,15 @@ export const mode = {
 
 export let maps, tiles
 export let currentTileMap, currentTileSet, tileMapUnderCursor, currentTileSprite
-export let objectName = new Map(), currentMode = mode.tiles, centerX, centerY
+export let currentMode = mode.tiles, centerX, centerY
 
 function initData() {
     for(const[name, object] of Object.entries(tileSet)) {
-        objectName.set(object, name)
+        setName(object, name)
     }
 
     for(const[name, object] of Object.entries(tileMap)) {
-        objectName.set(object, name)
+        setName(object, name)
     }
 }
 
@@ -71,7 +71,8 @@ project.init = (texture) => {
     let load = new Key("KeyL")
     let renameMap = new Key("KeyR")
     let newMap = new Key("KeyN")
-    let copyMap = new Key("KeyC")
+    let copy = new Key("KeyC")
+    let paste = new Key("KeyP")
     let turnMap = new Key("KeyT")
     let tileSetProperties = new Key("KeyI")
 
@@ -93,7 +94,7 @@ project.init = (texture) => {
     maps.renderContents = () => {
         tileMaps.items.forEach(map => {
             map.draw()
-            let name = objectName.get(map)
+            let name = getName(map)
             ctx.fillStyle = "white"
             ctx.font = "16px serif"
             let metrics = ctx.measureText(name)
@@ -225,30 +226,37 @@ project.init = (texture) => {
             }
         })
 
-        if(currentTileMap === undefined) return
+        if(currentTileMap !== undefined) {
+            tileMapUnderCursor = currentTileMap
+        }
 
-        centerX = Math.round(2.0 * currentTileMap.fColumn(mouse)) * 0.5
-        centerY = Math.round(2.0 * currentTileMap.fRow(mouse)) * 0.5
+        if(tileMapUnderCursor === undefined) return
 
-        if(copyMap.wasPressed) {
-            let name = prompt("Enter name of new tile map:", objectName.get(currentTileMap))
-            if(name !== null) {
-                let map = currentTileMap.copy()
-                objectName.set(map, name)
-                tileMap[name] = map
-                tileMaps.add(map)
-            }
+        let x0 = tileMapUnderCursor.fColumn(mouse)
+        let y0 = tileMapUnderCursor.fRow(mouse)
+        let x1 = Math.floor(x0) + 0.5
+        let y1 = Math.floor(y0) + 0.5
+        if(Math.abs(x0 - x1) + Math.abs(y0 - y1) <= 0.5) {
+            centerX = x1
+            centerY = y1
+        } else {
+            centerX = Math.round(x0)
+            centerY = Math.round(y0)
         }
 
         if(renameMap.wasPressed) {
-            let name = prompt("Enter new name of tile map:", objectName.get(currentTileMap))
+            let name = prompt("Enter new name of tile map:", getName(tileMapUnderCursor))
             if(name !== null) {
-                objectName.set(currentTileMap, name)
+                setName(tileMapUnderCursor, name)
             }
         }
 
+        if(copy.wasPressed) {
+            addTileMap(incrementName(getName(tileMapUnderCursor)), tileMapUnderCursor.copy())
+        }
+
         if(turnMap.wasPressed) {
-            currentTileMap.turnClockwise(centerX, centerY)
+            tileMapUnderCursor.turnClockwise(centerX, centerY)
         }
 
         if(tileSetProperties.wasPressed) {
@@ -258,6 +266,8 @@ project.init = (texture) => {
 
         switch(currentMode) {
             case mode.tiles:
+                if(currentTileMap === undefined) return
+
                 let tile = currentTileMap.tileForPoint(mouse)
                 if(tile < 0) break
                 if(select.isDown) {

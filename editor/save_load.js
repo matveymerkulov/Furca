@@ -1,6 +1,6 @@
-import {initData, tileMap, tileMaps, tileSet} from "../editor/data.js"
-import {objectName} from "../editor/main.js"
-import {getString, getSymbol, getTileMap, getTileSet, getToken, initParser, readSymbol} from "./parser.js"
+import {initData, tileMap, tileMaps, tileSet} from "../src/project.js"
+import {getString, getSymbol, getTileMap, getTileSet, getToken, initParser, readSymbol} from "../src/parser.js"
+import {getName} from "./names.js"
 
 export let indent = ""
 
@@ -45,22 +45,22 @@ export function projectToText() {
     let text = ""
     text += `export function loadData(texture) {\n`
 
-    text += "\ttileSet = {\n"
+    text += "\tsetTileSets({\n"
     indent = "\t\t"
     for(const set of Object.values(tileSet)) {
-        text += `\t\t"${objectName.get(set)}": ${set.toString()},\n`
+        text += `\t\t"${getName(set)}": ${set.toString()},\n`
     }
-    text += "\t}\n\n"
+    text += "\t})\n\n"
 
-    text += "\ttileMap = {\n"
+    text += "\tsetTileMaps({\n"
     for(let map of tileMaps.items) {
-        text += `\t\t"${objectName.get(map)}": ${map.toString()},\n`
+        text += `\t\t"${getName(map)}": ${map.toString()},\n`
     }
-    text += "\t}\n\n"
+    text += "\t})\n\n"
 
     text += "\ttileMaps = new Layer("
     tileMaps.items.forEach(map => {
-        text += `tileMap["${objectName.get(map)}"], `
+        text += `tileMap["${getName(map)}"], `
     })
     text += ")\n"
 
@@ -79,6 +79,7 @@ export function projectFromText(data, texture) {
         getSymbol("(")
         getTileSet(texture, name)
     }
+    readSymbol()
 
     readSymbol()
     while(true) {
@@ -87,6 +88,7 @@ export function projectFromText(data, texture) {
         getSymbol("(")
         getTileMap(name)
     }
+    readSymbol()
 
     getSymbol("(")
     while(getToken(")") !== "") {

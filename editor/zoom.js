@@ -1,6 +1,5 @@
-import Drag from "../src/drag.js"
 import {Action} from "../src/actions/action.js"
-import {canvasUnderCursor, currentCanvas, setCanvas} from "../src/canvas.js"
+import {canvasUnderCursor, currentCanvas} from "../src/canvas.js"
 import {screenMouse} from "../src/system.js"
 
 export default class Zoom extends Action {

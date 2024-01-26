@@ -1,4 +1,5 @@
 import {removeFromArray} from "./system.js"
+import {tileSet} from "./project.js"
 
 class Block {
     #x
@@ -34,6 +35,13 @@ export default class TileSet {
 
     get images() {
         return this.#images
+    }
+
+    get name() {
+        for(let [key, set] of Object.entries(tileSet)) {
+            if(this === set) return key
+        }
+        return ""
     }
 
     addBlock(x, y, width, height) {

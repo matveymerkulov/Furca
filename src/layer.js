@@ -1,6 +1,6 @@
 import {removeFromArray} from "./system.js"
 import {Renderable} from "./renderable.js"
-import {addIndent, indent, removeIndent} from "./save_load.js"
+import {addIndent, indent, removeIndent} from "../editor/save_load.js"
 
 export default class Layer extends Renderable {
     constructor(...items) {

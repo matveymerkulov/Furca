@@ -1,14 +1,17 @@
 import TileMap from "../src/tile_map.js"
-import {tileMap, tileMaps} from "./data.js"
-import {objectName} from "./main.js"
+import {tileMap, tileMaps, tileSet} from "../src/project.js"
 import {eof, getInt, getSymbol, getToken, initParser, readSymbol} from "../src/parser.js"
+import {setName} from "./names.js"
+
+export function addTileMap(name, map) {
+    setName(map, name)
+    tileMap[name] = map
+    tileMaps.add(map)
+}
 
 export function createTileMap(string, set, columns, rows, cornerX, cornerY) {
     function newMap(name, x, y) {
-        let map = new TileMap(set, columns, rows, x, y, 1, 1)
-        tileMap[name] = map
-        objectName.set(map, name)
-        tileMaps.add(map)
+        addTileMap(name, new TileMap(set, columns, rows, x, y, 1, 1))
     }
 
     let fromX = 0, toX = 0, fromY = 0, toY = 0

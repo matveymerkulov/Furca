@@ -2,7 +2,6 @@ import MovePoint from "./move_point.js"
 import {currentMode, mode as modes, tileMapUnderCursor} from "./main.js"
 import {selected} from "./select.js"
 import {mouse, screenMouse} from "../src/system.js"
-import Drag from "../src/drag.js"
 
 export default class MoveTileMap extends MovePoint {
     conditions() {

@@ -1,4 +1,4 @@
-import {tileMap, tileSet} from "../editor/data.js"
+import {tileMap, tileSet} from "./project.js"
 import TileSet from "./tile_set.js"
 import ImageArray from "./image_array.js"
 import TileMap from "./tile_map.js"

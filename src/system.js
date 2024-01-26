@@ -1,10 +1,9 @@
 import Point from "./point.js"
 import Canvas, {ctx, setCanvas, xFromScreen, yFromScreen} from "./canvas.js"
-import {project} from "./project.js"
+import {initData, project} from "./project.js"
 import {Function} from "./function/function.js"
 import {keys} from "./key.js"
 import {initInput} from "./input.js"
-import {initData} from "../editor/data.js"
 
 // global variables
 
@@ -66,7 +65,7 @@ export function play(sound) {
     let newSound = new Audio(sound.src)
     newSound.volume = masterVolume
     try {
-        newSound.play()
+        newSound.play().then()
     } catch(e) {
 
     }
@@ -79,7 +78,7 @@ export function loopedSound(sound, loopStart, loopEnd, play) {
         if(newSound.currentTime > loopEnd) newSound.currentTime -= loopLength
     }, 5)
     if(play) try {
-       newSound.play()
+       newSound.play().then()
     } catch(e) {
 
     }

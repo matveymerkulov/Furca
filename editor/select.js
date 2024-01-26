@@ -1,8 +1,8 @@
 import Drag from "../src/drag.js"
 import Box from "../src/box.js"
-import {mouse, screenMouse} from "../src/system.js"
+import {mouse} from "../src/system.js"
 import {currentMode, mode as modes, tileMapUnderCursor,} from "./main.js"
-import {tileMap, tileMaps} from "./data.js"
+import {tileMap, tileMaps, tileSet} from "../src/project.js"
 
 export let selected = [], selector
 
