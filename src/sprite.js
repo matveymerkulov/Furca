@@ -96,7 +96,6 @@ export default class Sprite extends Box {
     }
 
     update() {
-        setCanvas(this)
         if(this.active) {
             this.actions.forEach(action => action.execute())
         }

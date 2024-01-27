@@ -73,7 +73,6 @@ project.init = (texture) => {
     let renameMap = new Key("KeyR")
     let newMap = new Key("KeyN")
     let copy = new Key("KeyC")
-    let paste = new Key("KeyP")
     let turnMap = new Key("KeyT")
     let tileSetProperties = new Key("KeyI")
 
@@ -87,10 +86,11 @@ project.init = (texture) => {
     setCanvas(maps)
 
     tiles = Canvas.create(element("tiles"), new Layer(), 8, 14)
-    let tileSetCanvas = element("tile_set")
     tiles.add(new Pan(tiles), pan)
     tiles.add(new Zoom(zoomIn, zoomOut), pan)
     tiles.setZoom(-17)
+
+    let tileSetCanvas = element("tile_set")
 
     maps.renderContents = () => {
         tileMaps.items.forEach(map => {
@@ -180,9 +180,27 @@ project.init = (texture) => {
         }
     }
 
+    function renderTileSetCanvas() {
+        if(currentTileSet === undefined) return
+        let tex = currentTileSet.images.texture
+        let scale = Math.min((document.body.offsetWidth - 100) / tex.width
+            , (document.body.offsetHeight - 100) / tex.height, 2)
+        let style = tileSetCanvas.style
+        let canvasWidth = tex.width * scale
+        let canvasHeight = tex.height * scale
+        style.width = canvasWidth + "px"
+        style.height = canvasHeight + "px"
+        let ctx = tileSetCanvas.getContext("2d")
+        ctx.canvas.width = canvasWidth
+        ctx.canvas.height = canvasHeight
+        ctx.drawImage(tex, 0, 0, tex.width, tex.height, 0, 0, canvasWidth, canvasHeight)
+
+    }
+
     project.render = () => {
         maps.render()
         tiles.render()
+        renderTileSetCanvas()
     }
 
     let currentName = "", newX, newY
@@ -204,12 +222,16 @@ project.init = (texture) => {
             projectToStorage()
         }
 
-        if(del.wasPressed && !select.isDown && currentMode === mode.maps && selected.length > 0) {
+        if(del.wasPressed && selected.length > 0) {
             for(let map of selected) {
                 removeFromArray(map, tileMaps.items)
                 delete tileMap[getName(map)]
             }
             clearSelection()
+        }
+
+        if(tileSetProperties.wasPressed) {
+            showPopup("tile_set_properties")
         }
 
         if(canvasUnderCursor !== maps) return
@@ -268,11 +290,6 @@ project.init = (texture) => {
 
         if(turnMap.wasPressed) {
             tileMapUnderCursor.turnClockwise(centerX, centerY)
-        }
-
-        if(tileSetProperties.wasPressed) {
-            tileSetCanvas.style.height = (document.body.offsetHeight - 100) + "px"
-            showPopup("tile_set_properties")
         }
 
         switch(currentMode) {
