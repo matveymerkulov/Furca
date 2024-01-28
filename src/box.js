@@ -4,7 +4,7 @@ import {drawDashedRect} from "./draw_rect.js"
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
 
 export default class Box extends Point {
-    constructor(x = 0.0, y = 0.0, width = 1.0, height = 1.0) {
+    constructor(x = 0.0, y = 0.0, width = 0.0, height = 0.0) {
         super(x, y)
         this.halfWidth = 0.5 * width
         this.halfHeight = 0.5 * height

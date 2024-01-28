@@ -3,10 +3,10 @@ import Canvas, {canvasUnderCursor, ctx, distToScreen, setCanvas, xToScreen, yToS
 import {canvasMouse, element, mouse, removeFromArray} from "../src/system.js"
 import {drawDashedRect} from "../src/draw_rect.js"
 import {boxWithPointCollision} from "../src/collisions.js"
-import {projectFromStorage, projectToClipboard, projectToStorage} from "./save_load.js"
+import {projectFromStorage, projectToStorage} from "./save_load.js"
 import Key from "../src/key.js"
 import Layer from "../src/layer.js"
-import {hidePopup, showPopup} from "../src/gui/popup.js"
+import {currentWindow, hideWindow, showWindow} from "../src/gui/window.js"
 import MoveTileMap from "./move_tile_map.js"
 import {Pan} from "./pan.js"
 import Zoom from "./zoom.js"
@@ -14,6 +14,7 @@ import Select, {clearSelection, selected, selector} from "./select.js"
 import {addTileMap, createTileMap} from "./create_tile_map.js"
 import {getName, incrementName, setName} from "./names.js"
 import {loadData} from "./data.js"
+import SelectRegion, {regionSelector, setTileWidth, tileHeight, tileWidth} from "./select_region.js"
 
 project.getAssets = () => {
     return {
@@ -35,6 +36,8 @@ export const mode = {
 export let maps, tiles
 export let currentTileMap, currentTileSet, tileMapUnderCursor, currentTileSprite
 export let currentMode = mode.tiles, centerX, centerY
+
+export let tileSetWindow = element("tile_set_window")
 
 function initData() {
     for(const[name, object] of Object.entries(tileSet)) {
@@ -90,7 +93,8 @@ project.init = (texture) => {
     tiles.add(new Zoom(zoomIn, zoomOut), pan)
     tiles.setZoom(-17)
 
-    let tileSetCanvas = element("tile_set")
+    let tileSetCanvas = Canvas.create(element("tile_set"), new Layer(), 9, 16)
+    tileSetCanvas.add(new SelectRegion(), select)
 
     maps.renderContents = () => {
         tileMaps.items.forEach(map => {
@@ -180,32 +184,48 @@ project.init = (texture) => {
         }
     }
 
-    function renderTileSetCanvas() {
+    tileSetCanvas.renderContents = () => {
         if(currentTileSet === undefined) return
-        let tex = currentTileSet.images.texture
+
+        let images = currentTileSet.images
+        let tex = images.texture
         let scale = Math.min((document.body.offsetWidth - 100) / tex.width
             , (document.body.offsetHeight - 100) / tex.height, 2)
-        let style = tileSetCanvas.style
+        let style = tileSetCanvas.node.style
         let canvasWidth = tex.width * scale
         let canvasHeight = tex.height * scale
         style.width = canvasWidth + "px"
         style.height = canvasHeight + "px"
-        let ctx = tileSetCanvas.getContext("2d")
+        setCanvas(tileSetCanvas)
         ctx.canvas.width = canvasWidth
         ctx.canvas.height = canvasHeight
         ctx.drawImage(tex, 0, 0, tex.width, tex.height, 0, 0, canvasWidth, canvasHeight)
 
+        setTileWidth(canvasWidth / images.columns, canvasHeight / images.rows)
+
+        drawDashedRect(Math.floor(canvasMouse.x / tileWidth) * tileWidth
+            , Math.floor(canvasMouse.y / tileHeight) * tileHeight, tileWidth, tileHeight)
+
+        if(regionSelector === undefined) return
+        drawDashedRect(regionSelector.x * tileWidth, regionSelector.y * tileHeight
+            , (regionSelector.width + 1) * tileWidth - 1, (regionSelector.height + 1) * tileHeight)
     }
 
     project.render = () => {
         maps.render()
         tiles.render()
-        renderTileSetCanvas()
+        tileSetCanvas.render()
     }
 
     let currentName = "", newX, newY
 
     project.update = () => {
+        if(currentWindow === tileSetWindow) {
+            setCanvas(tileSetCanvas)
+            tileSetCanvas.update()
+            return
+        }
+
         maps.update()
         tiles.update()
 
@@ -231,7 +251,7 @@ project.init = (texture) => {
         }
 
         if(tileSetProperties.wasPressed) {
-            showPopup("tile_set_properties")
+            showWindow(tileSetWindow)
         }
 
         if(canvasUnderCursor !== maps) return
@@ -243,9 +263,9 @@ project.init = (texture) => {
             newY = Math.round(mouse.y)
             currentName = prompt("Введите имя новой карты:")
             if(currentName === null) {
-                hidePopup()
+                hideWindow()
             } else {
-                showPopup("map_size")
+                showWindow("map_size")
             }
         }
 
@@ -278,6 +298,7 @@ project.init = (texture) => {
         }
 
         if(renameMap.wasPressed) {
+            // noinspection JSCheckFunctionSignatures
             let name = prompt("Enter new name of tile map:", getName(tileMapUnderCursor))
             if(name !== null) {
                 setName(tileMapUnderCursor, name)
@@ -326,14 +347,14 @@ project.init = (texture) => {
             button.onclick = (event) => {
                 createTileMap(currentName, event.target.tileSet
                     , parseInt(columnsField.value), parseInt(rowsField.value), newX, newY)
-                hidePopup()
+                hideWindow()
             }
             tileSets.appendChild(button)
         }
-        showPopup("select_tile_set")
+        showWindow("select_tile_set")
     }
 
     for(let item of document.getElementsByClassName("cancel")) {
-        item.onclick = () => hidePopup()
+        item.onclick = () => hideWindow()
     }
 }

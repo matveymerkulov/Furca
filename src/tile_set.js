@@ -1,24 +1,6 @@
 import {removeFromArray} from "./system.js"
 import {tileSet} from "./project.js"
 
-class Block {
-    #x
-    #y
-    #width
-    #height
-
-    constructor(x, y, width, height) {
-        this.#x = x
-        this.#y = y
-        this.#width = width
-        this.#height = height
-    }
-
-    collidesWithTile(x, y) {
-        return x >= this.#x && x < this.#x + this.#width && y >= this.#y && y < this.#y + this.#height
-    }
-}
-
 export default class TileSet {
     #images
     #collision
@@ -45,7 +27,7 @@ export default class TileSet {
     }
 
     addBlock(x, y, width, height) {
-        this.#blocks.push(new Block(x, y, width, height))
+        this.#blocks.push(new Region(x, y, width, height))
     }
 
     removeBlock(x, y) {
