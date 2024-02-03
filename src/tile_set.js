@@ -1,18 +1,22 @@
 import {removeFromArray} from "./system.js"
 import {tileSet} from "./project.js"
+import Region from "./region.js"
+import {arrayToString} from "../editor/save_load.js"
 
 export default class TileSet {
     #images
     #collision
+    hidden
     #blocks
-    constructor(images) {
+    constructor(images, hidden) {
         this.#images = images
         this.#collision = new Array(images.quantity)
+        this.hidden = hidden ? hidden : new Array(images.quantity).fill(false)
         this.#blocks = []
     }
 
     toString() {
-        return `new TileSet(${this.#images.toString()})`
+        return `new TileSet(${this.#images.toString()}, ${arrayToString(this.hidden)})`
     }
 
     get images() {
@@ -27,7 +31,7 @@ export default class TileSet {
     }
 
     addBlock(x, y, width, height) {
-        this.#blocks.push(new Region(x, y, width, height))
+        this.#blocks.push(new Region(this.#images.columns, x, y, width, height))
     }
 
     removeBlock(x, y) {
@@ -41,6 +45,14 @@ export default class TileSet {
 
     image(num) {
         return this.#images.image(num)
+    }
+
+    get columns() {
+        return this.#images.columns
+    }
+
+    get rows() {
+        return this.#images.rows
     }
 
     collisionShape(num) {

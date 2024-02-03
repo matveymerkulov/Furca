@@ -1,6 +1,6 @@
 import Point from "./point.js"
 import {unc} from "./system.js"
-import {drawDashedRect} from "./draw_rect.js"
+import {drawDashedRect} from "./draw.js"
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
 
 export default class Box extends Point {

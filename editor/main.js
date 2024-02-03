@@ -1,7 +1,7 @@
 import {project, tileMap, tileMaps, tileSet} from "../src/project.js"
 import Canvas, {canvasUnderCursor, ctx, distToScreen, setCanvas, xToScreen, yToScreen} from "../src/canvas.js"
 import {canvasMouse, element, mouse, removeFromArray} from "../src/system.js"
-import {drawDashedRect} from "../src/draw_rect.js"
+import {drawDashedRect} from "../src/draw.js"
 import {boxWithPointCollision} from "../src/collisions.js"
 import {projectFromStorage, projectToStorage} from "./save_load.js"
 import Key from "../src/key.js"
@@ -14,7 +14,17 @@ import Select, {clearSelection, selected, selector} from "./select.js"
 import {addTileMap, createTileMap} from "./create_tile_map.js"
 import {getName, incrementName, setName} from "./names.js"
 import {loadData} from "./data.js"
-import SelectRegion, {regionSelector, setTileWidth, tileHeight, tileWidth} from "./select_region.js"
+import SelectRegion, {
+    regionSelector,
+    resetRegionSelector,
+    setTileWidth,
+    tileHeight,
+    tileWidth
+} from "./select_region.js"
+import {drawCross} from "./draw.js"
+import {renderTileSetProperties} from "./tile_set_properties.js"
+import {renderTileSet} from "./render_tile_set.js"
+import {renderMaps} from "./render_maps.js"
 
 project.getAssets = () => {
     return {
@@ -36,6 +46,7 @@ export const mode = {
 export let maps, tiles
 export let currentTileMap, currentTileSet, tileMapUnderCursor, currentTileSprite
 export let currentMode = mode.tiles, centerX, centerY
+export let currentTile = 1, altTile = 0
 
 export let tileSetWindow = element("tile_set_window")
 
@@ -47,6 +58,11 @@ function initData() {
     for(const[name, object] of Object.entries(tileMap)) {
         setName(object, name)
     }
+}
+
+export function setCurrentTile(set, i) {
+    currentTile = i
+    currentTileSet = set
 }
 
 project.init = (texture) => {
@@ -78,8 +94,9 @@ project.init = (texture) => {
     let copy = new Key("KeyC")
     let turnMap = new Key("KeyT")
     let tileSetProperties = new Key("KeyI")
+    let visibility = new Key("KeyV")
 
-    maps = Canvas.create(element("map"), tileMaps, 30, 14)
+    maps = Canvas.create(element("map"), 30, 14)
     maps.background = "rgb(9, 44, 84)"
     maps.setZoom(-19)
     maps.add(new MoveTileMap(), select)
@@ -88,128 +105,17 @@ project.init = (texture) => {
     maps.add(new Select(), select)
     setCanvas(maps)
 
-    tiles = Canvas.create(element("tiles"), new Layer(), 8, 14)
+    tiles = Canvas.create(element("tiles"), 8, 14)
     tiles.add(new Pan(tiles), pan)
     tiles.add(new Zoom(zoomIn, zoomOut), pan)
     tiles.setZoom(-17)
 
-    let tileSetCanvas = Canvas.create(element("tile_set"), new Layer(), 9, 16)
+    let tileSetCanvas = Canvas.create(element("tile_set"), 9, 16)
     tileSetCanvas.add(new SelectRegion(), select)
 
-    maps.renderContents = () => {
-        tileMaps.items.forEach(map => {
-            map.draw()
-            let name = getName(map)
-            ctx.fillStyle = "white"
-            ctx.font = "16px serif"
-            // noinspection JSCheckFunctionSignatures
-            let metrics = ctx.measureText(name)
-            // noinspection JSCheckFunctionSignatures
-            ctx.fillText(name, xToScreen(map.x) - 0.5 * metrics.width
-                ,  yToScreen(map.topY) - 0.5 * metrics.actualBoundingBoxDescent - 4)
-        })
-
-        function drawCross(x, y, width, color) {
-            ctx.beginPath()
-            ctx.strokeStyle = color
-            ctx.lineWidth = width
-            x = xToScreen(x)
-            y = yToScreen(y)
-            ctx.moveTo(x - 5, y)
-            ctx.lineTo(x + 5, y)
-            ctx.moveTo(x, y - 5)
-            ctx.lineTo(x, y + 5)
-            ctx.stroke()
-            ctx.strokeStyle = "white"
-            ctx.lineWidth = 1
-        }
-
-        switch(currentMode) {
-            case mode.tiles:
-                if(currentTileSprite !== undefined) {
-                    currentTileSprite.drawDashedRect()
-                }
-
-                if(tileMapUnderCursor !== undefined) {
-                    let x = tileMapUnderCursor.leftX + centerX
-                    let y = tileMapUnderCursor.topY + centerY
-                    drawCross(x, y, 2, "black")
-                    drawCross(x, y, 1, "white")
-                }
-                break
-            case mode.maps:
-                if(selector !== undefined) {
-                    selector.drawDashedRect()
-                } else if(selected.length > 0) {
-                    for(let map of selected) {
-                        map.drawDashedRect()
-                    }
-                } else if(tileMapUnderCursor !== undefined) {
-                    tileMapUnderCursor.drawDashedRect()
-                }
-                break
-        }
-    }
-
-    let currentTile = 1, altTile = 0
-    tiles.renderContents = function() {
-        let quantity = 0
-        for (const set of Object.values(tileSet)) {
-            quantity += set.images.quantity
-        }
-
-        let start = 0
-        let columns = Math.floor(tiles.width)
-        let height = Math.ceil(quantity / columns)
-        let x0 = distToScreen(0.5 * (tiles.width - columns))
-        let y0 = distToScreen(0.5 * (tiles.height - height) - tiles.y)
-        for (const set of Object.values(tileSet)) {
-            let images = set.images
-            let size = distToScreen(1)
-            for(let i = 0; i < images.quantity; i++) {
-                let pos = start + i
-                let x = x0 + size * (pos % columns)
-                let y = y0 + size * Math.floor(pos / columns)
-                images.image(i).drawResized(x, y, size, size)
-                if(set === currentTileSet && (currentTile === i || altTile === i)) {
-                    drawDashedRect(x, y, size, size)
-                }
-                if(canvasUnderCursor !== tiles) continue
-                if(select.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
-                    currentTile = i
-                    currentTileSet = set
-                }
-            }
-            start += images.quantity
-        }
-    }
-
-    tileSetCanvas.renderContents = () => {
-        if(currentTileSet === undefined) return
-
-        let images = currentTileSet.images
-        let tex = images.texture
-        let scale = Math.min((document.body.offsetWidth - 100) / tex.width
-            , (document.body.offsetHeight - 100) / tex.height, 2)
-        let style = tileSetCanvas.node.style
-        let canvasWidth = tex.width * scale
-        let canvasHeight = tex.height * scale
-        style.width = canvasWidth + "px"
-        style.height = canvasHeight + "px"
-        setCanvas(tileSetCanvas)
-        ctx.canvas.width = canvasWidth
-        ctx.canvas.height = canvasHeight
-        ctx.drawImage(tex, 0, 0, tex.width, tex.height, 0, 0, canvasWidth, canvasHeight)
-
-        setTileWidth(canvasWidth / images.columns, canvasHeight / images.rows)
-
-        drawDashedRect(Math.floor(canvasMouse.x / tileWidth) * tileWidth
-            , Math.floor(canvasMouse.y / tileHeight) * tileHeight, tileWidth, tileHeight)
-
-        if(regionSelector === undefined) return
-        drawDashedRect(regionSelector.x * tileWidth, regionSelector.y * tileHeight
-            , (regionSelector.width + 1) * tileWidth - 1, (regionSelector.height + 1) * tileHeight)
-    }
+    maps.renderContents = () => renderMaps()
+    tiles.renderContents = () => renderTileSet(select)
+    tileSetCanvas.renderContents = () => renderTileSetProperties(tileSetCanvas)
 
     project.render = () => {
         maps.render()
@@ -223,6 +129,15 @@ project.init = (texture) => {
         if(currentWindow === tileSetWindow) {
             setCanvas(tileSetCanvas)
             tileSetCanvas.update()
+
+            if(visibility.wasPressed && regionSelector !== undefined) {
+                let hide
+                regionSelector.process((tileNum) => {
+                    if(hide === undefined) hide = !currentTileSet.hidden[tileNum]
+                    currentTileSet.hidden[tileNum] = hide
+                })
+            }
+
             return
         }
 
@@ -251,6 +166,7 @@ project.init = (texture) => {
         }
 
         if(tileSetProperties.wasPressed) {
+            resetRegionSelector()
             showWindow(tileSetWindow)
         }
 
