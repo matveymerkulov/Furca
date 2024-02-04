@@ -2,11 +2,12 @@ import TileSet from "../src/tile_set.js"
 import TileMap from "../src/tile_map.js"
 import ImageArray from "../src/image_array.js"
 import {tileMap, tileMaps, tileSet} from "../src/project.js"
+import {getBooleanArray} from "../src/parser.js"
 
 export function loadData(texture) {
-    tileSet["floor"] = new TileSet(new ImageArray(texture.floor, 9, 11, 0.5, 0.5, 1, 1))
-    tileSet["objects"] = new TileSet(new ImageArray(texture.objects, 10, 17, 0.5, 0.5, 1, 1))
-    tileSet["blocks"] = new TileSet(new ImageArray(texture.blocks, 2, 1, 0.5, 0.5, 1, 1))
+    tileSet["floor"] = new TileSet(new ImageArray(texture.floor, 9, 11, 0.5, 0.5, 1, 1), getBooleanArray("000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"))
+    tileSet["objects"] = new TileSet(new ImageArray(texture.objects, 10, 17, 0.5, 0.5, 1, 1), getBooleanArray("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"))
+    tileSet["blocks"] = new TileSet(new ImageArray(texture.blocks, 2, 1, 0.5, 0.5, 1, 1), getBooleanArray("00"))
 
     tileMap["0-0"] = new TileMap(tileSet["blocks"], 4, 4, -18, -10, 1, 1, [
         0,  0,  0,  0,

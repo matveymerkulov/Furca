@@ -41,6 +41,16 @@ export function arrayToString(array, columns) {
     return `[${text}\n${indent}]`
 }
 
+export function booleanArrayToString(array) {
+    let text = ""
+    addIndent()
+    for(let pos = 0; pos < array.length; pos++) {
+        text += array[pos] ? "1" : "0"
+    }
+    removeIndent()
+    return `\"${text}\"`
+}
+
 export function projectToText() {
     let text = ""
     text += `export function loadData(texture) {\n`

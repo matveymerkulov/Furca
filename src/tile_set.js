@@ -1,7 +1,7 @@
 import {removeFromArray} from "./system.js"
 import {tileSet} from "./project.js"
 import Region from "./region.js"
-import {arrayToString} from "../editor/save_load.js"
+import {arrayToString, booleanArrayToString} from "../editor/save_load.js"
 
 export default class TileSet {
     #images
@@ -16,7 +16,7 @@ export default class TileSet {
     }
 
     toString() {
-        return `new TileSet(${this.#images.toString()}, ${arrayToString(this.hidden)})`
+        return `new TileSet(${this.#images.toString()}, getBooleanArray(${booleanArrayToString(this.hidden)}))`
     }
 
     get images() {

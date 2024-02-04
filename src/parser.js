@@ -82,6 +82,14 @@ export function getIntArray() {
     }
 }
 
+export function getBooleanArray(values) {
+    let array = new Array(values.length)
+    for(let i = 0; i < values.length; i++) {
+        array[i] = values.charAt(i) === "1"
+    }
+    return array
+}
+
 export function readSymbol() {
     let char = text.charAt(pos)
     pos++
@@ -103,7 +111,8 @@ export function getTileSet(texture, name) {
     let yMul = getFloat()
     let heightMul = getFloat()
     let widthMul = getFloat()
-    tileSet[name] = new TileSet(new ImageArray(texture[textureName], columns, rows, xMul, yMul, heightMul, widthMul))
+    let hidden = getBooleanArray(getString())
+    tileSet[name] = new TileSet(new ImageArray(texture[textureName], columns, rows, xMul, yMul, heightMul, widthMul), hidden)
     getSymbol(")")
 }
 
