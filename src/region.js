@@ -1,4 +1,4 @@
-export default class Region {
+ export default class Region {
     x
     y
     width
@@ -11,10 +11,10 @@ export default class Region {
 
     modify(columns, x, y, width, height) {
         this.columns = columns
-        this.x = x
-        this.y = y
-        this.width = width
-        this.height = height
+        this.x = width >= 0 ? x : x + width
+        this.y = height >= 0 ? y : y + height
+        this.width = Math.abs(width)
+        this.height = Math.abs(height)
     }
 
     process(code) {

@@ -95,6 +95,7 @@ project.init = (texture) => {
     let turnMap = new Key("KeyT")
     let tileSetProperties = new Key("KeyI")
     let visibility = new Key("KeyV")
+    let block = new Key("KeyB")
 
     maps = Canvas.create(element("map"), 30, 14)
     maps.background = "rgb(9, 44, 84)"
@@ -130,12 +131,18 @@ project.init = (texture) => {
             setCanvas(tileSetCanvas)
             tileSetCanvas.update()
 
-            if(visibility.wasPressed && regionSelector !== undefined) {
+            if(regionSelector === undefined) return
+
+            if(visibility.wasPressed) {
                 let hide
                 regionSelector.process((tileNum) => {
                     if(hide === undefined) hide = !currentTileSet.hidden[tileNum]
                     currentTileSet.hidden[tileNum] = hide
                 })
+            }
+
+            if(block.wasPressed) {
+                currentTileSet.blocks.push(regionSelector)
             }
 
             return

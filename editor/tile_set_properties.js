@@ -42,6 +42,8 @@ export function renderTileSetProperties(canvas) {
         }
     }
 
+
+
     if(regionSelector === undefined) return
     drawDashedRect(regionSelector.x * tileWidth, regionSelector.y * tileHeight
         , (regionSelector.width + 1) * tileWidth - 1, (regionSelector.height + 1) * tileHeight - 1)
