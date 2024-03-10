@@ -1,5 +1,5 @@
 import {tileMap, tileSet} from "./project.js"
-import TileSet from "./tile_set.js"
+import TileSet, {Block} from "./tile_set.js"
 import ImageArray from "./image_array.js"
 import TileMap from "./tile_map.js"
 
@@ -102,6 +102,20 @@ export function eof() {
 
 
 
+function getBlocks() {
+    let array = []
+    getSymbol("[")
+    while(true) {
+        let x = getInt("]")
+        if(x === "") return array
+        let y = getInt()
+        let width = getInt()
+        let height = getInt()
+        let type = getInt()
+        array.push(new Block(x, y, width, height, type))
+    }
+}
+
 export function getTileSet(texture, name) {
     getSymbol(".")
     let textureName = getToken()
@@ -111,8 +125,10 @@ export function getTileSet(texture, name) {
     let yMul = getFloat()
     let heightMul = getFloat()
     let widthMul = getFloat()
-    let hidden = getBooleanArray(getString())
-    tileSet[name] = new TileSet(new ImageArray(texture[textureName], columns, rows, xMul, yMul, heightMul, widthMul), hidden)
+    let visibility = getIntArray()
+    let blocks = getBlocks()
+    tileSet[name] = new TileSet(new ImageArray(texture[textureName], columns, rows, xMul, yMul, heightMul, widthMul)
+        , visibility, blocks)
     getSymbol(")")
 }
 

@@ -173,7 +173,7 @@ project.init = (texture) => {
             clearSelection()
         }
 
-        if(tileSetProperties.wasPressed) {
+        if(tileSetProperties.wasPressed && currentTileSet !== undefined) {
             resetRegionSelector()
             showWindow(tileSetWindow)
         }

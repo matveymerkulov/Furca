@@ -4,8 +4,8 @@ import Region from "./region.js"
 import {arrayToString, booleanArrayToString} from "../editor/save_load.js"
 
 export const type = {
-    block: Symbol("block"),
-    frame: Symbol("frame"),
+    block: 0,
+    frame: 1,
 }
 
 export const visibility = {
@@ -14,11 +14,15 @@ export const visibility = {
     block: 2,
 }
 
-class Block extends Region {
+export class Block extends Region {
     type
     constructor(x, y, width, height, type) {
         super(1, x, y, width, height)
         this.type = type
+    }
+
+    toString() {
+        return `new Block(${this.x}, ${this.y}, ${this.width}, ${this.height}, ${this.type})`
     }
 }
 
@@ -27,15 +31,16 @@ export default class TileSet {
     #collision
     visibility
     blocks
-    constructor(images, vis) {
+    constructor(images, vis, blocks) {
         this.#images = images
         this.#collision = new Array(images.quantity)
         this.visibility = vis ? vis : new Array(images.quantity).fill(visibility.visible)
-        this.blocks = []
+        this.blocks = blocks === undefined ? [] : blocks
     }
 
     toString() {
-        return `new TileSet(${this.#images.toString()}, getIntArray(${arrayToString(this.visibility)}))`
+        return `new TileSet(${this.#images.toString()}, ${arrayToString(this.visibility, this.columns, 1)}`
+            + `, ${arrayToString(this.blocks)})`
     }
 
     get images() {
@@ -54,13 +59,14 @@ export default class TileSet {
     }
 
     addBlock(x, y, width, height, type) {
-        this.initBlock(x, y, width, height, visibility.block)
-        this.blocks.push(new Block(x, y, width, height, type))
+        let block = new Block(x, y, width, height, type)
+        this.initBlock(block, visibility.block)
+        this.blocks.push(block)
     }
 
-    initBlock(x, y, width, height, vis) {
-        for(let row = y; row <= y + height; row++) {
-            for(let column = x; column <= x + width; column++) {
+    initBlock(block, vis) {
+        for(let row = block.y; row <= block.y + block.height; row++) {
+            for(let column = block.x; column <= block.x + block.width; column++) {
                 this.visibility[column + row * this.columns] = vis
             }
         }
@@ -69,6 +75,7 @@ export default class TileSet {
     removeBlock(x, y) {
         for(let block of this.blocks) {
             if(block.collidesWithTile(x, y)) {
+                this.initBlock(block, visibility.visible)
                 removeFromArray(block, this.blocks)
                 return
             }

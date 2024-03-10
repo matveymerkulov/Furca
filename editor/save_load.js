@@ -28,17 +28,17 @@ export function toString(value) {
     return value
 }
 
-export function arrayToString(array, columns) {
-    let text = ""
+export function arrayToString(array, columns, padding) {
+    let text = "["
     addIndent()
     for(let pos = 0; pos < array.length; pos++) {
         if(columns !== undefined && (pos % columns) === 0) {
             text +=`\n${indent}`
         }
-        text += array[pos].toString().padStart(3, " ") + ","
+        text += (columns === undefined ? array[pos].toString() : array[pos].toString().padStart(padding, "0")) + ","
     }
     removeIndent()
-    return `[${text}\n${indent}]`
+    return text + (columns === undefined ? "" : "\n" + indent) + "]"
 }
 
 export function booleanArrayToString(array) {

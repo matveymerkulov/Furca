@@ -150,5 +150,7 @@ export function loadData(texture) {
         0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     ], -1)
 
-    tileMaps.add(tileMap["0-0"], tileMap["1-0"], tileMap["2-0"], tileMap["3-0"], tileMap["4-0"], tileMap["5-0"], tileMap["6-0"], tileMap["0-1"], tileMap["1-1"], tileMap["1-2"], tileMap["1-3"], tileMap["2-1"], tileMap["3-1"], tileMap["4-1"], tileMap["4-2"], tileMap["4-3"], tileMap["5-1"], tileMap["5-2"], tileMap["5-3"], tileMap["field"], )
+    tileMaps.add(tileMap["0-0"], tileMap["1-0"], tileMap["2-0"], tileMap["3-0"], tileMap["4-0"], tileMap["5-0"]
+        , tileMap["6-0"], tileMap["0-1"], tileMap["1-1"], tileMap["1-2"], tileMap["1-3"], tileMap["2-1"], tileMap["3-1"]
+        , tileMap["4-1"], tileMap["4-2"], tileMap["4-3"], tileMap["5-1"], tileMap["5-2"], tileMap["5-3"], tileMap["field"], )
 }
