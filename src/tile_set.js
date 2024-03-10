@@ -3,16 +3,29 @@ import {tileSet} from "./project.js"
 import Region from "./region.js"
 import {arrayToString, booleanArrayToString} from "../editor/save_load.js"
 
+export const type = {
+    block: Symbol("block"),
+    frame: Symbol("frame"),
+}
+
+class Block extends Region {
+    type
+    constructor(x, y, width, height, type) {
+        super(1, x, y, width, height)
+        this.type = type
+    }
+}
+
 export default class TileSet {
     #images
     #collision
     hidden
-    #blocks
+    blocks
     constructor(images, hidden) {
         this.#images = images
         this.#collision = new Array(images.quantity)
         this.hidden = hidden ? hidden : new Array(images.quantity).fill(false)
-        this.#blocks = []
+        this.blocks = []
     }
 
     toString() {
@@ -30,14 +43,18 @@ export default class TileSet {
         return ""
     }
 
-    addBlock(x, y, width, height) {
-        this.#blocks.push(new Region(this.#images.columns, x, y, width, height))
+    addRegion(region, type) {
+        this.addBlock(region.x, region.y, region.width, region.height, type)
+    }
+
+    addBlock(x, y, width, height, type) {
+        this.blocks.push(new Block(x, y, width, height, type))
     }
 
     removeBlock(x, y) {
-        for(let block of this.#blocks) {
+        for(let block of this.blocks) {
             if(block.collidesWithTile(x, y)) {
-                removeFromArray(block, this.#blocks)
+                removeFromArray(block, this.blocks)
                 return
             }
         }

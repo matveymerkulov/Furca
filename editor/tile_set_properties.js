@@ -1,9 +1,10 @@
 import {ctx, setCanvas} from "../src/canvas.js"
 import {regionSelector, setTileWidth, tileHeight, tileWidth} from "./select_region.js"
-import {drawDashedRect} from "../src/draw.js"
+import {drawDashedRect, drawRect} from "../src/draw.js"
 import {canvasMouse} from "../src/system.js"
 import {currentTileSet} from "./main.js"
 import {drawX} from "./draw.js"
+import {type} from "../src/tile_set.js"
 
 export function renderTileSetProperties(canvas) {
     if(currentTileSet === undefined) return
@@ -42,7 +43,16 @@ export function renderTileSetProperties(canvas) {
         }
     }
 
-
+    for(let block of currentTileSet.blocks) {
+        let color
+        switch(block.type) {
+            case type.block:
+                color = "lightgreen"
+                break
+        }
+        drawRect(color, block.x * tileWidth + 2, block.y * tileHeight + 2
+            , (block.width + 1) * tileWidth - 5, (block.height + 1) * tileHeight - 5)
+    }
 
     if(regionSelector === undefined) return
     drawDashedRect(regionSelector.x * tileWidth, regionSelector.y * tileHeight

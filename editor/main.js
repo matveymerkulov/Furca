@@ -25,6 +25,7 @@ import {drawCross} from "./draw.js"
 import {renderTileSetProperties} from "./tile_set_properties.js"
 import {renderTileSet} from "./render_tile_set.js"
 import {renderMaps} from "./render_maps.js"
+import {type} from "../src/tile_set.js"
 
 project.getAssets = () => {
     return {
@@ -142,7 +143,7 @@ project.init = (texture) => {
             }
 
             if(block.wasPressed) {
-                currentTileSet.blocks.push(regionSelector)
+                currentTileSet.addRegion(regionSelector, type.block)
             }
 
             return
