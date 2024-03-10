@@ -4,6 +4,7 @@ import {drawDashedRect} from "../src/draw.js"
 import {boxWithPointCollision} from "../src/collisions.js"
 import {canvasMouse} from "../src/system.js"
 import {altTile, currentTile, currentTileSet, setCurrentTile, tiles} from "./main.js"
+import {visibility} from "../src/tile_set.js"
 
 export function renderTileSet(select) {
     let quantity = 0
@@ -21,7 +22,7 @@ export function renderTileSet(select) {
         let images = set.images
         let size = distToScreen(1)
         for(let i = 0; i < images.quantity; i++) {
-            if(set.hidden[i] === true) continue
+            if(set.visibility[i] !== visibility.visible) continue
             pos++
             let x = x0 + size * (pos % columns)
             let y = y0 + size * Math.floor(pos / columns)

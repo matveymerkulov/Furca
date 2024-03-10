@@ -4,7 +4,7 @@ import {drawDashedRect, drawRect} from "../src/draw.js"
 import {canvasMouse} from "../src/system.js"
 import {currentTileSet} from "./main.js"
 import {drawX} from "./draw.js"
-import {type} from "../src/tile_set.js"
+import {type, visibility} from "../src/tile_set.js"
 
 export function renderTileSetProperties(canvas) {
     if(currentTileSet === undefined) return
@@ -35,7 +35,7 @@ export function renderTileSetProperties(canvas) {
     for(let y = 0; y < currentTileSet.rows; y++) {
         for(let x = 0; x < currentTileSet.columns; x++) {
             let n = x + y * currentTileSet.columns
-            if(currentTileSet.hidden[n] === false) continue
+            if(currentTileSet.visibility[n] !== visibility.hidden) continue
             let xx = (x + 0.5) * cellWidth
             let yy = (y + 0.5) * cellHeight
             drawX(xx, yy, 3, 5, "black")

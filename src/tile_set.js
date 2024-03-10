@@ -8,6 +8,12 @@ export const type = {
     frame: Symbol("frame"),
 }
 
+export const visibility = {
+    visible: 0,
+    hidden: 1,
+    block: 2,
+}
+
 class Block extends Region {
     type
     constructor(x, y, width, height, type) {
@@ -19,17 +25,17 @@ class Block extends Region {
 export default class TileSet {
     #images
     #collision
-    hidden
+    visibility
     blocks
-    constructor(images, hidden) {
+    constructor(images, vis) {
         this.#images = images
         this.#collision = new Array(images.quantity)
-        this.hidden = hidden ? hidden : new Array(images.quantity).fill(false)
+        this.visibility = vis ? vis : new Array(images.quantity).fill(visibility.visible)
         this.blocks = []
     }
 
     toString() {
-        return `new TileSet(${this.#images.toString()}, getBooleanArray(${booleanArrayToString(this.hidden)}))`
+        return `new TileSet(${this.#images.toString()}, getIntArray(${arrayToString(this.visibility)}))`
     }
 
     get images() {
@@ -48,7 +54,16 @@ export default class TileSet {
     }
 
     addBlock(x, y, width, height, type) {
+        this.initBlock(x, y, width, height, visibility.block)
         this.blocks.push(new Block(x, y, width, height, type))
+    }
+
+    initBlock(x, y, width, height, vis) {
+        for(let row = y; row <= y + height; row++) {
+            for(let column = x; column <= x + width; column++) {
+                this.visibility[column + row * this.columns] = vis
+            }
+        }
     }
 
     removeBlock(x, y) {
