@@ -17,13 +17,14 @@ import {
     checkMapsWindowCollisions,
     currentTileMap,
     mapModeOperations,
-    mapWindowOperations,
+    mainWindowOperations,
     renderMaps,
     tileMapOperations,
     tileMapUnderCursor,
     tileModeOperations
 } from "./tile_map.js"
 import {mapSizeWindow} from "./new_map.js"
+import {deleteCurrentDrag} from "../src/drag.js"
 
 project.getAssets = () => {
     return {
@@ -138,12 +139,7 @@ project.init = (texture) => {
             projectToStorage()
         }
 
-        mapWindowOperations()
-
-        if(tileSetProperties.wasPressed && currentTileSet !== undefined) {
-            resetRegionSelector()
-            showWindow(tileSetWindow)
-        }
+        mainWindowOperations()
 
         if(canvasUnderCursor !== maps) return
 
@@ -167,6 +163,9 @@ project.init = (texture) => {
     mapSizeWindow()
 
     for(let item of document.getElementsByClassName("cancel")) {
-        item.onclick = () => hideWindow()
+        item.onclick = () => {
+            hideWindow()
+            deleteCurrentDrag()
+        }
     }
 }

@@ -1,15 +1,15 @@
 import {regionSelector} from "./select_region.js"
 import {type, visibility} from "../src/tile_set.js"
-import {block, tiles, tileSetCanvas, toggleVisibility} from "./main.js"
+import {block, select, tiles, tileSetCanvas, toggleVisibility} from "./main.js"
 import {tileSet} from "../src/project.js"
-import {canvasUnderCursor, distToScreen, setCanvas} from "../src/canvas.js"
+import {canvasUnderCursor, ctx, distToScreen, setCanvas} from "../src/canvas.js"
 import {drawDashedRect} from "../src/draw.js"
 import {boxWithPointCollision} from "../src/collisions.js"
 import {canvasMouse} from "../src/system.js"
 
-export let currentTile = 1, altTile = 0, currentTileSet
+export let currentTile = 1, altTile = 0, currentTileSet, currentBlock
 
-export function renderTileSet(select) {
+export function renderTileSet() {
     let quantity = 0
     for(const set of Object.values(tileSet)) {
         quantity += set.images.quantity
@@ -35,16 +35,34 @@ export function renderTileSet(select) {
             if(canvasUnderCursor !== tiles) continue
             if(select.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
                 currentTile = i
+                currentBlock = undefined
                 currentTileSet = set
             }
         }
 
-        /*for(let block of tileSet.blocks) {
+        let texture = images.texture
+        for(let block of set.blocks) {
             pos++
             let x = x0 + size * (pos % columns)
             let y = y0 + size * Math.floor(pos / columns)
+            let cellWidth = texture.width / images.columns
+            let cellHeight = texture.height / images.rows
+            let tx = block.x * cellWidth
+            let ty = block.y * cellHeight
+            let tWidth = (block.width + 1) * cellWidth
+            let tHeight = (block.height + 1) * cellHeight
+            ctx.drawImage(texture, tx, ty, tWidth, tHeight, x, y, size, size)
 
-        }*/
+            if(select.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
+                currentBlock = block
+                currentTile = -1
+                currentTileSet = set
+            }
+
+            if(set === currentTileSet && currentBlock === block) {
+                drawDashedRect(x, y, size, size)
+            }
+        }
     }
 }
 

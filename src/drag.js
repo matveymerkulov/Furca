@@ -30,3 +30,7 @@ export default class Drag extends Action {
         current = undefined
     }
 }
+
+export function deleteCurrentDrag() {
+    current = undefined
+}

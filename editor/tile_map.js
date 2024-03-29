@@ -1,7 +1,7 @@
 import {mouse, removeFromArray} from "../src/system.js"
 import {tileMap, tileMaps} from "../src/project.js"
 import {addTileMap} from "./create_tile_map.js"
-import {copy, currentMode, del, mode, renameMap, select, turnMap,} from "./main.js"
+import {copy, currentMode, del, mode, renameMap, select, tileSetProperties, tileSetWindow, turnMap,} from "./main.js"
 import {getName, incrementName, setName} from "./names.js"
 import {ctx, xToScreen, yToScreen} from "../src/canvas.js"
 import {clearSelection, selected, selector} from "./select.js"
@@ -9,8 +9,10 @@ import {drawCross} from "./draw.js"
 import {altTile, currentTile, currentTileSet} from "./tile_set.js"
 import {updateNewMapWindow} from "./new_map.js"
 import Sprite from "../src/sprite.js"
+import {resetRegionSelector} from "./select_region.js"
+import {showWindow} from "../src/gui/window.js"
 
-export let currentTileMap, tileMapUnderCursor, currentTileSprite, currentBlock
+export let currentTileMap, tileMapUnderCursor, currentTileSprite
 
 export function renderMaps() {
     tileMaps.items.forEach(map => {
@@ -52,7 +54,7 @@ export function renderMaps() {
     }
 }
 
-export function mapWindowOperations() {
+export function mainWindowOperations() {
    if(del.wasPressed && selected.length > 0) {
         for(let map of selected) {
             removeFromArray(map, tileMaps.items)
@@ -62,13 +64,17 @@ export function mapWindowOperations() {
     }
 
     updateNewMapWindow()
+
+    if(tileSetProperties.wasPressed && currentTileSet !== undefined) {
+        resetRegionSelector()
+        showWindow(tileSetWindow)
+    }
 }
 
 export function checkMapsWindowCollisions() {
     currentTileMap = undefined
     tileMapUnderCursor = undefined
     currentTileSprite = undefined
-    currentBlock = undefined
 
     tileMaps.collisionWithPoint(mouse.x, mouse.y, (x, y, map) => {
         tileMapUnderCursor = map
@@ -120,25 +126,30 @@ export function tileMapOperations() {
 }
 
 let tileSprite = new Sprite()
-let brushSize = 3
+let blockWidth = 4, blockHeight = 3
 
-export function tileModeOperations() {
-    let brushWidth = currentTileMap.cellWidth * brushSize
-    let brushHeight = currentTileMap.cellWidth * brushSize
-    let column = Math.floor(currentTileMap.fColumn(mouse) - 0.5 * (brushWidth - 1))
-    let row = Math.floor(currentTileMap.fRow(mouse) - 0.5 * (brushHeight - 1))
-    for(let y = 0; y < brushSize; y++) {
+function setTiles(column, row, tile) {
+    for(let y = 0; y < blockHeight; y++) {
         let yy = row + y
         if(yy < 0 || yy > currentTileMap.rows) continue
-        for(let x = 0; x < brushSize; x++) {
+        for(let x = 0; x < blockWidth; x++) {
             let xx = column + x
             if(xx < 0 || xx > currentTileMap.columns) continue
-            if(select.isDown) {
-                currentTileMap.setTile(xx, yy, currentTile)
-            } else if(del.isDown) {
-                currentTileMap.setTile(xx, yy, altTile)
-            }
+            currentTileMap.setTile(xx, yy, tile)
         }
+    }
+}
+
+export function tileModeOperations() {
+    let brushWidth = currentTileMap.cellWidth * blockWidth
+    let brushHeight = currentTileMap.cellWidth * blockHeight
+    let column = Math.floor(currentTileMap.fColumn(mouse) - 0.5 * (brushWidth - 1))
+    let row = Math.floor(currentTileMap.fRow(mouse) - 0.5 * (brushHeight - 1))
+
+    if(select.isDown) {
+        setTiles(column, row, currentTile)
+    } else if(del.isDown) {
+        setTiles(column, row, altTile)
     }
 
     let x = currentTileMap.leftX + currentTileMap.cellWidth * column + 0.5 * brushWidth
