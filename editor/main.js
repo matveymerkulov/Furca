@@ -14,16 +14,16 @@ import SelectRegion, {resetRegionSelector} from "./select_region.js"
 import {renderTileSetProperties} from "./tile_set_properties.js"
 import {currentTileSet, renderTileSet, updateTileSetProperties} from "./tile_set.js"
 import {
-    checkCollisions,
+    checkMapsWindowCollisions,
     currentTileMap,
-    mapsModeOperations,
+    mapModeOperations,
     mapWindowOperations,
     renderMaps,
     tileMapOperations,
     tileMapUnderCursor,
     tileModeOperations
 } from "./tile_map.js"
-import {mapSizeWindow, updateNewMapWindow} from "./new_map.js"
+import {mapSizeWindow} from "./new_map.js"
 
 project.getAssets = () => {
     return {
@@ -149,9 +149,7 @@ project.init = (texture) => {
 
         setCanvas(maps)
 
-        updateNewMapWindow()
-
-        checkCollisions()
+        checkMapsWindowCollisions()
 
         if(tileMapUnderCursor === undefined) return
 
@@ -162,7 +160,7 @@ project.init = (texture) => {
         if(currentMode === mode.tiles) {
             tileModeOperations()
         } else if(currentMode === mode.maps) {
-            mapsModeOperations()
+            mapModeOperations()
         }
     }
 

@@ -7,6 +7,8 @@ import {drawDashedRect} from "../src/draw.js"
 import {boxWithPointCollision} from "../src/collisions.js"
 import {canvasMouse} from "../src/system.js"
 
+export let currentTile = 1, altTile = 0, currentTileSet
+
 export function renderTileSet(select) {
     let quantity = 0
     for(const set of Object.values(tileSet)) {
@@ -32,7 +34,8 @@ export function renderTileSet(select) {
             }
             if(canvasUnderCursor !== tiles) continue
             if(select.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
-                setCurrentTile(set, i)
+                currentTile = i
+                currentTileSet = set
             }
         }
 
@@ -43,13 +46,6 @@ export function renderTileSet(select) {
 
         }*/
     }
-}
-
-export let currentTile = 1, altTile = 0, currentTileSet
-
-export function setCurrentTile(set, i) {
-    currentTile = i
-    currentTileSet = set
 }
 
 export function updateTileSetProperties() {

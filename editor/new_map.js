@@ -7,10 +7,11 @@ import {createTileMap} from "./create_tile_map.js"
 
 let currentName = "", newX, newY
 
+let tileSets = element("tile_sets")
+let columnsField = element("columns")
+let rowsField = element("rows")
+
 export function mapSizeWindow() {
-    let tileSets = element("tile_sets")
-    let columnsField = element("columns")
-    let rowsField = element("rows")
     element("map_size_ok").onclick = () => {
         tileSets.innerHTML = ""
         for(const[name, set] of Object.entries(tileSet)) {

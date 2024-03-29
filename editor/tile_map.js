@@ -7,6 +7,10 @@ import {ctx, xToScreen, yToScreen} from "../src/canvas.js"
 import {clearSelection, selected, selector} from "./select.js"
 import {drawCross} from "./draw.js"
 import {altTile, currentTile, currentTileSet} from "./tile_set.js"
+import {updateNewMapWindow} from "./new_map.js"
+import Sprite from "../src/sprite.js"
+
+export let currentTileMap, tileMapUnderCursor, currentTileSprite, currentBlock
 
 export function renderMaps() {
     tileMaps.items.forEach(map => {
@@ -56,11 +60,11 @@ export function mapWindowOperations() {
         }
         clearSelection()
     }
+
+    updateNewMapWindow()
 }
 
-export let currentTileMap, tileMapUnderCursor, currentTileSprite, currentBlock
-
-export function checkCollisions() {
+export function checkMapsWindowCollisions() {
     currentTileMap = undefined
     tileMapUnderCursor = undefined
     currentTileSprite = undefined
@@ -115,19 +119,36 @@ export function tileMapOperations() {
     }
 }
 
+let tileSprite = new Sprite()
+let brushSize = 3
+
 export function tileModeOperations() {
-    let tile = currentTileMap.tileForPoint(mouse)
-    if(tile >= 0) {
-        if(select.isDown) {
-            currentTileMap.setTile(tile, currentTile)
-        } else if(del.isDown) {
-            currentTileMap.setTile(tile, altTile)
+    let brushWidth = currentTileMap.cellWidth * brushSize
+    let brushHeight = currentTileMap.cellWidth * brushSize
+    let column = Math.floor(currentTileMap.fColumn(mouse) - 0.5 * (brushWidth - 1))
+    let row = Math.floor(currentTileMap.fRow(mouse) - 0.5 * (brushHeight - 1))
+    for(let y = 0; y < brushSize; y++) {
+        let yy = row + y
+        if(yy < 0 || yy > currentTileMap.rows) continue
+        for(let x = 0; x < brushSize; x++) {
+            let xx = column + x
+            if(xx < 0 || xx > currentTileMap.columns) continue
+            if(select.isDown) {
+                currentTileMap.setTile(xx, yy, currentTile)
+            } else if(del.isDown) {
+                currentTileMap.setTile(xx, yy, altTile)
+            }
         }
-        currentTileSprite = currentTileMap.tileSprite(tile)
     }
+
+    let x = currentTileMap.leftX + currentTileMap.cellWidth * column + 0.5 * brushWidth
+    let y = currentTileMap.topY + currentTileMap.cellHeight * row + 0.5 * brushHeight
+    tileSprite.setPosition(x, y)
+    tileSprite.setSize(brushWidth, brushHeight)
+    currentTileSprite = tileSprite
 }
 
-export function mapsModeOperations() {
+export function mapModeOperations() {
     if(del.wasPressed && selected.length === 0) {
         removeFromArray(tileMapUnderCursor, tileMaps.items)
         delete tileMap[getName(tileMapUnderCursor)]

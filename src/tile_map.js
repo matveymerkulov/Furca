@@ -130,10 +130,9 @@ export default class TileMap extends Box {
         }
     }
 
-    tileSprite(column, row, shapeType) {
+    tileSprite(shapeType, column, row) {
         let tileNum, x, y
-        if(shapeType === undefined) {
-            shapeType = row
+        if(row === undefined) {
             x = this.leftX + this.cellWidth * (0.5 + this.tileColumn(column))
             y = this.topY + this.cellHeight * (0.5 + this.tileRow(column))
             tileNum = this.tile(column)
@@ -157,11 +156,11 @@ export default class TileMap extends Box {
 
     extractTile(column, row, shapeType) {
         if(shapeType === undefined) {
-            let sprite = this.tileSprite(column, shapeType)
+            let sprite = this.tileSprite(shapeType, column)
             this.setTile(column, 0)
             return sprite
         } else {
-            let sprite = this.tileSprite(column, row, shapeType)
+            let sprite = this.tileSprite(shapeType, column, row)
             this.setTile(column, row, 0)
             return sprite
         }
