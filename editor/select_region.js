@@ -1,8 +1,9 @@
-import {currentTileSet, tileSetWindow} from "./main.js"
+import {tileSetWindow} from "./main.js"
 import {canvasMouse} from "../src/system.js"
 import Drag from "../src/drag.js"
 import {currentWindow} from "../src/gui/window.js"
 import Region from "../src/region.js"
+import {currentTileSet} from "./tile_set.js"
 
 export let regionSelector, tileWidth, tileHeight
 
@@ -22,7 +23,6 @@ export default class SelectRegion extends Drag {
     conditions() {
         return currentWindow === tileSetWindow
     }
-
 
     start() {
         this.#x = Math.floor(canvasMouse.x / tileWidth)

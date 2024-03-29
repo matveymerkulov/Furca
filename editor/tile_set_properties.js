@@ -2,9 +2,9 @@ import {ctx, setCanvas} from "../src/canvas.js"
 import {regionSelector, setTileWidth, tileHeight, tileWidth} from "./select_region.js"
 import {drawDashedRect, drawRect} from "../src/draw.js"
 import {canvasMouse} from "../src/system.js"
-import {currentTileSet} from "./main.js"
 import {drawX} from "./draw.js"
 import {type, visibility} from "../src/tile_set.js"
+import {currentTileSet} from "./tile_set.js"
 
 export function renderTileSetProperties(canvas) {
     if(currentTileSet === undefined) return

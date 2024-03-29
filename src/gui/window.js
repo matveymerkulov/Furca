@@ -4,7 +4,7 @@ export let currentWindow
 
 export function showWindow(win) {
     hideWindow()
-    if(win instanceof String) {
+    if(typeof win === "string") {
         currentWindow = element(win)
     } else {
         currentWindow = win
