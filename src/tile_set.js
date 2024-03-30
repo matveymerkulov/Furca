@@ -3,30 +3,12 @@ import {tileSet} from "./project.js"
 import Region from "./region.js"
 import {arrayToString} from "../editor/save_load.js"
 import {getTexturePart} from "./texture.js"
-
-export const type = {
-    block: 0,
-    frame: 1,
-}
+import {Block} from "./block.js"
 
 export const visibility = {
     visible: 0,
     hidden: 1,
     block: 2,
-}
-
-export class Block extends Region {
-    type
-    texture
-    constructor(x, y, width, height, type, texture) {
-        super(1, x, y, width, height)
-        this.type = type
-        this.texture = texture
-    }
-
-    toString() {
-        return `new Block(${this.x}, ${this.y}, ${this.width}, ${this.height}, ${this.type})`
-    }
 }
 
 export default class TileSet {

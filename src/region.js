@@ -5,7 +5,7 @@
     height
     columns
 
-    constructor(columns, x = 0, y = 0, width = 0, height = 0) {
+    constructor(columns, x = 0, y = 0, width = 1, height = 1) {
         this.modify(columns, x, y, width, height)
     }
 

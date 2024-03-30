@@ -128,6 +128,11 @@ export function tileMapOperations() {
 let tileSprite = new Sprite()
 let blockWidth = 4, blockHeight = 3
 
+export function setBlockSize(width, height) {
+    blockWidth = width
+    blockHeight = height
+}
+
 function setTiles(column, row, tile) {
     for(let y = 0; y < blockHeight; y++) {
         let yy = row + y

@@ -1,11 +1,13 @@
 import {regionSelector} from "./select_region.js"
-import {type, visibility} from "../src/tile_set.js"
 import {block, select, tiles, tileSetCanvas, toggleVisibility} from "./main.js"
 import {tileSet} from "../src/project.js"
 import {canvasUnderCursor, ctx, distToScreen, setCanvas} from "../src/canvas.js"
 import {drawDashedRect} from "../src/draw.js"
 import {boxWithPointCollision} from "../src/collisions.js"
 import {canvasMouse} from "../src/system.js"
+import {setBlockSize} from "./tile_map.js"
+import {type} from "../src/block.js"
+import {visibility} from "../src/tile_set.js"
 
 export let currentTile = 1, altTile = 0, currentTileSet, currentBlock
 
@@ -34,8 +36,10 @@ export function renderTileSet() {
             }
             if(canvasUnderCursor !== tiles) continue
             if(select.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
+
                 currentTile = i
                 currentBlock = undefined
+                setBlockSize(1, 1)
                 currentTileSet = set
             }
         }
@@ -49,12 +53,13 @@ export function renderTileSet() {
             let cellHeight = texture.height / images.rows
             let tx = block.x * cellWidth
             let ty = block.y * cellHeight
-            let tWidth = (block.width + 1) * cellWidth
-            let tHeight = (block.height + 1) * cellHeight
+            let tWidth = block.width * cellWidth
+            let tHeight = block.height * cellHeight
             ctx.drawImage(texture, tx, ty, tWidth, tHeight, x, y, size, size)
 
             if(select.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
                 currentBlock = block
+                setBlockSize(block.width, block.height)
                 currentTile = -1
                 currentTileSet = set
             }

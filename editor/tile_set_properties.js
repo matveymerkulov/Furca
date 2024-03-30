@@ -3,8 +3,9 @@ import {regionSelector, setTileWidth, tileHeight, tileWidth} from "./select_regi
 import {drawDashedRect, drawRect} from "../src/draw.js"
 import {canvasMouse} from "../src/system.js"
 import {drawX} from "./draw.js"
-import {type, visibility} from "../src/tile_set.js"
 import {currentTileSet} from "./tile_set.js"
+import {type} from "../src/block.js"
+import {visibility} from "../src/tile_set.js"
 
 export function renderTileSetProperties(canvas) {
     if(currentTileSet === undefined) return
@@ -51,10 +52,10 @@ export function renderTileSetProperties(canvas) {
                 break
         }
         drawRect(color, block.x * tileWidth + 2, block.y * tileHeight + 2
-            , (block.width + 1) * tileWidth - 5, (block.height + 1) * tileHeight - 5)
+            , block.width * tileWidth - 5, block.height * tileHeight - 5)
     }
 
     if(regionSelector === undefined) return
     drawDashedRect(regionSelector.x * tileWidth, regionSelector.y * tileHeight
-        , (regionSelector.width + 1) * tileWidth - 1, (regionSelector.height + 1) * tileHeight - 1)
+        , regionSelector.width * tileWidth, regionSelector.height * tileHeight)
 }

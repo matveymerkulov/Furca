@@ -1,7 +1,8 @@
-import TileSet, {Block} from "../src/tile_set.js"
+import TileSet from "../src/tile_set.js"
 import TileMap from "../src/tile_map.js"
 import ImageArray from "../src/image_array.js"
 import {tileMap, tileMaps, tileSet} from "../src/project.js"
+import {Block} from "../src/block.js"
 
 export function loadData(texture) {
     tileSet["floor"] = new TileSet(new ImageArray(texture.floor, 9, 11, 0.5, 0.5, 1, 1), [

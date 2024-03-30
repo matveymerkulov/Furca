@@ -1,7 +1,8 @@
 import {tileMap, tileSet} from "./project.js"
-import TileSet, {Block} from "./tile_set.js"
+import TileSet from "./tile_set.js"
 import ImageArray from "./image_array.js"
 import TileMap from "./tile_map.js"
+import {Block} from "./block.js"
 
 let pos, text
 
