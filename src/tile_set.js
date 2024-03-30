@@ -52,7 +52,7 @@ export default class TileSet {
     }
 
     addRegion(region, type) {
-        this.addBlock(region.x, region.y, region.width, region.height, type)
+        this.addBlock(region.x, region.y, region.width + 1, region.height + 1, type)
     }
 
     addBlock(x, y, width, height, type) {
@@ -65,7 +65,7 @@ export default class TileSet {
     initBlockImage(block) {
         let size = this.images.width
         block.texture = getTexturePart(this.images.texture, block.x * size, block.y * size
-            , block.width * size - 1, block.height * size - 1)
+            , block.width * size, block.height * size)
     }
 
     setBlockVisibility(block, vis) {

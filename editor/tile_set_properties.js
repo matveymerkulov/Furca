@@ -6,6 +6,7 @@ import {drawX} from "./draw.js"
 import {currentTileSet} from "./tile_set.js"
 import {type} from "../src/block.js"
 import {visibility} from "../src/tile_set.js"
+import {block, del, tileSetCanvas, toggleVisibility} from "./main.js"
 
 export function renderTileSetProperties(canvas) {
     if(currentTileSet === undefined) return
@@ -58,4 +59,29 @@ export function renderTileSetProperties(canvas) {
     if(regionSelector === undefined) return
     drawDashedRect(regionSelector.x * tileWidth, regionSelector.y * tileHeight
         , (regionSelector.width + 1) * tileWidth, (regionSelector.height + 1) * tileHeight)
+}
+
+export function updateTileSetProperties() {
+    setCanvas(tileSetCanvas)
+    tileSetCanvas.update()
+
+    if(del.wasPressed) {
+        currentTileSet.removeBlock(Math.floor(canvasMouse.x / tileWidth), Math.floor(canvasMouse.y / tileHeight))
+    }
+
+    if(regionSelector === undefined) return
+
+    if(toggleVisibility.wasPressed) {
+        let hide
+        regionSelector.process((tileNum) => {
+            let vis = currentTileSet.visibility[tileNum]
+            if(vis === visibility.block) return
+            if(hide === undefined) hide = vis === visibility.visible ? visibility.hidden : visibility.visible
+            currentTileSet.visibility[tileNum] = hide
+        })
+    }
+
+    if(block.wasPressed) {
+        currentTileSet.addRegion(regionSelector, type.block)
+    }
 }

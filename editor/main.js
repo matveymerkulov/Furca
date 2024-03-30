@@ -11,8 +11,8 @@ import Select from "./select.js"
 import {setName} from "./names.js"
 import {loadData} from "./data.js"
 import SelectRegion, {resetRegionSelector} from "./select_region.js"
-import {renderTileSetProperties} from "./tile_set_properties.js"
-import {currentTileSet, renderTileSet, updateTileSetProperties} from "./tile_set.js"
+import {renderTileSetProperties, updateTileSetProperties} from "./tile_set_properties.js"
+import {currentTileSet, renderTileSet} from "./tile_set.js"
 import {
     checkMapsWindowCollisions,
     currentTileMap,

@@ -76,24 +76,3 @@ export function renderTileSet() {
         }
     }
 }
-
-export function updateTileSetProperties() {
-    setCanvas(tileSetCanvas)
-    tileSetCanvas.update()
-
-    if(regionSelector === undefined) return
-
-    if(toggleVisibility.wasPressed) {
-        let hide
-        regionSelector.process((tileNum) => {
-            let vis = currentTileSet.visibility[tileNum]
-            if(vis === visibility.block) return
-            if(hide === undefined) hide = vis === visibility.visible ? visibility.hidden : visibility.visible
-            currentTileSet.visibility[tileNum] = hide
-        })
-    }
-
-    if(block.wasPressed) {
-        currentTileSet.addRegion(regionSelector, type.block)
-    }
-}
