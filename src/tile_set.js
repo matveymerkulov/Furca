@@ -53,12 +53,12 @@ export default class TileSet {
     initBlockImage(block) {
         let size = this.images.width
         block.texture = getTexturePart(this.images.texture, block.x * size, block.y * size
-            , (block.width + 1) * size - 1, (block.height + 1) * size - 1)
+            , block.width * size - 1, block.height * size - 1)
     }
 
     setBlockVisibility(block, vis) {
-        for(let row = block.y; row <= block.y + block.height; row++) {
-            for(let column = block.x; column <= block.x + block.width; column++) {
+        for(let row = block.y; row < block.y + block.height; row++) {
+            for(let column = block.x; column < block.x + block.width; column++) {
                 this.visibility[column + row * this.columns] = vis
             }
         }

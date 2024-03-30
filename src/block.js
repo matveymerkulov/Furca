@@ -9,7 +9,7 @@ export class Block extends Region {
     type
     texture
     constructor(x, y, width, height, type, texture) {
-        super(1, x, y, width + 1, height + 1)
+        super(1, x, y, width, height)
         this.type = type
         this.texture = texture
     }

@@ -36,7 +36,7 @@ export function loadData(texture) {
         2,2,2,2,2,2,2,2,1,0,
         2,2,2,2,2,2,2,2,1,0,
         2,2,2,2,2,2,2,2,1,1,
-    ], [new Block(5, 10, 1, 1, 0),new Block(5, 12, 0, 1, 0),new Block(0, 14, 1, 2, 0),new Block(2, 14, 1, 2, 0),new Block(4, 14, 1, 2, 0),new Block(6, 14, 1, 2, 0),new Block(4, 0, 2, 1, 0),new Block(7, 0, 1, 1, 0),new Block(4, 2, 2, 1, 0),new Block(7, 2, 1, 1, 0),])
+    ], [new Block(5, 10, 2, 2, 0),new Block(5, 12, 1, 2, 0),new Block(0, 14, 2, 3, 0),new Block(2, 14, 2, 3, 0),new Block(4, 14, 2, 3, 0),new Block(6, 14, 2, 3, 0),new Block(4, 0, 3, 2, 0),new Block(7, 0, 2, 2, 0),new Block(4, 2, 3, 2, 0),new Block(7, 2, 2, 2, 0),])
     tileSet["blocks"] = new TileSet(new ImageArray(texture.blocks, 2, 1, 0.5, 0.5, 1, 1), [
         0,0,
     ], [])

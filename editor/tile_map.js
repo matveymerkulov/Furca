@@ -6,7 +6,7 @@ import {getName, incrementName, setName} from "./names.js"
 import {ctx, xToScreen, yToScreen} from "../src/canvas.js"
 import {clearSelection, selected, selector} from "./select.js"
 import {drawCross} from "./draw.js"
-import {altTile, currentTile, currentTileSet} from "./tile_set.js"
+import {altTile, currentBlock, currentTile, currentTileSet} from "./tile_set.js"
 import {updateNewMapWindow} from "./new_map.js"
 import Sprite from "../src/sprite.js"
 import {resetRegionSelector} from "./select_region.js"
@@ -133,14 +133,18 @@ export function setBlockSize(width, height) {
     blockHeight = height
 }
 
-function setTiles(column, row, tile) {
+function setTiles(column, row, tileNum, block) {
     for(let y = 0; y < blockHeight; y++) {
         let yy = row + y
         if(yy < 0 || yy > currentTileMap.rows) continue
         for(let x = 0; x < blockWidth; x++) {
             let xx = column + x
             if(xx < 0 || xx > currentTileMap.columns) continue
-            currentTileMap.setTile(xx, yy, tile)
+            if(block === undefined) {
+                currentTileMap.setTile(xx, yy, tileNum)
+            } else {
+                currentTileMap.setTile(xx, yy, block.x + x + currentTileSet.columns * (block.y + y))
+            }
         }
     }
 }
@@ -152,7 +156,11 @@ export function tileModeOperations() {
     let row = Math.floor(currentTileMap.fRow(mouse) - 0.5 * (brushHeight - 1))
 
     if(select.isDown) {
-        setTiles(column, row, currentTile)
+        if(currentBlock === undefined) {
+            setTiles(column, row, currentTile)
+        } else {
+            setTiles(column, row, 0, currentBlock)
+        }
     } else if(del.isDown) {
         setTiles(column, row, altTile)
     }

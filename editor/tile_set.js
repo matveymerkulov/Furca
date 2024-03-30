@@ -36,7 +36,6 @@ export function renderTileSet() {
             }
             if(canvasUnderCursor !== tiles) continue
             if(select.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
-
                 currentTile = i
                 currentBlock = undefined
                 setBlockSize(1, 1)
