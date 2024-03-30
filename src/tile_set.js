@@ -20,7 +20,7 @@ export default class TileSet {
         this.#images = images
         this.#collision = new Array(images.quantity)
         this.visibility = vis ? vis : new Array(images.quantity).fill(visibility.visible)
-        this.blocks = blocks === undefined ? [] : blocks
+        this.blocks = blocks ? blocks : []
     }
 
     toString() {
@@ -37,6 +37,18 @@ export default class TileSet {
             if(this === set) return key
         }
         return ""
+    }
+
+    image(num) {
+        return this.#images.image(num)
+    }
+
+    get columns() {
+        return this.#images.columns
+    }
+
+    get rows() {
+        return this.#images.rows
     }
 
     addRegion(region, type) {
@@ -72,18 +84,6 @@ export default class TileSet {
                 return
             }
         }
-    }
-
-    image(num) {
-        return this.#images.image(num)
-    }
-
-    get columns() {
-        return this.#images.columns
-    }
-
-    get rows() {
-        return this.#images.rows
     }
 
     collisionShape(num) {

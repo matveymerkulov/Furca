@@ -11,8 +11,8 @@
 
     modify(columns, x, y, width, height) {
         this.columns = columns
-        this.x = width >= 0 ? x : x + width
-        this.y = height >= 0 ? y : y + height
+        this.x = width > 0 ? x : x + width
+        this.y = height > 0 ? y : y + height
         this.width = Math.abs(width)
         this.height = Math.abs(height)
     }

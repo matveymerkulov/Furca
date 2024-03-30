@@ -114,15 +114,6 @@ export function tileMapOperations() {
             setName(tileMapUnderCursor, name)
         }
     }
-
-    if(copy.wasPressed) {
-        addTileMap(incrementName(getName(tileMapUnderCursor)), tileMapUnderCursor.copy())
-    }
-
-    if(del.wasPressed && selected.length === 0) {
-        removeFromArray(tileMapUnderCursor, tileMaps.items)
-        delete tileMap[getName(tileMapUnderCursor)]
-    }
 }
 
 let tileSprite = new Sprite()
@@ -173,6 +164,10 @@ export function tileModeOperations() {
 }
 
 export function mapModeOperations() {
+    if(copy.wasPressed) {
+        addTileMap(incrementName(getName(tileMapUnderCursor)), tileMapUnderCursor.copy())
+    }
+
     if(del.wasPressed && selected.length === 0) {
         removeFromArray(tileMapUnderCursor, tileMaps.items)
         delete tileMap[getName(tileMapUnderCursor)]

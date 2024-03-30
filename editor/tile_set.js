@@ -17,19 +17,28 @@ export function renderTileSet() {
         quantity += set.images.quantity
     }
 
+
     let columns = Math.floor(tiles.width)
     let height = Math.ceil(quantity / columns)
     let x0 = distToScreen(0.5 * (tiles.width - columns))
     let y0 = distToScreen(0.5 * (tiles.height - height) - tiles.y)
     let pos = -1
+
+
     for(const set of Object.values(tileSet)) {
-        let images = set.images
         let size = distToScreen(1)
+
+        let x, y
+        function incrementPos() {
+            pos++
+            x = x0 + size * (pos % columns)
+            y = y0 + size * Math.floor(pos / columns)
+        }
+
+        let images = set.images
         for(let i = 0; i < images.quantity; i++) {
             if(set.visibility[i] !== visibility.visible) continue
-            pos++
-            let x = x0 + size * (pos % columns)
-            let y = y0 + size * Math.floor(pos / columns)
+            incrementPos()
             images.image(i).drawResized(x, y, size, size)
             if(set === currentTileSet && (currentTile === i || altTile === i)) {
                 drawDashedRect(x, y, size, size)
@@ -45,9 +54,7 @@ export function renderTileSet() {
 
         let texture = images.texture
         for(let block of set.blocks) {
-            pos++
-            let x = x0 + size * (pos % columns)
-            let y = y0 + size * Math.floor(pos / columns)
+            incrementPos()
             let cellWidth = texture.width / images.columns
             let cellHeight = texture.height / images.rows
             let tx = block.x * cellWidth
