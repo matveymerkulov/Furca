@@ -5,7 +5,7 @@ import {currentMode, mode as modes} from "./main.js"
 import {tileMap} from "../src/project.js"
 import {tileMapUnderCursor} from "./tile_map.js"
 
-export let selected = [], selector
+export let selectedTileMaps = [], mapSelectionRegion
 
 export default class SelectTileMaps extends Drag {
     #x
@@ -18,25 +18,25 @@ export default class SelectTileMaps extends Drag {
     start() {
         this.#x = mouse.x
         this.#y = mouse.y
-        selector = new Box()
+        mapSelectionRegion = new Box()
     }
 
     process() {
-        selector.setSize(mouse.x - this.#x, mouse.y - this.#y)
-        selector.setCorner(this.#x, this.#y)
+        mapSelectionRegion.setSize(mouse.x - this.#x, mouse.y - this.#y)
+        mapSelectionRegion.setCorner(this.#x, this.#y)
     }
 
     end() {
-        selected = []
+        selectedTileMaps = []
         for(const map of Object.values(tileMap)) {
-            if(map.isInside(selector)) {
-                selected.push(map)
+            if(map.isInside(mapSelectionRegion)) {
+                selectedTileMaps.push(map)
             }
         }
-        selector = undefined
+        mapSelectionRegion = undefined
     }
 }
 
 export function clearSelection() {
-    selected = []
+    selectedTileMaps = []
 }

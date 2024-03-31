@@ -1,12 +1,13 @@
 import {ctx, setCanvas} from "../src/canvas.js"
-import {regionSelector, setTileWidth, tileHeight, tileWidth} from "./select_tile_set_region.js"
+import {tileSetRegion} from "./select_tile_set_region.js"
 import {drawDashedRect, drawRect} from "../src/draw.js"
 import {canvasMouse} from "../src/system.js"
 import {drawX} from "./draw.js"
 import {currentTileSet} from "./tile_set.js"
-import {type} from "../src/block.js"
+import {blockType} from "../src/block.js"
 import {visibility} from "../src/tile_set.js"
-import {delKey, newBlockKey, newFrameKey, tileSetCanvas, toggleVisibilityKey} from "./main.js"
+import {delKey, newBlockKey, newFrameKey, setTileWidth, tileHeight, tileSetCanvas, tileWidth
+    , toggleVisibilityKey} from "./main.js"
 
 export function renderTileSetProperties(canvas) {
     if(currentTileSet === undefined) return
@@ -46,22 +47,24 @@ export function renderTileSetProperties(canvas) {
     }
 
     for(let block of currentTileSet.blocks) {
-        let color
+        let innerColor, outerColor
         switch(block.type) {
-            case type.block:
-                color = "lightgreen"
+            case blockType.block:
+                innerColor = "green"
+                outerColor = "lightgreen"
                 break
-            case type.frame:
-                color = "red"
+            case blockType.frame:
+                innerColor = "lightred"
+                outerColor = "red"
                 break
         }
-        drawRect(color, block.x * tileWidth + 2, block.y * tileHeight + 2
+        drawRect(innerColor, outerColor,block.x * tileWidth + 2, block.y * tileHeight + 2
             , block.width * tileWidth - 4, block.height * tileHeight - 4)
     }
 
-    if(regionSelector === undefined) return
-    drawDashedRect(regionSelector.x * tileWidth, regionSelector.y * tileHeight
-        , (regionSelector.width + 1) * tileWidth, (regionSelector.height + 1) * tileHeight)
+    if(tileSetRegion === undefined) return
+    drawDashedRect(tileSetRegion.x * tileWidth, tileSetRegion.y * tileHeight
+        , (tileSetRegion.width + 1) * tileWidth, (tileSetRegion.height + 1) * tileHeight)
 }
 
 export function updateTileSetProperties() {
@@ -72,11 +75,11 @@ export function updateTileSetProperties() {
         currentTileSet.removeBlock(Math.floor(canvasMouse.x / tileWidth), Math.floor(canvasMouse.y / tileHeight))
     }
 
-    if(regionSelector === undefined) return
+    if(tileSetRegion === undefined) return
 
     if(toggleVisibilityKey.wasPressed) {
         let hide
-        regionSelector.process((tileNum) => {
+        tileSetRegion.process((tileNum) => {
             let vis = currentTileSet.visibility[tileNum]
             if(vis === visibility.block) return
             if(hide === undefined) hide = vis === visibility.visible ? visibility.hidden : visibility.visible
@@ -85,8 +88,8 @@ export function updateTileSetProperties() {
     }
 
     if(newBlockKey.wasPressed) {
-        currentTileSet.addRegion(regionSelector, type.block)
+        currentTileSet.addRegion(tileSetRegion, blockType.block)
     } else if(newFrameKey.wasPressed) {
-        currentTileSet.addRegion(regionSelector, type.frame)
+        currentTileSet.addRegion(tileSetRegion, blockType.frame)
     }
 }

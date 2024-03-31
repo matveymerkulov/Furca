@@ -1,6 +1,6 @@
 import Region from "./region.js"
 
-export const type = {
+export const blockType = {
     block: 0,
     frame: 1,
 }

@@ -1,11 +1,12 @@
 import {selectKey, tiles} from "./main.js"
 import {tileSet} from "../src/project.js"
-import {canvasUnderCursor, ctx, distToScreen} from "../src/canvas.js"
+import {canvasUnderCursor, ctx, distToScreen, setCanvas} from "../src/canvas.js"
 import {drawDashedRect} from "../src/draw.js"
 import {boxWithPointCollision} from "../src/collisions.js"
 import {canvasMouse} from "../src/system.js"
 import {setBlockSize} from "./tile_map.js"
 import {visibility} from "../src/tile_set.js"
+import {blockType} from "../src/block.js"
 
 export let currentTile = 1, altTile = 0, currentTileSet, currentBlock
 
@@ -44,6 +45,7 @@ export function renderTileSet() {
                 currentTile = i
                 currentBlock = undefined
                 setBlockSize(1, 1)
+                console.log("" + 1 + ", " + 1)
                 currentTileSet = set
             }
         }
@@ -61,7 +63,11 @@ export function renderTileSet() {
 
             if(selectKey.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
                 currentBlock = block
-                setBlockSize(block.width, block.height)
+                if(block.type === blockType.block) {
+                    setBlockSize(block.width, block.height)
+                } else {
+                    setBlockSize(1, 1)
+                }
                 currentTile = -1
                 currentTileSet = set
             }

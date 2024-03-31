@@ -1,19 +1,14 @@
-import {tileSetWindow} from "./main.js"
+import {tileHeight, tileSetWindow, tileWidth} from "./main.js"
 import {canvasMouse} from "../src/system.js"
 import Drag from "../src/drag.js"
 import {currentWindow} from "../src/gui/window.js"
 import Region from "../src/region.js"
 import {currentTileSet} from "./tile_set.js"
 
-export let regionSelector, tileWidth, tileHeight
+export let tileSetRegion
 
 export function resetRegionSelector() {
-    regionSelector = undefined
-}
-
-export function setTileWidth(width, height) {
-    tileWidth = width
-    tileHeight = height
+    tileSetRegion = undefined
 }
 
 export default class SelectTileSetRegion extends Drag {
@@ -27,13 +22,13 @@ export default class SelectTileSetRegion extends Drag {
     start() {
         this.#x = Math.floor(canvasMouse.x / tileWidth)
         this.#y = Math.floor(canvasMouse.y / tileHeight)
-        regionSelector = new Region(currentTileSet.images.columns)
+        tileSetRegion = new Region(currentTileSet.images.columns)
     }
 
     process() {
-        if(regionSelector === undefined) return
+        if(tileSetRegion === undefined) return
         let width = Math.floor(canvasMouse.x / tileWidth) - this.#x
         let height = Math.floor(canvasMouse.y / tileHeight) - this.#y
-        regionSelector.modify(currentTileSet.images.columns, this.#x, this.#y, width, height)
+        tileSetRegion.modify(currentTileSet.images.columns, this.#x, this.#y, width, height)
     }
 }

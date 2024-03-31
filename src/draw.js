@@ -28,15 +28,15 @@ export function drawDashedRect(x, y, width, height) {
     ctx.lineWidth = 1
 }
 
-export function drawRect(color, x, y, width, height) {
+export function drawRect(innerColor, outerColor, x, y, width, height) {
     x = Math.floor(x)
     y = Math.floor(y)
     width = Math.floor(width)
     height = Math.floor(height)
-    ctx.strokeStyle = "black"
+    ctx.strokeStyle = innerColor
     ctx.lineWidth = 4
     ctx.strokeRect(x, y, width, height)
-    ctx.strokeStyle = color
+    ctx.strokeStyle = outerColor
     ctx.lineWidth = 1
     ctx.strokeRect(x, y, width, height)
     ctx.strokeStyle = "black"
