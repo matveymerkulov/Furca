@@ -1,6 +1,6 @@
 import {element, mouse} from "../src/system.js"
 import {hideWindow, showWindow} from "../src/gui/window.js"
-import {newMap} from "./main.js"
+import {newMapKey} from "./main.js"
 import {tileSet} from "../src/project.js"
 import {createTileMap} from "./create_tile_map.js"
 
@@ -30,7 +30,7 @@ export function mapSizeWindow() {
 }
 
 export function updateNewMapWindow() {
-    if(newMap.wasPressed) {
+    if(newMapKey.wasPressed) {
         newX = Math.round(mouse.x)
         newY = Math.round(mouse.y)
         currentName = prompt("Введите имя новой карты:")

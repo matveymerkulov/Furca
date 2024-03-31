@@ -7,7 +7,7 @@ import {tileMapUnderCursor} from "./tile_map.js"
 
 export let selected = [], selector
 
-export default class Select extends Drag {
+export default class SelectTileMaps extends Drag {
     #x
     #y
 

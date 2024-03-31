@@ -1,15 +1,25 @@
 import {mouse, removeFromArray} from "../src/system.js"
 import {tileMap, tileMaps} from "../src/project.js"
 import {addTileMap} from "./create_tile_map.js"
-import {copy, currentMode, del, mode, renameMap, select, tileSetProperties, tileSetWindow, turnMap,} from "./main.js"
+import {
+    copyKey,
+    currentMode,
+    delKey,
+    mode,
+    renameMapKey,
+    selectKey,
+    tileSetPropertiesKey,
+    tileSetWindow,
+    turnMapKey,
+} from "./main.js"
 import {getName, incrementName, setName} from "./names.js"
 import {ctx, xToScreen, yToScreen} from "../src/canvas.js"
-import {clearSelection, selected, selector} from "./select.js"
+import {clearSelection, selected, selector} from "./select_tile_maps.js"
 import {drawCross} from "./draw.js"
 import {altTile, currentBlock, currentTile, currentTileSet} from "./tile_set.js"
 import {updateNewMapWindow} from "./new_map.js"
 import Sprite from "../src/sprite.js"
-import {resetRegionSelector} from "./select_region.js"
+import {resetRegionSelector} from "./select_tile_set_region.js"
 import {showWindow} from "../src/gui/window.js"
 
 export let currentTileMap, tileMapUnderCursor, currentTileSprite
@@ -55,7 +65,7 @@ export function renderMaps() {
 }
 
 export function mainWindowOperations() {
-   if(del.wasPressed && selected.length > 0) {
+   if(delKey.wasPressed && selected.length > 0) {
         for(let map of selected) {
             removeFromArray(map, tileMaps.items)
             delete tileMap[getName(map)]
@@ -65,7 +75,7 @@ export function mainWindowOperations() {
 
     updateNewMapWindow()
 
-    if(tileSetProperties.wasPressed && currentTileSet !== undefined) {
+    if(tileSetPropertiesKey.wasPressed && currentTileSet !== undefined) {
         resetRegionSelector()
         showWindow(tileSetWindow)
     }
@@ -103,11 +113,11 @@ export function tileMapOperations() {
         centerY = Math.round(y0)
     }
 
-    if(turnMap.wasPressed) {
+    if(turnMapKey.wasPressed) {
         tileMapUnderCursor.turnClockwise(centerX, centerY)
     }
 
-    if(renameMap.wasPressed) {
+    if(renameMapKey.wasPressed) {
         // noinspection JSCheckFunctionSignatures
         let name = prompt("Enter new name of tile map:", getName(tileMapUnderCursor))
         if(name !== null) {
@@ -146,13 +156,13 @@ export function tileModeOperations() {
     let column = Math.floor(currentTileMap.fColumn(mouse) - 0.5 * (brushWidth - 1))
     let row = Math.floor(currentTileMap.fRow(mouse) - 0.5 * (brushHeight - 1))
 
-    if(select.isDown) {
+    if(selectKey.isDown) {
         if(currentBlock === undefined) {
             setTiles(column, row, currentTile)
         } else {
             setTiles(column, row, 0, currentBlock)
         }
-    } else if(del.isDown) {
+    } else if(delKey.isDown) {
         setTiles(column, row, altTile)
     }
 
@@ -164,11 +174,11 @@ export function tileModeOperations() {
 }
 
 export function mapModeOperations() {
-    if(copy.wasPressed) {
+    if(copyKey.wasPressed) {
         addTileMap(incrementName(getName(tileMapUnderCursor)), tileMapUnderCursor.copy())
     }
 
-    if(del.wasPressed && selected.length === 0) {
+    if(delKey.wasPressed && selected.length === 0) {
         removeFromArray(tileMapUnderCursor, tileMaps.items)
         delete tileMap[getName(tileMapUnderCursor)]
     }

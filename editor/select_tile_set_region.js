@@ -16,7 +16,7 @@ export function setTileWidth(width, height) {
     tileHeight = height
 }
 
-export default class SelectRegion extends Drag {
+export default class SelectTileSetRegion extends Drag {
     #x
     #y
 

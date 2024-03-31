@@ -1,12 +1,10 @@
-import {regionSelector} from "./select_region.js"
-import {block, select, tiles, tileSetCanvas, toggleVisibility} from "./main.js"
+import {selectKey, tiles} from "./main.js"
 import {tileSet} from "../src/project.js"
-import {canvasUnderCursor, ctx, distToScreen, setCanvas} from "../src/canvas.js"
+import {canvasUnderCursor, ctx, distToScreen} from "../src/canvas.js"
 import {drawDashedRect} from "../src/draw.js"
 import {boxWithPointCollision} from "../src/collisions.js"
 import {canvasMouse} from "../src/system.js"
 import {setBlockSize} from "./tile_map.js"
-import {type} from "../src/block.js"
 import {visibility} from "../src/tile_set.js"
 
 export let currentTile = 1, altTile = 0, currentTileSet, currentBlock
@@ -17,13 +15,11 @@ export function renderTileSet() {
         quantity += set.images.quantity
     }
 
-
     let columns = Math.floor(tiles.width)
     let height = Math.ceil(quantity / columns)
     let x0 = distToScreen(0.5 * (tiles.width - columns))
     let y0 = distToScreen(0.5 * (tiles.height - height) - tiles.y)
     let pos = -1
-
 
     for(const set of Object.values(tileSet)) {
         let size = distToScreen(1)
@@ -44,7 +40,7 @@ export function renderTileSet() {
                 drawDashedRect(x, y, size, size)
             }
             if(canvasUnderCursor !== tiles) continue
-            if(select.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
+            if(selectKey.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
                 currentTile = i
                 currentBlock = undefined
                 setBlockSize(1, 1)
@@ -63,7 +59,7 @@ export function renderTileSet() {
             let tHeight = block.height * cellHeight
             ctx.drawImage(texture, tx, ty, tWidth, tHeight, x, y, size, size)
 
-            if(select.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
+            if(selectKey.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
                 currentBlock = block
                 setBlockSize(block.width, block.height)
                 currentTile = -1

@@ -1,10 +1,10 @@
 import MovePoint from "./move_point.js"
 import {currentMode, mode as modes} from "./main.js"
-import {selected} from "./select.js"
+import {selected} from "./select_tile_maps.js"
 import {mouse, screenMouse} from "../src/system.js"
 import {tileMapUnderCursor} from "./tile_map.js"
 
-export default class MoveTileMap extends MovePoint {
+export default class MoveTileMaps extends MovePoint {
     conditions() {
         if(currentMode !== modes.maps) return false
         if(selected.length > 0) {

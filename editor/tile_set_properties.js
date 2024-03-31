@@ -1,12 +1,12 @@
 import {ctx, setCanvas} from "../src/canvas.js"
-import {regionSelector, setTileWidth, tileHeight, tileWidth} from "./select_region.js"
+import {regionSelector, setTileWidth, tileHeight, tileWidth} from "./select_tile_set_region.js"
 import {drawDashedRect, drawRect} from "../src/draw.js"
 import {canvasMouse} from "../src/system.js"
 import {drawX} from "./draw.js"
 import {currentTileSet} from "./tile_set.js"
 import {type} from "../src/block.js"
 import {visibility} from "../src/tile_set.js"
-import {block, del, tileSetCanvas, toggleVisibility} from "./main.js"
+import {delKey, newBlockKey, newFrameKey, tileSetCanvas, toggleVisibilityKey} from "./main.js"
 
 export function renderTileSetProperties(canvas) {
     if(currentTileSet === undefined) return
@@ -51,9 +51,12 @@ export function renderTileSetProperties(canvas) {
             case type.block:
                 color = "lightgreen"
                 break
+            case type.frame:
+                color = "red"
+                break
         }
         drawRect(color, block.x * tileWidth + 2, block.y * tileHeight + 2
-            , block.width * tileWidth - 5, block.height * tileHeight - 5)
+            , block.width * tileWidth - 4, block.height * tileHeight - 4)
     }
 
     if(regionSelector === undefined) return
@@ -65,13 +68,13 @@ export function updateTileSetProperties() {
     setCanvas(tileSetCanvas)
     tileSetCanvas.update()
 
-    if(del.wasPressed) {
+    if(delKey.wasPressed) {
         currentTileSet.removeBlock(Math.floor(canvasMouse.x / tileWidth), Math.floor(canvasMouse.y / tileHeight))
     }
 
     if(regionSelector === undefined) return
 
-    if(toggleVisibility.wasPressed) {
+    if(toggleVisibilityKey.wasPressed) {
         let hide
         regionSelector.process((tileNum) => {
             let vis = currentTileSet.visibility[tileNum]
@@ -81,7 +84,9 @@ export function updateTileSetProperties() {
         })
     }
 
-    if(block.wasPressed) {
+    if(newBlockKey.wasPressed) {
         currentTileSet.addRegion(regionSelector, type.block)
+    } else if(newFrameKey.wasPressed) {
+        currentTileSet.addRegion(regionSelector, type.frame)
     }
 }

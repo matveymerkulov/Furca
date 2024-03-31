@@ -3,21 +3,21 @@ import Canvas, {canvasUnderCursor, setCanvas} from "../src/canvas.js"
 import {element} from "../src/system.js"
 import {projectFromStorage, projectToStorage} from "./save_load.js"
 import Key from "../src/key.js"
-import {currentWindow, hideWindow, showWindow} from "../src/gui/window.js"
-import MoveTileMap from "./move_tile_map.js"
+import {currentWindow, hideWindow} from "../src/gui/window.js"
+import MoveTileMaps from "./move_tile_maps.js"
 import {Pan} from "./pan.js"
 import Zoom from "./zoom.js"
-import Select from "./select.js"
+import SelectTileMaps from "./select_tile_maps.js"
 import {setName} from "./names.js"
 import {loadData} from "./data.js"
-import SelectRegion, {resetRegionSelector} from "./select_region.js"
+import SelectTileSetRegion from "./select_tile_set_region.js"
 import {renderTileSetProperties, updateTileSetProperties} from "./tile_set_properties.js"
-import {currentTileSet, renderTileSet} from "./tile_set.js"
+import {renderTileSet} from "./tile_set.js"
 import {
     checkMapsWindowCollisions,
     currentTileMap,
-    mapModeOperations,
     mainWindowOperations,
+    mapModeOperations,
     renderMaps,
     tileMapOperations,
     tileMapUnderCursor,
@@ -59,21 +59,22 @@ function initData() {
     }
 }
 
-export let select = new Key("LMB")
-export let del = new Key("Delete")
-export let pan = new Key("ControlLeft", "MMB")
-export let zoomIn = new Key("WheelUp")
-export let zoomOut = new Key("WheelDown")
-export let switchMode = new Key("Space")
-export let save = new Key("KeyS")
-export let load = new Key("KeyL")
-export let renameMap = new Key("KeyR")
-export let newMap = new Key("KeyN")
-export let copy = new Key("KeyC")
-export let turnMap = new Key("KeyT")
-export let tileSetProperties = new Key("KeyI")
-export let toggleVisibility = new Key("KeyV")
-export let block = new Key("KeyB")
+export let selectKey = new Key("LMB")
+export let delKey = new Key("Delete")
+export let panKey = new Key("ControlLeft", "MMB")
+export let zoomInKey = new Key("WheelUp")
+export let zoomOutKey = new Key("WheelDown")
+export let switchModeKey = new Key("Space")
+export let saveKey = new Key("KeyS")
+export let loadKey = new Key("KeyL")
+export let renameMapKey = new Key("KeyR")
+export let newMapKey = new Key("KeyN")
+export let copyKey = new Key("KeyC")
+export let turnMapKey = new Key("KeyT")
+export let tileSetPropertiesKey = new Key("KeyI")
+export let toggleVisibilityKey = new Key("KeyV")
+export let newBlockKey = new Key("KeyB")
+export let newFrameKey = new Key("KeyF")
 
 project.init = (texture) => {
     /*if(localStorage.getItem("project") === null) {
@@ -94,21 +95,21 @@ project.init = (texture) => {
     maps = Canvas.create(element("map"), 30, 14)
     maps.background = "rgb(9, 44, 84)"
     maps.setZoom(-19)
-    maps.add(new MoveTileMap(), select)
-    maps.add(new Pan(), pan)
-    maps.add(new Zoom(zoomIn, zoomOut))
-    maps.add(new Select(), select)
+    maps.add(new Pan(), panKey)
+    maps.add(new Zoom(zoomInKey, zoomOutKey))
+    maps.add(new SelectTileMaps(), selectKey)
+    maps.add(new MoveTileMaps(), selectKey)
     maps.renderContents = () => renderMaps()
     setCanvas(maps)
 
     tiles = Canvas.create(element("tiles"), 8, 14)
-    tiles.add(new Pan(tiles), pan)
-    tiles.add(new Zoom(zoomIn, zoomOut), pan)
+    tiles.add(new Pan(tiles), panKey)
+    tiles.add(new Zoom(zoomInKey, zoomOutKey), panKey)
     tiles.setZoom(-17)
-    tiles.renderContents = () => renderTileSet(select)
+    tiles.renderContents = () => renderTileSet(selectKey)
 
     tileSetCanvas = Canvas.create(element("tile_set"), 9, 16)
-    tileSetCanvas.add(new SelectRegion(), select)
+    tileSetCanvas.add(new SelectTileSetRegion(), selectKey)
     tileSetCanvas.renderContents = () => renderTileSetProperties(tileSetCanvas)
 
     project.render = () => {
@@ -126,16 +127,16 @@ project.init = (texture) => {
         maps.update()
         tiles.update()
 
-        if(switchMode.wasPressed) {
+        if(switchModeKey.wasPressed) {
             currentMode = currentMode === mode.tiles ? mode.maps : mode.tiles
         }
 
-        if(load.wasPressed) {
+        if(loadKey.wasPressed) {
             projectFromStorage(texture)
             initData()
         }
 
-        if(save.wasPressed) {
+        if(saveKey.wasPressed) {
             projectToStorage()
         }
 
