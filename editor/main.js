@@ -25,7 +25,7 @@ import {
 } from "./tile_map.js"
 import {mapSizeWindow} from "./new_map.js"
 import {deleteCurrentDrag} from "../src/drag.js"
-import SelectFrameRegion from "./select_frame_region.js"
+import SelectMapRegion from "./select_map_region.js"
 
 project.getAssets = () => {
     return {
@@ -83,6 +83,8 @@ export let tileSetPropertiesKey = new Key("KeyI")
 export let toggleVisibilityKey = new Key("KeyV")
 export let newBlockKey = new Key("KeyB")
 export let newFrameKey = new Key("KeyF")
+export let incrementBrushSize = new Key("NumpadAdd")
+export let decrementBrushSize = new Key("NumpadSubtract")
 
 project.init = (texture) => {
     /*if(localStorage.getItem("project") === null) {
@@ -107,7 +109,7 @@ project.init = (texture) => {
     maps.add(new Zoom(zoomInKey, zoomOutKey))
     maps.add(new SelectTileMaps(), selectKey)
     maps.add(new MoveTileMaps(), selectKey)
-    maps.add(new SelectFrameRegion(), selectKey)
+    maps.add(new SelectMapRegion(), selectKey)
     maps.renderContents = () => renderMaps()
 
     tiles = Canvas.create(element("tiles"), 8, 14)

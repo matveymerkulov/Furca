@@ -1,7 +1,20 @@
 import {mouse, removeFromArray} from "../src/system.js"
 import {tileMap, tileMaps} from "../src/project.js"
 import {addTileMap} from "./create_tile_map.js"
-import {copyKey, currentMode, delKey, mode, renameMapKey, selectKey, tileHeight, tileSetPropertiesKey, tileSetWindow, tileWidth, turnMapKey,} from "./main.js"
+import {
+    copyKey,
+    currentMode, decrementBrushSize,
+    delKey,
+    incrementBrushSize,
+    mode,
+    renameMapKey,
+    selectKey,
+    tileHeight,
+    tileSetPropertiesKey,
+    tileSetWindow,
+    tileWidth,
+    turnMapKey,
+} from "./main.js"
 import {getName, incrementName, setName} from "./names.js"
 import {ctx, distToScreen, xToScreen, yToScreen} from "../src/canvas.js"
 import {clearSelection, selectedTileMaps, mapSelectionRegion} from "./select_tile_maps.js"
@@ -11,7 +24,7 @@ import {updateNewMapWindow} from "./new_map.js"
 import Sprite from "../src/sprite.js"
 import {resetRegionSelector, tileSetRegion} from "./select_tile_set_region.js"
 import {showWindow} from "../src/gui/window.js"
-import {frameRegion} from "./select_frame_region.js"
+import {mapRegion} from "./select_map_region.js"
 import {blockType} from "../src/block.js"
 import {drawDashedRect} from "../src/draw.js"
 
@@ -30,37 +43,27 @@ export function renderMaps() {
             , yToScreen(map.topY) - 0.5 * metrics.actualBoundingBoxDescent - 4)
     })
 
-    switch(currentMode) {
-        case mode.tiles:
-            if(frameRegion !== undefined && currentTileMap !== undefined) {
-                let cellWidth = currentTileMap.cellWidth
-                let cellHeight = currentTileMap.cellHeight
-                drawDashedRect(xToScreen(currentTileMap.leftX + frameRegion.x * cellWidth)
-                    , yToScreen(currentTileMap.topY + frameRegion.y * cellHeight)
-                    , distToScreen((frameRegion.width + 1) * cellWidth)
-                    , distToScreen((frameRegion.height + 1) * cellHeight))
-            } else if(currentTileSprite !== undefined) {
-                currentTileSprite.drawDashedRect()
+    if(currentMode === mode.tiles) {
+        if(mapRegion !== undefined && currentTileMap !== undefined) {
+            let cellWidth = currentTileMap.cellWidth
+            let cellHeight = currentTileMap.cellHeight
+            drawDashedRect(xToScreen(currentTileMap.leftX + mapRegion.x * cellWidth)
+                , yToScreen(currentTileMap.topY + mapRegion.y * cellHeight)
+                , distToScreen((mapRegion.width + 1) * cellWidth)
+                , distToScreen((mapRegion.height + 1) * cellHeight))
+        } else if(currentTileSprite !== undefined) {
+            currentTileSprite.drawDashedRect()
+        }
+    } else if(currentMode === mode.maps) {
+        if(mapSelectionRegion !== undefined) {
+            mapSelectionRegion.drawDashedRect()
+        } else if(selectedTileMaps.length > 0) {
+            for(let map of selectedTileMaps) {
+                map.drawDashedRect()
             }
-
-            if(tileMapUnderCursor !== undefined) {
-                let x = tileMapUnderCursor.leftX + centerX
-                let y = tileMapUnderCursor.topY + centerY
-                drawCross(x, y, 2, "black")
-                drawCross(x, y, 1, "white")
-            }
-            break
-        case mode.maps:
-            if(mapSelectionRegion !== undefined) {
-                mapSelectionRegion.drawDashedRect()
-            } else if(selectedTileMaps.length > 0) {
-                for(let map of selectedTileMaps) {
-                    map.drawDashedRect()
-                }
-            } else if(tileMapUnderCursor !== undefined) {
-                tileMapUnderCursor.drawDashedRect()
-            }
-            break
+        } else if(tileMapUnderCursor !== undefined) {
+            tileMapUnderCursor.drawDashedRect()
+        }
     }
 }
 
@@ -101,22 +104,6 @@ export function checkMapsWindowCollisions() {
 export let centerX, centerY
 
 export function tileMapOperations() {
-    let x0 = tileMapUnderCursor.fColumn(mouse)
-    let y0 = tileMapUnderCursor.fRow(mouse)
-    let x1 = Math.floor(x0) + 0.5
-    let y1 = Math.floor(y0) + 0.5
-    if(Math.abs(x0 - x1) + Math.abs(y0 - y1) <= 0.5) {
-        centerX = x1
-        centerY = y1
-    } else {
-        centerX = Math.round(x0)
-        centerY = Math.round(y0)
-    }
-
-    if(turnMapKey.wasPressed) {
-        tileMapUnderCursor.turnClockwise(centerX, centerY)
-    }
-
     if(renameMapKey.wasPressed) {
         // noinspection JSCheckFunctionSignatures
         let name = prompt("Enter new name of tile map:", getName(tileMapUnderCursor))
@@ -126,34 +113,35 @@ export function tileMapOperations() {
     }
 }
 
+export let brushSize = 2
 let tileSprite = new Sprite()
-let blockWidth = 4, blockHeight = 3
+let blockWidth = brushSize, blockHeight = brushSize
 
 export function setBlockSize(width, height) {
     blockWidth = width
     blockHeight = height
 }
 
-export function setTiles(column, row, tileNum, block) {
-    if(block !== undefined && block.type === blockType.frame) {
-        if(block.width < 3) blockWidth = block.width
-        if(block.height < 3) blockHeight = block.height
+export function setTiles(column, row, width, height, tileNum) {
+    if(currentBlock !== undefined && currentBlock.type === blockType.frame) {
+        if(currentBlock.width < 3) width = currentBlock.width
+        if(currentBlock.height < 3) height = currentBlock.height
     }
 
-    for(let y = 0; y < blockHeight; y++) {
+    for(let y = 0; y < height; y++) {
         let yy = row + y
         if(yy < 0 || yy >= currentTileMap.rows) continue
-        for(let x = 0; x < blockWidth; x++) {
+        for(let x = 0; x < width; x++) {
             let xx = column + x
             if(xx < 0 || xx >= currentTileMap.columns) continue
-            if(block === undefined) {
+            if(tileNum !== undefined) {
                 currentTileMap.setTile(xx, yy, tileNum)
-            } else if(block.type === blockType.block) {
-                currentTileMap.setTile(xx, yy, block.x + x + currentTileSet.columns * (block.y + y))
-            } else if(block.type === blockType.frame) {
-                let dx = block.width < 3 || x === 0 ? x : (x === blockWidth - 1 ? 2 : 1)
-                let dy = block.height < 3 || y === 0 ? y : (y === blockHeight - 1 ? 2 : 1)
-                currentTileMap.setTile(xx, yy, block.x + dx + currentTileSet.columns * (block.y + dy))
+            } else if(currentBlock.type === blockType.block) {
+                currentTileMap.setTile(xx, yy, currentBlock.x + x + currentTileSet.columns * (currentBlock.y + y))
+            } else if(currentBlock.type === blockType.frame) {
+                let dx = currentBlock.width < 3 || x === 0 ? x : (x === blockWidth - 1 ? 2 : 1)
+                let dy = currentBlock.height < 3 || y === 0 ? y : (y === blockHeight - 1 ? 2 : 1)
+                currentTileMap.setTile(xx, yy, currentBlock.x + dx + currentTileSet.columns * (currentBlock.y + dy))
             }
         }
     }
@@ -167,12 +155,20 @@ export function tileModeOperations() {
 
     if(selectKey.isDown) {
         if(currentBlock === undefined) {
-            setTiles(column, row, currentTile)
+            setTiles(column, row, blockWidth, blockHeight, currentTile)
         } else if(currentBlock.type === blockType.block) {
-            setTiles(column, row, 0, currentBlock)
+            setTiles(column, row)
         }
     } else if(delKey.isDown) {
-        setTiles(column, row, altTile)
+        setTiles(column, row, blockWidth, blockHeight, altTile)
+    }
+
+    if(incrementBrushSize.wasPressed) {
+        brushSize++
+        if(currentBlock === undefined) setBlockSize(brushSize, brushSize)
+    } else if(decrementBrushSize.wasPressed && brushSize > 1) {
+        brushSize--
+        if(currentBlock === undefined) setBlockSize(brushSize, brushSize)
     }
 
     let x = currentTileMap.leftX + currentTileMap.cellWidth * column + 0.5 * brushWidth

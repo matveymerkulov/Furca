@@ -8,13 +8,9 @@ import {Block, blockType} from "../src/block.js"
 import {currentCanvas} from "../src/canvas.js"
 import {currentTileMap, setBlockSize, setTiles} from "./tile_map.js"
 
-export let frameRegion
+export let mapRegion
 
-export function resetRegionSelector() {
-    frameRegion = undefined
-}
-
-export default class SelectFrameRegion extends Drag {
+export default class SelectMapRegion extends Drag {
     #x
     #y
 
@@ -26,19 +22,19 @@ export default class SelectFrameRegion extends Drag {
     start() {
         this.#x = Math.floor((mouse.x - currentTileMap.leftX) / currentTileMap.cellWidth)
         this.#y = Math.floor((mouse.y - currentTileMap.topY) / currentTileMap.cellHeight)
-        frameRegion = new Block()
+        mapRegion = new Block()
     }
 
     process() {
         let width = Math.floor((mouse.x - currentTileMap.leftX) / currentTileMap.cellWidth) - this.#x
         let height = Math.floor((mouse.y - currentTileMap.topY) / currentTileMap.cellHeight) - this.#y
-        frameRegion.modify(currentTileSet.images.columns, this.#x, this.#y, width, height)
+        mapRegion.modify(currentTileSet.images.columns, this.#x, this.#y, width, height)
     }
 
     end() {
-        setBlockSize(frameRegion.width + 1, frameRegion.height + 1)
-        setTiles(frameRegion.x, frameRegion.y, 0, currentBlock)
-        frameRegion = undefined
-        setBlockSize(currentBlock.width, currentBlock.height)
+        setBlockSize(mapRegion.width + 1, mapRegion.height + 1)
+        setTiles(mapRegion.x, mapRegion.y, 0, currentBlock)
+        mapRegion = undefined
+        setBlockSize(1, 1)
     }
 }
