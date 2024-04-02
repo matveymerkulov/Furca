@@ -1,6 +1,6 @@
 import {ctx, setCanvas} from "../src/canvas.js"
 import {tileSetRegion} from "./select_tile_set_region.js"
-import {drawDashedRect, drawRect} from "../src/draw.js"
+import {drawDashedRegion, drawRect} from "../src/draw.js"
 import {canvasMouse} from "../src/system.js"
 import {drawX} from "./draw.js"
 import {currentTileSet} from "./tile_set.js"
@@ -29,7 +29,7 @@ export function renderTileSetProperties(canvas) {
 
     setTileWidth(canvasWidth / images.columns, canvasHeight / images.rows)
 
-    drawDashedRect(Math.floor(canvasMouse.x / tileWidth) * tileWidth + 3
+    drawDashedRegion(Math.floor(canvasMouse.x / tileWidth) * tileWidth + 3
         , Math.floor(canvasMouse.y / tileHeight) * tileHeight + 3, tileWidth - 7, tileHeight - 7)
 
     let cellWidth = canvasWidth / currentTileSet.columns
@@ -63,7 +63,7 @@ export function renderTileSetProperties(canvas) {
     }
 
     if(tileSetRegion === undefined) return
-    drawDashedRect(tileSetRegion.x * tileWidth, tileSetRegion.y * tileHeight
+    drawDashedRegion(tileSetRegion.x * tileWidth, tileSetRegion.y * tileHeight
         , (tileSetRegion.width + 1) * tileWidth, (tileSetRegion.height + 1) * tileHeight)
 }
 

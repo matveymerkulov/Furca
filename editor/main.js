@@ -83,6 +83,7 @@ export let tileSetPropertiesKey = new Key("KeyI")
 export let toggleVisibilityKey = new Key("KeyV")
 export let newBlockKey = new Key("KeyB")
 export let newFrameKey = new Key("KeyF")
+export let changeBrushType = new Key("KeyB")
 export let incrementBrushSize = new Key("NumpadAdd")
 export let decrementBrushSize = new Key("NumpadSubtract")
 

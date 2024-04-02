@@ -11,18 +11,28 @@ let dashes = [
     [3, 4, 1, 0],
 ]
 
-export function drawDashedRect(x, y, width, height) {
+export function drawDashedRegion(x, y, width, height, isCircle = false) {
+    function draw() {
+        if(isCircle) {
+            ctx.beginPath()
+            ctx.ellipse(x + 0.5 * width,  y + 0.5 * height, 0.5 * width, 0.5 * height, 0, 0, 2.0 * Math.PI)
+            ctx.stroke()
+        } else {
+            ctx.strokeRect(x, y, width, height)
+        }
+    }
+
     x = Math.floor(x)
     y = Math.floor(y)
     width = Math.floor(width)
     height = Math.floor(height)
     ctx.strokeStyle = "black"
     ctx.lineWidth = 2
-    ctx.strokeRect(x, y, width, height)
+    draw()
     let shift = Math.floor(new Date().getTime() / 100) % 8
     ctx.setLineDash(dashes[shift])
     ctx.strokeStyle = "white"
-    ctx.strokeRect(x, y, width, height)
+    draw()
     ctx.setLineDash([])
     ctx.strokeStyle = "black"
     ctx.lineWidth = 1

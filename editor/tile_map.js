@@ -2,6 +2,7 @@ import {mouse, removeFromArray} from "../src/system.js"
 import {tileMap, tileMaps} from "../src/project.js"
 import {addTileMap} from "./create_tile_map.js"
 import {
+    changeBrushType,
     copyKey,
     currentMode, decrementBrushSize,
     delKey,
@@ -26,7 +27,7 @@ import {resetRegionSelector, tileSetRegion} from "./select_tile_set_region.js"
 import {showWindow} from "../src/gui/window.js"
 import {mapRegion} from "./select_map_region.js"
 import {blockType} from "../src/block.js"
-import {drawDashedRect} from "../src/draw.js"
+import {drawDashedRegion} from "../src/draw.js"
 
 export let currentTileMap, tileMapUnderCursor, currentTileSprite
 
@@ -47,22 +48,22 @@ export function renderMaps() {
         if(mapRegion !== undefined && currentTileMap !== undefined) {
             let cellWidth = currentTileMap.cellWidth
             let cellHeight = currentTileMap.cellHeight
-            drawDashedRect(xToScreen(currentTileMap.leftX + mapRegion.x * cellWidth)
+            drawDashedRegion(xToScreen(currentTileMap.leftX + mapRegion.x * cellWidth)
                 , yToScreen(currentTileMap.topY + mapRegion.y * cellHeight)
                 , distToScreen((mapRegion.width + 1) * cellWidth)
                 , distToScreen((mapRegion.height + 1) * cellHeight))
         } else if(currentTileSprite !== undefined) {
-            currentTileSprite.drawDashedRect()
+            currentTileSprite.drawDashedRegion(currentBlock === undefined && brushType === brush.circle)
         }
     } else if(currentMode === mode.maps) {
         if(mapSelectionRegion !== undefined) {
-            mapSelectionRegion.drawDashedRect()
+            mapSelectionRegion.drawDashedRegion()
         } else if(selectedTileMaps.length > 0) {
             for(let map of selectedTileMaps) {
-                map.drawDashedRect()
+                map.drawDashedRegion()
             }
         } else if(tileMapUnderCursor !== undefined) {
-            tileMapUnderCursor.drawDashedRect()
+            tileMapUnderCursor.drawDashedRegion()
         }
     }
 }
@@ -101,8 +102,6 @@ export function checkMapsWindowCollisions() {
     }
 }
 
-export let centerX, centerY
-
 export function tileMapOperations() {
     if(renameMapKey.wasPressed) {
         // noinspection JSCheckFunctionSignatures
@@ -113,7 +112,11 @@ export function tileMapOperations() {
     }
 }
 
-export let brushSize = 2
+export let brush = {
+    square: Symbol("square"),
+    circle: Symbol("circle"),
+}
+export let brushSize = 2, brushType = brush.circle
 let tileSprite = new Sprite()
 let blockWidth = brushSize, blockHeight = brushSize
 
@@ -122,10 +125,10 @@ export function setBlockSize(width, height) {
     blockHeight = height
 }
 
-export function setTiles(column, row, width, height, tileNum) {
-    if(currentBlock !== undefined && currentBlock.type === blockType.frame) {
-        if(currentBlock.width < 3) width = currentBlock.width
-        if(currentBlock.height < 3) height = currentBlock.height
+export function setTiles(column, row, width, height, tileNum, block) {
+    if(block !== undefined && block.type === blockType.frame) {
+        if(block.width < 3) width = block.width
+        if(block.height < 3) height = block.height
     }
 
     for(let y = 0; y < height; y++) {
@@ -135,13 +138,18 @@ export function setTiles(column, row, width, height, tileNum) {
             let xx = column + x
             if(xx < 0 || xx >= currentTileMap.columns) continue
             if(tileNum !== undefined) {
+                if(brushType === brush.circle) {
+                    let dx = x - 0.5 * (width - 1)
+                    let dy = y - 0.5 * (height - 1)
+                    if(Math.sqrt(dx * dx + dy * dy) > 0.5 * width) continue
+                }
                 currentTileMap.setTile(xx, yy, tileNum)
-            } else if(currentBlock.type === blockType.block) {
-                currentTileMap.setTile(xx, yy, currentBlock.x + x + currentTileSet.columns * (currentBlock.y + y))
-            } else if(currentBlock.type === blockType.frame) {
-                let dx = currentBlock.width < 3 || x === 0 ? x : (x === blockWidth - 1 ? 2 : 1)
-                let dy = currentBlock.height < 3 || y === 0 ? y : (y === blockHeight - 1 ? 2 : 1)
-                currentTileMap.setTile(xx, yy, currentBlock.x + dx + currentTileSet.columns * (currentBlock.y + dy))
+            } else if(block.type === blockType.block) {
+                currentTileMap.setTile(xx, yy, block.x + x + currentTileSet.columns * (block.y + y))
+            } else if(block.type === blockType.frame) {
+                let dx = block.width < 3 || x === 0 ? x : (x === blockWidth - 1 ? 2 : 1)
+                let dy = block.height < 3 || y === 0 ? y : (y === blockHeight - 1 ? 2 : 1)
+                currentTileMap.setTile(xx, yy, block.x + dx + currentTileSet.columns * (block.y + dy))
             }
         }
     }
@@ -157,10 +165,14 @@ export function tileModeOperations() {
         if(currentBlock === undefined) {
             setTiles(column, row, blockWidth, blockHeight, currentTile)
         } else if(currentBlock.type === blockType.block) {
-            setTiles(column, row)
+            setTiles(column, row, blockWidth, blockHeight, undefined, currentBlock)
         }
     } else if(delKey.isDown) {
         setTiles(column, row, blockWidth, blockHeight, altTile)
+    }
+
+    if(changeBrushType.wasPressed) {
+        brushType = brushType === brush.circle ? brush.square : brush.circle
     }
 
     if(incrementBrushSize.wasPressed) {

@@ -1,6 +1,6 @@
 import Point from "./point.js"
 import {unc} from "./system.js"
-import {drawDashedRect} from "./draw.js"
+import {drawDashedRegion} from "./draw.js"
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
 
 export default class Box extends Point {
@@ -85,8 +85,9 @@ export default class Box extends Point {
         this.height = shape.height
     }
 
-    drawDashedRect() {
-        drawDashedRect(xToScreen(this.leftX), yToScreen(this.topY), distToScreen(this.width), distToScreen(this.height))
+    drawDashedRegion(isCircle) {
+        drawDashedRegion(xToScreen(this.leftX), yToScreen(this.topY), distToScreen(this.width), distToScreen(this.height)
+            , isCircle)
     }
 
     limit(box) {

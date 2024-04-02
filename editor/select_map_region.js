@@ -33,7 +33,7 @@ export default class SelectMapRegion extends Drag {
 
     end() {
         setBlockSize(mapRegion.width + 1, mapRegion.height + 1)
-        setTiles(mapRegion.x, mapRegion.y, 0, currentBlock)
+        setTiles(mapRegion.x, mapRegion.y, mapRegion.width + 1, mapRegion.height + 1,undefined, currentBlock)
         mapRegion = undefined
         setBlockSize(1, 1)
     }

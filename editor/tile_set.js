@@ -1,7 +1,7 @@
 import {selectKey, tiles} from "./main.js"
 import {tileSet} from "../src/project.js"
 import {canvasUnderCursor, ctx, distToScreen, setCanvas} from "../src/canvas.js"
-import {drawDashedRect} from "../src/draw.js"
+import {drawDashedRegion} from "../src/draw.js"
 import {boxWithPointCollision} from "../src/collisions.js"
 import {canvasMouse} from "../src/system.js"
 import {brushSize, setBlockSize} from "./tile_map.js"
@@ -38,7 +38,7 @@ export function renderTileSet() {
             incrementPos()
             images.image(i).drawResized(x, y, size, size)
             if(set === currentTileSet && (currentTile === i || altTile === i)) {
-                drawDashedRect(x, y, size, size)
+                drawDashedRegion(x, y, size, size)
             }
             if(canvasUnderCursor !== tiles) continue
             if(selectKey.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
@@ -72,7 +72,7 @@ export function renderTileSet() {
             }
 
             if(set === currentTileSet && currentBlock === block) {
-                drawDashedRect(x, y, size, size)
+                drawDashedRegion(x, y, size, size)
             }
         }
     }
