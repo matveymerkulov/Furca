@@ -1,4 +1,4 @@
-import {selectKey, tiles} from "./main.js"
+import {clamp, selectKey, tiles} from "./main.js"
 import {tileSet} from "../src/project.js"
 import {canvasUnderCursor, ctx, distToScreen, setCanvas} from "../src/canvas.js"
 import {drawDashedRegion} from "../src/draw.js"
@@ -7,8 +7,11 @@ import {canvasMouse} from "../src/system.js"
 import {brushSize, setBlockSize} from "./tile_map.js"
 import {visibility} from "../src/tile_set.js"
 import {blockType} from "../src/block.js"
+import {tilesPerRow} from "./tile_zoom.js"
+import {updateY0, y0} from "./tile_pan.js"
 
 export let currentTile = 1, altTile = 0, currentTileSet, currentBlock
+export let maxY0 = 0
 
 export function renderTileSet() {
     let quantity = 0
@@ -16,20 +19,15 @@ export function renderTileSet() {
         quantity += set.images.quantity
     }
 
-    let columns = Math.floor(tiles.width)
-    let height = Math.ceil(quantity / columns)
-    let x0 = distToScreen(0.5 * (tiles.width - columns))
-    let y0 = distToScreen(0.5 * (tiles.height - height) - tiles.y)
+    let size = tiles.viewport.width / tilesPerRow
+    let x, y
     let pos = -1
 
     for(const set of Object.values(tileSet)) {
-        let size = distToScreen(1)
-
-        let x, y
         function incrementPos() {
             pos++
-            x = x0 + size * (pos % columns)
-            y = y0 + size * Math.floor(pos / columns)
+            x = size * (pos % tilesPerRow)
+            y = size * Math.floor(pos / tilesPerRow) - y0
         }
 
         let images = set.images
@@ -76,4 +74,6 @@ export function renderTileSet() {
             }
         }
     }
+    maxY0 = Math.max(y + size - tiles.viewport.height + y0, 0)
+    updateY0()
 }

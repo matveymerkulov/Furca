@@ -13,19 +13,18 @@ import {loadData} from "./data.js"
 import SelectTileSetRegion from "./select_tile_set_region.js"
 import {renderTileSetProperties, updateTileSetProperties} from "./tile_set_properties.js"
 import {renderTileSet} from "./tile_set.js"
-import {
-    checkMapsWindowCollisions,
-    currentTileMap,
-    mainWindowOperations,
-    mapModeOperations,
-    renderMaps,
-    tileMapOperations,
-    tileMapUnderCursor,
-    tileModeOperations
-} from "./tile_map.js"
+import {checkMapsWindowCollisions, currentTileMap, mainWindowOperations, mapModeOperations, renderMaps, tileMapOperations, tileMapUnderCursor, tileModeOperations} from "./tile_map.js"
 import {mapSizeWindow} from "./new_map.js"
 import {deleteCurrentDrag} from "../src/drag.js"
 import SelectMapRegion from "./select_map_region.js"
+import TileZoom from "./tile_zoom.js"
+import {TilePan} from "./tile_pan.js"
+
+export function clamp(value, min, max) {
+    if(value < min) return min
+    if(value > max) return max
+    return value
+}
 
 project.getAssets = () => {
     return {
@@ -114,9 +113,8 @@ project.init = (texture) => {
     maps.renderContents = () => renderMaps()
 
     tiles = Canvas.create(element("tiles"), 8, 14)
-    tiles.add(new Pan(tiles), panKey)
-    tiles.add(new Zoom(zoomInKey, zoomOutKey), panKey)
-    tiles.setZoom(-17)
+    tiles.add(new TilePan(), panKey)
+    tiles.add(new TileZoom(zoomInKey, zoomOutKey))
     tiles.renderContents = () => renderTileSet(selectKey)
 
     tileSetCanvas = Canvas.create(element("tile_set"), 9, 16)
