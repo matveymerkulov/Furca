@@ -11,7 +11,7 @@ import SelectTileMaps from "./select_tile_maps.js"
 import {setName} from "./names.js"
 import {loadData} from "./data.js"
 import SelectTileSetRegion from "./select_tile_set_region.js"
-import {renderTileSetProperties, updateTileSetProperties} from "./tile_set_properties.js"
+import {renderBlocksTileSet, updateTileSetProperties} from "./tile_set_properties.js"
 import {renderTileSet} from "./tile_set.js"
 import {checkMapsWindowCollisions, currentTileMap, mainWindowOperations, mapModeOperations, renderMaps, tileMapOperations, tileMapUnderCursor, tileModeOperations} from "./tile_map.js"
 import {mapSizeWindow} from "./new_map.js"
@@ -19,6 +19,7 @@ import {deleteCurrentDrag} from "../src/drag.js"
 import SelectMapRegion from "./select_map_region.js"
 import TileZoom from "./tile_zoom.js"
 import {TilePan} from "./tile_pan.js"
+import {renderRulesGrid, renderRulesList, renderRulesTileSet, updateRulesWindow} from "./auto_tiling.js"
 
 export function clamp(value, min, max) {
     if(value < min) return min
@@ -47,7 +48,8 @@ export let maps, tiles
 export let currentMode = mode.tiles
 
 export let tileSetWindow = element("tile_set_window")
-export let tileSetCanvas
+export let rulesWindow = element("rules_window")
+export let blocksTileSetCanvas, rulesTileSetCanvas, rulesGrid, rulesList
 
 export let tileWidth, tileHeight
 
@@ -77,7 +79,6 @@ export let loadKey = new Key("KeyL")
 export let renameMapKey = new Key("KeyR")
 export let newMapKey = new Key("KeyN")
 export let copyKey = new Key("KeyC")
-export let turnMapKey = new Key("KeyT")
 export let tileSetPropertiesKey = new Key("KeyI")
 export let toggleVisibilityKey = new Key("KeyV")
 export let newBlockKey = new Key("KeyB")
@@ -85,6 +86,7 @@ export let newFrameKey = new Key("KeyF")
 export let changeBrushType = new Key("KeyB")
 export let incrementBrushSize = new Key("NumpadAdd")
 export let decrementBrushSize = new Key("NumpadSubtract")
+export let autoTilingEditorKey = new Key("KeyA")
 
 project.init = (texture) => {
     /*if(localStorage.getItem("project") === null) {
@@ -117,19 +119,37 @@ project.init = (texture) => {
     tiles.add(new TileZoom(zoomInKey, zoomOutKey))
     tiles.renderContents = () => renderTileSet(selectKey)
 
-    tileSetCanvas = Canvas.create(element("tile_set"), 9, 16)
-    tileSetCanvas.add(new SelectTileSetRegion(), selectKey)
-    tileSetCanvas.renderContents = () => renderTileSetProperties(tileSetCanvas)
+    blocksTileSetCanvas = Canvas.create(element("tile_set_blocks"), 9, 16)
+    blocksTileSetCanvas.add(new SelectTileSetRegion(), selectKey)
+    blocksTileSetCanvas.renderContents = () => renderBlocksTileSet()
+
+    rulesTileSetCanvas = Canvas.create(element("tile_set_rules"), 9, 16)
+    rulesTileSetCanvas.renderContents = () => renderRulesTileSet()
+    rulesGrid = Canvas.create(element("rules_grid"), 9, 16)
+    rulesGrid.renderContents = () => renderRulesGrid()
+    rulesList = Canvas.create(element("rules_list"), 9, 16)
+    rulesList.renderContents = () => renderRulesList()
 
     project.render = () => {
         maps.render()
         tiles.render()
-        tileSetCanvas.render()
+        if(currentWindow === tileSetWindow) {
+            blocksTileSetCanvas.render()
+        } else if(currentWindow === rulesWindow) {
+            rulesTileSetCanvas.render()
+            rulesGrid.render()
+            rulesList.render()
+        }
     }
 
     project.update = () => {
         if(currentWindow === tileSetWindow) {
             updateTileSetProperties()
+            return
+        }
+
+        if(currentWindow === rulesWindow) {
+            updateRulesWindow()
             return
         }
 

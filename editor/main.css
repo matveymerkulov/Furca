@@ -49,3 +49,27 @@ button, input {
     justify-content: center;
     gap: 8px;
 }
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+#rules_grid {
+    width: 200px;
+    height: 200px;
+}
+
+#add_category, #remove_category {
+    flex-grow: 1;
+}
+
+#rules_list {
+    width: 200px;
+    flex-grow: 1;
+}

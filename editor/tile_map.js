@@ -2,19 +2,19 @@ import {mouse, removeFromArray} from "../src/system.js"
 import {tileMap, tileMaps} from "../src/project.js"
 import {addTileMap} from "./create_tile_map.js"
 import {
+    autoTilingEditorKey,
     changeBrushType,
     copyKey,
     currentMode, decrementBrushSize,
     delKey,
     incrementBrushSize,
     mode,
-    renameMapKey,
+    renameMapKey, rulesWindow,
     selectKey,
     tileHeight,
     tileSetPropertiesKey,
     tileSetWindow,
     tileWidth,
-    turnMapKey,
 } from "./main.js"
 import {getName, incrementName, setName} from "./names.js"
 import {ctx, distToScreen, xToScreen, yToScreen} from "../src/canvas.js"
@@ -79,9 +79,15 @@ export function mainWindowOperations() {
 
     updateNewMapWindow()
 
-    if(tileSetPropertiesKey.wasPressed && currentTileSet !== undefined) {
+    if(currentTileSet === undefined) return
+
+    if(tileSetPropertiesKey.wasPressed) {
         resetRegionSelector()
         showWindow(tileSetWindow)
+    }
+
+    if(autoTilingEditorKey.wasPressed) {
+        showWindow(rulesWindow)
     }
 }
 
@@ -116,7 +122,7 @@ export let brush = {
     square: Symbol("square"),
     circle: Symbol("circle"),
 }
-export let brushSize = 2, brushType = brush.circle
+export let brushSize = 2, brushType = brush.square
 let tileSprite = new Sprite()
 let blockWidth = brushSize, blockHeight = brushSize
 
@@ -137,6 +143,11 @@ export function setTiles(column, row, width, height, tileNum, block) {
         for(let x = 0; x < width; x++) {
             let xx = column + x
             if(xx < 0 || xx >= currentTileMap.columns) continue
+
+            function setTile(dx, dy) {
+                currentTileMap.setTile(xx, yy, block.x + dx + currentTileSet.columns * (block.y + dy))
+            }
+
             if(tileNum !== undefined) {
                 if(brushType === brush.circle) {
                     let dx = x - 0.5 * (width - 1)
@@ -145,11 +156,11 @@ export function setTiles(column, row, width, height, tileNum, block) {
                 }
                 currentTileMap.setTile(xx, yy, tileNum)
             } else if(block.type === blockType.block) {
-                currentTileMap.setTile(xx, yy, block.x + x + currentTileSet.columns * (block.y + y))
+                setTile(x, y)
             } else if(block.type === blockType.frame) {
                 let dx = block.width < 3 || x === 0 ? x : (x === blockWidth - 1 ? 2 : 1)
                 let dy = block.height < 3 || y === 0 ? y : (y === blockHeight - 1 ? 2 : 1)
-                currentTileMap.setTile(xx, yy, block.x + dx + currentTileSet.columns * (block.y + dy))
+                setTile(dx, dy)
             }
         }
     }
