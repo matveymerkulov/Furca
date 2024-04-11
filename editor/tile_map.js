@@ -3,11 +3,11 @@ import {tileMap, tileMaps} from "../src/project.js"
 import {addTileMap} from "./create_tile_map.js"
 import {
     autoTilingEditorKey,
-    changeBrushType,
+    changeBrushTypeKey,
     copyKey,
-    currentMode, decrementBrushSize,
+    currentMode, decrementBrushSizeKey,
     delKey,
-    incrementBrushSize,
+    incrementBrushSizeKey,
     mode,
     renameMapKey, rulesWindow,
     selectKey,
@@ -182,14 +182,14 @@ export function tileModeOperations() {
         setTiles(column, row, blockWidth, blockHeight, altTile)
     }
 
-    if(changeBrushType.wasPressed) {
+    if(changeBrushTypeKey.wasPressed) {
         brushType = brushType === brush.circle ? brush.square : brush.circle
     }
 
-    if(incrementBrushSize.wasPressed) {
+    if(incrementBrushSizeKey.wasPressed) {
         brushSize++
         if(currentBlock === undefined) setBlockSize(brushSize, brushSize)
-    } else if(decrementBrushSize.wasPressed && brushSize > 1) {
+    } else if(decrementBrushSizeKey.wasPressed && brushSize > 1) {
         brushSize--
         if(currentBlock === undefined) setBlockSize(brushSize, brushSize)
     }

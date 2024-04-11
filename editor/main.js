@@ -19,7 +19,13 @@ import {deleteCurrentDrag} from "../src/drag.js"
 import SelectMapRegion from "./select_map_region.js"
 import TileZoom from "./tile_zoom.js"
 import {TilePan} from "./tile_pan.js"
-import {renderRulesGrid, renderRulesList, renderRulesTileSet, updateRulesWindow} from "./auto_tiling.js"
+import {
+    initRulesWindow,
+    renderRulesGrid,
+    renderRulesList,
+    renderRulesTileSet,
+    updateRulesWindow
+} from "./auto_tiling.js"
 
 export function clamp(value, min, max) {
     if(value < min) return min
@@ -83,10 +89,13 @@ export let tileSetPropertiesKey = new Key("KeyI")
 export let toggleVisibilityKey = new Key("KeyV")
 export let newBlockKey = new Key("KeyB")
 export let newFrameKey = new Key("KeyF")
-export let changeBrushType = new Key("KeyB")
-export let incrementBrushSize = new Key("NumpadAdd")
-export let decrementBrushSize = new Key("NumpadSubtract")
+export let changeBrushTypeKey = new Key("KeyB")
+export let incrementBrushSizeKey = new Key("NumpadAdd")
+export let decrementBrushSizeKey = new Key("NumpadSubtract")
 export let autoTilingEditorKey = new Key("KeyA")
+export let incrementGridSizeKey = new Key("NumpadAdd")
+export let decrementGridSizeKey = new Key("NumpadSubtract")
+//export let Key = new Key("NumpadSubtract")
 
 project.init = (texture) => {
     /*if(localStorage.getItem("project") === null) {
@@ -129,6 +138,7 @@ project.init = (texture) => {
     rulesGrid.renderContents = () => renderRulesGrid()
     rulesList = Canvas.create(element("rules_list"), 9, 16)
     rulesList.renderContents = () => renderRulesList()
+    initRulesWindow()
 
     project.render = () => {
         maps.render()

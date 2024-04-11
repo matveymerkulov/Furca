@@ -1,7 +1,7 @@
-import {ctx, setCanvas} from "../src/canvas.js"
+import {canvasUnderCursor, ctx, currentCanvas, setCanvas} from "../src/canvas.js"
 import {tileSetRegion} from "./select_tile_set_region.js"
 import {drawDashedRegion, drawRect} from "../src/draw.js"
-import {canvasMouse} from "../src/system.js"
+import {canvasMouse, mouse} from "../src/system.js"
 import {drawX} from "./draw.js"
 import {currentTileSet} from "./tile_set.js"
 import {blockType} from "../src/block.js"
@@ -12,7 +12,7 @@ import {delKey, newBlockKey, newFrameKey, setTileWidth, tileHeight, blocksTileSe
 export function renderBlocksTileSet() {
     if(currentTileSet === undefined) return
 
-    renderTileSetCanvas(blocksTileSetCanvas)
+    renderTileSetCanvas()
 
     for(let y = 0; y < currentTileSet.rows; y++) {
         for(let x = 0; x < currentTileSet.columns; x++) {
@@ -46,23 +46,25 @@ export function renderBlocksTileSet() {
         , (tileSetRegion.width + 1) * tileWidth, (tileSetRegion.height + 1) * tileHeight)
 }
 
-export function renderTileSetCanvas(canvas, tileFunction) {
+export function renderTileSetCanvas() {
     let images = currentTileSet.images
     let tex = images.texture
     let scale = Math.min((document.body.offsetWidth - 100) / tex.width
         , (document.body.offsetHeight - 100) / tex.height, 2)
-    let style = canvas.node.style
+    let style = currentCanvas.node.style
     let canvasWidth = tex.width * scale
     let canvasHeight = tex.height * scale
     style.width = canvasWidth + "px"
     style.height = canvasHeight + "px"
 
-    setCanvas(canvas)
+    setCanvas(currentCanvas)
     ctx.canvas.width = canvasWidth
     ctx.canvas.height = canvasHeight
     ctx.drawImage(tex, 0, 0, tex.width, tex.height, 0, 0, canvasWidth, canvasHeight)
 
     setTileWidth(canvasWidth / images.columns, canvasHeight / images.rows)
+
+    if(canvasUnderCursor !== currentCanvas) return
 
     drawDashedRegion(Math.floor(canvasMouse.x / tileWidth) * tileWidth + 3
         , Math.floor(canvasMouse.y / tileHeight) * tileHeight + 3, tileWidth - 7, tileHeight - 7)
