@@ -32,9 +32,29 @@ class Position {
 let addCategory = element("add_category")
 let removeCategory = element("remove_category")
 
+let categoriesMap = new Map()
+let categoriesBox = element("category")
+
+function updateCategoriesList() {
+    while(categoriesBox.options.length > 0) {
+        categoriesBox.remove(0)
+    }
+    if(!categoriesMap.has(currentTileSet)) return
+    let array = categoriesMap.get(currentTileSet)
+    for(let i = 0; i < array.length; i++) {
+        let category = array[i]
+        let option = document.createElement("option")
+        option.value = i
+        option.category = category
+        option.innerHTML = category.name
+        categoriesBox.appendChild(option)
+        if(category === currentCategory) option.selected = true
+    }
+}
+
 export function initRulesWindow() {
     categoriesBox.onchange = (event) => {
-        currentCategory = event.target.value
+        currentCategory = event.target[event.target.value].category
     }
 
     addCategory.onclick = (event) => {
@@ -53,9 +73,10 @@ export function initRulesWindow() {
     }
 
     removeCategory.onclick = (event) => {
+        if(currentCategory === undefined) return
         if(!confirm(`Действительно удалить категорию ${currentCategory.name}?`)) return
         let array = categoriesMap.get(currentTileSet)
-        removeFromArray(currentCategory, )
+        removeFromArray(currentCategory, array)
         currentCategory = array.length > 0 ? array[0] : undefined
         updateCategoriesList()
     }
@@ -102,23 +123,6 @@ export function renderRulesGrid() {
 
 export function renderRulesList() {
 
-}
-
-let categoriesMap = new Map()
-let categoriesBox = element("category")
-
-function updateCategoriesList() {
-    while(categoriesBox.options.length > 0) {
-        categoriesBox.remove(0)
-    }
-    if(!categoriesMap.has(currentTileSet)) return
-    for(let category of categoriesMap.get(currentTileSet)) {
-        let option = document.createElement("option")
-        option.value = category
-        option.innerHTML = category.name
-        categoriesBox.appendChild(option)
-        if(category === currentCategory) option.selected = true
-    }
 }
 
 export function updateRulesWindow() {
