@@ -6,7 +6,7 @@ import {drawX} from "./draw.js"
 import {currentTileSet} from "./tile_set.js"
 import {blockType} from "../src/block.js"
 import {visibility} from "../src/tile_set.js"
-import {delKey, newBlockKey, newFrameKey, setTileWidth, tileHeight, blocksTileSetCanvas, tileWidth
+import {delKey, newBlockKey, newFrameKey, setTileSize, tileHeight, blocksTileSetCanvas, tileWidth
     , toggleVisibilityKey} from "./main.js"
 
 export function renderBlocksTileSet() {
@@ -57,12 +57,11 @@ export function renderTileSetCanvas() {
     style.width = canvasWidth + "px"
     style.height = canvasHeight + "px"
 
-    setCanvas(currentCanvas)
     ctx.canvas.width = canvasWidth
     ctx.canvas.height = canvasHeight
     ctx.drawImage(tex, 0, 0, tex.width, tex.height, 0, 0, canvasWidth, canvasHeight)
 
-    setTileWidth(canvasWidth / images.columns, canvasHeight / images.rows)
+    setTileSize(canvasWidth / images.columns, canvasHeight / images.rows)
 
     if(canvasUnderCursor !== currentCanvas) return
 

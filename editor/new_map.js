@@ -33,7 +33,7 @@ export function updateNewMapWindow() {
     if(newMapKey.wasPressed) {
         newX = Math.round(mouse.x)
         newY = Math.round(mouse.y)
-        currentName = prompt("Введите имя новой карты:")
+        currentName = prompt("Введите название новой карты:")
         if(currentName === null) {
             hideWindow()
         } else {

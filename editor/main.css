@@ -8,10 +8,6 @@ body {
     margin: 0;
 }
 
-button, input {
-    width: 94px;
-}
-
 .screen {
     visibility: hidden;
     width: 100%;
@@ -61,15 +57,20 @@ button, input {
 }
 
 #rules_grid {
-    width: 200px;
-    height: 200px;
+    width: 225px;
+    height: 225px;
 }
 
-#add_category, #remove_category {
+button {
     flex-grow: 1;
 }
 
+.cancel {
+    flex-grow: 0;
+    width: 50px;
+}
+
 #rules_list {
-    width: 200px;
+    width: 225px;
     flex-grow: 1;
 }

@@ -59,7 +59,7 @@ export let blocksTileSetCanvas, rulesTileSetCanvas, rulesGrid, rulesList
 
 export let tileWidth, tileHeight
 
-export function setTileWidth(width, height) {
+export function setTileSize(width, height) {
     tileWidth = width
     tileHeight = height
 }

@@ -28,6 +28,7 @@ import {showWindow} from "../src/gui/window.js"
 import {mapRegion} from "./select_map_region.js"
 import {blockType} from "../src/block.js"
 import {drawDashedRegion} from "../src/draw.js"
+import {updateCategoriesList} from "./auto_tiling.js"
 
 export let currentTileMap, tileMapUnderCursor, currentTileSprite
 
@@ -88,6 +89,7 @@ export function mainWindowOperations() {
 
     if(autoTilingEditorKey.wasPressed) {
         showWindow(rulesWindow)
+        updateCategoriesList()
     }
 }
 
@@ -111,7 +113,7 @@ export function checkMapsWindowCollisions() {
 export function tileMapOperations() {
     if(renameMapKey.wasPressed) {
         // noinspection JSCheckFunctionSignatures
-        let name = prompt("Enter new name of tile map:", getName(tileMapUnderCursor))
+        let name = prompt("Введите новое название карты:", getName(tileMapUnderCursor))
         if(name !== null) {
             setName(tileMapUnderCursor, name)
         }
