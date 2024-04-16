@@ -1,6 +1,6 @@
 import {currentBlock, currentTile, currentTileSet} from "./tile_set.js"
 import {
-    blocksTileSetCanvas,
+    blocksTileSetCanvas, delKey,
     maps,
     rulesGrid, rulesList,
     rulesTileSetCanvas,
@@ -39,7 +39,7 @@ class Rule {
 class Position {
     dx
     dy
-    tile
+    tileNum
 }
 
 let addCategory = element("add_category")
@@ -151,21 +151,21 @@ export function renderRulesTileSet() {
 
     if(currentCategory === undefined) return
 
-    ctx.opacity = 0.5
-    ctx.fillStyle = "purple"
+    ctx.globalAlpha = 0.5
+    ctx.fillStyle = "mediumorchid"
     for(let rule of currentCategory.rules) {
         let tiles = rule.tiles
         for(let tileNum of tiles) {
             let x = (tileNum % currentTileSet.columns) * tileWidth
             let y = (Math.floor(tileNum / currentTileSet.columns)) * tileHeight
-            ctx.rect(x, y, tileWidth, tileHeight)
+            ctx.fillRect(x, y, tileWidth, tileHeight)
 
             if(currentRule === rule) {
                 drawDashedRegion(x, y, tileWidth, tileHeight)
             }
         }
     }
-    ctx.opacity = 1.0
+    ctx.globalAlpha = 1.0
 
     if(currentRule === undefined) return
 
@@ -193,6 +193,18 @@ export function renderRulesGrid() {
     }
     drawDashedRegion((currentGridDX + gridSize) * cellSize + 1, (currentGridDY + gridSize) * cellSize + 1
         , cellSize, cellSize)
+
+    if(currentRule !== undefined) {
+        for(let pos of currentRule.positions) {
+            currentTileSet.image(pos.tileNum).drawResized((pos.dx + gridSize) * cellSize + 1
+                , (pos.dy + gridSize) * cellSize + 1, cellSize - 1, cellSize - 1)
+        }
+
+        if(currentRule.tiles.length > 0) {
+            currentTileSet.image(currentRule.tiles[0]).drawResized(gridSize * cellSize + 1
+                , gridSize * cellSize + 1, cellSize - 1, cellSize - 1)
+        }
+    }
 
     if(canvasUnderCursor !== currentCanvas) return
 
@@ -224,24 +236,51 @@ export function renderRulesList() {
     }
 }
 
-export function updateRulesWindow() {
-    if(selectKey.wasPressed) {
-        if(canvasUnderCursor === rulesGrid) {
-            let cellSize = (rulesGrid.viewport.width - 1) / (gridSize * 2 + 1)
-            currentGridDX = Math.floor(canvasMouse.x / cellSize) - gridSize
-            currentGridDY = Math.floor(canvasMouse.y / cellSize) - gridSize
-        }
+function findPos(dx, dy, add = true) {
+    for(let pos of currentRule.positions) {
+        if(pos.dx === dx && pos.dy === dy) return pos
+    }
+    if(!add) return undefined
+    let pos = new Position()
+    pos.dx = currentGridDX
+    pos.dy = currentGridDY
+    currentRule.positions.push(pos)
+    return pos
+}
 
+export function updateRulesWindow() {
+    if(canvasUnderCursor === rulesGrid) {
+        let cellSize = (rulesGrid.viewport.width - 1) / (gridSize * 2 + 1)
+        let dx = Math.floor(canvasMouse.x / cellSize) - gridSize
+        let dy = Math.floor(canvasMouse.y / cellSize) - gridSize
+        if(selectKey.wasPressed) {
+            currentGridDX = dx
+            currentGridDY = dy
+        }
+        if(delKey.wasPressed) {
+            let pos = findPos(dx, dy, false)
+            if(pos !== undefined) {
+                removeFromArray(pos, currentRule.positions)
+            }
+        }
+    }
+
+    if(selectKey.wasPressed) {
         if(canvasUnderCursor === rulesTileSetCanvas) {
             if(currentRule !== undefined) {
                 let tiles = currentRule.tiles
                 let x = Math.floor(canvasMouse.x / tileWidth)
                 let y = Math.floor(canvasMouse.y / tileHeight)
                 let tileNum = x + y * currentTileSet.columns
-                if(tiles.includes(tileNum)) {
-                    removeFromArray(tileNum, tiles)
+                if(currentGridDX === 0 && currentGridDY === 0) {
+                    if(tiles.includes(tileNum)) {
+                        removeFromArray(tileNum, tiles)
+                    } else {
+                        tiles.push(tileNum)
+                    }
                 } else {
-                    tiles.push(tileNum)
+                    let pos = findPos(currentGridDX, currentGridDY)
+                    pos.tileNum = tileNum
                 }
             }
         }
@@ -254,6 +293,8 @@ export function updateRulesWindow() {
             let rules = currentCategory.rules
             if(ruleNum < rules.length) {
                 currentRule = rules[ruleNum]
+                currentGridDX = 0
+                currentGridDY = 0
             }
         }
     }
