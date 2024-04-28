@@ -22,9 +22,11 @@ export function loadData(texture) {
         new Block(6, 4, 3, 3, 1), new Block(0, 8, 3, 3, 1),
         new Block(3, 8, 1, 3, 1), new Block(4, 8, 3, 3, 1),
     ], [
-        new Category("new", [
-            new Rule([40, ], [new Position(-1, 0, 39), new Position(1, 0, 41), ]),
-            new Rule([37, ], [new Position(1, 0, 0), ]),
+        new Category("ground", [
+            new Rule([0, 1, 2, 3, 4, 5, 6, 15, 16, 7, 8, ], []),
+        ]),
+        new Category("water", [
+            new Rule([27, ], []),
         ]),
     ])
     tileSet["objects"] = new TileSet(new ImageArray(texture.objects, 10, 16, 0.5, 0.5, 1, 1), [
@@ -55,13 +57,10 @@ export function loadData(texture) {
         new Block(8, 4, 1, 3, 1), new Block(4, 10, 2, 3, 0),
         new Block(4, 13, 2, 3, 0), new Block(6, 13, 1, 3, 0),
         new Block(1, 9, 3, 2, 1),
-    ], [
-    ])
+    ], [])
     tileSet["blocks"] = new TileSet(new ImageArray(texture.blocks, 2, 1, 0.5, 0.5, 1, 1), [
         0, 0,
-    ], [
-    ], [
-    ])
+    ], [], [])
 
     tileMap["0-0"] = new TileMap(tileSet["blocks"], 4, 4, -18, -10, 1, 1, [
         0,   0,   0,   0,

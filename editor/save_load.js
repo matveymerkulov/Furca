@@ -38,7 +38,7 @@ export function arrayToString(array, columns, padding = 0) {
         text += (columns === undefined ? array[pos].toString() : array[pos].toString().padStart(padding, " ")) + ", "
     }
     removeIndent()
-    return text + (columns === undefined ? "" : "\n" + indent) + "]"
+    return text + (columns === undefined || array.length === 0 ? "" : "\n" + indent) + "]"
 }
 
 export function booleanArrayToString(array) {

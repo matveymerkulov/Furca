@@ -9,6 +9,7 @@ import {visibility} from "../src/tile_set.js"
 import {blockType} from "../src/block.js"
 import {tilesPerRow} from "./tile_zoom.js"
 import {updateY0, y0} from "./tile_pan.js"
+import {currentWindow} from "../src/gui/window.js"
 
 export let currentTile = 1, altTile = 0, currentTileSet, currentBlock
 export let maxY0 = 0
@@ -38,8 +39,8 @@ export function renderTileSet() {
             if(set === currentTileSet && (currentTile === i || altTile === i)) {
                 drawDashedRegion(x, y, size, size)
             }
-            if(canvasUnderCursor !== tiles) continue
-            if(selectKey.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
+            if(selectKey.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)
+                    && currentWindow === undefined && canvasUnderCursor === tiles) {
                 currentTile = i
                 currentBlock = undefined
                 setBlockSize(brushSize, brushSize)
@@ -58,7 +59,8 @@ export function renderTileSet() {
             let tHeight = block.height * cellHeight
             ctx.drawImage(texture, tx, ty, tWidth, tHeight, x, y, size, size)
 
-            if(selectKey.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)) {
+            if(selectKey.isDown && boxWithPointCollision(canvasMouse, x, y, size, size)
+                    && currentWindow === undefined && canvasUnderCursor === tiles) {
                 currentBlock = block
                 if(block.type === blockType.block) {
                     setBlockSize(block.width, block.height)

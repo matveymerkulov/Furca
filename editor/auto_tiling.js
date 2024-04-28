@@ -81,7 +81,6 @@ export function updateCategoriesList() {
     while(categoriesBox.options.length > 0) {
         categoriesBox.remove(0)
     }
-    if(currentTileSet === undefined) return
     let categories = currentTileSet.categories
     for(let i = 0; i < categories.length; i++) {
         let category = categories[i]

@@ -42,7 +42,9 @@ export function getSymbols(comparison, terminator) {
     }
 
     let start = pos
-    while(comparison(text.charAt(pos))) pos++
+    while(comparison(text.charAt(pos))) {
+        pos++
+    }
 
     return text.substring(start, pos)
 }
@@ -75,7 +77,7 @@ export function getString(terminator) {
 }
 
 export function getIntArray(terminator) {
-    if(getSymbol('[', terminator) === false) return ""
+    if(!getSymbol("[", terminator)) return ""
     let array = []
     while(true) {
         let num = getInt("]")
@@ -109,7 +111,10 @@ function getBlocks() {
     getSymbol("[")
     while(true) {
         let x = getInt("]")
-        if(x === "") return array
+        if(x === "")  {
+            pos++
+            return array
+        }
         let y = getInt()
         let width = getInt()
         let height = getInt()
@@ -120,9 +125,13 @@ function getBlocks() {
 
 function getPositions() {
     let array = []
+    getSymbol("[")
     while(true) {
         let dx = getInt("]")
-        if(dx === "") return array
+        if(dx === "") {
+            pos++
+            return array
+        }
         let dy = getInt()
         let tileNum = getInt()
         array.push(new Position(dx, dy, tileNum))
@@ -131,9 +140,13 @@ function getPositions() {
 
 function getRules() {
     let array = []
+    getSymbol("[")
     while(true) {
-        let tiles = getIntArray(")")
-        if(tiles === "") return array
+        let tiles = getIntArray("]")
+        if(tiles === "")  {
+            pos++
+            return array
+        }
         let positions = getPositions()
         array.push(new Rule(tiles, positions))
     }
@@ -141,9 +154,13 @@ function getRules() {
 
 function getCategories() {
     let array = []
+    getSymbol("[")
     while(true) {
         let name = getString("]")
-        if(name === "") return array
+        if(name === "") {
+            pos++
+            return array
+        }
         let rules = getRules()
         array.push(new Category(name, rules))
     }
