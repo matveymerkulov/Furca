@@ -24,7 +24,7 @@ export default class TileSet {
 
     toString() {
         return `new TileSet(${this.#images.toString()}, ${arrayToString(this.visibility, this.columns, 1)}`
-            + `, ${arrayToString(this.blocks)})`
+            + `, ${arrayToString(this.blocks, 2)})`
     }
 
     get images() {

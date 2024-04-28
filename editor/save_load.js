@@ -28,14 +28,14 @@ export function toString(value) {
     return value
 }
 
-export function arrayToString(array, columns, padding) {
+export function arrayToString(array, columns, padding = 0) {
     let text = "["
     addIndent()
     for(let pos = 0; pos < array.length; pos++) {
         if(columns !== undefined && (pos % columns) === 0) {
             text +=`\n${indent}`
         }
-        text += (columns === undefined ? array[pos].toString() : array[pos].toString().padStart(padding, " ")) + ","
+        text += (columns === undefined ? array[pos].toString() : array[pos].toString().padStart(padding, " ")) + ", "
     }
     removeIndent()
     return text + (columns === undefined ? "" : "\n" + indent) + "]"
@@ -66,11 +66,14 @@ export function projectToText() {
         text += `\ttileMap["${getName(map)}"] = ${map.toString()}\n`
     }
 
-    text += "\t\n\ttileMaps.add("
-    tileMaps.items.forEach(map => {
-        text += `tileMap["${getName(map)}"], `
-    })
-    text += ")\n"
+    text += "\n\ttileMaps.add("
+    for(let pos = 0; pos < tileMaps.items.length; pos++) {
+        if(pos % 4 === 0) {
+            text +="\n\t\t"
+        }
+        text += `tileMap["${getName(tileMaps.items[pos])}"], `
+    }
+    text += "\n\t)\n"
 
     text += "}"
     return text

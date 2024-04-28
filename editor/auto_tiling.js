@@ -19,6 +19,7 @@ import {tilesPerRow} from "./tile_zoom.js"
 import {tileSet} from "../src/project.js"
 import {boxWithPointCollision} from "../src/collisions.js"
 import {brushSize, setBlockSize} from "./tile_map.js"
+import {arrayToString} from "./save_load.js"
 
 let currentCategory, currentRule
 
@@ -28,6 +29,10 @@ class Category {
 
     constructor(name) {
         this.name = name
+    }
+
+    toString() {
+        return `new Category("${name}", ${arrayToString()}`
     }
 }
 
@@ -100,7 +105,7 @@ export function initRulesWindow() {
 
     addCategory.onclick = (event) => {
         let name = prompt("Введите имя новой категории:")
-        if(name === undefined) return
+        if(name === null) return
         addNewCategory(currentTileSet, name)
     }
 
