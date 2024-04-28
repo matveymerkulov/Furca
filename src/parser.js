@@ -3,6 +3,7 @@ import TileSet from "./tile_set.js"
 import ImageArray from "./image_array.js"
 import TileMap from "./tile_map.js"
 import {Block} from "./block.js"
+import {Category, Position, Rule} from "../editor/auto_tiling.js"
 
 let pos, text
 
@@ -73,8 +74,8 @@ export function getString(terminator) {
     }, terminator)
 }
 
-export function getIntArray() {
-    getSymbol('[')
+export function getIntArray(terminator) {
+    if(getSymbol('[', terminator) === false) return ""
     let array = []
     while(true) {
         let num = getInt("]")
@@ -117,6 +118,37 @@ function getBlocks() {
     }
 }
 
+function getPositions() {
+    let array = []
+    while(true) {
+        let dx = getInt("]")
+        if(dx === "") return array
+        let dy = getInt()
+        let tileNum = getInt()
+        array.push(new Position(dx, dy, tileNum))
+    }
+}
+
+function getRules() {
+    let array = []
+    while(true) {
+        let tiles = getIntArray(")")
+        if(tiles === "") return array
+        let positions = getPositions()
+        array.push(new Rule(tiles, positions))
+    }
+}
+
+function getCategories() {
+    let array = []
+    while(true) {
+        let name = getString("]")
+        if(name === "") return array
+        let rules = getRules()
+        array.push(new Category(name, rules))
+    }
+}
+
 export function getTileSet(texture, name) {
     getSymbol(".")
     let textureName = getToken()
@@ -128,8 +160,9 @@ export function getTileSet(texture, name) {
     let widthMul = getFloat()
     let visibility = getIntArray()
     let blocks = getBlocks()
+    let categories = getCategories()
     tileSet[name] = new TileSet(new ImageArray(texture[textureName], columns, rows, xMul, yMul, heightMul, widthMul)
-        , visibility, blocks)
+        , visibility, blocks, categories)
     getSymbol(")")
 }
 

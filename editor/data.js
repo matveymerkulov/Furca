@@ -3,6 +3,7 @@ import TileMap from "../src/tile_map.js"
 import ImageArray from "../src/image_array.js"
 import {tileMap, tileMaps, tileSet} from "../src/project.js"
 import {Block} from "../src/block.js"
+import {Category, Position, Rule} from "./auto_tiling.js"
 
 export function loadData(texture) {
     tileSet["floor"] = new TileSet(new ImageArray(texture.floor, 9, 11, 0.5, 0.5, 1, 1), [
@@ -18,8 +19,13 @@ export function loadData(texture) {
         2, 2, 2, 2, 2, 2, 2, 0, 0,
         2, 2, 2, 2, 2, 2, 2, 0, 0,
     ], [
-        new Block(6, 4, 3, 3, 1), new Block(0, 8, 3, 3, 1), new Block(3, 8, 1, 3, 1),
-        new Block(4, 8, 3, 3, 1),
+        new Block(6, 4, 3, 3, 1), new Block(0, 8, 3, 3, 1),
+        new Block(3, 8, 1, 3, 1), new Block(4, 8, 3, 3, 1),
+    ], [
+        new Category("new", [
+            new Rule([40, ], [new Position(-1, 0, 39), new Position(1, 0, 41), ]),
+            new Rule([37, ], [new Position(1, 0, 0), ]),
+        ]),
     ])
     tileSet["objects"] = new TileSet(new ImageArray(texture.objects, 10, 16, 0.5, 0.5, 1, 1), [
         0, 1, 1, 1, 2, 2, 2, 2, 2, 1,
@@ -40,15 +46,20 @@ export function loadData(texture) {
         2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
         0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
     ], [
-        new Block(4, 0, 3, 2, 0), new Block(7, 0, 2, 2, 0), new Block(4, 2, 3, 2, 0),
-        new Block(7, 2, 2, 2, 0), new Block(0, 8, 3, 1, 0), new Block(4, 8, 3, 1, 0),
-        new Block(6, 11, 1, 2, 0), new Block(0, 13, 2, 3, 1), new Block(2, 13, 2, 3, 1),
-        new Block(7, 13, 3, 3, 1), new Block(7, 10, 3, 3, 1), new Block(0, 9, 1, 3, 1),
-        new Block(8, 4, 1, 3, 1), new Block(4, 10, 2, 3, 0), new Block(4, 13, 2, 3, 0),
-        new Block(6, 13, 1, 3, 0), new Block(1, 9, 3, 2, 1),
+        new Block(4, 0, 3, 2, 0), new Block(7, 0, 2, 2, 0),
+        new Block(4, 2, 3, 2, 0), new Block(7, 2, 2, 2, 0),
+        new Block(0, 8, 3, 1, 0), new Block(4, 8, 3, 1, 0),
+        new Block(6, 11, 1, 2, 0), new Block(0, 13, 2, 3, 1),
+        new Block(2, 13, 2, 3, 1), new Block(7, 13, 3, 3, 1),
+        new Block(7, 10, 3, 3, 1), new Block(0, 9, 1, 3, 1),
+        new Block(8, 4, 1, 3, 1), new Block(4, 10, 2, 3, 0),
+        new Block(4, 13, 2, 3, 0), new Block(6, 13, 1, 3, 0),
+        new Block(1, 9, 3, 2, 1),
+    ], [
     ])
     tileSet["blocks"] = new TileSet(new ImageArray(texture.blocks, 2, 1, 0.5, 0.5, 1, 1), [
         0, 0,
+    ], [
     ], [
     ])
 

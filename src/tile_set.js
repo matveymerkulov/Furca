@@ -15,16 +15,19 @@ export default class TileSet {
     #collision
     visibility
     blocks
-    constructor(images, vis, blocks) {
+    categories
+
+    constructor(images, vis, blocks = [], categories = []) {
         this.#images = images
         this.#collision = new Array(images.quantity)
         this.visibility = vis ? vis : new Array(images.quantity).fill(visibility.visible)
-        this.blocks = blocks ? blocks : []
+        this.blocks = blocks
+        this.categories = categories
     }
 
     toString() {
         return `new TileSet(${this.#images.toString()}, ${arrayToString(this.visibility, this.columns, 1)}`
-            + `, ${arrayToString(this.blocks, 2)})`
+            + `, ${arrayToString(this.blocks, 2)}, ${arrayToString(this.categories, 1)})`
     }
 
     get images() {

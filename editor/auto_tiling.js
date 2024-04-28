@@ -23,34 +23,53 @@ import {arrayToString} from "./save_load.js"
 
 let currentCategory, currentRule
 
-class Category {
+export class Category {
     name
     rules = []
 
-    constructor(name) {
+    constructor(name, rules = []) {
         this.name = name
+        this.rules = rules
     }
 
     toString() {
-        return `new Category("${name}", ${arrayToString()}`
+        return `new Category("${this.name}", ${arrayToString(this.rules, 1)})`
     }
 }
 
-class Rule {
-    tiles = []
-    positions = []
+export class Rule {
+    tiles
+    positions
+
+    constructor(tiles = [], positions = []) {
+        this.tiles = tiles
+        this.positions = positions
+    }
+
+    toString() {
+        return `new Rule(${arrayToString(this.tiles)}, ${arrayToString(this.positions)})`
+    }
 }
 
-class Position {
+export class Position {
     dx
     dy
     tileNum
+
+    constructor(dx, dy, tileNum) {
+        this.dx = dx
+        this.dy = dy
+        this.tileNum = tileNum
+    }
+
+    toString() {
+        return `new Position(${this.dx}, ${this.dy}, ${this.tileNum})`
+    }
 }
 
 let addCategory = element("add_category")
 let removeCategory = element("remove_category")
 
-let categoriesMap = new Map()
 let categoriesBox = element("category")
 
 let addRule = element("add_rule")
@@ -62,15 +81,16 @@ export function updateCategoriesList() {
     while(categoriesBox.options.length > 0) {
         categoriesBox.remove(0)
     }
-    if(!categoriesMap.has(currentTileSet)) return
-    let array = categoriesMap.get(currentTileSet)
-    for(let i = 0; i < array.length; i++) {
-        let category = array[i]
+    if(currentTileSet === undefined) return
+    let categories = currentTileSet.categories
+    for(let i = 0; i < categories.length; i++) {
+        let category = categories[i]
         let option = document.createElement("option")
         option.category = category
-        option.value = i
+        option.value = i.toString()
         option.innerHTML = category.name
         categoriesBox.appendChild(option)
+        if(i === 0 && currentCategory === undefined) currentCategory = categories[0]
         if(category === currentCategory) option.selected = true
     }
 }
@@ -83,15 +103,8 @@ function findRule(rule) {
 }
 
 function addNewCategory(tileSet, name) {
-    let categories
-    if(!categoriesMap.has(tileSet)) {
-        categories = []
-        categoriesMap.set(tileSet, categories)
-    } else {
-        categories = categoriesMap.get(tileSet)
-    }
     currentCategory = new Category(name)
-    categories.push(currentCategory)
+    tileSet.categories.push(currentCategory)
     updateCategoriesList()
 }
 
@@ -112,9 +125,9 @@ export function initRulesWindow() {
     removeCategory.onclick = (event) => {
         if(currentCategory === undefined) return
         if(!confirm(`Действительно удалить категорию ${currentCategory.name}?`)) return
-        let array = categoriesMap.get(currentTileSet)
-        removeFromArray(currentCategory, array)
-        currentCategory = array.length > 0 ? array[0] : undefined
+        let categories = currentTileSet.categories
+        removeFromArray(currentCategory, categories)
+        currentCategory = categories.length > 0 ? categories[0] : undefined
         updateCategoriesList()
     }
 
@@ -147,8 +160,6 @@ export function initRulesWindow() {
     moveRuleRight.onclick = (event) => {
         moveRule(currentRule, 1)
     }
-
-    addNewCategory(tileSet["floor"], "new")
 }
 
 export function renderRulesTileSet() {
@@ -246,9 +257,7 @@ function findPos(dx, dy, add = true) {
         if(pos.dx === dx && pos.dy === dy) return pos
     }
     if(!add) return undefined
-    let pos = new Position()
-    pos.dx = currentGridDX
-    pos.dy = currentGridDY
+    let pos = new Position(currentGridDX, currentGridDY, undefined)
     currentRule.positions.push(pos)
     return pos
 }
@@ -291,15 +300,17 @@ export function updateRulesWindow() {
         }
 
         if(canvasUnderCursor === rulesList) {
-            let size = rulesList.viewport.width / tilesPerRow
-            let x = Math.floor(canvasMouse.x / size)
-            let y = Math.floor(canvasMouse.y / size)
-            let ruleNum = x + y * tilesPerRow
-            let rules = currentCategory.rules
-            if(ruleNum < rules.length) {
-                currentRule = rules[ruleNum]
-                currentGridDX = 0
-                currentGridDY = 0
+            if(currentCategory !== undefined) {
+                let size = rulesList.viewport.width / tilesPerRow
+                let x = Math.floor(canvasMouse.x / size)
+                let y = Math.floor(canvasMouse.y / size)
+                let ruleNum = x + y * tilesPerRow
+                let rules = currentCategory.rules
+                if(ruleNum < rules.length) {
+                    currentRule = rules[ruleNum]
+                    currentGridDX = 0
+                    currentGridDY = 0
+                }
             }
         }
     }
