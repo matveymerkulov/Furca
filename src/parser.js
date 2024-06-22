@@ -3,7 +3,7 @@ import TileSet from "./tile_set.js"
 import ImageArray from "./image_array.js"
 import TileMap from "./tile_map.js"
 import {Block} from "./block.js"
-import {Category, Position, Rule} from "../editor/auto_tiling.js"
+import {Category, Pos, Rule} from "../editor/auto_tiling.js"
 
 let pos, text
 
@@ -134,7 +134,7 @@ function getPositions() {
         }
         let dy = getInt()
         let tileNum = getInt()
-        array.push(new Position(dx, dy, tileNum))
+        array.push(new Pos(dx, dy, tileNum))
     }
 }
 

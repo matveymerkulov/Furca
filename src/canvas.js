@@ -19,6 +19,9 @@ export default class Canvas extends Sprite {
         node.addEventListener("mouseover", () => {
             canvasUnderCursor = this
         })
+        node.addEventListener("mouseout", () => {
+            canvasUnderCursor = undefined
+        })
 
         this.viewport = viewport
         this._vdx = 1.0

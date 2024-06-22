@@ -3,7 +3,7 @@ import TileMap from "../src/tile_map.js"
 import ImageArray from "../src/image_array.js"
 import {tileMap, tileMaps, tileSet} from "../src/project.js"
 import {Block} from "../src/block.js"
-import {Category, Position, Rule} from "./auto_tiling.js"
+import {Category, Pos, Rule} from "./auto_tiling.js"
 
 export function loadData(texture) {
     tileSet["floor"] = new TileSet(new ImageArray(texture.floor, 9, 11, 0.5, 0.5, 1, 1), [
@@ -26,7 +26,19 @@ export function loadData(texture) {
             new Rule([0, 1, 2, 3, 4, 5, 6, 15, 16, 7, 8, ], []),
         ]),
         new Category("water", [
-            new Rule([27, ], []),
+            new Rule([27, 0, ], [new Pos(-1, 0, 0), new Pos(0, -1, 0), ]),
+            new Rule([29, ], [new Pos(0, -1, 0), new Pos(1, 0, 0), ]),
+            new Rule([45, ], [new Pos(-1, 0, 0), new Pos(0, 1, 0), ]),
+            new Rule([47, ], [new Pos(1, 0, 0), new Pos(0, 1, 0), ]),
+            new Rule([10, ], [new Pos(1, 1, 0), ]),
+            new Rule([11, ], [new Pos(-1, 1, 0), ]),
+            new Rule([19, ], [new Pos(1, -1, 1), ]),
+            new Rule([20, ], [new Pos(-1, -1, 1), ]),
+            new Rule([28, ], [new Pos(0, -1, 0), ]),
+            new Rule([36, ], [new Pos(-1, 0, 0), ]),
+            new Rule([46, ], [new Pos(0, 1, 0), ]),
+            new Rule([38, ], [new Pos(1, 0, 0), ]),
+            new Rule([37, ], []),
         ]),
     ])
     tileSet["objects"] = new TileSet(new ImageArray(texture.objects, 10, 16, 0.5, 0.5, 1, 1), [

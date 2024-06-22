@@ -51,7 +51,7 @@ export class Rule {
     }
 }
 
-export class Position {
+export class Pos {
     dx
     dy
     tileNum
@@ -63,7 +63,7 @@ export class Position {
     }
 
     toString() {
-        return `new Position(${this.dx}, ${this.dy}, ${this.tileNum})`
+        return `new Pos(${this.dx}, ${this.dy}, ${this.tileNum})`
     }
 }
 
@@ -92,13 +92,6 @@ export function updateCategoriesList() {
         if(i === 0 && currentCategory === undefined) currentCategory = categories[0]
         if(category === currentCategory) option.selected = true
     }
-}
-
-function findRule(rule) {
-    for(let i = 0; i < currentCategory.rules.length; i++) {
-        if(currentCategory.rules[i] === rule) return i
-    }
-    return -1
 }
 
 function addNewCategory(tileSet, name) {
@@ -142,22 +135,29 @@ export function initRulesWindow() {
         currentRule = undefined
     }
 
+    function findRule(rule) {
+        for(let i = 0; i < currentCategory.rules.length; i++) {
+            if(currentCategory.rules[i] === rule) return i
+        }
+        return -1
+    }
+
     function moveRule(rule, di) {
         let i1 = findRule(rule)
         let i2 = i1 + di
         let rules = currentCategory.rules
-        if(i2 < 0 || i2 >= rules.length) return
-        let z = rules[i2]
-        rules[i2] = rules[i1]
-        rules[i1] = z
+        if(i1 < 0 || i2 < 0 || i2 >= rules.length) return
+        let z = rules[i1]
+        rules[i1] = rules[i2]
+        rules[i2] = z
     }
 
-    moveRuleLeft.onclick = (event) => {
-        moveRule(currentRule, -1)
+    moveRuleLeft.onclick = () => {
+        if(currentRule !== undefined) moveRule(currentRule, -1)
     }
 
-    moveRuleRight.onclick = (event) => {
-        moveRule(currentRule, 1)
+    moveRuleRight.onclick = () => {
+        if(currentRule !== undefined) moveRule(currentRule, 1)
     }
 }
 
@@ -256,7 +256,7 @@ function findPos(dx, dy, add = true) {
         if(pos.dx === dx && pos.dy === dy) return pos
     }
     if(!add) return undefined
-    let pos = new Position(currentGridDX, currentGridDY, undefined)
+    let pos = new Pos(currentGridDX, currentGridDY, undefined)
     currentRule.positions.push(pos)
     return pos
 }
