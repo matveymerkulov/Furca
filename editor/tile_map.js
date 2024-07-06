@@ -147,7 +147,6 @@ export function setTiles(column, row, width, height, tileNum, block) {
 
             function setTile(dx, dy) {
                 currentTileMap.setTile(xx, yy, block.x + dx + currentTileSet.columns * (block.y + dy))
-                enframeTile(currentTileMap, currentTileSet, xx, yy)
             }
 
             if(tileNum !== undefined) {
@@ -164,6 +163,15 @@ export function setTiles(column, row, width, height, tileNum, block) {
                 let dy = block.height < 3 || y === 0 ? y : (y === blockHeight - 1 ? 2 : 1)
                 setTile(dx, dy)
             }
+        }
+    }
+    for(let y = -1; y <= height; y++) {
+        let yy = row + y
+        if(yy < 0 || yy >= currentTileMap.rows) continue
+        for(let x = -1; x <= width; x++) {
+            let xx = column + x
+            if(xx < 0 || xx >= currentTileMap.columns) continue
+            enframeTile(currentTileMap, xx, yy)
         }
     }
 }

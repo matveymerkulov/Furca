@@ -271,10 +271,25 @@ export function updateRulesWindow() {
     }
 }
 
-export function enframeTile(map, set, x, y) {
-    for(let category of set.categories) {
+function findTileCategory(map, column, row) {
+    let tileNum = map.tile(column, row)
+    for(let category of map.tileSet.categories) {
         for(let rule of category.rules) {
-
+            if(rule.tile === tileNum) return category
         }
+    }
+    return undefined
+}
+
+export function enframeTile(map, column, row) {
+    let tileCategory = findTileCategory(map, column, row)
+    if(tileCategory === undefined) return
+    rule: for(let rule of tileCategory.rules) {
+        for(let pos of rule.positions) {
+            let category = findTileCategory(map, pos.dx + column, pos.dy + row)
+            if(category === tileCategory) continue rule
+        }
+        map.setTile(column, row, rule.tile)
+        return
     }
 }
