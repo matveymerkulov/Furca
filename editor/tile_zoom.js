@@ -1,6 +1,5 @@
 import {Action} from "../src/actions/action.js"
 import {canvasUnderCursor, currentCanvas} from "../src/canvas.js"
-import {screenMouse} from "../src/system.js"
 
 export let tilesPerRow = 8
 

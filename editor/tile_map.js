@@ -5,30 +5,29 @@ import {
     autoTilingEditorKey,
     changeBrushTypeKey,
     copyKey,
-    currentMode, decrementBrushSizeKey,
+    currentMode,
+    decrementBrushSizeKey,
     delKey,
     incrementBrushSizeKey,
     mode,
-    renameMapKey, rulesWindow,
+    renameMapKey,
+    rulesWindow,
     selectKey,
-    tileHeight,
     tileSetPropertiesKey,
     tileSetWindow,
-    tileWidth,
 } from "./main.js"
 import {getName, incrementName, setName} from "./names.js"
 import {ctx, distToScreen, xToScreen, yToScreen} from "../src/canvas.js"
-import {clearSelection, selectedTileMaps, mapSelectionRegion} from "./select_tile_maps.js"
-import {drawCross} from "./draw.js"
+import {clearSelection, mapSelectionRegion, selectedTileMaps} from "./select_tile_maps.js"
 import {altTile, currentBlock, currentTile, currentTileSet} from "./tile_set.js"
 import {updateNewMapWindow} from "./new_map.js"
 import Sprite from "../src/sprite.js"
-import {resetRegionSelector, tileSetRegion} from "./select_tile_set_region.js"
+import {resetRegionSelector} from "./select_tile_set_region.js"
 import {showWindow} from "../src/gui/window.js"
 import {mapRegion} from "./select_map_region.js"
 import {blockType} from "../src/block.js"
 import {drawDashedRegion} from "../src/draw.js"
-import {updateCategoriesList} from "./auto_tiling.js"
+import {enframeTile, updateCategoriesList} from "./auto_tiling.js"
 
 export let currentTileMap, tileMapUnderCursor, currentTileSprite
 
@@ -148,6 +147,7 @@ export function setTiles(column, row, width, height, tileNum, block) {
 
             function setTile(dx, dy) {
                 currentTileMap.setTile(xx, yy, block.x + dx + currentTileSet.columns * (block.y + dy))
+                enframeTile(currentTileMap, currentTileSet, xx, yy)
             }
 
             if(tileNum !== undefined) {

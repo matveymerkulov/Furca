@@ -1,13 +1,21 @@
 import {canvasUnderCursor, ctx, currentCanvas, setCanvas} from "../src/canvas.js"
 import {tileSetRegion} from "./select_tile_set_region.js"
 import {drawDashedRegion, drawRect} from "../src/draw.js"
-import {canvasMouse, mouse} from "../src/system.js"
+import {canvasMouse} from "../src/system.js"
 import {drawX} from "./draw.js"
 import {currentTileSet} from "./tile_set.js"
 import {blockType} from "../src/block.js"
 import {visibility} from "../src/tile_set.js"
-import {delKey, newBlockKey, newFrameKey, setTileSize, tileHeight, blocksTileSetCanvas, tileWidth
-    , toggleVisibilityKey} from "./main.js"
+import {
+    blocksTileSetCanvas,
+    delKey,
+    newBlockKey,
+    newFrameKey,
+    setTileSize,
+    tileHeight,
+    tileWidth,
+    toggleVisibilityKey
+} from "./main.js"
 
 export function renderBlocksTileSet() {
     if(currentTileSet === undefined) return

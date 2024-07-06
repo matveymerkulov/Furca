@@ -1,6 +1,6 @@
-import {clamp, selectKey, tiles} from "./main.js"
+import {selectKey, tiles} from "./main.js"
 import {tileSet} from "../src/project.js"
-import {canvasUnderCursor, ctx, distToScreen, setCanvas} from "../src/canvas.js"
+import {canvasUnderCursor, ctx} from "../src/canvas.js"
 import {drawDashedRegion} from "../src/draw.js"
 import {boxWithPointCollision} from "../src/collisions.js"
 import {canvasMouse} from "../src/system.js"

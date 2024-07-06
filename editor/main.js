@@ -13,7 +13,16 @@ import {loadData} from "./data.js"
 import SelectTileSetRegion from "./select_tile_set_region.js"
 import {renderBlocksTileSet, updateTileSetProperties} from "./tile_set_properties.js"
 import {renderTileSet} from "./tile_set.js"
-import {checkMapsWindowCollisions, currentTileMap, mainWindowOperations, mapModeOperations, renderMaps, tileMapOperations, tileMapUnderCursor, tileModeOperations} from "./tile_map.js"
+import {
+    checkMapsWindowCollisions,
+    currentTileMap,
+    mainWindowOperations,
+    mapModeOperations,
+    renderMaps,
+    tileMapOperations,
+    tileMapUnderCursor,
+    tileModeOperations
+} from "./tile_map.js"
 import {mapSizeWindow} from "./new_map.js"
 import {deleteCurrentDrag} from "../src/drag.js"
 import SelectMapRegion from "./select_map_region.js"
