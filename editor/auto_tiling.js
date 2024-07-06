@@ -11,15 +11,17 @@ let currentCategory, currentRule
 
 export class Category {
     name
-    rules = []
+    rules
+    prolong
 
-    constructor(name, rules = []) {
+    constructor(name, rules = [], prolong = false) {
         this.name = name
         this.rules = rules
+        this.prolong = prolong
     }
 
     toString() {
-        return `new Category("${this.name}", ${arrayToString(this.rules, 1)})`
+        return `new Category("${this.name}", ${arrayToString(this.rules, 1)}, ${this.prolong})`
     }
 }
 
@@ -65,6 +67,8 @@ export function updateCategoriesList() {
     while(categoriesBox.options.length > 0) {
         categoriesBox.remove(0)
     }
+
+    currentCategory = undefined
     let categories = currentTileSet.categories
     for(let i = 0; i < categories.length; i++) {
         let category = categories[i]
@@ -271,7 +275,16 @@ export function updateRulesWindow() {
     }
 }
 
-function findTileCategory(map, column, row) {
+function findTileCategory(map, column, row, prolong = false) {
+    if(prolong) {
+        if(column < 0) column = 0
+        if(column >= map.columns) column = map.columns - 1
+        if(row < 0) row = 0
+        if(row >= map.rows) row = map.rows - 1
+    } else {
+        if(column < 0 || column >= map.columns || row < 0 ||row >= map.rows) return undefined
+    }
+
     let tileNum = map.tile(column, row)
     for(let category of map.tileSet.categories) {
         for(let rule of category.rules) {
@@ -282,11 +295,12 @@ function findTileCategory(map, column, row) {
 }
 
 export function enframeTile(map, column, row) {
-    let tileCategory = findTileCategory(map, column, row)
+    let tileCategory = findTileCategory(map, column, row, false)
     if(tileCategory === undefined) return
+    let prolong = tileCategory.prolong
     rule: for(let rule of tileCategory.rules) {
         for(let pos of rule.positions) {
-            let category = findTileCategory(map, pos.dx + column, pos.dy + row)
+            let category = findTileCategory(map, pos.dx + column, pos.dy + row, prolong)
             if(category === tileCategory) continue rule
         }
         map.setTile(column, row, rule.tile)

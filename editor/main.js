@@ -162,6 +162,15 @@ project.init = (texture) => {
     }
 
     project.update = () => {
+        if(loadKey.wasPressed) {
+            projectFromStorage(texture)
+            initData()
+        }
+
+        if(saveKey.wasPressed) {
+            projectToStorage()
+        }
+
         if(currentWindow === tileSetWindow) {
             updateTileSetProperties()
             return
@@ -177,15 +186,6 @@ project.init = (texture) => {
 
         if(switchModeKey.wasPressed) {
             currentMode = currentMode === mode.tiles ? mode.maps : mode.tiles
-        }
-
-        if(loadKey.wasPressed) {
-            projectFromStorage(texture)
-            initData()
-        }
-
-        if(saveKey.wasPressed) {
-            projectToStorage()
         }
 
         mainWindowOperations()
