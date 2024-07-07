@@ -29,7 +29,7 @@ export class Rule {
     tile
     positions
 
-    constructor(tile, positions = []) {
+    constructor(tile = 0, positions = []) {
         this.tile = tile
         this.positions = positions
     }

@@ -178,8 +178,9 @@ export function getTileSet(texture, name) {
     let visibility = getIntArray()
     let blocks = getBlocks()
     let categories = getCategories()
+    let prolong = getInt()
     tileSet[name] = new TileSet(new ImageArray(texture[textureName], columns, rows, xMul, yMul, heightMul, widthMul)
-        , visibility, blocks, categories)
+        , visibility, blocks, categories, prolong === 1)
     getSymbol(")")
 }
 
