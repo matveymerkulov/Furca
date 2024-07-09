@@ -176,16 +176,25 @@ export function setTiles(column, row, width, height, tileNum, block) {
     }
 }
 
+let startTileColumn, startTileRow
+
 export function tileModeOperations() {
     let brushWidth = currentTileMap.cellWidth * blockWidth
     let brushHeight = currentTileMap.cellWidth * blockHeight
     let column = Math.floor(currentTileMap.fColumn(mouse) - 0.5 * (brushWidth - 1))
     let row = Math.floor(currentTileMap.fRow(mouse) - 0.5 * (brushHeight - 1))
 
+    if(selectKey.wasPressed) {
+        startTileColumn = column
+        startTileRow = row
+    }
+
     if(selectKey.isDown) {
         if(currentBlock === undefined) {
             setTiles(column, row, blockWidth, blockHeight, currentTile)
         } else if(currentBlock.type === blockType.block) {
+            column = Math.floor((column - startTileColumn) / blockWidth) * blockWidth + startTileColumn
+            row = Math.floor((row - startTileRow) / blockHeight) * blockHeight + startTileRow
             setTiles(column, row, blockWidth, blockHeight, undefined, currentBlock)
         }
     } else if(delKey.isDown) {
