@@ -19,7 +19,7 @@ import {
 import {getName, incrementName, setName} from "./names.js"
 import {ctx, distToScreen, xToScreen, yToScreen} from "../src/canvas.js"
 import {clearSelection, mapSelectionRegion, selectedTileMaps} from "./select_tile_maps.js"
-import {altTile, currentBlock, currentTile, currentTileSet} from "./tile_set.js"
+import {currentBlock, currentTile, currentTileSet} from "./tile_set.js"
 import {updateNewMapWindow} from "./new_map.js"
 import Sprite from "../src/sprite.js"
 import {resetRegionSelector} from "./select_tile_set_region.js"
@@ -198,7 +198,7 @@ export function tileModeOperations() {
             setTiles(column, row, blockWidth, blockHeight, undefined, currentBlock)
         }
     } else if(delKey.isDown) {
-        setTiles(column, row, blockWidth, blockHeight, altTile)
+        setTiles(column, row, blockWidth, blockHeight, currentTileSet.altTile)
     }
 
     if(changeBrushTypeKey.wasPressed) {

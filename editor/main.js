@@ -12,7 +12,7 @@ import {setName} from "./names.js"
 import {loadData} from "./data.js"
 import SelectTileSetRegion from "./select_tile_set_region.js"
 import {renderBlocksTileSet, updateTileSetProperties} from "./tile_set_properties.js"
-import {renderTileSet} from "./tile_set.js"
+import {renderTileSet, tileSetOperations} from "./tile_set.js"
 import {
     checkMapsWindowCollisions,
     currentTileMap,
@@ -179,6 +179,11 @@ project.init = (texture) => {
 
         if(currentWindow === rulesWindow) {
             updateRulesWindow()
+            return
+        }
+
+        if(canvasUnderCursor === tiles) {
+            tileSetOperations()
             return
         }
 
