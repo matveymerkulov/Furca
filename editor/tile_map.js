@@ -123,7 +123,7 @@ export let brush = {
     square: Symbol("square"),
     circle: Symbol("circle"),
 }
-export let brushSize = 2, brushType = brush.square
+export let brushSize = 1, brushType = brush.square
 let tileSprite = new Sprite()
 let blockWidth = brushSize, blockHeight = brushSize
 

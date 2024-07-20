@@ -49,9 +49,12 @@ function processTiles(tileFunction, blockFunction) {
             let tWidth = block.width * cellWidth
             let tHeight = block.height * cellHeight
 
+
+
             blockFunction(set, block, texture, tx, ty, tWidth, tHeight, x, y, size)
         }
     }
+
     maxY0 = Math.max(y + size - tiles.viewport.height + y0, 0)
     updateY0()
 }
@@ -60,15 +63,31 @@ function processTiles(tileFunction, blockFunction) {
 export function renderTileSet() {
     processTiles((set, images, i, x, y, size) => {
         images.image(i).drawResized(x, y, size, size)
+
         if(set !== currentTileSet) return
+
         if(currentTile === i) {
             drawDashedRegion(x + 1, y + 1, size - 2, size - 2)
         }
+
         if(set.altTile === i) {
             drawDashedRegion(x + 3, y + 3, size - 6, size - 6)
         }
     }, (set, block, texture, tx, ty, tWidth, tHeight, x, y, size) => {
-        ctx.drawImage(texture, tx, ty, tWidth, tHeight, x, y, size, size)
+        let x0, y0, width0, height0
+        if(tWidth >= tHeight) {
+            width0 = size
+            height0 = size * tHeight / tWidth
+            x0 = x
+            y0 = y + 0.5 * (size - height0)
+        } else {
+            height0 = size
+            width0 = size * tWidth / tHeight
+            x0 = x + 0.5 * (size - width0)
+            y0 = y + 0.5 * (size - height0)
+        }
+
+        ctx.drawImage(texture, tx, ty, tWidth, tHeight, x0, y0, width0, height0)
 
         if(set === currentTileSet && currentBlock === block) {
             drawDashedRegion(x, y, size, size)

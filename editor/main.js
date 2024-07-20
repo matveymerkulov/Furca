@@ -47,8 +47,9 @@ project.getAssets = () => {
         texture: {
             floor: "farm_floor.png",
             objects: "farm_furniture.png",
-            blocks: "tetris.png",
+            blocks: "blocks.png",
             smooth: "smooth.png",
+            colors: "colors.png",
         },
         sound: {
         }
