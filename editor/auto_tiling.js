@@ -20,6 +20,14 @@ export class Category {
         this.prolong = prolong
     }
 
+    copy(newName, d) {
+        let newRules = new Array(this.rules.length)
+        for(let i = 0; i < newRules.length; i++) {
+            newRules[i] = this.rules[i].copy(d)
+        }
+        return new Category(newName, newRules, this.prolong)
+    }
+
     toString() {
         return `new Category("${this.name}", ${arrayToString(this.rules, 1)}, ${this.prolong})`
     }
@@ -32,6 +40,14 @@ export class Rule {
     constructor(tile = 0, positions = []) {
         this.tile = tile
         this.positions = positions
+    }
+
+    copy(d) {
+        let newPositions = new Array(this.positions.length)
+        for(let i = 0; i < newPositions.length; i++) {
+            newPositions[i] = this.positions[i].copy()
+        }
+        return new Rule(this.tile + d, newPositions)
     }
 
     toString() {
@@ -48,6 +64,10 @@ export class Pos {
         this.dy = dy
     }
 
+    copy() {
+        return new Pos(this.dx, this.dy)
+    }
+
     toString() {
         return `new Pos(${this.dx}, ${this.dy})`
     }
@@ -55,6 +75,8 @@ export class Pos {
 
 let addCategory = element("add_category")
 let removeCategory = element("remove_category")
+let renameCategory = element("rename_category")
+let copyCategory = element("copy_category")
 
 let categoriesBox = element("category")
 
@@ -82,12 +104,6 @@ export function updateCategoriesList() {
     }
 }
 
-function addNewCategory(tileSet, name) {
-    currentCategory = new Category(name)
-    tileSet.categories.push(currentCategory)
-    updateCategoriesList()
-}
-
 export function initRulesWindow() {
     rulesList.viewport.width = rulesList.node.offsetWidth
     rulesList.viewport.height = rulesList.node.offsetHeight
@@ -96,13 +112,15 @@ export function initRulesWindow() {
         currentCategory = event.target[event.target.value].category
     }
 
-    addCategory.onclick = (event) => {
+    addCategory.onclick = () => {
         let name = prompt("Введите имя новой категории:")
         if(name === null) return
-        addNewCategory(currentTileSet, name)
+        currentCategory = new Category(name)
+        currentTileSet.categories.push(currentCategory)
+        updateCategoriesList()
     }
 
-    removeCategory.onclick = (event) => {
+    removeCategory.onclick = () => {
         if(currentCategory === undefined) return
         if(!confirm(`Действительно удалить категорию ${currentCategory.name}?`)) return
         let categories = currentTileSet.categories
@@ -111,13 +129,31 @@ export function initRulesWindow() {
         updateCategoriesList()
     }
 
-    addRule.onclick = (event) => {
+    renameCategory.onclick = () => {
+        if(currentCategory === undefined) return
+        let name = prompt("Введите имя категории:", currentCategory.name)
+        if(name === null) return
+        currentCategory.name = name
+        updateCategoriesList()
+    }
+
+    copyCategory.onclick = () => {
+        if(currentCategory === undefined) return
+        let name = prompt("Введите имя новой категории:", currentCategory.name)
+        if(name === null) return
+        let d = parseInt(prompt("Введите смещение:"))
+        if(isNaN(d)) return
+        currentCategory = currentCategory.copy(name, d)
+        currentTileSet.categories.push(currentCategory)
+    }
+
+    addRule.onclick = () => {
         if(currentCategory === undefined) return
         currentRule = new Rule()
         currentCategory.rules.push(currentRule)
     }
 
-    removeRule.onclick = (event) => {
+    removeRule.onclick = () => {
         if(currentRule === undefined) return
         removeFromArray(currentRule, currentCategory.rules)
         currentRule = undefined

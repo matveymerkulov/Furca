@@ -74,18 +74,10 @@ export function renderTileSet() {
             drawDashedRegion(x + 3, y + 3, size - 6, size - 6)
         }
     }, (set, block, texture, tx, ty, tWidth, tHeight, x, y, size) => {
-        let x0, y0, width0, height0
-        if(tWidth >= tHeight) {
-            width0 = size
-            height0 = size * tHeight / tWidth
-            x0 = x
-            y0 = y + 0.5 * (size - height0)
-        } else {
-            height0 = size
-            width0 = size * tWidth / tHeight
-            x0 = x + 0.5 * (size - width0)
-            y0 = y + 0.5 * (size - height0)
-        }
+        let width0 = tWidth >= tHeight ? size : size * tWidth / tHeight
+        let height0 = tWidth >= tHeight ? size * tHeight / tWidth : size
+        let x0 = x + 0.5 * (size - width0)
+        let y0 = y + 0.5 * (size - height0)
 
         ctx.drawImage(texture, tx, ty, tWidth, tHeight, x0, y0, width0, height0)
 
