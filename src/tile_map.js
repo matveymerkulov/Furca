@@ -114,17 +114,20 @@ export default class TileMap extends Box {
         let tileSet = this.tileSet
         let images = tileSet.images
         for(let row = 0; row < this.#rows; row++) {
-            let y = y0 + height * row
+            let intY = Math.floor(y0 + height * row)
+            let intHeight = Math.floor(y0 + height * (row + 1)) - intY
             for(let column = 0; column < this.#columns; column++) {
                 let tileNum = this.tile(column, row)
                 if(tileNum === this.emptyTile) continue
                 let x = x0 + width * column
-                images.image(tileNum).drawResized(x, y, width, height)
+                let intX = Math.floor(x0 + width * column)
+                let intWidth = Math.floor(x0 + width * (column + 1)) - intX
+                images.image(tileNum).drawResized(intX, intY, intWidth, intHeight)
                 if(!showCollisionShapes) continue
                 let shape = tileSet.collisionShape(tileNum)
                 if(shape === undefined) continue
-                collisionShape.drawResized(x + distToScreen(shape.x - shape.halfWidth)
-                    , y + distToScreen(shape.y - shape.halfHeight)
+                collisionShape.drawResized(intX + distToScreen(shape.x - shape.halfWidth)
+                    , intY + distToScreen(shape.y - shape.halfHeight)
                     , width * shape.width, height * shape.height, shape.shapeType)
             }
         }
