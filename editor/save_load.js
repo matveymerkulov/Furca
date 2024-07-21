@@ -35,7 +35,8 @@ export function arrayToString(array, columns, padding = 0) {
         if(columns !== undefined && (pos % columns) === 0) {
             text +=`\n${indent}`
         }
-        text += (columns === undefined ? array[pos].toString() : array[pos].toString().padStart(padding, " ")) + ", "
+        let item = array[pos]
+        text += (columns === undefined ? toString(item) : item.toString().padStart(padding, " ")) + ", "
     }
     removeIndent()
     return text + (columns === undefined || array.length === 0 ? "" : "\n" + indent) + "]"

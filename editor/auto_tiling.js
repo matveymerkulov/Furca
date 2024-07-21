@@ -1,8 +1,8 @@
-import {currentTileSet} from "./tile_set.js"
+import {altGroup, currentTileSet} from "./tile_set.js"
 import {rulesGrid, rulesList, rulesTileSetCanvas, selectKey, tileHeight, tileWidth} from "./main.js"
 import {renderTileSetCanvas} from "./tile_set_properties.js"
 import {canvasUnderCursor, ctx, currentCanvas} from "../src/canvas.js"
-import {canvasMouse, element, removeFromArray} from "../src/system.js"
+import {canvasMouse, element, removeFromArray, rndi} from "../src/system.js"
 import {drawDashedRegion, drawRect} from "../src/draw.js"
 import {tilesPerRow} from "./tile_zoom.js"
 import {arrayToString} from "./save_load.js"
@@ -339,7 +339,8 @@ export function enframeTile(map, column, row) {
             let category = findTileCategory(map, pos.dx + column, pos.dy + row, prolong)
             if(category === tileCategory) continue rule
         }
-        map.setTile(column, row, rule.tile)
+        map.setTile(column, row, altGroup !== undefined && altGroup[0] === rule.tile
+            ? altGroup[rndi(0, altGroup.length)] : rule.tile)
         return
     }
 }

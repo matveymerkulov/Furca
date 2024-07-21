@@ -11,7 +11,7 @@ import {tilesPerRow} from "./tile_zoom.js"
 import {updateY0, y0} from "./tile_pan.js"
 import {currentWindow} from "../src/gui/window.js"
 
-export let currentTile = 1, currentTileSet, currentBlock
+export let currentTile = 1, currentTileSet, currentBlock, currentGroup, altGroup
 export let maxY0 = 0
 
 function processTiles(tileFunction, blockFunction) {
@@ -35,7 +35,6 @@ function processTiles(tileFunction, blockFunction) {
         for(let i = 0; i < images.quantity; i++) {
             if(set.visibility[i] !== visibility.visible) continue
             incrementPos()
-
             tileFunction(set, images, i, x, y, size)
         }
 
@@ -48,9 +47,6 @@ function processTiles(tileFunction, blockFunction) {
             let ty = block.y * cellHeight
             let tWidth = block.width * cellWidth
             let tHeight = block.height * cellHeight
-
-
-
             blockFunction(set, block, texture, tx, ty, tWidth, tHeight, x, y, size)
         }
     }
@@ -87,6 +83,14 @@ export function renderTileSet() {
     })
 }
 
+function findGroup(set, tileNum) {
+    for(let group of set.groups) {
+        if(group[0] !== tileNum) continue
+        return group
+    }
+    return undefined
+}
+
 export function tileSetOperations() {
     processTiles((set, images, i, x, y, size) => {
         if((selectKey.wasPressed || delKey.wasPressed) && boxWithPointCollision(canvasMouse, x, y, size, size)
@@ -96,8 +100,10 @@ export function tileSetOperations() {
                 currentBlock = undefined
                 setBlockSize(brushSize, brushSize)
                 currentTileSet = set
+                currentGroup = findGroup(set, currentTile)
             } else {
                 set.altTile = set.altTile === i ? -1 : i
+                altGroup = findGroup(set, set.altTile)
             }
         }
     }, (set, block, texture, tx, ty, tWidth, tHeight, x, y, size) => {

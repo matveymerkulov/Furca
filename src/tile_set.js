@@ -17,20 +17,22 @@ export default class TileSet {
     blocks
     categories
     altTile
+    groups
 
-    constructor(images, vis, blocks = [], categories = [], altTile = -1) {
+    constructor(images, vis, blocks = [], categories = [], altTile = -1, groups = []) {
         this.#images = images
         this.#collision = new Array(images.quantity)
         this.visibility = vis ? vis : new Array(images.quantity).fill(visibility.visible)
         this.blocks = blocks
         this.categories = categories
         this.altTile = altTile
+        this.groups = groups
     }
 
     toString() {
         return `new TileSet(${this.#images.toString()}, ${arrayToString(this.visibility, this.columns, 1)}`
             + `, ${arrayToString(this.blocks, 2)}, ${arrayToString(this.categories, 1)}`
-            + `, ${this.altTile})`
+            + `, ${this.altTile}, ${arrayToString(this.groups)})`
     }
 
     get images() {

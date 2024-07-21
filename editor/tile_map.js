@@ -1,4 +1,4 @@
-import {mouse, removeFromArray} from "../src/system.js"
+import {mouse, removeFromArray, rndi} from "../src/system.js"
 import {tileMap, tileMaps} from "../src/project.js"
 import {addTileMap} from "./create_tile_map.js"
 import {
@@ -19,7 +19,7 @@ import {
 import {getName, incrementName, setName} from "./names.js"
 import {ctx, distToScreen, xToScreen, yToScreen} from "../src/canvas.js"
 import {clearSelection, mapSelectionRegion, selectedTileMaps} from "./select_tile_maps.js"
-import {currentBlock, currentTile, currentTileSet} from "./tile_set.js"
+import {altGroup, currentBlock, currentGroup, currentTile, currentTileSet} from "./tile_set.js"
 import {updateNewMapWindow} from "./new_map.js"
 import Sprite from "../src/sprite.js"
 import {resetRegionSelector} from "./select_tile_set_region.js"
@@ -132,7 +132,7 @@ export function setBlockSize(width, height) {
     blockHeight = height
 }
 
-export function setTiles(column, row, width, height, tileNum, block) {
+export function setTiles(column, row, width, height, tileNum, block, group) {
     if(block !== undefined && block.type === blockType.frame) {
         if(block.width < 3) width = block.width
         if(block.height < 3) height = block.height
@@ -155,7 +155,7 @@ export function setTiles(column, row, width, height, tileNum, block) {
                     let dy = y - 0.5 * (height - 1)
                     if(Math.sqrt(dx * dx + dy * dy) > 0.5 * width) continue
                 }
-                currentTileMap.setTile(xx, yy, tileNum)
+                currentTileMap.setTile(xx, yy, group === undefined ? tileNum : group[rndi(0, group.length)])
             } else if(block.type === blockType.block) {
                 setTile(x, y)
             } else if(block.type === blockType.frame) {
@@ -191,14 +191,14 @@ export function tileModeOperations() {
 
     if(selectKey.isDown) {
         if(currentBlock === undefined) {
-            setTiles(column, row, blockWidth, blockHeight, currentTile)
+            setTiles(column, row, blockWidth, blockHeight, currentTile, undefined, currentGroup)
         } else if(currentBlock.type === blockType.block) {
             column = Math.floor((column - startTileColumn) / blockWidth) * blockWidth + startTileColumn
             row = Math.floor((row - startTileRow) / blockHeight) * blockHeight + startTileRow
             setTiles(column, row, blockWidth, blockHeight, undefined, currentBlock)
         }
     } else if(delKey.isDown) {
-        setTiles(column, row, blockWidth, blockHeight, currentTileSet.altTile)
+        setTiles(column, row, blockWidth, blockHeight, currentTileSet.altTile, undefined, altGroup)
     }
 
     if(changeBrushTypeKey.wasPressed) {
