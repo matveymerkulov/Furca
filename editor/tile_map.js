@@ -9,7 +9,7 @@ import {
     decrementBrushSizeKey,
     delKey,
     incrementBrushSizeKey,
-    mode,
+    mode, rectangleModeKey,
     renameMapKey,
     rulesWindow,
     selectKey,
@@ -145,10 +145,6 @@ export function setTiles(column, row, width, height, tileNum, block, group) {
             let xx = column + x
             if(xx < 0 || xx >= currentTileMap.columns) continue
 
-            function setTile(dx, dy) {
-                currentTileMap.setTile(xx, yy, block.x + dx + currentTileSet.columns * (block.y + dy))
-            }
-
             if(tileNum !== undefined) {
                 if(brushType === brush.circle) {
                     let dx = x - 0.5 * (width - 1)
@@ -157,11 +153,13 @@ export function setTiles(column, row, width, height, tileNum, block, group) {
                 }
                 currentTileMap.setTile(xx, yy, group === undefined ? tileNum : group[rndi(0, group.length)])
             } else if(block.type === blockType.block) {
-                setTile(x, y)
+                currentTileMap.setTile(xx, yy, block.x + (x % block.width)
+                    + currentTileSet.columns * (block.y + (y % block.height)))
             } else if(block.type === blockType.frame) {
                 let dx = block.width < 3 || x === 0 ? x : (x === blockWidth - 1 ? 2 : 1)
                 let dy = block.height < 3 || y === 0 ? y : (y === blockHeight - 1 ? 2 : 1)
-                setTile(dx, dy)
+                currentTileMap.setTile(xx, yy, block.x + dx + currentTileSet.columns * (block.y + dy))
+
             }
         }
     }
@@ -177,6 +175,7 @@ export function setTiles(column, row, width, height, tileNum, block, group) {
 }
 
 let startTileColumn, startTileRow
+export let rectangleMode = false
 
 export function tileModeOperations() {
     let brushWidth = currentTileMap.cellWidth * blockWidth
@@ -189,13 +188,19 @@ export function tileModeOperations() {
         startTileRow = row
     }
 
+    if(rectangleModeKey.wasPressed) {
+        rectangleMode = !rectangleMode
+    }
+
     if(selectKey.isDown) {
-        if(currentBlock === undefined) {
-            setTiles(column, row, blockWidth, blockHeight, currentTile, undefined, currentGroup)
-        } else if(currentBlock.type === blockType.block) {
-            column = Math.floor((column - startTileColumn) / blockWidth) * blockWidth + startTileColumn
-            row = Math.floor((row - startTileRow) / blockHeight) * blockHeight + startTileRow
-            setTiles(column, row, blockWidth, blockHeight, undefined, currentBlock)
+        if(!rectangleMode) {
+            if(currentBlock === undefined) {
+                setTiles(column, row, blockWidth, blockHeight, currentTile, undefined, currentGroup)
+            } else if(currentBlock.type === blockType.block) {
+                column = Math.floor((column - startTileColumn) / blockWidth) * blockWidth + startTileColumn
+                row = Math.floor((row - startTileRow) / blockHeight) * blockHeight + startTileRow
+                setTiles(column, row, blockWidth, blockHeight, undefined, currentBlock)
+            }
         }
     } else if(delKey.isDown) {
         setTiles(column, row, blockWidth, blockHeight, currentTileSet.altTile, undefined, altGroup)
