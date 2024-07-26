@@ -1,4 +1,3 @@
-import {maps} from "./main.js"
 import {mouse} from "../src/system.js"
 import Drag from "../src/drag.js"
 import {currentBlock, currentTile, currentTileSet} from "./tile_set.js"
@@ -13,7 +12,7 @@ export default class SelectMapRegion extends Drag {
     #y
 
     conditions() {
-        return currentCanvas === maps && currentTileMap !== undefined
+        return currentTileMap !== undefined
             && ((currentBlock !== undefined && currentBlock.type === blockType.frame) || rectangleMode)
     }
 
@@ -36,7 +35,7 @@ export default class SelectMapRegion extends Drag {
     }
 
     end() {
-        setBlockSize(mapRegion.width, mapRegion.height + 1)
+        setBlockSize(mapRegion.width + 1, mapRegion.height + 1)
         setTiles(mapRegion.x, mapRegion.y, mapRegion.width + 1, mapRegion.height + 1
             , currentBlock === undefined ? currentTile : undefined, currentBlock)
         mapRegion = undefined

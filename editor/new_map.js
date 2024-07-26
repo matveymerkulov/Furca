@@ -1,6 +1,5 @@
 import {element, mouse} from "../src/system.js"
-import {hideWindow, showWindow} from "../src/gui/window.js"
-import {newMapKey} from "./main.js"
+import {hideWindow, Win} from "../src/gui/window.js"
 import {tileSet} from "../src/project.js"
 import {createTileMap} from "./create_tile_map.js"
 
@@ -11,7 +10,10 @@ let tileSets = element("tile_sets")
 let columnsField = element("columns")
 let rowsField = element("rows")
 
-export function mapSizeWindow() {
+export let mapSizeWindow = new Win("map_size")
+export let tileSetSelectionWindow = new Win("select_tile_set")
+
+export function initTileSetSelectionWindow() {
     element("map_size_ok").onclick = () => {
         tileSets.innerHTML = ""
         for(const[name, set] of Object.entries(tileSet)) {
@@ -21,23 +23,22 @@ export function mapSizeWindow() {
             button.onclick = (event) => {
                 createTileMap(currentName, event.target.tileSet
                     , parseInt(columnsField.value), parseInt(rowsField.value), newX, newY)
-                hideWindow()
+                tileSetSelectionWindow.hide()
             }
             tileSets.appendChild(button)
         }
-        showWindow("select_tile_set")
+        mapSizeWindow.hide()
+        tileSetSelectionWindow.show()
     }
 }
 
-export function updateNewMapWindow() {
-    if(newMapKey.wasPressed) {
-        newX = Math.round(mouse.x)
-        newY = Math.round(mouse.y)
-        currentName = prompt("Введите название новой карты:")
-        if(currentName === null) {
-            hideWindow()
-        } else {
-            showWindow("map_size")
-        }
+export function newMap() {
+    newX = Math.round(mouse.x)
+    newY = Math.round(mouse.y)
+    currentName = prompt("Введите название новой карты:")
+    if(currentName === null) {
+        hideWindow()
+    } else {
+        mapSizeWindow.show()
     }
 }

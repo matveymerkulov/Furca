@@ -1,18 +1,30 @@
-import {delKey, selectKey, tiles} from "./main.js"
 import {tileSet} from "../src/project.js"
-import {canvasUnderCursor, ctx} from "../src/canvas.js"
+import Canvas, {canvasUnderCursor, ctx} from "../src/canvas.js"
 import {drawDashedRegion} from "../src/draw.js"
 import {boxWithPointCollision} from "../src/collisions.js"
 import {canvasMouse} from "../src/system.js"
 import {brushSize, setBlockSize} from "./tile_map.js"
 import {visibility} from "../src/tile_set.js"
 import {blockType} from "../src/block.js"
-import {tilesPerRow} from "./tile_zoom.js"
-import {updateY0, y0} from "./tile_pan.js"
+import TileZoom, {tilesPerRow} from "./tile_zoom.js"
+import {TilePan, updateY0, y0} from "./tile_pan.js"
 import {currentWindow} from "../src/gui/window.js"
+import Key from "../src/key.js"
+import {mainWindow} from "./main_window.js"
 
 export let currentTile = 1, currentTileSet, currentBlock, currentGroup, altGroup
 export let maxY0 = 0
+
+let selectKey = new Key("LMB")
+let delKey = new Key("Delete")
+let panKey = new Key("ControlLeft", "MMB")
+let zoomInKey = new Key("WheelUp")
+let zoomOutKey = new Key("WheelDown")
+
+let tileSetCanvas = mainWindow.addCanvas("tiles", 8, 14)
+tileSetCanvas.add(new TilePan(), panKey)
+tileSetCanvas.add(new TileZoom(zoomInKey, zoomOutKey))
+
 
 function processTiles(tileFunction, blockFunction) {
     let quantity = 0
@@ -20,7 +32,7 @@ function processTiles(tileFunction, blockFunction) {
         quantity += set.images.quantity
     }
 
-    let size = tiles.viewport.width / tilesPerRow
+    let size = tileSetCanvas.viewport.width / tilesPerRow
     let x, y
     let pos = -1
 
@@ -51,12 +63,12 @@ function processTiles(tileFunction, blockFunction) {
         }
     }
 
-    maxY0 = Math.max(y + size - tiles.viewport.height + y0, 0)
+    maxY0 = Math.max(y + size - tileSetCanvas.viewport.height + y0, 0)
     updateY0()
 }
 
 
-export function renderTileSet() {
+tileSetCanvas.render = () => {
     processTiles((set, images, i, x, y, size) => {
         images.image(i).drawResized(x, y, size, size)
 
@@ -91,10 +103,10 @@ function findGroup(set, tileNum) {
     return undefined
 }
 
-export function tileSetOperations() {
+tileSetCanvas.update = () => {
     processTiles((set, images, i, x, y, size) => {
         if((selectKey.wasPressed || delKey.wasPressed) && boxWithPointCollision(canvasMouse, x, y, size, size)
-            && currentWindow === undefined && canvasUnderCursor === tiles) {
+                && currentWindow === undefined && canvasUnderCursor === tileSetCanvas) {
             if(selectKey.wasPressed) {
                 currentTile = i
                 currentBlock = undefined
@@ -108,7 +120,7 @@ export function tileSetOperations() {
         }
     }, (set, block, texture, tx, ty, tWidth, tHeight, x, y, size) => {
         if(selectKey.wasPressed && boxWithPointCollision(canvasMouse, x, y, size, size)
-            && currentWindow === undefined && canvasUnderCursor === tiles) {
+                && currentWindow === undefined && canvasUnderCursor === tileSetCanvas) {
             currentBlock = block
             if(block.type === blockType.block) {
                 setBlockSize(block.width, block.height)

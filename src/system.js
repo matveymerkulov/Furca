@@ -175,6 +175,7 @@ export function loadAssets(path, asset) {
 function start() {
     initInput()
     initData()
+
     project.init(project._assets.texture)
     delete project._assets
 
@@ -186,13 +187,7 @@ function start() {
 
     let apsTime = 0, realAps = 0, apsCounter = 0
     setInterval(function () {
-        if(paused) {
-            project.update()
-        } else {
-            project.actions.forEach(action => action.execute())
-            project.update()
-            project.scene.update()
-        }
+        project.updateNode()
 
         keys.forEach(key => {
             key.reset()
@@ -219,7 +214,7 @@ function start() {
             fpsCounter++
         }
 
-        project.render()
+        project.renderNode()
 
         //ctx.fillText(`fps: ${realFps}, aps: ${realAps}`, 5, 5)
     }, 1000.0 / 150)

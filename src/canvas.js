@@ -11,9 +11,9 @@ export function setCanvas(canvas) {
     mouse.setPosition(xFromScreen(screenMouse.x), yFromScreen(screenMouse.y))
 }
 
-export default class Canvas extends Sprite {
-    constructor(node, x, y, width, height, active, viewport) {
-        super(undefined, x, y, width, height, 0.0, 0.0, 0, active)
+export default class Canvas extends Box {
+    constructor(node, x, y, width, height, viewport, active = true) {
+        super(undefined, x, y, width, height, 0.0, 0.0)
 
         this.node = node
         node.addEventListener("mouseover", () => {
@@ -23,6 +23,7 @@ export default class Canvas extends Sprite {
             canvasUnderCursor = undefined
         })
 
+        this.active = true
         this.viewport = viewport
         this._vdx = 1.0
         this._vdy = 1.0
@@ -37,11 +38,11 @@ export default class Canvas extends Sprite {
     static create(node, fwidth, fheight, active = true) {
         node.width = node.clientWidth
         node.height = node.clientHeight
-        return new Canvas(node,0.0, 0.0, fwidth, fheight, active, Box.fromArea(node.offsetLeft
-            , node.offsetTop, node.width, node.height))
+        return new Canvas(node,0.0, 0.0, fwidth, fheight, Box.fromArea(node.offsetLeft
+            , node.offsetTop, node.width, node.height), active)
     }
 
-    render() {
+    renderNode() {
         if(!this.active) return
 
         this.updateParameters()
@@ -54,18 +55,22 @@ export default class Canvas extends Sprite {
 
         ctx.fillStyle = "white"
 
-        this.renderContents()
+        this.render()
     }
 
-    renderContents() {
+    render() {
         project.scene.draw()
     }
 
-    update() {
+    updateNode() {
         setCanvas(this)
+        this.update()
         for(let action of this.actions) {
             action.execute()
         }
+    }
+
+    update() {
     }
 
     add(drag, key) {

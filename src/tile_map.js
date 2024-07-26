@@ -19,7 +19,7 @@ export default class TileMap extends Box {
         this.#tileSet = tileSet
         this.#columns = columns
         this.#rows = rows
-        this.#array = array ?? new Array(columns * rows).fill(0)
+        this.#array = array ?? new Array(columns * rows).fill(-1)
         this.cellWidth = cellWidth
         this.cellHeight = cellHeight
     }
@@ -85,12 +85,12 @@ export default class TileMap extends Box {
         return this.#array[row === undefined ? column : column + row * this.columns]
     }
 
-    setTile(column, row, number) {
-        if(number === undefined) {
-            this.#array[column] = row
-        } else {
-            this.#array[column + row * this.columns] = number
-        }
+    setIndexTile(tileNum, number) {
+        this.#array[tileNum] = number
+    }
+
+    setPosTile(column, row, number) {
+        this.#array[column + row * this.columns] = number
     }
 
     setArray(array) {

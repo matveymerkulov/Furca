@@ -3,7 +3,7 @@ import TileMap from "../src/tile_map.js"
 import ImageArray from "../src/image_array.js"
 import {tileMap, tileMaps, tileSet} from "../src/project.js"
 import {Block} from "../src/block.js"
-import {Category, Pos, Rule} from "./auto_tiling.js"
+import {Category, Pos, Rule} from "../src/auto_tiling.js"
 
 export function loadData(texture) {
     tileSet["floor"] = new TileSet(new ImageArray(texture.floor, 9, 11, 0.5, 0.5, 1, 1), [

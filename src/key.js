@@ -31,6 +31,7 @@ export default class Key {
         keys.push(this)
     }
 
+
     processKeyDownEvent(event) {
         this.items.forEach(item => {
             if(event.code === item.code) {

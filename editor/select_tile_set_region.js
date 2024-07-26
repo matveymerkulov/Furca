@@ -1,4 +1,4 @@
-import {tileHeight, tileSetWindow, tileWidth} from "./main.js"
+import {tileHeight, tileWidth} from "./main.js"
 import {canvasMouse} from "../src/system.js"
 import Drag from "../src/drag.js"
 import {currentWindow} from "../src/gui/window.js"
@@ -14,10 +14,6 @@ export function resetRegionSelector() {
 export default class SelectTileSetRegion extends Drag {
     #x
     #y
-
-    conditions() {
-        return currentWindow === tileSetWindow
-    }
 
     start() {
         this.#x = Math.floor(canvasMouse.x / tileWidth)

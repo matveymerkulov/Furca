@@ -1,37 +1,61 @@
-import {mouse, removeFromArray, rndi} from "../src/system.js"
+import {element, mouse, removeFromArray, rndi} from "../src/system.js"
 import {tileMap, tileMaps} from "../src/project.js"
 import {addTileMap} from "./create_tile_map.js"
-import {
-    autoTilingEditorKey,
-    changeBrushTypeKey,
-    copyKey,
-    currentMode,
-    decrementBrushSizeKey,
-    delKey,
-    incrementBrushSizeKey,
-    mode, rectangleModeKey,
-    renameMapKey,
-    rulesWindow,
-    selectKey,
-    tileSetPropertiesKey,
-    tileSetWindow,
-} from "./main.js"
 import {getName, incrementName, setName} from "./names.js"
-import {ctx, distToScreen, xToScreen, yToScreen} from "../src/canvas.js"
-import {clearSelection, mapSelectionRegion, selectedTileMaps} from "./select_tile_maps.js"
+import Canvas, {ctx, distToScreen, setCanvas, xToScreen, yToScreen} from "../src/canvas.js"
+import SelectTileMaps, {clearSelection, mapSelectionRegion, selectedTileMaps} from "./select_tile_maps.js"
 import {altGroup, currentBlock, currentGroup, currentTile, currentTileSet} from "./tile_set.js"
-import {updateNewMapWindow} from "./new_map.js"
+import {newMap, } from "./new_map.js"
 import Sprite from "../src/sprite.js"
-import {resetRegionSelector} from "./select_tile_set_region.js"
-import {showWindow} from "../src/gui/window.js"
-import {mapRegion} from "./select_map_region.js"
+import SelectMapRegion, {mapRegion} from "./select_map_region.js"
 import {blockType} from "../src/block.js"
 import {drawDashedRegion} from "../src/draw.js"
-import {enframeTile, updateCategoriesList} from "./auto_tiling.js"
+import {Pan} from "./pan.js"
+import Zoom from "./zoom.js"
+import MoveTileMaps from "./move_tile_maps.js"
+import Key from "../src/key.js"
+import {mainWindow} from "./main_window.js"
+import {enframeTile} from "../src/auto_tiling.js"
 
 export let currentTileMap, tileMapUnderCursor, currentTileSprite
 
-export function renderMaps() {
+export const mode = {
+    tiles: Symbol("tiles"),
+    maps: Symbol("maps"),
+}
+
+export let currentMode = mode.tiles
+
+let switchModeKey = new Key("Space")
+
+let selectKey = new Key("LMB")
+let delKey = new Key("Delete")
+let panKey = new Key("ControlLeft", "MMB")
+let zoomInKey = new Key("WheelUp")
+let zoomOutKey = new Key("WheelDown")
+
+let newMapKey = new Key("KeyN")
+let renameMapKey = new Key("KeyR")
+let copyMapKey = new Key("KeyC")
+let deleteMapKey = new Key("Delete")
+
+let changeBrushTypeKey = new Key("KeyB")
+let incrementBrushSizeKey = new Key("NumpadAdd")
+let decrementBrushSizeKey = new Key("NumpadSubtract")
+let rectangleModeKey = new Key("KeyR")
+
+
+let mapsCanvas = mainWindow.addCanvas("map", 30, 14)
+mapsCanvas.background = "rgb(9, 44, 84)"
+mapsCanvas.setZoom(-19)
+mapsCanvas.add(new Pan(), panKey)
+mapsCanvas.add(new Zoom(zoomInKey, zoomOutKey))
+mapsCanvas.add(new SelectTileMaps(), selectKey)
+mapsCanvas.add(new MoveTileMaps(), selectKey)
+mapsCanvas.add(new SelectMapRegion(), selectKey)
+
+
+mapsCanvas.render = () => {
     tileMaps.items.forEach(map => {
         map.draw()
         let name = getName(map)
@@ -68,61 +92,38 @@ export function renderMaps() {
     }
 }
 
-export function mainWindowOperations() {
-   if(delKey.wasPressed && selectedTileMaps.length > 0) {
-        for(let map of selectedTileMaps) {
-            removeFromArray(map, tileMaps.items)
-            delete tileMap[getName(map)]
-        }
-        clearSelection()
+
+mapsCanvas.update = () => {
+    if(switchModeKey.wasPressed) {
+        currentMode = currentMode === mode.tiles ? mode.maps : mode.tiles
     }
 
-    updateNewMapWindow()
-
-    if(currentTileSet === undefined) return
-
-    if(tileSetPropertiesKey.wasPressed) {
-        resetRegionSelector()
-        showWindow(tileSetWindow)
+    if(rectangleModeKey.wasPressed) {
+        rectangleMode = !rectangleMode
     }
 
-    if(autoTilingEditorKey.wasPressed) {
-        showWindow(rulesWindow)
-        updateCategoriesList()
-    }
-}
+    setCanvas(mapsCanvas)
 
-export function checkMapsWindowCollisions() {
-    currentTileMap = undefined
-    tileMapUnderCursor = undefined
-    currentTileSprite = undefined
+    checkMapsWindowCollisions()
 
-    tileMaps.collisionWithPoint(mouse.x, mouse.y, (x, y, map) => {
-        tileMapUnderCursor = map
-        if(currentTileSet === map.tileSet || currentMode === mode.maps) {
-            currentTileMap = map
-        }
-    })
+    if(tileMapUnderCursor === undefined || currentTileMap === undefined) return
 
-    if(currentTileMap !== undefined) {
-        tileMapUnderCursor = currentTileMap
+    if(currentMode === mode.tiles) {
+        tileModeOperations()
+    } else if(currentMode === mode.maps) {
+        mapModeOperations()
     }
 }
 
-export function tileMapOperations() {
-    if(renameMapKey.wasPressed) {
-        // noinspection JSCheckFunctionSignatures
-        let name = prompt("Введите новое название карты:", getName(tileMapUnderCursor))
-        if(name !== null) {
-            setName(tileMapUnderCursor, name)
-        }
-    }
-}
+
+let startTileColumn, startTileRow
+export let rectangleMode = false
 
 export let brush = {
     square: Symbol("square"),
     circle: Symbol("circle"),
 }
+
 export let brushSize = 1, brushType = brush.square
 let tileSprite = new Sprite()
 let blockWidth = brushSize, blockHeight = brushSize
@@ -132,50 +133,6 @@ export function setBlockSize(width, height) {
     blockHeight = height
 }
 
-export function setTiles(column, row, width, height, tileNum, block, group) {
-    if(block !== undefined && block.type === blockType.frame) {
-        if(block.width < 3) width = block.width
-        if(block.height < 3) height = block.height
-    }
-
-    for(let y = 0; y < height; y++) {
-        let yy = row + y
-        if(yy < 0 || yy >= currentTileMap.rows) continue
-        for(let x = 0; x < width; x++) {
-            let xx = column + x
-            if(xx < 0 || xx >= currentTileMap.columns) continue
-
-            if(tileNum !== undefined) {
-                if(brushType === brush.circle) {
-                    let dx = x - 0.5 * (width - 1)
-                    let dy = y - 0.5 * (height - 1)
-                    if(Math.sqrt(dx * dx + dy * dy) > 0.5 * width) continue
-                }
-                currentTileMap.setTile(xx, yy, group === undefined ? tileNum : group[rndi(0, group.length)])
-            } else if(block.type === blockType.block) {
-                currentTileMap.setTile(xx, yy, block.x + (x % block.width)
-                    + currentTileSet.columns * (block.y + (y % block.height)))
-            } else if(block.type === blockType.frame) {
-                let dx = block.width < 3 || x === 0 ? x : (x === blockWidth - 1 ? 2 : 1)
-                let dy = block.height < 3 || y === 0 ? y : (y === blockHeight - 1 ? 2 : 1)
-                currentTileMap.setTile(xx, yy, block.x + dx + currentTileSet.columns * (block.y + dy))
-
-            }
-        }
-    }
-    for(let y = -1; y <= height; y++) {
-        let yy = row + y
-        if(yy < 0 || yy >= currentTileMap.rows) continue
-        for(let x = -1; x <= width; x++) {
-            let xx = column + x
-            if(xx < 0 || xx >= currentTileMap.columns) continue
-            enframeTile(currentTileMap, xx, yy)
-        }
-    }
-}
-
-let startTileColumn, startTileRow
-export let rectangleMode = false
 
 export function tileModeOperations() {
     let brushWidth = currentTileMap.cellWidth * blockWidth
@@ -186,10 +143,6 @@ export function tileModeOperations() {
     if(selectKey.wasPressed) {
         startTileColumn = column
         startTileRow = row
-    }
-
-    if(rectangleModeKey.wasPressed) {
-        rectangleMode = !rectangleMode
     }
 
     if(selectKey.isDown) {
@@ -225,13 +178,96 @@ export function tileModeOperations() {
     currentTileSprite = tileSprite
 }
 
+
 export function mapModeOperations() {
-    if(copyKey.wasPressed) {
+    if(newMapKey.wasPressed) {
+        newMap()
+    }
+
+    if(renameMapKey.wasPressed) {
+        // noinspection JSCheckFunctionSignatures
+        let name = prompt("Введите новое название карты:", getName(tileMapUnderCursor))
+        if(name !== null) {
+            setName(tileMapUnderCursor, name)
+        }
+    }
+
+    if(copyMapKey.wasPressed) {
         addTileMap(incrementName(getName(tileMapUnderCursor)), tileMapUnderCursor.copy())
     }
 
-    if(delKey.wasPressed && selectedTileMaps.length === 0) {
-        removeFromArray(tileMapUnderCursor, tileMaps.items)
-        delete tileMap[getName(tileMapUnderCursor)]
+    if(deleteMapKey.wasPressed) {
+        if(selectedTileMaps.length === 0) {
+            removeFromArray(tileMapUnderCursor, tileMaps.items)
+            delete tileMap[getName(tileMapUnderCursor)]
+        } else {
+            for(let map of selectedTileMaps) {
+                removeFromArray(map, tileMaps.items)
+                delete tileMap[getName(map)]
+            }
+            clearSelection()
+        }
+    }
+}
+
+
+export function checkMapsWindowCollisions() {
+    currentTileMap = undefined
+    tileMapUnderCursor = undefined
+    currentTileSprite = undefined
+
+    tileMaps.collisionWithPoint(mouse.x, mouse.y, (x, y, map) => {
+        tileMapUnderCursor = map
+        if(currentTileSet === map.tileSet || currentMode === mode.maps) {
+            currentTileMap = map
+        }
+    })
+
+    if(currentTileMap !== undefined) {
+        tileMapUnderCursor = currentTileMap
+    }
+}
+
+
+export function setTiles(column, row, width, height, tileNum, block, group) {
+    if(block !== undefined && block.type === blockType.frame) {
+        if(block.width < 3) width = block.width
+        if(block.height < 3) height = block.height
+    }
+
+    for(let y = 0; y < height; y++) {
+        let yy = row + y
+        if(yy < 0 || yy >= currentTileMap.rows) continue
+        for(let x = 0; x < width; x++) {
+            let xx = column + x
+            if(xx < 0 || xx >= currentTileMap.columns) continue
+
+            if(tileNum !== undefined) {
+                if(brushType === brush.circle) {
+                    let dx = x - 0.5 * (width - 1)
+                    let dy = y - 0.5 * (height - 1)
+                    if(Math.sqrt(dx * dx + dy * dy) > 0.5 * width) continue
+                }
+                currentTileMap.setPosTile(xx, yy, group === undefined ? tileNum : group[rndi(0, group.length)])
+            } else if(block.type === blockType.block) {
+                currentTileMap.setPosTile(xx, yy, block.x + (x % block.width)
+                    + currentTileSet.columns * (block.y + (y % block.height)))
+            } else if(block.type === blockType.frame) {
+                let dx = block.width < 3 || x === 0 ? x : (x === blockWidth - 1 ? 2 : 1)
+                let dy = block.height < 3 || y === 0 ? y : (y === blockHeight - 1 ? 2 : 1)
+                currentTileMap.setPosTile(xx, yy, block.x + dx + currentTileSet.columns * (block.y + dy))
+
+            }
+        }
+    }
+
+    for(let y = -1; y <= height; y++) {
+        let yy = row + y
+        if(yy < 0 || yy >= currentTileMap.rows) continue
+        for(let x = -1; x <= width; x++) {
+            let xx = column + x
+            if(xx < 0 || xx >= currentTileMap.columns) continue
+            enframeTile(currentTileMap, xx, yy)
+        }
     }
 }

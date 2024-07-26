@@ -3,7 +3,7 @@ import TileSet from "./tile_set.js"
 import ImageArray from "./image_array.js"
 import TileMap from "./tile_map.js"
 import {Block} from "./block.js"
-import {Category, Pos, Rule} from "../editor/auto_tiling.js"
+import {Category, Pos, Rule} from "./auto_tiling.js"
 
 let pos, text
 
@@ -30,8 +30,8 @@ export function isTokenSymbol(symbol) {
     if(symbol >= "0" && symbol <= "9") return true
     if(symbol >= "A" && symbol <= "Z") return true
     if(symbol >= "a" && symbol <= "z") return true
-    if(symbol === "_") return true
-    return false
+    return symbol === "_";
+
 }
 
 export function getSymbols(comparison, terminator) {

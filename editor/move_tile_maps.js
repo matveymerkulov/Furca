@@ -1,12 +1,11 @@
 import MovePoint from "./move_point.js"
-import {currentMode, mode as modes} from "./main.js"
 import {selectedTileMaps} from "./select_tile_maps.js"
 import {mouse, screenMouse} from "../src/system.js"
-import {tileMapUnderCursor} from "./tile_map.js"
+import {currentMode, mode, tileMapUnderCursor} from "./tile_map.js"
 
 export default class MoveTileMaps extends MovePoint {
     conditions() {
-        if(currentMode !== modes.maps) return false
+        if(currentMode !== mode.maps) return false
         if(selectedTileMaps.length > 0) {
             for(const map of selectedTileMaps) {
                 if(map.collidesWithPoint(mouse.x, mouse.y)) return true

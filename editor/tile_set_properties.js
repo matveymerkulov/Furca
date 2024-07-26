@@ -1,58 +1,30 @@
-import {canvasUnderCursor, ctx, currentCanvas, setCanvas} from "../src/canvas.js"
-import {tileSetRegion} from "./select_tile_set_region.js"
+import Canvas, {canvasUnderCursor, ctx, currentCanvas, setCanvas} from "../src/canvas.js"
+import SelectTileSetRegion, {tileSetRegion} from "./select_tile_set_region.js"
 import {drawDashedRegion, drawRect} from "../src/draw.js"
-import {canvasMouse} from "../src/system.js"
+import {canvasMouse, element} from "../src/system.js"
 import {drawX} from "./draw.js"
 import {currentTileSet} from "./tile_set.js"
 import {blockType} from "../src/block.js"
 import {visibility} from "../src/tile_set.js"
 import {
-    blocksTileSetCanvas,
-    delKey,
-    newBlockKey,
-    newFrameKey,
     setTileSize,
     tileHeight,
     tileWidth,
-    toggleVisibilityKey
 } from "./main.js"
+import {Win} from "../src/gui/window.js"
+import Key from "../src/key.js"
 
-export function renderBlocksTileSet() {
-    if(currentTileSet === undefined) return
+let selectKey = new Key("LMB")
+let delKey = new Key("Delete")
+let toggleVisibilityKey = new Key("KeyV")
+let newBlockKey = new Key("KeyB")
+let newFrameKey = new Key("KeyF")
 
-    renderTileSetCanvas()
+export let tileSetPropertiesWindow = new Win("tile_set_window")
 
-    for(let y = 0; y < currentTileSet.rows; y++) {
-        for(let x = 0; x < currentTileSet.columns; x++) {
-            let n = x + y * currentTileSet.columns
-            if(currentTileSet.visibility[n] !== visibility.hidden) continue
-            let xx = (x + 0.5) * tileWidth
-            let yy = (y + 0.5) * tileHeight
-            drawX(xx, yy, 3, 5, "black")
-            drawX(xx, yy, 1, 5, "white")
-        }
-    }
+let blocksCanvas = tileSetPropertiesWindow.addCanvas("tile_set_blocks", 9, 16)
+blocksCanvas.add(new SelectTileSetRegion(), selectKey)
 
-    for(let block of currentTileSet.blocks) {
-        let innerColor, outerColor
-        switch(block.type) {
-            case blockType.block:
-                innerColor = "green"
-                outerColor = "lightgreen"
-                break
-            case blockType.frame:
-                innerColor = "lightred"
-                outerColor = "red"
-                break
-        }
-        drawRect(innerColor, outerColor,block.x * tileWidth + 2, block.y * tileHeight + 2
-            , block.width * tileWidth - 4, block.height * tileHeight - 4)
-    }
-
-    if(tileSetRegion === undefined) return
-    drawDashedRegion(tileSetRegion.x * tileWidth, tileSetRegion.y * tileHeight
-        , (tileSetRegion.width + 1) * tileWidth, (tileSetRegion.height + 1) * tileHeight)
-}
 
 export function renderTileSetCanvas() {
     let images = currentTileSet.images
@@ -77,10 +49,45 @@ export function renderTileSetCanvas() {
         , Math.floor(canvasMouse.y / tileHeight) * tileHeight + 3, tileWidth - 7, tileHeight - 7)
 }
 
-export function updateTileSetProperties() {
-    setCanvas(blocksTileSetCanvas)
-    blocksTileSetCanvas.update()
 
+
+blocksCanvas.render = () => {
+    renderTileSetCanvas()
+
+    for(let y = 0; y < currentTileSet.rows; y++) {
+        for(let x = 0; x < currentTileSet.columns; x++) {
+            let n = x + y * currentTileSet.columns
+            if(currentTileSet.visibility[n] !== visibility.hidden) continue
+            let xx = (x + 0.5) * tileWidth
+            let yy = (y + 0.5) * tileHeight
+            drawX(xx, yy, 3, 5, "black")
+            drawX(xx, yy, 1, 5, "white")
+        }
+    }
+
+    for(let block of currentTileSet.blocks) {
+        let innerColor, outerColor
+        switch(block.type) {
+            case blockType.block:
+                innerColor = "green"
+                outerColor = "lightgreen"
+                break
+            case blockType.frame:
+                innerColor = "red"
+                outerColor = "lightred"
+                break
+        }
+        drawRect(innerColor, outerColor,block.x * tileWidth + 2, block.y * tileHeight + 2
+            , block.width * tileWidth - 4, block.height * tileHeight - 4)
+    }
+
+    if(tileSetRegion === undefined) return
+    drawDashedRegion(tileSetRegion.x * tileWidth, tileSetRegion.y * tileHeight
+        , (tileSetRegion.width + 1) * tileWidth, (tileSetRegion.height + 1) * tileHeight)
+}
+
+
+blocksCanvas.update = () => {
     if(delKey.wasPressed) {
         currentTileSet.removeBlock(Math.floor(canvasMouse.x / tileWidth), Math.floor(canvasMouse.y / tileHeight))
     }
