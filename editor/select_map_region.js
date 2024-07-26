@@ -27,8 +27,8 @@ export default class SelectMapRegion extends Drag {
         let width = Math.floor((mouse.x - currentTileMap.leftX) / currentTileMap.cellWidth) - this.#x
         let height = Math.floor((mouse.y - currentTileMap.topY) / currentTileMap.cellHeight) - this.#y
         if(currentBlock !== undefined && currentBlock.type === blockType.block) {
-            if(width < currentBlock.width) width = currentBlock.width
-            if(height < currentBlock.height) height = currentBlock.height
+            if(width < currentBlock.width - 1) width = currentBlock.width - 1
+            if(height < currentBlock.height - 1) height = currentBlock.height - 1
             width = Math.floor((width + 1) / currentBlock.width) * currentBlock.width - 1
             height = Math.floor((height + 1) / currentBlock.height) * currentBlock.height - 1
         }
@@ -36,7 +36,7 @@ export default class SelectMapRegion extends Drag {
     }
 
     end() {
-        setBlockSize(mapRegion.width + 1, mapRegion.height + 1)
+        setBlockSize(mapRegion.width, mapRegion.height + 1)
         setTiles(mapRegion.x, mapRegion.y, mapRegion.width + 1, mapRegion.height + 1
             , currentBlock === undefined ? currentTile : undefined, currentBlock)
         mapRegion = undefined
