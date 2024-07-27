@@ -38,6 +38,12 @@ export function randomSign() {
     return 2 * rndi(2) - 1
 }
 
+export function clamp(value, min, max) {
+    if(value < min) return min
+    if(value > max) return max
+    return value
+}
+
 export function removeFromArray(item, array) {
     let i = array.indexOf(item)
     if(i < 0) return

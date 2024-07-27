@@ -103,32 +103,37 @@ function findGroup(set, tileNum) {
     return undefined
 }
 
+export function updateBlockSize() {
+    if(currentBlock === undefined) {
+        setBlockSize(brushSize, brushSize)
+    } else if(currentBlock.type === blockType.block) {
+        setBlockSize(currentBlock.width, currentBlock.height)
+    } else if(currentBlock.type === blockType.frame) {
+        setBlockSize(1, 1)
+    }
+}
+
 tileSetCanvas.update = () => {
     processTiles((set, images, i, x, y, size) => {
-        if((selectKey.wasPressed || delKey.wasPressed) && boxWithPointCollision(canvasMouse, x, y, size, size)
-                && currentWindow === undefined && canvasUnderCursor === tileSetCanvas) {
+        if((selectKey.wasPressed || delKey.wasPressed) && boxWithPointCollision(canvasMouse, x, y, size, size)) {
             if(selectKey.wasPressed) {
                 currentTile = i
                 currentBlock = undefined
-                setBlockSize(brushSize, brushSize)
+                updateBlockSize()
                 currentTileSet = set
                 currentGroup = findGroup(set, currentTile)
-            } else {
+            } else if(delKey.wasPressed) {
                 set.altTile = set.altTile === i ? -1 : i
                 altGroup = findGroup(set, set.altTile)
+                updateBlockSize()
             }
         }
     }, (set, block, texture, tx, ty, tWidth, tHeight, x, y, size) => {
-        if(selectKey.wasPressed && boxWithPointCollision(canvasMouse, x, y, size, size)
-                && currentWindow === undefined && canvasUnderCursor === tileSetCanvas) {
+        if(selectKey.wasPressed && boxWithPointCollision(canvasMouse, x, y, size, size)) {
             currentBlock = block
-            if(block.type === blockType.block) {
-                setBlockSize(block.width, block.height)
-            } else if(block.type === blockType.frame) {
-                setBlockSize(1, 1)
-            }
             currentTile = -1
             currentTileSet = set
+            updateBlockSize()
         }
     })
 }

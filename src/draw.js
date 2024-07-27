@@ -43,10 +43,10 @@ export function drawRect(innerColor, outerColor, x, y, width, height) {
     y = Math.floor(y)
     width = Math.floor(width)
     height = Math.floor(height)
-    ctx.strokeStyle = innerColor
+    ctx.strokeStyle = outerColor
     ctx.lineWidth = 4
     ctx.strokeRect(x, y, width, height)
-    ctx.strokeStyle = outerColor
+    ctx.strokeStyle = innerColor
     ctx.lineWidth = 1
     ctx.strokeRect(x, y, width, height)
     ctx.strokeStyle = "black"

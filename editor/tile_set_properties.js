@@ -60,22 +60,19 @@ blocksCanvas.render = () => {
             if(currentTileSet.visibility[n] !== visibility.hidden) continue
             let xx = (x + 0.5) * tileWidth
             let yy = (y + 0.5) * tileHeight
-            drawX(xx, yy, 3, 5, "black")
-            drawX(xx, yy, 1, 5, "white")
+            drawX(xx, yy, 5, 6, "black")
+            drawX(xx, yy, 3, 5, "white")
         }
     }
 
     for(let block of currentTileSet.blocks) {
         let innerColor, outerColor
-        switch(block.type) {
-            case blockType.block:
-                innerColor = "green"
-                outerColor = "lightgreen"
-                break
-            case blockType.frame:
-                innerColor = "red"
-                outerColor = "lightred"
-                break
+        if(block.type === blockType.block) {
+            innerColor = "lightgreen"
+            outerColor = "green"
+        } else if(block.type === blockType.frame) {
+            innerColor = "red"
+            outerColor = "darkred"
         }
         drawRect(innerColor, outerColor,block.x * tileWidth + 2, block.y * tileHeight + 2
             , block.width * tileWidth - 4, block.height * tileHeight - 4)

@@ -10,12 +10,6 @@ import {deleteCurrentDrag} from "../src/drag.js"
 import {projectFromStorage, projectToStorage} from "./save_load.js"
 import Key from "../src/key.js"
 
-export function clamp(value, min, max) {
-    if(value < min) return min
-    if(value > max) return max
-    return value
-}
-
 project.getAssets = () => {
     return {
         texture: {
@@ -30,10 +24,8 @@ project.getAssets = () => {
     }
 }
 
-
 let saveKey = new Key("KeyS")
 let loadKey = new Key("KeyL")
-
 
 export let tileWidth, tileHeight
 

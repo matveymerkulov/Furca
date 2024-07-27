@@ -4,10 +4,10 @@ import {addTileMap} from "./create_tile_map.js"
 import {getName, incrementName, setName} from "./names.js"
 import Canvas, {ctx, distToScreen, setCanvas, xToScreen, yToScreen} from "../src/canvas.js"
 import SelectTileMaps, {clearSelection, mapSelectionRegion, selectedTileMaps} from "./select_tile_maps.js"
-import {altGroup, currentBlock, currentGroup, currentTile, currentTileSet} from "./tile_set.js"
+import {altGroup, currentBlock, currentGroup, currentTile, currentTileSet, updateBlockSize} from "./tile_set.js"
 import {newMap, } from "./new_map.js"
 import Sprite from "../src/sprite.js"
-import SelectMapRegion, {mapRegion} from "./select_map_region.js"
+import SelectMapRegion, {mapRegion, regionTileMap} from "./select_map_region.js"
 import {blockType} from "../src/block.js"
 import {drawDashedRegion} from "../src/draw.js"
 import {Pan} from "./pan.js"
@@ -69,11 +69,11 @@ mapsCanvas.render = () => {
     })
 
     if(currentMode === mode.tiles) {
-        if(mapRegion !== undefined && currentTileMap !== undefined) {
-            let cellWidth = currentTileMap.cellWidth
-            let cellHeight = currentTileMap.cellHeight
-            drawDashedRegion(xToScreen(currentTileMap.leftX + mapRegion.x * cellWidth)
-                , yToScreen(currentTileMap.topY + mapRegion.y * cellHeight)
+        if(mapRegion !== undefined && regionTileMap !== undefined) {
+            let cellWidth = regionTileMap.cellWidth
+            let cellHeight = regionTileMap.cellHeight
+            drawDashedRegion(xToScreen(regionTileMap.leftX + mapRegion.x * cellWidth)
+                , yToScreen(regionTileMap.topY + mapRegion.y * cellHeight)
                 , distToScreen((mapRegion.width + 1) * cellWidth)
                 , distToScreen((mapRegion.height + 1) * cellHeight))
         } else if(currentTileSprite !== undefined) {
@@ -100,6 +100,11 @@ mapsCanvas.update = () => {
 
     if(rectangleModeKey.wasPressed) {
         rectangleMode = !rectangleMode
+        updateBlockSize(currentBlock)
+    }
+
+    if(newMapKey.wasPressed) {
+        newMap()
     }
 
     setCanvas(mapsCanvas)
@@ -148,15 +153,18 @@ export function tileModeOperations() {
     if(selectKey.isDown) {
         if(!rectangleMode) {
             if(currentBlock === undefined) {
-                setTiles(column, row, blockWidth, blockHeight, currentTile, undefined, currentGroup)
+                setTiles(currentTileMap, currentTileSet, column, row, blockWidth, blockHeight, currentTile
+                    , undefined, currentGroup)
             } else if(currentBlock.type === blockType.block) {
                 column = Math.floor((column - startTileColumn) / blockWidth) * blockWidth + startTileColumn
                 row = Math.floor((row - startTileRow) / blockHeight) * blockHeight + startTileRow
-                setTiles(column, row, blockWidth, blockHeight, undefined, currentBlock)
+                setTiles(currentTileMap, currentTileSet, column, row, blockWidth, blockHeight, undefined
+                    , currentBlock)
             }
         }
     } else if(delKey.isDown) {
-        setTiles(column, row, blockWidth, blockHeight, currentTileSet.altTile, undefined, altGroup)
+        setTiles(currentTileMap, currentTileSet, column, row, blockWidth, blockHeight, currentTileSet.altTile
+            , undefined, altGroup)
     }
 
     if(changeBrushTypeKey.wasPressed) {
@@ -180,10 +188,6 @@ export function tileModeOperations() {
 
 
 export function mapModeOperations() {
-    if(newMapKey.wasPressed) {
-        newMap()
-    }
-
     if(renameMapKey.wasPressed) {
         // noinspection JSCheckFunctionSignatures
         let name = prompt("Введите новое название карты:", getName(tileMapUnderCursor))
@@ -229,7 +233,7 @@ export function checkMapsWindowCollisions() {
 }
 
 
-export function setTiles(column, row, width, height, tileNum, block, group) {
+export function setTiles(map, set, column, row, width, height, tileNum, block, group) {
     if(block !== undefined && block.type === blockType.frame) {
         if(block.width < 3) width = block.width
         if(block.height < 3) height = block.height
@@ -237,10 +241,10 @@ export function setTiles(column, row, width, height, tileNum, block, group) {
 
     for(let y = 0; y < height; y++) {
         let yy = row + y
-        if(yy < 0 || yy >= currentTileMap.rows) continue
+        if(yy < 0 || yy >= map.rows) continue
         for(let x = 0; x < width; x++) {
             let xx = column + x
-            if(xx < 0 || xx >= currentTileMap.columns) continue
+            if(xx < 0 || xx >= map.columns) continue
 
             if(tileNum !== undefined) {
                 if(brushType === brush.circle) {
@@ -248,26 +252,25 @@ export function setTiles(column, row, width, height, tileNum, block, group) {
                     let dy = y - 0.5 * (height - 1)
                     if(Math.sqrt(dx * dx + dy * dy) > 0.5 * width) continue
                 }
-                currentTileMap.setPosTile(xx, yy, group === undefined ? tileNum : group[rndi(0, group.length)])
+                map.setPosTile(xx, yy, group === undefined ? tileNum : group[rndi(0, group.length)])
             } else if(block.type === blockType.block) {
-                currentTileMap.setPosTile(xx, yy, block.x + (x % block.width)
-                    + currentTileSet.columns * (block.y + (y % block.height)))
+                map.setPosTile(xx, yy, block.x + (x % block.width)
+                    + set.columns * (block.y + (y % block.height)))
             } else if(block.type === blockType.frame) {
                 let dx = block.width < 3 || x === 0 ? x : (x === blockWidth - 1 ? 2 : 1)
                 let dy = block.height < 3 || y === 0 ? y : (y === blockHeight - 1 ? 2 : 1)
-                currentTileMap.setPosTile(xx, yy, block.x + dx + currentTileSet.columns * (block.y + dy))
-
+                map.setPosTile(xx, yy, block.x + dx + set.columns * (block.y + dy))
             }
         }
     }
 
     for(let y = -1; y <= height; y++) {
         let yy = row + y
-        if(yy < 0 || yy >= currentTileMap.rows) continue
+        if(yy < 0 || yy >= map.rows) continue
         for(let x = -1; x <= width; x++) {
             let xx = column + x
-            if(xx < 0 || xx >= currentTileMap.columns) continue
-            enframeTile(currentTileMap, xx, yy)
+            if(xx < 0 || xx >= map.columns) continue
+            enframeTile(map, xx, yy)
         }
     }
 }

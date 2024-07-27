@@ -36,6 +36,7 @@ export class Win {
     show() {
         hideWindow()
         this.#node.style.visibility = "visible"
+        currentWindow = this
     }
 
     hide() {
