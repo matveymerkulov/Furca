@@ -1,5 +1,5 @@
 import Box from "./box.js"
-import {unc} from "./system.js"
+import {clamp, unc} from "./system.js"
 
 function circleFromCircleVector(circle, fromCircle) {
     let dx = circle.x - fromCircle.x
@@ -18,6 +18,7 @@ export function pushCircleFromCircle(circle, fromCircle) {
     circle.x += vector.x
     circle.y += vector.y
 }
+
 
 export function circleFromBoxVector(circle, fromBox) {
     if(circle.x >= fromBox.leftX && circle.x < fromBox.rightX
@@ -42,21 +43,16 @@ export function pushBoxFromCircle(box, fromCircle) {
     box.y -= vector.y
 }
 
+
 export function boxFromBoxVector(box, fromBox) {
     let dx = box.x - fromBox.x
     let dy = box.y - fromBox.y
     let dwidth = box.halfWidth + fromBox.halfWidth + unc
     let dheight = box.halfHeight + fromBox.halfHeight + unc
     if(dwidth - Math.abs(dx) < dheight - Math.abs(dy)) {
-        return {
-            x: fromBox.x - box.x + Math.sign(dx) * dwidth,
-            y: 0,
-        }
+        return {x: fromBox.x - box.x + Math.sign(dx) * dwidth, y: 0}
     } else {
-        return {
-            x: 0,
-            y: fromBox.y - box.y + Math.sign(dy) * dheight,
-        }
+        return {x: 0, y: fromBox.y - box.y + Math.sign(dy) * dheight}
     }
 }
 

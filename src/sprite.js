@@ -2,9 +2,14 @@ import Box from "./box.js"
 import {ctx, distToScreen, xToScreen, yToScreen} from "./canvas.js"
 import {apsk, num, rad} from "./system.js"
 import Animate from "./actions/sprite/animate.js"
-import {boxWithBoxCollision, circleWithBoxCollision, circleWithCircleCollision} from "./collisions.js"
-import {ShapeType} from "./shape_type.js"
+import {
+    boxWithBoxCollision, boxWithPillCollision,
+    circleWithBoxCollision,
+    circleWithCircleCollision, circleWithPillCollision,
+    pillWithPillCollision
+} from "./collisions.js"
 import {pushBoxFromBox, pushBoxFromCircle, pushCircleFromBox, pushCircleFromCircle} from "./physics.js"
+import {ShapeType} from "./shape.js"
 
 export default class Sprite extends Box {
     constructor(image, x = 0.0, y = 0.0, width = 1.0, height = 1.0
@@ -157,6 +162,8 @@ export default class Sprite extends Box {
                         return circleWithCircleCollision(this, sprite)
                     case ShapeType.box:
                         return circleWithBoxCollision(this, sprite)
+                    case ShapeType.pill:
+                        return circleWithPillCollision(this, sprite)
                 }
                 break
             case ShapeType.box:
@@ -165,6 +172,20 @@ export default class Sprite extends Box {
                         return circleWithBoxCollision(sprite, this)
                     case ShapeType.box:
                         return boxWithBoxCollision(this, sprite)
+                    case ShapeType.pill:
+                        return boxWithPillCollision(this, sprite)
+                        break
+                }
+                break
+            case ShapeType.pill:
+                switch(sprite.shapeType) {
+                    case ShapeType.circle:
+                        return circleWithPillCollision(sprite, this)
+                    case ShapeType.box:
+                        return boxWithPillCollision(sprite, this)
+                    case ShapeType.pill:
+                        return pillWithPillCollision(this, sprite)
+                        break
                 }
                 break
         }
@@ -181,6 +202,8 @@ export default class Sprite extends Box {
                     case ShapeType.box:
                         pushCircleFromBox(this, sprite)
                         break
+                    case ShapeType.pill:
+                        break
                 }
                 break
             case ShapeType.box:
@@ -190,6 +213,18 @@ export default class Sprite extends Box {
                         break
                     case ShapeType.box:
                         pushBoxFromBox(this, sprite)
+                        break
+                    case ShapeType.pill:
+                        break
+                }
+                break
+            case ShapeType.pill:
+                switch(sprite.shapeType) {
+                    case ShapeType.circle:
+                        break
+                    case ShapeType.box:
+                        break
+                    case ShapeType.pill:
                         break
                 }
                 break

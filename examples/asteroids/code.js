@@ -37,8 +37,8 @@ import {
     state,
     template
 } from "./data.js"
-import {ShapeType} from "../../src/shape_type.js"
 import Key from "../../src/key.js"
+import {ShapeType} from "../../src/shape.js"
 
 export function initUpdate() {
     let sound = project.sound

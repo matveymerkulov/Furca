@@ -1,7 +1,7 @@
 import {tileSet} from "../src/project.js"
 import {ctx} from "../src/canvas.js"
 import {drawDashedRegion} from "../src/draw.js"
-import {boxWithPointCollision} from "../src/collisions.js"
+import {pointWithBoxCollision, pointWithParamBoxCollision} from "../src/collisions.js"
 import {canvasMouse} from "../src/system.js"
 import {brushSize, setBlockSize} from "./tile_map.js"
 import {visibility} from "../src/tile_set.js"
@@ -114,7 +114,7 @@ export function updateBlockSize() {
 
 tileSetCanvas.update = () => {
     processTiles((set, images, i, x, y, size) => {
-        if((selectKey.wasPressed || delKey.wasPressed) && boxWithPointCollision(canvasMouse, x, y, size, size)) {
+        if((selectKey.wasPressed || delKey.wasPressed) && pointWithParamBoxCollision(canvasMouse, x, y, size, size)) {
             if(selectKey.wasPressed) {
                 currentTile = i
                 currentBlock = undefined
@@ -128,7 +128,7 @@ tileSetCanvas.update = () => {
             }
         }
     }, (set, block, texture, tx, ty, tWidth, tHeight, x, y, size) => {
-        if(selectKey.wasPressed && boxWithPointCollision(canvasMouse, x, y, size, size)) {
+        if(selectKey.wasPressed && pointWithParamBoxCollision(canvasMouse, x, y, size, size)) {
             currentBlock = block
             currentTile = -1
             currentTileSet = set

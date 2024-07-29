@@ -4,10 +4,10 @@ import ImageArray from "../../src/image_array.js"
 import {apsk, defaultCanvas} from "../../src/system.js"
 import Key from "../../src/key.js"
 import Sprite from "../../src/sprite.js"
-import {ShapeType} from "../../src/shape_type.js"
 import Layer from "../../src/layer.js"
 import TileSet from "../../src/tile_set.js"
 import {currentCanvas} from "../../src/canvas.js"
+import {ShapeType} from "../../src/shape.js"
 
 project.getAssets = () => {
     return {

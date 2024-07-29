@@ -8,7 +8,7 @@ import Generator from "../../src/actions/generator.js"
 import Img from "../../src/image.js"
 import {defaultCanvas, rad, rnd} from "../../src/system.js"
 import RemoveIfOutside from "../../src/actions/sprite/remove_if_outside.js"
-import {ShapeType} from "../../src/shape_type.js"
+import {ShapeType} from "../../src/shape.js"
 
 project.getAssets = () => {
     return {

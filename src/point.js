@@ -43,17 +43,21 @@ export default class Point extends Renderable {
         }
     }
 
-    loop(bounds) {
+    wrap(bounds) {
         while(this.x < bounds.leftX) this.x += bounds.width
         while(this.x >= bounds.rightX) this.x -= bounds.width
         while(this.y < bounds.topY) this.y += bounds.height
         while(this.y >= bounds.bottomY) this.y -= bounds.height
     }
 
-    distanceTo(point) {
+    distance2To(point) {
         let dx = this.x - point.x
         let dy = this.y - point.y
-        return Math.sqrt(dx * dx + dy * dy)
+        return dx * dx + dy * dy
+    }
+
+    distanceTo(point) {
+        return Math.sqrt(this.distance2To(point))
     }
 
     angleTo(x, y) {

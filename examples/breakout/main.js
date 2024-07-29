@@ -5,8 +5,8 @@ import Sprite from "../../src/sprite.js"
 import Img from "../../src/image.js"
 import {apsk, clamp, defaultCanvas, mouse} from "../../src/system.js"
 import {currentCanvas} from "../../src/canvas.js"
-import {ShapeType} from "../../src/shape_type.js"
 import {registry} from "./registry.js"
+import {ShapeType} from "../../src/shape.js"
 
 project.getAssets = () => {
     return {
@@ -56,14 +56,14 @@ project.init = (texture) => {
         paddle.setPosition(clamp(mouse.x, minPaddleX, maxPaddleX), paddleY)
         if(ballIsActive) {
             ball.x += ball.dx * apsk
-            tileMap.blocks.collisionWithSprite(ball, (shape, tileNum, x, y) => {
-                ball.pushFromSprite(shape)
+            tileMap.blocks.collisionWithSprite(ball, (collisionSprite, tileNum, x, y) => {
+                ball.pushFromSprite(collisionSprite)
                 ball.dx = -ball.dx
             })
 
             ball.y += ball.dy * apsk
-            tileMap.blocks.collisionWithSprite(ball, (shape, tileNum, x, y) => {
-                ball.pushFromSprite(shape)
+            tileMap.blocks.collisionWithSprite(ball, (collisionSprite, tileNum, x, y) => {
+                ball.pushFromSprite(collisionSprite)
                 ball.dy = -ball.dy
             })
 
