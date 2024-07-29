@@ -1,8 +1,8 @@
+import Sprite from "./sprite.js"
 import {ctx, distToScreen, xToScreen, yToScreen} from "./canvas.js"
 import Box from "./box.js"
 import Shape from "./shape.js"
-import Sprite from "./sprite.js"
-import {arrayToString} from "../editor/save_load.js"
+import {arrayToString} from "./save_load.js"
 import {showCollisionShapes} from "./input.js"
 import {tileMap} from "./project.js"
 
@@ -156,11 +156,11 @@ export default class TileMap extends Box {
     extractTile(column, row, shapeType) {
         if(shapeType === undefined) {
             let sprite = this.tileSprite(shapeType, column)
-            this.setTile(column, 0)
+            this.setPosTile(column, 0)
             return sprite
         } else {
             let sprite = this.tileSprite(shapeType, column, row)
-            this.setTile(column, row, 0)
+            this.setIndexTile(column, row, 0)
             return sprite
         }
     }

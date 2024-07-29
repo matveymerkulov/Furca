@@ -1,6 +1,6 @@
 import {removeFromArray} from "./system.js"
 import {tileSet} from "./project.js"
-import {arrayToString} from "../editor/save_load.js"
+import {arrayToString} from "./save_load.js"
 import {getTexturePart} from "./texture.js"
 import {Block} from "./block.js"
 

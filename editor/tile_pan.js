@@ -1,4 +1,3 @@
-import {canvasUnderCursor} from "../src/canvas.js"
 import Drag from "../src/drag.js"
 import {clamp, screenMouse} from "../src/system.js"
 import {maxY0} from "./tile_set.js"

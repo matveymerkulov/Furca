@@ -4,9 +4,6 @@ import {currentTileSet} from "./tile_set.js"
 import {resetRegionSelector} from "./select_tile_set_region.js"
 import {rulesWindow, updateCategoriesList} from "./auto_tiling.js"
 import {tileSetPropertiesWindow} from "./tile_set_properties.js"
-import {projectFromStorage, projectToStorage} from "./save_load.js"
-import {initData} from "../src/project.js"
-import {newMap} from "./new_map.js"
 
 export let mainWindow = new Win("main")
 

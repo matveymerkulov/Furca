@@ -19,9 +19,9 @@ export default class Point extends Renderable {
         this.y = y
     }
 
-    setPositionAs(point) {
-        this.x = point.x
-        this.y = point.y
+    setPositionAs(point, dx = 0, dy = 0) {
+        this.x = point.x + dx
+        this.y = point.y + dy
     }
 
     moveToCircle(x, y, radius) {
@@ -44,10 +44,10 @@ export default class Point extends Renderable {
     }
 
     loop(bounds) {
-        if(this.x < bounds.leftX) this.x += bounds.width
-        if(this.x >= bounds.rightX) this.x -= bounds.width
-        if(this.y < bounds.topY) this.y += bounds.height
-        if(this.y >= bounds.bottomY) this.y -= bounds.height
+        while(this.x < bounds.leftX) this.x += bounds.width
+        while(this.x >= bounds.rightX) this.x -= bounds.width
+        while(this.y < bounds.topY) this.y += bounds.height
+        while(this.y >= bounds.bottomY) this.y -= bounds.height
     }
 
     distanceTo(point) {

@@ -1,4 +1,4 @@
-import {isDigit} from "../src/parser.js"
+import {isDigit} from "./parser.js"
 
 let objectName = new Map()
 

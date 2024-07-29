@@ -106,6 +106,14 @@ export default class Sprite extends Box {
         this.y += Math.sin(this.angle) * this.speed * apsk
     }
 
+    moveHorizontally() {
+        this.x += Math.cos(this.angle) * this.speed * apsk
+    }
+
+    moveVertically() {
+        this.y += Math.sin(this.angle) * this.speed * apsk
+    }
+
     setAngleAs(sprite) {
         this.angle = sprite.angle
     }

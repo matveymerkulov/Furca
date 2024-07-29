@@ -1,14 +1,12 @@
 import {project, tileMap, tileSet} from "../src/project.js"
-import Canvas, {canvasUnderCursor, setCanvas} from "../src/canvas.js"
-
 import {currentWindow, hideWindow} from "../src/gui/window.js"
-import {setName} from "./names.js"
+import {setName} from "../src/names.js"
 import {loadData} from "./data.js"
-
 import {initTileSetSelectionWindow} from "./new_map.js"
 import {deleteCurrentDrag} from "../src/drag.js"
-import {projectFromStorage, projectToStorage} from "./save_load.js"
+import {projectFromStorage, projectToStorage} from "../src/save_load.js"
 import Key from "../src/key.js"
+import {mainWindow} from "./main_window.js"
 
 project.getAssets = () => {
     return {
@@ -43,6 +41,19 @@ function initData() {
         setName(object, name)
     }
 }
+
+project.renderNode = () => {
+    mainWindow.renderNode()
+    if(currentWindow === undefined || currentWindow === mainWindow) return
+    currentWindow.renderNode()
+}
+
+project.updateNode = () => {
+    mainWindow.updateNode()
+    if(currentWindow === undefined) return
+    currentWindow.updateNode()
+}
+
 
 
 project.init = (texture) => {

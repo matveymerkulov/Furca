@@ -1,16 +1,12 @@
-import Canvas, {canvasUnderCursor, ctx, currentCanvas, setCanvas} from "../src/canvas.js"
+import {canvasUnderCursor, ctx, currentCanvas} from "../src/canvas.js"
 import SelectTileSetRegion, {tileSetRegion} from "./select_tile_set_region.js"
 import {drawDashedRegion, drawRect} from "../src/draw.js"
-import {canvasMouse, element} from "../src/system.js"
+import {canvasMouse} from "../src/system.js"
 import {drawX} from "./draw.js"
 import {currentTileSet} from "./tile_set.js"
 import {blockType} from "../src/block.js"
 import {visibility} from "../src/tile_set.js"
-import {
-    setTileSize,
-    tileHeight,
-    tileWidth,
-} from "./main.js"
+import {setTileSize, tileHeight, tileWidth,} from "./main.js"
 import {Win} from "../src/gui/window.js"
 import Key from "../src/key.js"
 

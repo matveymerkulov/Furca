@@ -1,3 +1,5 @@
+// noinspection DuplicatedCode
+
 import TileSet from "../src/tile_set.js"
 import TileMap from "../src/tile_map.js"
 import ImageArray from "../src/image_array.js"

@@ -1,7 +1,7 @@
 import TileMap from "../src/tile_map.js"
 import {tileMap, tileMaps} from "../src/project.js"
 import {eof, getInt, getSymbol, getToken, initParser, readSymbol} from "../src/parser.js"
-import {setName} from "./names.js"
+import {setName} from "../src/names.js"
 
 export function addTileMap(name, map) {
     setName(map, name)

@@ -1,7 +1,5 @@
 import Layer from "./layer.js"
 import {currentCanvas} from "./canvas.js"
-import {currentWindow, windows} from "./gui/window.js"
-import {mainWindow} from "../editor/main_window.js"
 
 export let tileSet, tileMap, tileMaps
 
@@ -19,14 +17,12 @@ export let project = {
     sound: {},
     texture: null,
 
+    render() {
+    },
+
     renderNode() {
-        if(windows.size === 0) {
-            currentCanvas.renderNode()
-        } else {
-            mainWindow.renderNode()
-            if(currentWindow === undefined || currentWindow === mainWindow) return
-            currentWindow.renderNode()
-        }
+        this.render()
+        currentCanvas.renderNode()
     },
 
     getAssets() {
@@ -34,13 +30,12 @@ export let project = {
     },
 
     init: () => {},
-    updateNode: () => {
-        if(windows.size === 0) {
-            this.scene.update()
-        } else {
-            mainWindow.updateNode()
-            if(currentWindow === undefined) return
-            currentWindow.updateNode()
-        }
+
+    update() {
+    },
+
+    updateNode() {
+        this.update()
+        this.scene.update()
     },
 }

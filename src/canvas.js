@@ -1,5 +1,5 @@
 import Sprite from "./sprite.js"
-import {mouse, screenMouse} from "./system.js"
+import {canvasMouse, mouse} from "./system.js"
 import Box from "./box.js"
 import {project} from "./project.js"
 
@@ -8,12 +8,12 @@ export let currentCanvas, canvasUnderCursor, ctx, zk = 1.2
 export function setCanvas(canvas) {
     currentCanvas = canvas
     ctx = canvas.node.getContext("2d")
-    mouse.setPosition(xFromScreen(screenMouse.x), yFromScreen(screenMouse.y))
+    mouse.setPosition(xFromScreen(canvasMouse.x), yFromScreen(canvasMouse.y))
 }
 
 export default class Canvas extends Box {
     constructor(node, x, y, width, height, viewport, active = true) {
-        super(undefined, x, y, width, height, 0.0, 0.0)
+        super(x, y, width, height, 0.0, 0.0)
 
         this.node = node
         node.addEventListener("mouseover", () => {

@@ -1,6 +1,4 @@
-import {arrayToString} from "../editor/save_load.js"
-import {altGroup} from "../editor/tile_set.js"
-import {rndi} from "./system.js"
+import {arrayToString} from "./save_load.js"
 
 
 export class Category {
@@ -95,8 +93,7 @@ export function enframeTile(map, column, row) {
             let category = findTileCategory(map, pos.dx + column, pos.dy + row, prolong)
             if(category === tileCategory) continue rule
         }
-        map.setPosTile(column, row, altGroup !== undefined && altGroup[0] === rule.tile
-            ? altGroup[rndi(0, altGroup.length)] : rule.tile)
+        map.setPosTile(column, row, rule.tile)
         return
     }
 }
