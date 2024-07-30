@@ -8,8 +8,12 @@ import {
     circleWithCircleCollision, circleWithPillCollision,
     pillWithPillCollision
 } from "./collisions.js"
-import {pushBoxFromBox, pushBoxFromCircle, pushCircleFromBox, pushCircleFromCircle} from "./physics.js"
+import {
+    boxFromBoxVector,
+    circleFromBoxVector, circleFromCircleVector, circleFromPillVector, pillFromPillVector,
+} from "./physics.js"
 import {ShapeType} from "./shape.js"
+import {pillFromBoxVector} from "./physics.js"
 
 export default class Sprite extends Box {
     constructor(image, x = 0.0, y = 0.0, width = 1.0, height = 1.0
@@ -192,39 +196,44 @@ export default class Sprite extends Box {
         return false
     }
 
-    pushFromSprite(sprite) {
+    pushFromSprite(sprite, k = 1) {
         switch(this.shapeType) {
             case ShapeType.circle:
                 switch(sprite.shapeType) {
                     case ShapeType.circle:
-                        pushCircleFromCircle(this, sprite)
+                        circleFromCircleVector(this, sprite).addToSprite(this, k)
                         break
                     case ShapeType.box:
-                        pushCircleFromBox(this, sprite)
+                        circleFromBoxVector(this, sprite).addToSprite(this, k)
                         break
                     case ShapeType.pill:
+                        circleFromPillVector(this, sprite).addToSprite(this, k)
                         break
                 }
                 break
             case ShapeType.box:
                 switch(sprite.shapeType) {
                     case ShapeType.circle:
-                        pushBoxFromCircle(this, sprite)
+                        circleFromBoxVector(sprite, this).subtractFromSprite(this, k)
                         break
                     case ShapeType.box:
-                        pushBoxFromBox(this, sprite)
+                        boxFromBoxVector(sprite, this).subtractFromSprite(this, k)
                         break
                     case ShapeType.pill:
+                        pillFromBoxVector(this, sprite).addToSprite(this, k)
                         break
                 }
                 break
             case ShapeType.pill:
                 switch(sprite.shapeType) {
                     case ShapeType.circle:
+                        circleFromPillVector(sprite, this).subtractFromSprite(this, k)
                         break
                     case ShapeType.box:
+                        pillFromBoxVector(this, sprite).addToSprite(this, k)
                         break
                     case ShapeType.pill:
+                        pillFromPillVector(this, sprite).addToSprite(this, k)
                         break
                 }
                 break

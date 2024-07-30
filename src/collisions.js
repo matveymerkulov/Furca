@@ -1,10 +1,10 @@
 import Box from "./box.js"
 import {clamp, unc} from "./system.js"
 
-let serviceSprite1 = new Box()
-let serviceSprite2 = new Box()
+export let serviceSprite1 = new Box()
+export let serviceSprite2 = new Box()
 
-function toCircle(pill, point, servicePill) {
+export function toCircle(pill, point, servicePill) {
     if(pill.halfWidth === pill.halfHeight) return pill
     if(pill.halfWidth > pill.halfHeight) {
         let dwidth = pill.halfWidth - pill.halfHeight
