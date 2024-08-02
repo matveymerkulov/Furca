@@ -8,6 +8,7 @@ export let ShapeType = {
     pill: Symbol("pill"),
 }
 
+// noinspection JSSuspiciousNameCombination
 export default class Shape extends Renderable {
     constructor(color, opacity = 1.0, xMul = 0.5, yMul = 0.5, widthMul = 1.0, heightMul = 1.0) {
         super()
@@ -47,11 +48,9 @@ export default class Shape extends Renderable {
                 if(swidth > sheight) {
                     ctx.arc(halfHeight, halfHeight, halfHeight, rad(90), rad(270))
                     ctx.arc(swidth - halfHeight, halfHeight, halfHeight, rad(-90), rad(90))
-                    ctx.fillRect(halfHeight, 0, swidth - 2.0 * halfHeight, sheight)
                 } else {
                     ctx.arc(halfWidth, halfWidth, halfWidth, rad(180), rad(0))
                     ctx.arc(halfWidth, sheight - halfWidth, halfWidth, rad(360), rad(180))
-                    ctx.fillRect(0, halfWidth, swidth, sheight - 2.0 * halfWidth)
                 }
                 ctx.fill()
                 break

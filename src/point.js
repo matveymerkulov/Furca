@@ -61,6 +61,6 @@ export default class Point extends Renderable {
     }
 
     angleTo(x, y) {
-        return Math.atan2(this.y - y, this.x - x)
+        return Math.atan2(y - this.y, x - this.x)
     }
 }

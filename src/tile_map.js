@@ -5,23 +5,27 @@ import Shape from "./shape.js"
 import {arrayToString} from "./save_load.js"
 import {showCollisionShapes} from "./input.js"
 import {tileMap} from "./project.js"
+import {apsk, cos, rad, sin} from "./system.js"
 
 let collisionShape = new Shape("rgb(255, 0, 255)", 0.5)
 let collisionSprite = new Sprite()
+export const emptyTile = -1
 
 export default class TileMap extends Box {
     #tileSet
     #columns
     #rows
     #array
-    constructor(tileSet, columns, rows, x, y, cellWidth, cellHeight, array) {
+    operation
+    constructor(tileSet, columns, rows, x, y, cellWidth, cellHeight, array, operation) {
         super(x, y, cellWidth * columns, cellHeight * rows)
         this.#tileSet = tileSet
         this.#columns = columns
         this.#rows = rows
-        this.#array = array ?? new Array(columns * rows).fill(-1)
+        this.#array = array ?? new Array(columns * rows).fill(emptyTile)
         this.cellWidth = cellWidth
         this.cellHeight = cellHeight
+        this.operation = operation
     }
 
     copy() {
@@ -63,9 +67,9 @@ export default class TileMap extends Box {
 
     tileForPoint(point) {
         let column = Math.floor(this.fColumn(point))
-        if(column < 0 || column >= this.#columns) return -1
+        if(column < 0 || column >= this.#columns) return emptyTile
         let row = Math.floor(this.fRow(point))
-        if(row < 0 || row >= this.#rows) return -1
+        if(row < 0 || row >= this.#rows) return emptyTile
         return column + row * this.#columns
     }
 
@@ -81,8 +85,12 @@ export default class TileMap extends Box {
         return this.#tileSet.image(num)
     }
 
-    tile(column, row) {
-        return this.#array[row === undefined ? column : column + row * this.columns]
+    indexTile(index) {
+        return this.#array[index]
+    }
+
+    posTile(column, row) {
+        return this.#array[column + row * this.columns]
     }
 
     setIndexTile(tileNum, number) {
@@ -101,24 +109,28 @@ export default class TileMap extends Box {
     draw() {
         let x0 = Math.floor(xToScreen(this.leftX))
         let y0 = Math.floor(yToScreen(this.topY))
+        let tileSet = this.tileSet
 
         ctx.strokeStyle = "white"
         ctx.strokeRect(x0, y0, distToScreen(this.width), distToScreen((this.height)))
 
+        if(this.operation !== "") {
+            ctx.globalCompositeOperation = this.operation
+        }
+
         let width = distToScreen(this.cellWidth)
         let height = distToScreen(this.cellHeight)
 
-        let tileSet = this.tileSet
-        let images = tileSet.images
         for(let row = 0; row < this.#rows; row++) {
             let intY = Math.floor(y0 + height * row)
             let intHeight = Math.floor(y0 + height * (row + 1)) - intY
             for(let column = 0; column < this.#columns; column++) {
-                let tileNum = this.tile(column, row)
+                let tileNum = this.posTile(column, row)
                 if(tileNum < 0) continue
                 let intX = Math.floor(x0 + width * column)
                 let intWidth = Math.floor(x0 + width * (column + 1)) - intX
-                images.image(tileNum).drawResized(intX, intY, intWidth, intHeight)
+                this.drawTile(tileNum, intX, intY, intWidth, intHeight)
+
                 if(!showCollisionShapes) continue
                 let shape = tileSet.collisionShape(tileNum)
                 if(shape === undefined) continue
@@ -127,6 +139,11 @@ export default class TileMap extends Box {
                     , width * shape.width, height * shape.height, shape.shapeType)
             }
         }
+        ctx.globalCompositeOperation = "source-over"
+    }
+
+    drawTile(tileNum, intX, intY, intWidth, intHeight) {
+        this.tileSet.images.image(tileNum).drawResized(intX, intY, intWidth, intHeight)
     }
 
     tileSprite(shapeType, column, row) {
@@ -134,11 +151,11 @@ export default class TileMap extends Box {
         if(row === undefined) {
             x = this.leftX + this.cellWidth * (0.5 + this.tileColumn(column))
             y = this.topY + this.cellHeight * (0.5 + this.tileRow(column))
-            tileNum = this.tile(column)
+            tileNum = this.posTile(column, row)
         } else {
             x = this.leftX + this.cellWidth * (0.5 + column)
             y = this.topY + this.cellHeight * (0.5 + row)
-            tileNum = this.tile(column, row)
+            tileNum = this.posTile(column, row)
         }
         return new Sprite(this.image(tileNum), x, y, this.cellWidth, this.cellHeight, shapeType)
     }
@@ -146,7 +163,7 @@ export default class TileMap extends Box {
     extract(tileNumber, shapeType) {
         for(let row = 0; row < this.rows; row++) {
             for(let column = 0; column < this.columns; column++) {
-                if(tileNumber !== this.tile(column, row)) continue
+                if(tileNumber !== this.posTile(column, row)) continue
                 return this.extractTile(column, row, shapeType)
             }
         }
@@ -168,7 +185,7 @@ export default class TileMap extends Box {
     processTiles(code) {
         for(let row = 0; row < this.rows; row++) {
             for(let column = 0; column < this.columns; column++) {
-                code.call(null, column, row, this.tile(column, row))
+                code.call(null, column, row, this.posTile(column, row))
             }
         }
     }
@@ -220,7 +237,7 @@ export default class TileMap extends Box {
         let y1 = Math.ceil((sprite.bottomY - this.topY) / this.cellHeight)
         for(let y = y0; y <= y1; y++) {
             for(let x = x0; x <= x1; x++) {
-                let tileNum = this.tile(x, y)
+                let tileNum = this.posTile(x, y)
                 let shape = tileSet.collisionShape(tileNum)
                 if(shape === undefined) continue
                 collisionSprite.shapeType = shape.shapeType

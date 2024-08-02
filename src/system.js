@@ -22,6 +22,31 @@ export let align = {
 
 // global functions
 
+export function sin(angle) {
+    return Math.sin(angle)
+}
+
+export function cos(angle) {
+    return Math.cos(angle)
+}
+
+export function atan2(y, x) {
+    return Math.atan2(y, x)
+}
+
+export function sqrt(value) {
+    return Math.sqrt(value)
+}
+
+export function sign(value) {
+    return Math.sign(value)
+}
+
+export function abs(value) {
+    return Math.abs(value)
+}
+
+
 export function rad(angle) {
     return Math.PI * angle / 180
 }
@@ -222,6 +247,6 @@ function start() {
 
         project.renderNode()
 
-        //ctx.fillText(`fps: ${realFps}, aps: ${realAps}`, 5, 5)
+        ctx.fillText(`fps: ${realFps}, aps: ${realAps}`, 5, 5)
     }, 1000.0 / 150)
 }

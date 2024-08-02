@@ -3,17 +3,22 @@ import {ctx, distToScreen, xToScreen, yToScreen} from "./canvas.js"
 import {apsk, num, rad} from "./system.js"
 import Animate from "./actions/sprite/animate.js"
 import {
-    boxWithBoxCollision, boxWithPillCollision,
+    boxWithBoxCollision,
+    boxWithPillCollision,
     circleWithBoxCollision,
-    circleWithCircleCollision, circleWithPillCollision,
+    circleWithCircleCollision,
+    circleWithPillCollision,
     pillWithPillCollision
 } from "./collisions.js"
 import {
     boxFromBoxVector,
-    circleFromBoxVector, circleFromCircleVector, circleFromPillVector, pillFromPillVector,
+    circleFromBoxVector,
+    circleFromCircleVector,
+    circleFromPillVector,
+    pillFromBoxVector,
+    pillFromPillVector,
 } from "./physics.js"
 import {ShapeType} from "./shape.js"
-import {pillFromBoxVector} from "./physics.js"
 
 export default class Sprite extends Box {
     constructor(image, x = 0.0, y = 0.0, width = 1.0, height = 1.0
@@ -178,7 +183,6 @@ export default class Sprite extends Box {
                         return boxWithBoxCollision(this, sprite)
                     case ShapeType.pill:
                         return boxWithPillCollision(this, sprite)
-                        break
                 }
                 break
             case ShapeType.pill:
@@ -189,14 +193,13 @@ export default class Sprite extends Box {
                         return boxWithPillCollision(sprite, this)
                     case ShapeType.pill:
                         return pillWithPillCollision(this, sprite)
-                        break
                 }
                 break
         }
         return false
     }
 
-    pushFromSprite(sprite, k = 1) {
+    pushFromSprite(sprite, k = 1.0) {
         switch(this.shapeType) {
             case ShapeType.circle:
                 switch(sprite.shapeType) {

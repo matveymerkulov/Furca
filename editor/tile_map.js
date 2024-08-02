@@ -14,8 +14,8 @@ import {Pan} from "./pan.js"
 import Zoom from "./zoom.js"
 import MoveTileMaps from "./move_tile_maps.js"
 import Key from "../src/key.js"
-import {mainWindow} from "./main_window.js"
 import {enframeTile} from "../src/auto_tiling.js"
+import {mainWindow} from "./main_window.js"
 
 export let currentTileMap, tileMapUnderCursor, currentTileSprite
 

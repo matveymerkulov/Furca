@@ -1,5 +1,5 @@
 import Box from "./box.js"
-import {clamp, unc} from "./system.js"
+import {clamp} from "./system.js"
 
 export let serviceSprite1 = new Box()
 export let serviceSprite2 = new Box()

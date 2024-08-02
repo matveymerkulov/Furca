@@ -1,7 +1,7 @@
 import {tileSet} from "../src/project.js"
 import {ctx} from "../src/canvas.js"
 import {drawDashedRegion} from "../src/draw.js"
-import {pointWithBoxCollision, pointWithParamBoxCollision} from "../src/collisions.js"
+import {pointWithParamBoxCollision} from "../src/collisions.js"
 import {canvasMouse} from "../src/system.js"
 import {brushSize, setBlockSize} from "./tile_map.js"
 import {visibility} from "../src/tile_set.js"

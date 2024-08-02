@@ -1,5 +1,4 @@
-import Box from "./box.js"
-import {clamp, unc} from "./system.js"
+import {unc} from "./system.js"
 import {serviceSprite1, serviceSprite2, toCircle} from "./collisions.js"
 
 
@@ -9,6 +8,10 @@ export class Vector {
     constructor(x, y) {
         this.x = x
         this.y = y
+    }
+
+    get angle() {
+        return Math.atan2(this.y, this.x)
     }
 
     multiplyBy(value) {
@@ -23,6 +26,13 @@ export class Vector {
 
     subtractFromSprite(sprite, k = 1) {
         sprite.setPosition(k * (sprite.x - this.x), k * (sprite.y - this.y))
+    }
+
+    normalize() {
+        let length = Math.sqrt(this.x * this.x + this.y * this.y)
+        this.x /= length
+        this.y /= length
+        return this
     }
 }
 
@@ -41,9 +51,10 @@ export function circleFromBoxVector(circle, fromBox) {
             || circle.y >= fromBox.topY && circle.y < fromBox.bottomY) {
         return boxFromBoxVector(circle, fromBox)
     } else {
-        let x = circle.x < fromBox.x ? fromBox.leftX : fromBox.rightX
-        let y = circle.y < fromBox.y ? fromBox.topY : fromBox.bottomY
-        return circleFromCircleVector(circle, {x:x, y:y})
+        serviceSprite1.x = circle.x < fromBox.x ? fromBox.leftX : fromBox.rightX
+        serviceSprite1.y = circle.y < fromBox.y ? fromBox.topY : fromBox.bottomY
+        serviceSprite1.radius = 0
+        return circleFromCircleVector(circle, serviceSprite1)
     }
 }
 
