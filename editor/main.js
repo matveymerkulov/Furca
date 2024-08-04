@@ -53,9 +53,12 @@ project.renderNode = () => {
 }
 
 project.updateNode = () => {
-    mainWindow.updateNode()
-    if(currentWindow === undefined) return
-    currentWindow.updateNode()
+    project.update()
+    if(currentWindow === undefined) {
+        mainWindow.updateNode()
+    } else {
+        currentWindow.updateNode()
+    }
 }
 
 

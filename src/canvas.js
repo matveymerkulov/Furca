@@ -1,5 +1,5 @@
 import Sprite from "./sprite.js"
-import {canvasMouse, mouse} from "./system.js"
+import {canvasMouse, mouse, screenMouse} from "./system.js"
 import Box from "./box.js"
 import {project} from "./project.js"
 
@@ -43,8 +43,6 @@ export default class Canvas extends Box {
     }
 
     renderNode() {
-        if(!this.active) return
-
         this.updateParameters()
         let viewport = this.viewport
         setCanvas(this)
@@ -63,6 +61,8 @@ export default class Canvas extends Box {
     }
 
     updateNode() {
+        if(!this.active) return
+        // || !this.viewport.collidesWithPoint(screenMouse.x, screenMouse.y)
         setCanvas(this)
         this.update()
         for(let action of this.actions) {

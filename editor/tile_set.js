@@ -10,6 +10,7 @@ import TileZoom, {tilesPerRow} from "./tile_zoom.js"
 import {TilePan, updateY0, y0} from "./tile_pan.js"
 import Key from "../src/key.js"
 import {mainWindow} from "./main_window.js"
+import {currentWindow} from "../src/gui/window.js"
 
 export let currentTile = 1, currentTileSet, currentBlock, currentGroup, altGroup
 export let maxY0 = 0
@@ -113,6 +114,7 @@ export function updateBlockSize() {
 }
 
 tileSetCanvas.update = () => {
+    if(currentWindow !== undefined) return
     processTiles((set, images, i, x, y, size) => {
         if((selectKey.wasPressed || delKey.wasPressed) && pointWithParamBoxCollision(canvasMouse, x, y, size, size)) {
             if(selectKey.wasPressed) {

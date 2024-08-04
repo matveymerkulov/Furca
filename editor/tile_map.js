@@ -252,14 +252,14 @@ export function setTiles(map, set, column, row, width, height, tileNum, block, g
                     let dy = y - 0.5 * (height - 1)
                     if(Math.sqrt(dx * dx + dy * dy) > 0.5 * width) continue
                 }
-                map.setPosTile(xx, yy, group === undefined ? tileNum : group[rndi(0, group.length)])
+                map.setTileByPos(xx, yy, group === undefined ? tileNum : group[rndi(0, group.length)])
             } else if(block.type === blockType.block) {
-                map.setPosTile(xx, yy, block.x + (x % block.width)
+                map.setTileByPos(xx, yy, block.x + (x % block.width)
                     + set.columns * (block.y + (y % block.height)))
             } else if(block.type === blockType.frame) {
                 let dx = block.width < 3 || x === 0 ? x : (x === blockWidth - 1 ? 2 : 1)
                 let dy = block.height < 3 || y === 0 ? y : (y === blockHeight - 1 ? 2 : 1)
-                map.setPosTile(xx, yy, block.x + dx + set.columns * (block.y + dy))
+                map.setTileByPos(xx, yy, block.x + dx + set.columns * (block.y + dy))
             }
         }
     }

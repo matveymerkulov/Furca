@@ -5,7 +5,6 @@ import Shape from "./shape.js"
 import {arrayToString} from "./save_load.js"
 import {showCollisionShapes} from "./input.js"
 import {tileMap} from "./project.js"
-import {apsk, cos, rad, sin} from "./system.js"
 
 let collisionShape = new Shape("rgb(255, 0, 255)", 0.5)
 let collisionSprite = new Sprite()
@@ -73,32 +72,32 @@ export default class TileMap extends Box {
         return column + row * this.#columns
     }
 
-    tileColumn(tileNum) {
-        return tileNum % this.#columns
+    tileColumn(index) {
+        return index % this.#columns
     }
 
-    tileRow(tileNum) {
-        return Math.floor(tileNum / this.#columns)
+    tileRow(index) {
+        return Math.floor(index / this.#columns)
     }
 
     image(num) {
         return this.#tileSet.image(num)
     }
 
-    indexTile(index) {
+    tileByIndex(index) {
         return this.#array[index]
     }
 
-    posTile(column, row) {
+    tileByPos(column, row) {
         return this.#array[column + row * this.columns]
     }
 
-    setIndexTile(tileNum, number) {
-        this.#array[tileNum] = number
+    setTileByIndex(index, tileNum) {
+        this.#array[index] = tileNum
     }
 
-    setPosTile(column, row, number) {
-        this.#array[column + row * this.columns] = number
+    setTileByPos(column, row, tileNum) {
+        this.#array[column + row * this.columns] = tileNum
     }
 
     setArray(array) {
@@ -125,7 +124,7 @@ export default class TileMap extends Box {
             let intY = Math.floor(y0 + height * row)
             let intHeight = Math.floor(y0 + height * (row + 1)) - intY
             for(let column = 0; column < this.#columns; column++) {
-                let tileNum = this.posTile(column, row)
+                let tileNum = this.tileByPos(column, row)
                 if(tileNum < 0) continue
                 let intX = Math.floor(x0 + width * column)
                 let intWidth = Math.floor(x0 + width * (column + 1)) - intX
@@ -139,6 +138,7 @@ export default class TileMap extends Box {
                     , width * shape.width, height * shape.height, shape.shapeType)
             }
         }
+
         ctx.globalCompositeOperation = "source-over"
     }
 
@@ -146,87 +146,55 @@ export default class TileMap extends Box {
         this.tileSet.images.image(tileNum).drawResized(intX, intY, intWidth, intHeight)
     }
 
-    tileSprite(shapeType, column, row) {
-        let tileNum, x, y
-        if(row === undefined) {
-            x = this.leftX + this.cellWidth * (0.5 + this.tileColumn(column))
-            y = this.topY + this.cellHeight * (0.5 + this.tileRow(column))
-            tileNum = this.posTile(column, row)
-        } else {
-            x = this.leftX + this.cellWidth * (0.5 + column)
-            y = this.topY + this.cellHeight * (0.5 + row)
-            tileNum = this.posTile(column, row)
-        }
-        return new Sprite(this.image(tileNum), x, y, this.cellWidth, this.cellHeight, shapeType)
+    tileXByColumn(column) {
+        return this.leftX + this.cellWidth * (0.5 + column)
+    }
+
+    tileYByRow(row) {
+        return this.topY + this.cellHeight * (0.5 + row)
+    }
+
+    tileXByIndex(index) {
+        return this.leftX + this.cellWidth * (0.5 + this.tileColumn(index))
+    }
+
+    tileYByIndex(row) {
+        return this.topY + this.cellHeight * (0.5 + this.tileRow(row))
+    }
+
+
+    tileSpriteByIndex(shapeType, index) {
+        return new Sprite(this.image(this.tileByIndex(index)), this.tileXByIndex(index), this.tileYByIndex(index)
+            , this.cellWidth, this.cellHeight, shapeType)
+    }
+
+    tileSpriteByPos(shapeType, column, row) {
+        return new Sprite(this.image(this.tileByPos(column, row)), this.tileXByColumn(column), this.tileYByRow(row)
+            , this.cellWidth, this.cellHeight, shapeType)
     }
 
     extract(tileNumber, shapeType) {
         for(let row = 0; row < this.rows; row++) {
             for(let column = 0; column < this.columns; column++) {
-                if(tileNumber !== this.posTile(column, row)) continue
-                return this.extractTile(column, row, shapeType)
+                if(tileNumber !== this.tileByPos(column, row)) continue
+                return this.extractTileByPos(column, row, shapeType)
             }
         }
         throw new Error("Cannot find tile " + tileNumber)
     }
 
-    extractTile(column, row, shapeType) {
-        if(shapeType === undefined) {
-            let sprite = this.tileSprite(shapeType, column)
-            this.setPosTile(column, 0)
-            return sprite
-        } else {
-            let sprite = this.tileSprite(shapeType, column, row)
-            this.setIndexTile(column, row, 0)
-            return sprite
-        }
+    extractTileByPos(column, row, shapeType) {
+        let sprite = this.tileSpriteByPos(shapeType, column, row)
+        this.setTileByPos(column, row, 0)
+        return sprite
     }
 
     processTiles(code) {
         for(let row = 0; row < this.rows; row++) {
             for(let column = 0; column < this.columns; column++) {
-                code.call(null, column, row, this.posTile(column, row))
+                code.call(null, column, row, this.tileByPos(column, row))
             }
         }
-    }
-
-    transform(centerX = 0.5 * this.#columns, centerY = 0.5 * this.#rows, mirrorHorizontally, mirrorVertically, swap) {
-        centerX -= 0.5
-        centerY -= 0.5
-        let newArray = new Array(this.#array.length).fill(0)
-        let newK = swap ? this.#columns : this.#rows
-        for(let y = 0; y < this.#rows; y++) {
-            for(let x = 0; x < this.#columns; x++) {
-                let newX = x - centerX
-                let newY = y - centerY
-                newX = mirrorHorizontally ? -newX : newX
-                newY = mirrorVertically ? -newY : newY
-                if(swap) [newX, newY] = [newY, newX]
-                newX += centerX
-                newY += centerY
-                if(newX < 0 || newX >= this.#columns) continue
-                if(newY < 0 || newY >= this.#rows) continue
-                newArray[newX + newK * newY] = this.#array[x + this.#columns * y]
-            }
-        }
-        //if(swap) [this.#columns, this.#rows] = [this.#rows, this.#columns]
-        this.#array = newArray
-    }
-
-    turnClockwise(centerX, centerY) {
-        this.transform(centerX, centerY, false, true, true)
-    }
-
-    turnCounterclockwise(centerX, centerY) {
-        this.transform(centerX, centerY, true, false, true)
-    }
-
-    mirrorHorizontally(centerX, centerY) {
-        this.transform(centerX, centerY, true, false, false)
-    }
-
-    mirrorVertically(centerX, centerY) {
-        this.transform(centerX, centerY, false, true, false)
     }
 
     collisionWithSprite(sprite, code) {
@@ -237,7 +205,7 @@ export default class TileMap extends Box {
         let y1 = Math.ceil((sprite.bottomY - this.topY) / this.cellHeight)
         for(let y = y0; y <= y1; y++) {
             for(let x = x0; x <= x1; x++) {
-                let tileNum = this.posTile(x, y)
+                let tileNum = this.tileByPos(x, y)
                 let shape = tileSet.collisionShape(tileNum)
                 if(shape === undefined) continue
                 collisionSprite.shapeType = shape.shapeType

@@ -77,7 +77,7 @@ project.init = (texture) => {
             case bombTile:
             case figureTile:
             case diamondTile:
-                tiles.setTile(x, y, emptyTile)
+                tiles.setTileByPos(x, y, emptyTile)
                 break
             default:
                 player.pushFromSprite(shape)
@@ -89,7 +89,7 @@ project.init = (texture) => {
 
     tiles.processTiles((column, row, tileNum) => {
         if(tileNum === panelTile) {
-            let panel = tiles.extractTile(column, row, ShapeType.box)
+            let panel = tiles.extractTileByPos(column, row, ShapeType.box)
             panel.dy = -panelSpeed
             panels.add(panel)
         }

@@ -46,6 +46,14 @@ export function abs(value) {
     return Math.abs(value)
 }
 
+export function floor(value) {
+    return Math.floor(value)
+}
+
+export function ceil(value) {
+    return Math.ceil(value)
+}
+
 
 export function rad(angle) {
     return Math.PI * angle / 180

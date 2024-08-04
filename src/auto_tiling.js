@@ -75,7 +75,7 @@ function findTileCategory(map, column, row, prolong = false) {
         if(column < 0 || column >= map.columns || row < 0 ||row >= map.rows) return undefined
     }
 
-    let tileNum = map.tile(column, row)
+    let tileNum = map.tileByPos(column, row)
     for(let category of map.tileSet.categories) {
         for(let rule of category.rules) {
             if(rule.tile === tileNum) return category
@@ -93,7 +93,7 @@ export function enframeTile(map, column, row) {
             let category = findTileCategory(map, pos.dx + column, pos.dy + row, prolong)
             if(category === tileCategory) continue rule
         }
-        map.setPosTile(column, row, rule.tile)
+        map.setTileByPos(column, row, rule.tile)
         return
     }
 }
