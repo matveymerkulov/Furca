@@ -197,7 +197,7 @@ export function mapModeOperations() {
     }
 
     if(copyMapKey.wasPressed) {
-        addTileMap(incrementName(getName(tileMapUnderCursor)), tileMapUnderCursor.copy())
+        addTileMap(incrementName(getName(tileMapUnderCursor)), tileMapUnderCursor.copy(1 + tileMapUnderCursor.width, 0))
     }
 
     if(deleteMapKey.wasPressed) {

@@ -46,6 +46,10 @@ export default class Layer extends Renderable {
         Array.prototype.push.apply(this.items, objects)
     }
 
+    replace(index, object) {
+        this.items[index] = object
+    }
+
     remove(object) {
         removeFromArray(object, this.items)
     }

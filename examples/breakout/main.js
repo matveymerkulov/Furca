@@ -1,5 +1,5 @@
 import Key from "../../src/key.js"
-import {apsk, atan2, clamp, cos, defaultCanvas, mouse, play, rad, sin} from "../../src/system.js"
+import {Align, apsk, atan2, clamp, cos, defaultCanvas, floor, mouse, play, rad, sin} from "../../src/system.js"
 import {project, tileMap, tileSet} from "../../src/project.js"
 import {loadData} from "./data.js"
 import Sprite from "../../src/sprite.js"
@@ -11,23 +11,30 @@ import {emptyTile} from "../../src/tile_map.js"
 import {NinePatch} from "../../src/nine_patch.js"
 import {Action} from "../../src/actions/action.js"
 import Layer from "../../src/layer.js"
+import {PopEffect, PopEffectType} from "./pop_effect.js"
+import Box from "../../src/box.js"
+import Label from "../../src/gui/label.js"
+import Num from "../../src/variable/number.js"
 
 project.getAssets = () => {
     return {
         texture: {
             blocks: "blocks.png",
-            colors: "colors.png",
         },
         sound: {
             collision1: "collision1.mp3",
             collision2: "collision2.mp3",
             collision3: "collision3.mp3",
-            ballLost: "death.ogg",
+            collision4: "collision4.mp3",
+            ballLost: "ball_lost.ogg",
+            gameOver: "game_over.mp3",
+            win: "win.ogg",
         }
     }
 }
 
-export let fieldHalfWidth, fieldHalfHeight, minPaddleX, maxPaddleX, paddleY, initialBallY
+export let minPaddleX, maxPaddleX, paddleY, initialBallY, level
+export let fx = new Layer()
 
 project.init = (texture) => {
     let key = new Key("LMB")
@@ -37,34 +44,73 @@ project.init = (texture) => {
     defaultCanvas()
     currentCanvas.size = 40
 
+    let ballImage = new Img(texture.blocks, 3 * 32, 13 * 32, 32, 32)
+
+    let blocksLeft = new Num()
+    let score = new Num()
+    let lives = new Num(3)
+
+    let hud = new Box(0, 0, currentCanvas.width - 1, currentCanvas.height - 1)
+    let blocksLeftLabel = new Label(hud, [""/*"Blocks left: ", blocksLeft*/], Align.left, Align.top)
+    let messageLabel = new Label(hud, [""], Align.center, Align.center)
+    let scoreLabel = new Label(hud, [score], Align.center, Align.top, "Z8")
+    let livesLabel = new Label(hud, [lives], Align.left, Align.bottom, "I1", ballImage)
+
+    const tileSetWidth = 4
+
     // new Img(texture.blocks, 0, 192, 96, 32, 0.5, 1.0, 1.0, 0.5)
     let paddle = new Sprite(new NinePatch(new Img(texture.blocks, 0, 0, 96, 32), 16
         , 80, 8, 24), 0, 10.5, 5, 1, ShapeType.box)
-    let ball = new Sprite(new Img(texture.blocks, 3 * 32, 13 * 32, 32, 32), 0, 9.25, 0.5, 0.5, ShapeType.circle)
-    let ballIsActive = false
 
-    tileSet.blocks.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.box), 0, 4 * 14)
+    const BallStatus = {
+        onPaddle: Symbol("onPaddle"),
+        rolling: Symbol("rolling"),
+        appearing: Symbol("appearing"),
+        gameOver: Symbol("gameOver")
+    }
 
-    let sprites = new Layer()
+    let ball = new Sprite(ballImage, 0, 9.25, 0.5, 0.5, ShapeType.circle)
+    let ballStatus = BallStatus.onPaddle
 
-    project.scene.add(tileMap.blocks, sprites, paddle, ball)
+    tileSet.blocks.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.box), 0, tileSetWidth * 14)
 
-    function initLevel() {
-        fieldHalfWidth = tileMap.blocks.halfWidth
-        fieldHalfHeight = tileMap.blocks.halfHeight
-        let d = tileMap.blocks.cellWidth + paddle.halfWidth
-        minPaddleX = -fieldHalfWidth + d
-        maxPaddleX = fieldHalfWidth - d
-        paddleY = fieldHalfHeight - paddle.halfHeight
-        ball.speed = registry.initialBallSpeed
-        ball.angle = rad(-45)
-        ball.size = registry.ballSize
+    project.scene.add(level, fx, paddle, ball, blocksLeftLabel, livesLabel, messageLabel, scoreLabel)
+
+    const horizontalBlocks = tileSetWidth * 4
+    const verticalBlocks = tileSetWidth * 8
+    const singleBlocks = tileSetWidth * 12
+
+    function initPaddleSize(width, height) {
+        paddle.setSize(width, height)
+        let d = level.cellWidth + paddle.halfWidth
+        minPaddleX = -level.halfWidth + d
+        maxPaddleX = level.halfWidth - d
+        paddleY = level.halfHeight - paddle.halfHeight
         initialBallY = paddle.topY - ball.halfHeight
     }
-    initLevel()
 
-    let collision1 = project.sound.collision1
-    let collision2 = project.sound.collision2
+    function initLevel() {
+        level = tileMap.blocks.copy()
+        ball.speed = registry.ball.speed
+        ball.angle = registry.ball.angle
+        ball.size = registry.ball.size
+        ballStatus = BallStatus.onPaddle
+
+        lives.value = 3
+        score.value = 0
+        messageLabel.items[0] = ""
+
+        project.scene.replace(0, level)
+
+        level.processTiles((column, row, tileNum) => {
+            if(tileNum >= horizontalBlocks) {
+                blocksLeft.increment()
+            }
+        })
+
+        initPaddleSize(registry.paddle.width, registry.paddle.height)
+    }
+    initLevel()
 
     const collisionType = {
         none: Symbol("none"),
@@ -73,48 +119,66 @@ project.init = (texture) => {
     }
 
     project.update = () => {
-        function removeTile(column, row) {
-            let tileNum = tileMap.blocks.tileByPos(column, row)
+        function removeTile(column, row, snd) {
+            let tileNum = level.tileByPos(column, row)
             let dx = 0, dy = 0
-            if(tileNum < 16) {
-                play(collision2)
+
+            if(tileNum < horizontalBlocks) {
+                play(snd)
                 return
-            } else if(tileNum < 32) {
+            } else if(tileNum < verticalBlocks) {
                 dx = 1
                 if (tileNum % 2 === 1) {
                     column -= 1
                 }
-            } else if(tileNum < 48) {
+            } else if(tileNum < singleBlocks) {
                 dy = 1
-                if(Math.floor(tileNum / 4) % 2 === 1) {
+                if(floor(tileNum / tileSetWidth) % 2 === 1) {
                     row -= 1
                 }
             }
+            blocksLeft.decrement(1 + dx + dy)
+            score.increment((2 - dx - dy)* 100)
 
-            tileMap.blocks.setTileByPos(column, row, emptyTile)
-            tileMap.blocks.setTileByPos(column + dx, row + dy, emptyTile)
-            play(collision1)
+            if(blocksLeft <= 0) {
+                messageLabel.items[0] = "ВЫ ПОБЕДИЛИ!"
+                ballStatus = BallStatus.gameOver
+                play(project.sound.win)
+            }
+
+            let sprite = level.tileSpriteByPos(undefined, column, row)
+            sprite.setPosition(sprite.x + 0.5 * dx, sprite.y + 0.5 * dy)
+            sprite.setSize(1 + dx, 1 + dy)
+
+            fx.add(new PopEffect(sprite, 0.5, PopEffectType.disappear))
+
+            level.setTileByPos(column, row, emptyTile)
+            level.setTileByPos(column + dx, row + dy, emptyTile)
+
+            play(project.sound.collision1)
         }
 
-        paddle.setPosition(clamp(mouse.x, minPaddleX, maxPaddleX), paddleY)
+        if(ballStatus !== BallStatus.gameOver) {
+            paddle.setPosition(clamp(mouse.x, minPaddleX, maxPaddleX), paddleY)
+        }
 
-        if(ballIsActive) {
+        if(ballStatus === BallStatus.rolling) {
             let dx = cos(ball.angle) * ball.speed * apsk
             let dy = sin(ball.angle) * ball.speed * apsk
             let angleChanged = collisionType.none
 
             ball.x += dx
-            tileMap.blocks.collisionWithSprite(ball, (collisionSprite, tileNum, x, y) => {
+            level.collisionWithSprite(ball, (collisionSprite, tileNum, x, y) => {
                 ball.pushFromSprite(collisionSprite)
                 angleChanged = collisionType.horizontal
-                removeTile(x, y)
+                removeTile(x, y, project.sound.collision2)
             })
 
             ball.y += dy
-            tileMap.blocks.collisionWithSprite(ball, (collisionSprite, tileNum, x, y) => {
+            level.collisionWithSprite(ball, (collisionSprite, tileNum, x, y) => {
                 ball.pushFromSprite(collisionSprite)
                 angleChanged = collisionType.vertical
-                removeTile(x, y)
+                removeTile(x, y, project.sound.collision4)
             })
 
             if(angleChanged === collisionType.horizontal) {
@@ -130,42 +194,36 @@ project.init = (texture) => {
             }
 
             if(ball.topY > paddle.bottomY) {
-                play(project.sound.ballLost)
-                //ball.hide()
+                if(lives.value <= 0) {
+                    messageLabel.items[0] = "ИГРА ОКОНЧЕНА"
+                    ballStatus = BallStatus.gameOver
+                    ball.hide()
+                    play(project.sound.gameOver)
+                    return
+                }
 
-                ballIsActive = false
+                play(project.sound.ballLost)
+
+                lives.decrement()
+
+                let effect = new PopEffect(ball, 0.5, PopEffectType.appear)
+                effect.next = () => {
+                    ballStatus = BallStatus.onPaddle
+                }
+                fx.add(effect)
+
+                ball.angle = registry.ball.angle
+                ballStatus = BallStatus.appearing
             }
         } else {
             ball.setPosition(paddle.x, initialBallY)
-            ball.angle = rad(-45)
-            if(key.wasPressed) {
-                ballIsActive = true
+            if(ballStatus === BallStatus.onPaddle && key.wasPressed) {
+                ballStatus = BallStatus.rolling
+            } else if(ballStatus === BallStatus.gameOver && key.wasPressed) {
+                ballStatus = BallStatus.onPaddle
+                initLevel()
+                ball.show()
             }
         }
-    }
-}
-
-
-
-class ColoredSprite extends Sprite {
-    #color
-
-    constructor(image, x, y, width, height, color) {
-        super(image, x, y, width, height, ShapeType.box)
-        this.#color = color
-    }
-
-    draw() {
-        let x = xToScreen(this.x)
-        let y = yToScreen(this.y)
-        let width = distToScreen(this.width)
-        let height = distToScreen(this.height)
-        this.image.drawResized(x, y, width, height)
-
-        ctx.globalCompositeOperation = "color"
-        ctx.fillStyle = this.#color
-        ctx.fillRect(x, y, width, height)
-
-        ctx.globalCompositeOperation = "source-over"
     }
 }

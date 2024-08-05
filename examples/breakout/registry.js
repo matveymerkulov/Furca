@@ -1,9 +1,13 @@
 import {rad} from "../../src/system.js"
 
 export let registry = {
-    initialBallAngle: rad(-45),
-    initialBallSpeed: 20,
-    ballSize: 0.75,
-    leftTilePart: 16,
-    rightTilePart: 17,
+    ball: {
+        angle: rad(-45),
+        speed: 15,
+        size: 0.75,
+    },
+    paddle: {
+        width: 5,
+        height: 1,
+    }
 }

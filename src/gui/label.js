@@ -1,5 +1,5 @@
 import Box from "../box.js"
-import {align} from "../system.js"
+import {Align} from "../system.js"
 import {ctx, xToScreen, yToScreen} from "../canvas.js"
 
 export default class Label extends Box {
@@ -40,25 +40,25 @@ export default class Label extends Box {
         }
 
         switch(this.horizontalAlign) {
-            case align.left:
+            case Align.left:
                 x = xToScreen(this.leftX)
                 break
-            case align.center:
+            case Align.center:
                 x = xToScreen(this.x) - 0.5 * width
                 break
-            case align.right:
+            case Align.right:
                 x = xToScreen(this.rightX) - width
                 break
         }
 
         switch(this.verticalAlign) {
-            case align.top:
+            case Align.top:
                 y = yToScreen(this.topY)
                 break
-            case align.center:
+            case Align.center:
                 y = yToScreen(this.y) - 0.5 * height
                 break
-            case align.bottom:
+            case Align.bottom:
                 y = yToScreen(this.bottomY) - height
                 break
         }
@@ -66,8 +66,9 @@ export default class Label extends Box {
         if (this.format?.startsWith("I")) {
             let value = Math.round(parseInt(text) / parseInt(formatString))
             width /= value
+            let image = this.image
             for(let i = 0; i < value ; i++) {
-                ctx.drawImage(this.image, 0, 0, this.image.width, this.image.height, x + i * width, y, width, height)
+                ctx.drawImage(image.texture, image.x + 1, image.y + 1, image.width, image.height, x + i * width, y, width - 1, height - 1)
             }
         } else {
             ctx.fillStyle = "white"

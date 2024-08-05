@@ -27,8 +27,8 @@ export default class TileMap extends Box {
         this.operation = operation
     }
 
-    copy() {
-        return new TileMap(this.#tileSet, this.#columns, this.#rows, this.x + 1 + this.width, this.y
+    copy(dx = 0, dy = 0) {
+        return new TileMap(this.#tileSet, this.#columns, this.#rows, this.x + dx, this.y + dy
             , this.cellWidth, this.cellHeight, [...this.#array])
     }
 
@@ -158,8 +158,8 @@ export default class TileMap extends Box {
         return this.leftX + this.cellWidth * (0.5 + this.tileColumn(index))
     }
 
-    tileYByIndex(row) {
-        return this.topY + this.cellHeight * (0.5 + this.tileRow(row))
+    tileYByIndex(index) {
+        return this.topY + this.cellHeight * (0.5 + this.tileRow(index))
     }
 
 

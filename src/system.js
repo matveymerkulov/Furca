@@ -7,12 +7,12 @@ import {initInput} from "./input.js"
 
 // global variables
 
-export let zk = 1.2, fps = 60, aps = 150, paused = false
+export let zk = 1.2, fps = 60, aps = 200, paused = false
 export let mouse, screenMouse, canvasMouse, apsk = 1 / aps, unc = 0.0000001
 
 // enums
 
-export let align = {
+export let Align = {
     left: 0,
     top: 0,
     center: 1,
@@ -144,7 +144,7 @@ export function loc(stringName) {
 
 // listeners
 
-let square = true
+let square = false
 
 export function defaultCanvas() {
     let canvas = document.getElementById("canvas")
@@ -255,6 +255,6 @@ function start() {
 
         project.renderNode()
 
-        ctx.fillText(`fps: ${realFps}, aps: ${realAps}`, 5, 5)
+        //ctx.fillText(`fps: ${realFps}, aps: ${realAps}`, 5, 5)
     }, 1000.0 / 150)
 }

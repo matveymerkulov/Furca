@@ -2,7 +2,7 @@ import Num from "../../src/variable/number.js"
 import Box from "../../src/box.js"
 import {currentCanvas} from "../../src/canvas.js"
 import Label from "../../src/gui/label.js"
-import {align, defaultCanvas, loc, rad} from "../../src/system.js"
+import {Align, defaultCanvas, loc, rad} from "../../src/system.js"
 import Sprite from "../../src/sprite.js"
 import Img from "../../src/image.js"
 import ImageArray from "../../src/image_array.js"
@@ -351,14 +351,14 @@ project.init = (texture) => {
 
     let hudArea = new Box(0, 0, currentCanvas.width - 1, currentCanvas.height - 1)
 
-    let scoreLabel = new Label(hudArea, [score], align.left, align.top, "Z8")
-    let levelLabel = new Label(hudArea, [loc("level"), level], align.center, align.top)
-    let livesLabel = new Label(hudArea, [lives], align.right, align.top, "I1", texture.ship)
-    let missilesLabel = new Label(hudArea, [template.weapon.launcher.ammo], align.left, align.bottom, "I1", texture.missileIcon)
+    let scoreLabel = new Label(hudArea, [score], Align.left, Align.top, "Z8")
+    let levelLabel = new Label(hudArea, [loc("level"), level], Align.center, Align.top)
+    let livesLabel = new Label(hudArea, [lives], Align.right, Align.top, "I1", texture.ship)
+    let missilesLabel = new Label(hudArea, [template.weapon.launcher.ammo], Align.left, Align.bottom, "I1", texture.missileIcon)
 
-    messageLabel = new Label(hudArea, [""], align.center, align.center)
+    messageLabel = new Label(hudArea, [""], Align.center, Align.center)
     hud = new Layer(scoreLabel, levelLabel, livesLabel, messageLabel, missilesLabel)
-    hud.add(new Label(hudArea, [turret.ammo], align.right, align.bottom, "I10", texture.ammoIcon))
+    hud.add(new Label(hudArea, [turret.ammo], Align.right, Align.bottom, "I10", texture.ammoIcon))
 
     // other
 
