@@ -1,5 +1,5 @@
 import Sprite from "./sprite.js"
-import {canvasMouse, mouse, screenMouse} from "./system.js"
+import {canvasMouse, min, mouse, screenMouse} from "./system.js"
 import Box from "./box.js"
 import {project} from "./project.js"
 
@@ -35,11 +35,14 @@ export default class Canvas extends Box {
         this.updateParameters()
     }
 
-    static create(node, fwidth, fheight, active = true) {
-        node.width = node.clientWidth
-        node.height = node.clientHeight
+    static create(node, fwidth, fheight, adaptive = true) {
+        let k = min(window.innerWidth / fwidth, window.innerHeight / fheight)
+        let width = adaptive ? fwidth * k : node.clientWidth
+        let height = adaptive ? fheight * k : node.clientHeight
+        node.width = width
+        node.height = height
         return new Canvas(node,0.0, 0.0, fwidth, fheight, Box.fromArea(node.offsetLeft
-            , node.offsetTop, node.width, node.height), active)
+            , node.offsetTop, width, height))
     }
 
     renderNode() {

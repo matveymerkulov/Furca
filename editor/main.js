@@ -101,7 +101,6 @@ project.init = (texture) => {
 }
 
 
-
 let tileSetPropertiesKey = new Key("KeyI")
 let autoTilingEditorKey = new Key("KeyA")
 

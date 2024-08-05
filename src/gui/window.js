@@ -12,7 +12,7 @@ export class Win {
     }
 
     addCanvas(name, fwidth, fheight) {
-        let canvas = Canvas.create(element(name), fwidth, fheight)
+        let canvas = Canvas.create(element(name), fwidth, fheight, false)
         this.#canvases.push(canvas)
         return canvas
     }

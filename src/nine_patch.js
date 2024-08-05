@@ -29,7 +29,7 @@ export class NinePatch extends Renderable {
             for(let i = 0; i <= 2; i++) {
                 if(this.#width[i] <= 0 || width0[i] <= 0) continue
                 ctx.drawImage(this.#texture, this.#x[i], this.#y[j], this.#width[i], this.#height[j]
-                    , x0[i], y0[j], width0[i], height0[j])
+                    , x0[i], y0[j], width0[i] + 1, height0[j] + 1)
             }
         }
     }

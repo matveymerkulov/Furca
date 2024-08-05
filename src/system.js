@@ -54,6 +54,14 @@ export function ceil(value) {
     return Math.ceil(value)
 }
 
+export function min(value1, value2) {
+    return Math.min(value1, value2)
+}
+
+export function max(value1, value2) {
+    return Math.max(value1, value2)
+}
+
 
 export function rad(angle) {
     return Math.PI * angle / 180
@@ -144,21 +152,16 @@ export function loc(stringName) {
 
 // listeners
 
-let square = false
+let square = true
 
-export function defaultCanvas() {
+export function defaultCanvas(width, height) {
     let canvas = document.getElementById("canvas")
-    if(square) {
-        canvas.width = canvas.height = 640
-    } else {
-        canvas.width = 360
-    }
     canvas.style.display = "flex"
     canvas.focus()
 
-    setCanvas(Canvas.create(canvas, square ? 16 : 9, 16))
+    setCanvas(Canvas.create(canvas, width, height))
     ctx.fillStyle = "white"
-    ctx.font = canvas.width / 24 + "px monospace"
+    ctx.font = canvas.width / 32 + "px monospace"
     ctx.textBaseline = "top"
 }
 

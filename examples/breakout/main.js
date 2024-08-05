@@ -41,8 +41,7 @@ project.init = (texture) => {
 
     loadData(texture)
 
-    defaultCanvas()
-    currentCanvas.size = 40
+    defaultCanvas(40,24)
 
     let ballImage = new Img(texture.blocks, 3 * 32, 13 * 32, 32, 32)
 
@@ -50,11 +49,11 @@ project.init = (texture) => {
     let score = new Num()
     let lives = new Num(3)
 
-    let hud = new Box(0, 0, currentCanvas.width - 1, currentCanvas.height - 1)
+    let hud = new Box(0, 1, tileMap.blocks.width - 3, tileMap.blocks.height - 1)
     let blocksLeftLabel = new Label(hud, [""/*"Blocks left: ", blocksLeft*/], Align.left, Align.top)
     let messageLabel = new Label(hud, [""], Align.center, Align.center)
     let scoreLabel = new Label(hud, [score], Align.center, Align.top, "Z8")
-    let livesLabel = new Label(hud, [lives], Align.left, Align.bottom, "I1", ballImage)
+    let livesLabel = new Label(hud, [lives], Align.right, Align.top, "I1", ballImage, 0.5)
 
     const tileSetWidth = 4
 

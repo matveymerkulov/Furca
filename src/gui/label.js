@@ -3,13 +3,14 @@ import {Align} from "../system.js"
 import {ctx, xToScreen, yToScreen} from "../canvas.js"
 
 export default class Label extends Box {
-    constructor(sprite, items, horizontalAlign, verticalAlign, format, image) {
+    constructor(sprite, items, horizontalAlign, verticalAlign, format, image, sizeMul = 1) {
         super(sprite.x, sprite.y, sprite.width, sprite.height)
         this.items = items
         this.horizontalAlign = horizontalAlign
         this.verticalAlign = verticalAlign
         this.format = format
         this.image = image
+        this.sizeMul = sizeMul
     }
 
     draw() {
@@ -37,6 +38,8 @@ export default class Label extends Box {
             height *= 2
             let k = height / this.image.height
             width = this.image.width * k * Math.round(parseInt(text) / parseInt(formatString))
+            width *= this.sizeMul
+            height *= this.sizeMul
         }
 
         switch(this.horizontalAlign) {
@@ -68,7 +71,8 @@ export default class Label extends Box {
             width /= value
             let image = this.image
             for(let i = 0; i < value ; i++) {
-                ctx.drawImage(image, image.x + 1, image.y + 1, image.width, image.height, x + i * width, y, width - 1, height - 1)
+                ctx.drawImage(image.texture, image.x + 1, image.y + 1, image.width, image.height, x + i * width, y
+                    , width - 1, height - 1)
             }
         } else {
             ctx.fillStyle = "white"

@@ -66,11 +66,9 @@ project.getAssets = () => {
             fireball: "textures/fireball.png",
             flame: "textures/flame.png",
             flameParticle: "textures/flame_particle.png",
-            gunfire: "textures/gunfire.png",
             ship: "textures/ship.png",
         },
         sound: {
-            bonus: "sounds/bonus.mp3",
             death: "sounds/death.mp3",
             explosion: "sounds/explosion.mp3",
             extraLife: "sounds/extra_life.mp3",
@@ -255,7 +253,7 @@ project.init = (texture) => {
 
     // gui
 
-    defaultCanvas()
+    defaultCanvas(16, 16)
 
     bounds = new Box(0, 0, currentCanvas.width + 3, currentCanvas.height + 3)
 
@@ -263,7 +261,7 @@ project.init = (texture) => {
 
     let scoreLabel = new Label(hudArea, [score], Align.left, Align.top, "Z8")
     let levelLabel = new Label(hudArea, [loc("level"), level], Align.center, Align.top)
-    let livesLabel = new Label(hudArea, [lives], Align.right, Align.top, "I1", texture.ship)
+    let livesLabel = new Label(hudArea, [lives], Align.right, Align.top, "I1", new Img(texture.ship))
 
     messageLabel = new Label(hudArea, [""], Align.center, Align.center)
     hud = new Layer(scoreLabel, levelLabel, livesLabel, messageLabel)
