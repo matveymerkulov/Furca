@@ -62,30 +62,18 @@ project.getAssets = () => {
     return {
         texture: {
             asteroid: "textures/asteroid.png",
-            bullet: "textures/bullet.png",
-            emptyBonus: "textures/empty_bonus.png",
-            explodingAsteroid: "textures/exploding_asteroid.png",
             explosion: "textures/explosion.png",
             fireball: "textures/fireball.png",
             flame: "textures/flame.png",
             flameParticle: "textures/flame_particle.png",
             gunfire: "textures/gunfire.png",
-            missile: "textures/missile.png",
-            missileBonus: "textures/missile_bonus.png",
-            missileIcon: "textures/missile_icon.png",
             ship: "textures/ship.png",
-            turret: "textures/turret.png",
-            turretBonus: "textures/turret_bonus.png",
-            ammoIcon: "textures/ammo_icon.png",
         },
         sound: {
             bonus: "sounds/bonus.mp3",
-            bullet: "sounds/bullet.mp3",
-            bulletHit: "sounds/bullet_hit.mp3",
             death: "sounds/death.mp3",
             explosion: "sounds/explosion.mp3",
             extraLife: "sounds/extra_life.mp3",
-            fireMissile: "sounds/fire_missile.ogg",
             fireball: "sounds/fireball.mp3",
             flame: "sounds/flame.mp3",
             gameOver: "sounds/game_over.mp3",
@@ -132,17 +120,9 @@ export const state = {
 
 project.init = (texture) => {
     let fire = new Key("Space")
-    let fireMissile = new Key("KeyX")
 
     let asteroidImages = new ImageArray(texture.asteroid, 8, 4
         , 0.5, 0.5, 1.5, 1.5)
-
-    let gunfireTemplate = {
-        layer: shipLayer,
-        image: new Img(texture.gunfire, undefined, undefined, undefined, undefined, 0, 0.5),
-        size: 1,
-        visible: false,
-    }
 
     template = {
         ship: {
@@ -160,21 +140,6 @@ project.init = (texture) => {
         },
 
         // asteroids
-
-        explodingAsteroid: {
-            layer: asteroids,
-            images: new ImageArray(texture.explodingAsteroid, 8, 4
-                , 0.5, 0.5, 1.5, 1.5),
-            size: 2,
-            speed: 5,
-            //angle: new Rnd(rad(-10), rad(10)),
-            animationSpeed: 24.0,
-            score: 250,
-            parameters: {
-                explosionSize: 5,
-                hp: 50,
-            },
-        },
 
         asteroidType: {
             big: {
@@ -243,58 +208,6 @@ project.init = (texture) => {
 
                 controller: new Turbo(fire, 0.15),
             },
-
-            // double barreled turret
-
-            turret: {
-                sprite: new Sprite(new Img(texture.turret), 0, 0, 2, 2),
-                barrelEnd: [new Point(0.5, 0.4), new Point(0.5, -0.4)],
-                gunfire: [Sprite.createFromTemplate(gunfireTemplate), Sprite.createFromTemplate(gunfireTemplate)],
-                controller: new Turbo(fire, 0.10),
-
-                bullet: {
-                    layer: bullets,
-                    image: new Img(texture.bullet),
-                    size: 0.12,
-                    speed: 30,
-                    parameters: {
-                        damage: 50,
-                        explosionSize: 0.5,
-                    }
-                },
-
-                bonus: new Sprite(new Img(texture.turretBonus)),
-                probability: 0.1,
-                ammo: new Num(),
-                bonusAmmo: 50,
-                maxAmmo: 100,
-                gunfireTime: 0.05
-            },
-
-            // missile launcher
-
-            launcher: {
-                missile: {
-                    class: "template",
-                    layer: bullets,
-                    image: new Img(texture.missile, undefined, undefined, undefined, undefined
-                        , 0.95, 0.5, 10, 3),
-                    size: 0.15,
-                    speed: 15,
-                    parameters: {
-                        damage: 300,
-                        explosionSize: 5,
-                    },
-                },
-
-                bonus: new Sprite(new Img(texture.missileBonus)),
-                probability: 0.1,
-                ammo: new Num(3),
-                maxAmmo: 8,
-
-                controller: new Turbo(fireMissile, 0.5),
-            }
-
         },
     }
 
@@ -339,9 +252,6 @@ project.init = (texture) => {
 
     startingWeapon = template.weapon.fireball
     gun = new Point(1, 0)
-    let turret = template.weapon.turret
-    turret.sprite.visible = false
-    shipLayer.add(turret.sprite)
 
     // gui
 
@@ -354,11 +264,9 @@ project.init = (texture) => {
     let scoreLabel = new Label(hudArea, [score], Align.left, Align.top, "Z8")
     let levelLabel = new Label(hudArea, [loc("level"), level], Align.center, Align.top)
     let livesLabel = new Label(hudArea, [lives], Align.right, Align.top, "I1", texture.ship)
-    let missilesLabel = new Label(hudArea, [template.weapon.launcher.ammo], Align.left, Align.bottom, "I1", texture.missileIcon)
 
     messageLabel = new Label(hudArea, [""], Align.center, Align.center)
-    hud = new Layer(scoreLabel, levelLabel, livesLabel, messageLabel, missilesLabel)
-    hud.add(new Label(hudArea, [turret.ammo], Align.right, Align.bottom, "I10", texture.ammoIcon))
+    hud = new Layer(scoreLabel, levelLabel, livesLabel, messageLabel)
 
     // other
 
@@ -371,13 +279,11 @@ project.init = (texture) => {
         new AnimateSize(flameSprite, new Cos(0.1, 0.1, 0, 0.95)),
         new Constraint(flameSprite, shipSprite),
 
+        new Constraint(gun, shipSprite),
+
         new RemoveIfOutside(bullets, bounds),
 
         new LoopArea(asteroids, bounds),
-
-        new Constraint(gun, shipSprite),
-        new Constraint(turret.barrelEnd[0], turret.sprite),
-        new Constraint(turret.barrelEnd[1], turret.sprite),
 
         new Move(project.scene),
     ]

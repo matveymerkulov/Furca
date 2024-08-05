@@ -10,9 +10,9 @@ export default class LoopArea extends Action {
 
     execute() {
         if(this.object instanceof Layer) {
-            this.object.items.forEach(sprite => sprite.loop(this.area))
+            this.object.items.forEach(sprite => sprite.wrap(this.area))
         } else {
-            this.object.loop(this.area)
+            this.object.wrap(this.area)
         }
     }
 }

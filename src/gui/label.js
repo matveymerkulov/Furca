@@ -68,7 +68,7 @@ export default class Label extends Box {
             width /= value
             let image = this.image
             for(let i = 0; i < value ; i++) {
-                ctx.drawImage(image.texture, image.x + 1, image.y + 1, image.width, image.height, x + i * width, y, width - 1, height - 1)
+                ctx.drawImage(image, image.x + 1, image.y + 1, image.width, image.height, x + i * width, y, width - 1, height - 1)
             }
         } else {
             ctx.fillStyle = "white"
