@@ -8,7 +8,7 @@ import {Block} from "../src/block.js"
 import {Category, Pos, Rule} from "../src/auto_tiling.js"
 
 export function loadData(texture) {
-    tileSet["floor"] = new TileSet(new ImageArray(texture.floor, 9, 11, 0.5, 0.5, 1, 1), [
+    tileSet["floor"] = new TileSet(new ImageArray(texture["farm_floor"], 9, 11, 0.5, 0.5, 1, 1), [
         0, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 0,
         1, 1, 1, 1, 1, 1, 1, 1, 0,
@@ -65,7 +65,7 @@ export function loadData(texture) {
             new Rule(40, []),
         ], true),
     ], 0, [[0,1,2,3,4,5,6,7,8,15,16], [37,54,55,56,57,58,59,60,61,62], ])
-    tileSet["objects"] = new TileSet(new ImageArray(texture.objects, 10, 16, 0.5, 0.5, 1, 1), [
+    tileSet["objects"] = new TileSet(new ImageArray(texture["farm_furniture"], 10, 16, 0.5, 0.5, 1, 1), [
         0, 1, 1, 1, 2, 2, 2, 2, 2, 1,
         0, 0, 0, 0, 2, 2, 2, 2, 2, 1,
         0, 0, 0, 0, 2, 2, 2, 2, 2, 0,
@@ -113,7 +113,7 @@ export function loadData(texture) {
             new Rule(61, []),
         ], false),
     ], -1, [])
-    tileSet["blocks"] = new TileSet(new ImageArray(texture.blocks, 4, 14, 0.5, 0.5, 1, 1), [
+    tileSet["blocks"] = new TileSet(new ImageArray(texture["blocks"], 4, 14, 0.5, 0.5, 1, 1), [
         1, 1, 1, 0,
         1, 1, 1, 1,
         1, 1, 1, 1,
@@ -156,7 +156,7 @@ export function loadData(texture) {
             new Rule(9, []),
         ], false),
     ], -1, [])
-    tileSet["smooth"] = new TileSet(new ImageArray(texture.smooth, 6, 12, 0.5, 0.5, 1, 1), [
+    tileSet["smooth"] = new TileSet(new ImageArray(texture["smooth"], 6, 12, 0.5, 0.5, 1, 1), [
         0, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1,

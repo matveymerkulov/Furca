@@ -18,18 +18,9 @@ import Num from "../../src/variable/number.js"
 
 project.getAssets = () => {
     return {
-        texture: {
-            blocks: "blocks.png",
-        },
-        sound: {
-            collision1: "collision1.mp3",
-            collision2: "collision2.mp3",
-            collision3: "collision3.mp3",
-            collision4: "collision4.mp3",
-            ballLost: "ball_lost.ogg",
-            gameOver: "game_over.mp3",
-            win: "win.ogg",
-        }
+        texture: ["blocks.png"],
+        sound: ["collision1.mp3", "collision2.mp3", "collision3.mp3", "collision4.mp3", "ball_lost.ogg"
+            , "game_over.mp3", "win.ogg"]
     }
 }
 
@@ -58,14 +49,14 @@ project.init = (texture) => {
     const tileSetWidth = 4
 
     // new Img(texture.blocks, 0, 192, 96, 32, 0.5, 1.0, 1.0, 0.5)
-    let paddle = new Sprite(new NinePatch(new Img(texture.blocks, 0, 0, 96, 32), 16
+    let paddle = new Sprite(new NinePatch(new Img(texture["blocks"], 0, 0, 96, 32), 16
         , 80, 8, 24), 0, 10.5, 5, 1, ShapeType.box)
 
     const BallStatus = {
-        onPaddle: Symbol("onPaddle"),
-        rolling: Symbol("rolling"),
-        appearing: Symbol("appearing"),
-        gameOver: Symbol("gameOver")
+        onPaddle: 0,
+        rolling: 1,
+        appearing: 2,
+        gameOver: 3
     }
 
     let ball = new Sprite(ballImage, 0, 9.25, 0.5, 0.5, ShapeType.circle)
@@ -101,6 +92,7 @@ project.init = (texture) => {
 
         project.scene.replace(0, level)
 
+        blocksLeft.value = 0
         level.processTiles((column, row, tileNum) => {
             if(tileNum >= horizontalBlocks) {
                 blocksLeft.increment()
@@ -112,9 +104,9 @@ project.init = (texture) => {
     initLevel()
 
     const collisionType = {
-        none: Symbol("none"),
-        horizontal: Symbol("horizontal"),
-        vertical: Symbol("vertical"),
+        none: 0,
+        horizontal: 1,
+        vertical: 2,
     }
 
     project.update = () => {
@@ -142,7 +134,7 @@ project.init = (texture) => {
             if(blocksLeft <= 0) {
                 messageLabel.items[0] = "ВЫ ПОБЕДИЛИ!"
                 ballStatus = BallStatus.gameOver
-                play(project.sound.win)
+                play("win")
             }
 
             let sprite = level.tileSpriteByPos(undefined, column, row)
@@ -154,7 +146,7 @@ project.init = (texture) => {
             level.setTileByPos(column, row, emptyTile)
             level.setTileByPos(column + dx, row + dy, emptyTile)
 
-            play(project.sound.collision1)
+            play("collision1")
         }
 
         if(ballStatus !== BallStatus.gameOver) {
@@ -170,14 +162,14 @@ project.init = (texture) => {
             level.collisionWithSprite(ball, (collisionSprite, tileNum, x, y) => {
                 ball.pushFromSprite(collisionSprite)
                 angleChanged = collisionType.horizontal
-                removeTile(x, y, project.sound.collision2)
+                removeTile(x, y, "collision2")
             })
 
             ball.y += dy
             level.collisionWithSprite(ball, (collisionSprite, tileNum, x, y) => {
                 ball.pushFromSprite(collisionSprite)
                 angleChanged = collisionType.vertical
-                removeTile(x, y, project.sound.collision4)
+                removeTile(x, y, "collision4")
             })
 
             if(angleChanged === collisionType.horizontal) {
@@ -189,7 +181,7 @@ project.init = (texture) => {
             if(sin(ball.angle) > 0 && ball.collidesWithSprite(paddle)) {
                 ball.pushFromSprite(paddle)
                 ball.angle = atan2(-paddle.height, ball.x - paddle.x)
-                play(project.sound.collision3)
+                play("collision3")
             }
 
             if(ball.topY > paddle.bottomY) {
@@ -197,11 +189,11 @@ project.init = (texture) => {
                     messageLabel.items[0] = "ИГРА ОКОНЧЕНА"
                     ballStatus = BallStatus.gameOver
                     ball.hide()
-                    play(project.sound.gameOver)
+                    play("game_over")
                     return
                 }
 
-                play(project.sound.ballLost)
+                play("ball_lost")
 
                 lives.decrement()
 

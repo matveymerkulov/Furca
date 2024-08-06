@@ -7,7 +7,7 @@ import Key from "../../src/key.js"
 project.init = (texture) => {
     let switchType = new Key("Space", "LMB", "WheelUp", "WheelDown")
 
-    defaultCanvas()
+    defaultCanvas(40, 22)
     
     let defaultColor = "rgb(0, 128, 0)"
     let collisionColor = "rgb(128, 255, 128)"

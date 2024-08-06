@@ -60,24 +60,10 @@ project.locales.ru = {
 
 project.getAssets = () => {
     return {
-        texture: {
-            asteroid: "textures/asteroid.png",
-            explosion: "textures/explosion.png",
-            fireball: "textures/fireball.png",
-            flame: "textures/flame.png",
-            flameParticle: "textures/flame_particle.png",
-            ship: "textures/ship.png",
-        },
-        sound: {
-            death: "sounds/death.mp3",
-            explosion: "sounds/explosion.mp3",
-            extraLife: "sounds/extra_life.mp3",
-            fireball: "sounds/fireball.mp3",
-            flame: "sounds/flame.mp3",
-            gameOver: "sounds/game_over.mp3",
-            music: "sounds/music.mp3",
-            newLevel: "sounds/new_level.mp3",
-        }
+        texture: ["textures/asteroid.png", "textures/explosion.png", "textures/fireball.png", "textures/flame.png",
+            "textures/flame_particle.png", "textures/ship.png",],
+        sound: ["sounds/death.mp3", "sounds/explosion.mp3", "sounds/extra_life.mp3", "sounds/fireball.mp3",
+            "sounds/flame.mp3", "sounds/game_over.mp3", "sounds/music.mp3", "sounds/new_level.mp3"]
     }
 }
 
@@ -119,12 +105,12 @@ export const state = {
 project.init = (texture) => {
     let fire = new Key("Space")
 
-    let asteroidImages = new ImageArray(texture.asteroid, 8, 4
+    let asteroidImages = new ImageArray(texture["asteroid"], 8, 4
         , 0.5, 0.5, 1.5, 1.5)
 
     template = {
         ship: {
-            image: new Img(texture.ship, 0, 0, undefined, undefined
+            image: new Img(texture["ship"], 0, 0, undefined, undefined
                 , 0.5, 0.5, 1.75, 1.75),
             angle: 0,
             speed: 0,
@@ -132,7 +118,7 @@ project.init = (texture) => {
 
         explosion: {
             layer: explosions,
-            images: new ImageArray(texture.explosion, 4, 4, 0.5, 0.5, 2, 2),
+            images: new ImageArray(texture["explosion"], 4, 4, 0.5, 0.5, 2, 2),
             angle: new Rnd(360),
             animationSpeed: 16
         },
@@ -192,7 +178,7 @@ project.init = (texture) => {
             fireball: {
                 bullet: {
                     layer: bullets,
-                    images: new ImageArray(texture.fireball, 1, 16
+                    images: new ImageArray(texture["fireball"], 1, 16
                         , 43 / 48, 5.5 / 12, 5.25, 1.5),
                     size: 0.3,
                     speed: 15,
@@ -242,7 +228,7 @@ project.init = (texture) => {
     invulnerabilityAction = new AnimateOpacity(shipSprite, new Cos(0.2, 0.5, 0, 0.5))
     shipLayer.add(shipSprite)
 
-    let flameImages = new ImageArray(texture.flame, 3, 3, 0.5, 1)
+    let flameImages = new ImageArray(texture["flame"], 3, 3, 0.5, 1)
     flameSprite = Sprite.create(shipLayer, flameImages.image(0), -0.6, 0
         , 1, 1, undefined, rad(-90))
 

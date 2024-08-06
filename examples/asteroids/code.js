@@ -36,8 +36,6 @@ import Key from "../../src/key.js"
 import {ShapeType} from "../../src/shape.js"
 
 export function initUpdate() {
-    let sound = project.sound
-
     let left = new Key("ArrowLeft")
     let right = new Key("ArrowRight")
     let forward = new Key("ArrowUp")
@@ -46,8 +44,8 @@ export function initUpdate() {
 
     let currentState = state.alive
 
-    loopedSound(sound.music, 0, 1.81, true)
-    let flameSound = loopedSound(sound.flame, 1.1, 1.9)
+    loopedSound("music", 0, 1.81, true)
+    let flameSound = loopedSound("flame", 1.1, 1.9)
 
     // level
 
@@ -107,13 +105,13 @@ export function initUpdate() {
         explosion.size = size
         explosion.setPosition(sprite.x, sprite.y)
         explosion.add(new DelayedRemove(explosion, explosions, 1.0))
-        if(playSnd) play(sound.explosion)
+        if(playSnd) play("explosion")
     }
 
     function createExplosion(sprite, size, playSnd = true) {
         let times = rndi(3) + size
         createParticle(true)
-        if(playSnd) play(sound.explosion)
+        if(playSnd) play("explosion")
 
         function createParticle(first) {
             let angle = rad(rnd(360))
@@ -138,11 +136,11 @@ export function initUpdate() {
         if(lives.value === 0) {
             messageLabel.show(loc("gameOver"))
             currentState = state.gameOver
-            play(sound.gameOver)
+            play("game_over")
         } else {
             messageLabel.show(loc("pressEnter"))
             currentState = state.dead
-            play(sound.death)
+            play("death")
         }
     }
 
@@ -160,7 +158,7 @@ export function initUpdate() {
             let bullet = Sprite.createFromTemplate(weapon.fireball.bullet)
             bullet.setPositionAs(gun)
             bullet.turn(shipSprite.angle)
-            play(sound.fireball)
+            play("fireball")
         }
     }
 
@@ -225,7 +223,7 @@ export function initUpdate() {
         if(asteroids.isEmpty()) {
             level.increment()
             initLevel(level.value)
-            play(sound.newLevel)
+            play("new_level")
         }
 
         bullets.collisionWith(asteroids, (bullet, asteroid) => {
@@ -243,7 +241,7 @@ export function initUpdate() {
 
         if(score.value >= nextLifeBonus) {
             lives.increment()
-            play(sound.extraLife)
+            play("extra_life")
             nextLifeBonus += nextLifeBonus
         }
 

@@ -14,15 +14,8 @@ import {rulesWindow, updateCategoriesList} from "./auto_tiling.js"
 
 project.getAssets = () => {
     return {
-        texture: {
-            floor: "farm_floor.png",
-            objects: "farm_furniture.png",
-            blocks: "blocks.png",
-            smooth: "smooth.png",
-            colors: "colors.png",
-        },
-        sound: {
-        }
+        texture: ["farm_floor.png", "farm_furniture.png", "blocks.png", "smooth.png"],
+        sound: []
     }
 }
 

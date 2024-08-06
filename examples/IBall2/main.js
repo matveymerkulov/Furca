@@ -11,12 +11,8 @@ import {ShapeType} from "../../src/shape.js"
 
 project.getAssets = () => {
     return {
-        texture: {
-            tiles: "tiles.png",
-            levels: "screens/02.png",
-        },
-        sound: {
-        }
+        texture: ["tiles.png", "screens/02.png"],
+        sound: []
     }
 }
 
@@ -40,7 +36,7 @@ project.init = (texture) => {
     let jump = new Key("KeyW")
 
     //let tileMap = tilemapFromImage(texture.levels, texture.tiles, 16, 16, 16, 0, 0, 1, 1)
-    let tileSet = new TileSet(new ImageArray(texture.tiles, 16, 21))
+    let tileSet = new TileSet(new ImageArray(texture["tiles"], 16, 21))
     tileSet.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.box), 2)
     tileSet.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.circle)
         , [keyTile, diamondTile, bombTile, figureTile])
@@ -57,7 +53,7 @@ project.init = (texture) => {
     player.dy = 0
     player.size = 0.99
 
-    defaultCanvas()
+    defaultCanvas(16, 16)
     currentCanvas.background = "blue"
 
     function onGround() {

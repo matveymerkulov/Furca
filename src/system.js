@@ -108,8 +108,8 @@ export function element(name) {
 
 export let masterVolume = 0.25
 
-export function play(sound) {
-    let newSound = new Audio(sound.src)
+export function play(soundName) {
+    let newSound = new Audio(project.sound[soundName].src)
     newSound.volume = masterVolume
     try {
         newSound.play().then()
@@ -118,8 +118,8 @@ export function play(sound) {
     }
 }
 
-export function loopedSound(sound, loopStart, loopEnd, play) {
-    let newSound = new Audio(sound.src)
+export function loopedSound(name, loopStart, loopEnd, play) {
+    let newSound = new Audio(project.sound[name].src)
     let loopLength = loopEnd - loopStart
     setInterval(function() {
         if(newSound.currentTime > loopEnd) newSound.currentTime -= loopLength
@@ -152,8 +152,6 @@ export function loc(stringName) {
 
 // listeners
 
-let square = true
-
 export function defaultCanvas(width, height) {
     let canvas = document.getElementById("canvas")
     canvas.style.display = "flex"
@@ -174,19 +172,26 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // assets loader
 
+export function removeExtension(fileName) {
+    let pos = fileName.lastIndexOf("/")
+    if(pos > 0) fileName = fileName.substring(pos + 1)
+    return fileName.substring(0, fileName.lastIndexOf("\."))
+}
+
 let assetsToLoad = 0
 export function loadAssets(path, asset) {
-    let textures = {}
+    let textures = new Map()
 
-    for(const[key, value] of Object.entries(asset.texture)) {
-        let texture = new Image()
-        texture.onload = () => {
+    for(const textureFileName of asset.texture) {
+        let img = new Image()
+        img.onload = () => {
             assetsToLoad--
             if(assetsToLoad <= 0) start()
         }
-        texture.src = path + value
-        texture.id = key
-        textures[key] = texture
+        let key = removeExtension(textureFileName)
+        img.src = path + textureFileName
+        img.id = key
+        textures[key] = img
         assetsToLoad++
     }
 
@@ -199,11 +204,12 @@ export function loadAssets(path, asset) {
         audio.addEventListener("canplaythrough", listener, false)
     }
 
-    let sounds = {}
-    for(const[key, value] of Object.entries(asset.sound)) {
+    let sounds = new Map()
+    for(const soundFileName of asset.sound) {
         let audio = new Audio()
         addAudioListener(audio)
-        audio.src = path + value
+        let key = removeExtension(soundFileName)
+        audio.src = path + soundFileName
         sounds[key] = audio
         assetsToLoad++
     }

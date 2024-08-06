@@ -9,11 +9,8 @@ import Rnd from "../../src/function/rnd.js"
 
 project.getAssets = () => {
     return {
-        texture: {
-            particle: "particle.png"
-        },
-        sound: {
-        }
+        texture: ["particle.png"],
+        sound: []
     }
 }
 
@@ -49,7 +46,7 @@ project.init = (texture) => {
         ctx.globalAlpha = 1
     }
 
-    defaultCanvas()
+    defaultCanvas(16, 16)
     currentCanvas.background = "rgb(9, 44, 84)"
 
     project.scene.add(particles)

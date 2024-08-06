@@ -26,7 +26,7 @@ export let project = {
     },
 
     getAssets() {
-        return {texture: {}, sound: {}}
+        return {texture: [], sound: []}
     },
 
     init: () => {},

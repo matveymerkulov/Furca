@@ -12,20 +12,17 @@ import {ShapeType} from "../../src/shape.js"
 
 project.getAssets = () => {
     return {
-        texture: {
-            flake: "snowflake.png",
-        },
-        sound: {
-        }
+        texture: ["snowflake.png"],
+        sound: []
     }
 }
 
 project.init = (texture) => {
-    defaultCanvas()
+    defaultCanvas(16, 16)
     currentCanvas.background = "rgb(9, 44, 84)"
 
     let flakes = new Layer()
-    let generator = new Generator(new Img(texture.flake), new Box(0, currentCanvas.topY - 3, currentCanvas.width + 3
+    let generator = new Generator(new Img(texture["snowflake"]), new Box(0, currentCanvas.topY - 3, currentCanvas.width + 3
         , 2), ShapeType.box)
 
     project.scene.add(flakes)
