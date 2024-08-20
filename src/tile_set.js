@@ -1,8 +1,8 @@
-import {removeFromArray} from "./system.js"
 import {tileSet} from "./project.js"
 import {arrayToString} from "./save_load.js"
 import {getTexturePart} from "./texture.js"
 import {Block} from "./block.js"
+import {removeFromArray} from "./functions.js"
 
 export const visibility = {
     visible: 0,
@@ -10,7 +10,7 @@ export const visibility = {
     block: 2,
 }
 
-export default class TileSet {
+export class TileSet {
     #images
     #collision
     visibility
@@ -35,15 +35,19 @@ export default class TileSet {
             + `, ${this.altTile}, ${arrayToString(this.groups)})`
     }
 
-    get images() {
-        return this.#images
-    }
-
     get name() {
         for(let [key, set] of Object.entries(tileSet)) {
             if(this === set) return key
         }
         return ""
+    }
+
+    get texture() {
+        return this.#images.texture
+    }
+
+    get images() {
+        return this.#images
     }
 
     image(num) {
@@ -58,19 +62,23 @@ export default class TileSet {
         return this.#images.rows
     }
 
+    get quantity() {
+        return this.#images.quantity
+    }
+
     addRegion(region, type) {
         this.addBlock(region.x, region.y, region.width + 1, region.height + 1, type)
     }
 
     addBlock(x, y, width, height, type) {
-        let block = new Block(x, y, width, height, type)
+        const block = new Block(x, y, width, height, type)
         this.setBlockVisibility(block, visibility.block)
         this.initBlockImage(block)
         this.blocks.push(block)
     }
 
     initBlockImage(block) {
-        let size = this.images.width
+        const size = this.images.width
         block.texture = getTexturePart(this.images.texture, block.x * size, block.y * size
             , block.width * size, block.height * size)
     }

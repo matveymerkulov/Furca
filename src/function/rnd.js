@@ -1,7 +1,8 @@
-import {num, rnd} from "../system.js"
+import {num} from "../system.js"
 import {Function} from "./function.js"
+import {rnd} from "../functions.js"
 
-export default class Rnd extends Function {
+export class Rnd extends Function {
     constructor(from, to) {
         super()
         this.from = from

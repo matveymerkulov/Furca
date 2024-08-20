@@ -1,7 +1,7 @@
 import {apsk, num} from "../../system.js"
 import {Action} from "../action.js"
 
-export default class DelayedRemove extends Action {
+export class DelayedRemove extends Action {
     constructor(sprite, layer, time) {
         super()
         this.sprite = sprite

@@ -1,4 +1,4 @@
-import {rad} from "../../src/system.js"
+import {rad} from "../../src/functions.js"
 
 export let registry = {
     ball: {

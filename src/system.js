@@ -1,5 +1,5 @@
-import Point from "./point.js"
-import Canvas, {ctx, setCanvas, xFromScreen, yFromScreen} from "./canvas.js"
+import {Point} from "./point.js"
+import {Canvas, ctx, setCanvas, xFromScreen, yFromScreen} from "./canvas.js"
 import {initData, project} from "./project.js"
 import {Function} from "./function/function.js"
 import {keys} from "./key.js"
@@ -20,76 +20,7 @@ export let Align = {
     bottom: 2
 }
 
-// global functions
-
-export function sin(angle) {
-    return Math.sin(angle)
-}
-
-export function cos(angle) {
-    return Math.cos(angle)
-}
-
-export function atan2(y, x) {
-    return Math.atan2(y, x)
-}
-
-export function sqrt(value) {
-    return Math.sqrt(value)
-}
-
-export function sign(value) {
-    return Math.sign(value)
-}
-
-export function abs(value) {
-    return Math.abs(value)
-}
-
-export function floor(value) {
-    return Math.floor(value)
-}
-
-export function ceil(value) {
-    return Math.ceil(value)
-}
-
-export function min(value1, value2) {
-    return Math.min(value1, value2)
-}
-
-export function max(value1, value2) {
-    return Math.max(value1, value2)
-}
-
-
-export function rad(angle) {
-    return Math.PI * angle / 180
-}
-
-export function rndi(from, to) {
-    return Math.floor(rnd(from, to))
-}
-
-export function rnd(from = 1, to) {
-    return to === undefined ? Math.random() * from : Math.random() * (to - from) + from
-}
-
-export function randomSign() {
-    return 2 * rndi(2) - 1
-}
-
-export function clamp(value, min, max) {
-    if(value < min) return min
-    if(value > max) return max
-    return value
-}
-
-export function removeFromArray(item, array) {
-    let i = array.indexOf(item)
-    if(i < 0) return
-    array.splice(i, 1)
-}
+// other
 
 export function num(value) {
     if(value === undefined) return undefined
@@ -108,28 +39,48 @@ export function element(name) {
 
 export let masterVolume = 0.25
 
-export function play(soundName) {
-    let newSound = new Audio(project.sound[soundName].src)
+export function play(name) {
+    let newSound = new Audio(project.sound[name].src)
     newSound.volume = masterVolume
-    try {
-        newSound.play().then()
-    } catch(e) {
-
-    }
+    newSound.play()
+    return newSound
 }
 
-export function loopedSound(name, loopStart, loopEnd, play) {
-    let newSound = new Audio(project.sound[name].src)
-    let loopLength = loopEnd - loopStart
-    setInterval(function() {
-        if(newSound.currentTime > loopEnd) newSound.currentTime -= loopLength
-    }, 5)
-    if(play) try {
-       newSound.play().then()
-    } catch(e) {
-
-    }
+export function playSound(sound) {
+    if(sound === undefined) return
+    let newSound = new Audio(sound.src)
     newSound.volume = masterVolume
+    newSound.play()
+    return newSound
+}
+
+export function stopSound(sound) {
+    if(sound === undefined) return
+    sound.currentTime = 0
+    sound.pause()
+}
+
+export function mutedSound(name) {
+    let newSound = new Audio(project.sound[name].src)
+    newSound.volume = masterVolume
+    return newSound
+}
+
+export function loopedSound(name, loopStart = 0, loopEnd, play = true, volume = masterVolume) {
+    let newSound = new Audio(project.sound[name].src)
+    if(loopStart === 0 && loopEnd === undefined) {
+        newSound.loop = true
+    } else {
+        let loopLength = loopEnd - loopStart
+        setInterval(function() {
+            if(newSound.currentTime > loopEnd) newSound.currentTime -= loopLength
+        }, 5)
+    }
+
+    if(play) {
+       newSound.play()
+    }
+    newSound.volume = volume
     return newSound
 }
 
@@ -152,14 +103,22 @@ export function loc(stringName) {
 
 // listeners
 
+export let defaultFontSize
+
+export function setFontSize(size) {
+    ctx.font = size + "px monospace"
+}
+
 export function defaultCanvas(width, height) {
     let canvas = document.getElementById("canvas")
     canvas.style.display = "flex"
     canvas.focus()
 
     setCanvas(Canvas.create(canvas, width, height))
+
+    defaultFontSize = canvas.height / 24
     ctx.fillStyle = "white"
-    ctx.font = canvas.width / 32 + "px monospace"
+    setFontSize(defaultFontSize)
     ctx.textBaseline = "top"
 }
 
@@ -180,15 +139,38 @@ export function removeExtension(fileName) {
 
 let assetsToLoad = 0
 export function loadAssets(path, asset) {
-    let textures = new Map()
+    function process(assets) {
+        const newArray = []
+        for(const fileName of assets) {
+            const bracketStart = fileName.indexOf("[")
+            if(bracketStart < 0) {
+                newArray.push(fileName)
+                continue
+            }
+            const minus = fileName.indexOf("-")
+            const bracketEnd = fileName.indexOf("]")
+            const from = parseInt(fileName.substring(bracketStart + 1, minus))
+            const to = parseInt(fileName.substring(minus + 1, bracketEnd))
+
+            for(let index = from; index <= to; index++) {
+                newArray.push(fileName.substring(0, bracketStart) + index + fileName.substring(bracketEnd + 1))
+            }
+        }
+        return newArray
+    }
+
+    asset.texture = process(asset.texture)
+    asset.sound = process(asset.sound)
+
+    const textures = new Map()
 
     for(const textureFileName of asset.texture) {
-        let img = new Image()
+        const img = new Image()
         img.onload = () => {
             assetsToLoad--
             if(assetsToLoad <= 0) start()
         }
-        let key = removeExtension(textureFileName)
+        const key = removeExtension(textureFileName)
         img.src = path + textureFileName
         img.id = key
         textures[key] = img

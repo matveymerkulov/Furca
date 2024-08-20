@@ -1,7 +1,7 @@
 import {apsk} from "../../system.js"
 import {Action} from "../action.js"
 
-export default class Animate extends Action {
+export class Animate extends Action {
     constructor(sprite, images, speed) {
         super()
         this.sprite = sprite

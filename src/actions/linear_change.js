@@ -1,7 +1,7 @@
 import {apsk} from "../system.js"
 import {Action} from "./action.js"
 
-export default class LinearChange extends Action {
+export class LinearChange extends Action {
     constructor(object, parameterName, speed, min, max) {
         super()
         this.object = object

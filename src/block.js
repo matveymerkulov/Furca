@@ -1,4 +1,4 @@
-import Region from "./region.js"
+import {Region} from "./region.js"
 
 export const blockType = {
     block: 0,

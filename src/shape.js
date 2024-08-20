@@ -1,6 +1,6 @@
 import {Renderable} from "./renderable.js"
 import {ctx} from "./canvas.js"
-import {rad} from "./system.js"
+import {rad} from "./functions.js"
 
 export let ShapeType = {
     circle: Symbol("circle"),
@@ -9,7 +9,7 @@ export let ShapeType = {
 }
 
 // noinspection JSSuspiciousNameCombination
-export default class Shape extends Renderable {
+export class Shape extends Renderable {
     constructor(color, opacity = 1.0, xMul = 0.5, yMul = 0.5, widthMul = 1.0, heightMul = 1.0) {
         super()
         this.color = color

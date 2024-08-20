@@ -1,9 +1,9 @@
-import Sprite from "../../src/sprite.js"
-import {apsk, loc, loopedSound, num, paused, play, rad, rnd, rndi, togglePause} from "../../src/system.js"
-import LinearChange from "../../src/actions/linear_change.js"
+import {Sprite} from "../../src/sprite.js"
+import {apsk, loc, loopedSound, num, paused, play, togglePause} from "../../src/system.js"
+import {LinearChange} from "../../src/actions/linear_change.js"
 import {project} from "../../src/project.js"
-import RotateImage from "../../src/actions/sprite/rotate_image.js"
-import DelayedRemove from "../../src/actions/sprite/delayed_remove.js"
+import {RotateImage} from "../../src/actions/sprite/rotate_image.js"
+import {DelayedRemove} from "../../src/actions/sprite/delayed_remove.js"
 import {currentCanvas} from "../../src/canvas.js"
 import {
     asteroids,
@@ -32,8 +32,9 @@ import {
     state,
     template
 } from "./data.js"
-import Key from "../../src/key.js"
+import {Key} from "../../src/key.js"
 import {ShapeType} from "../../src/shape.js"
+import {rad, rnd, rndi} from "../../src/functions.js"
 
 export function initUpdate() {
     let left = new Key("ArrowLeft")

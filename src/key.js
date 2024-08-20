@@ -1,6 +1,6 @@
 export let keys = []
 
-export default class Key {
+export class Key {
     #isDown = false
     #wasPressed = false
     constructor(...codes) {

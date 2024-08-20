@@ -1,28 +1,29 @@
-import Num from "../../src/variable/number.js"
-import Box from "../../src/box.js"
+import {Num} from "../../src/variable/number.js"
+import {Box} from "../../src/box.js"
 import {currentCanvas} from "../../src/canvas.js"
-import Label from "../../src/gui/label.js"
-import {Align, defaultCanvas, loc, rad} from "../../src/system.js"
-import Sprite from "../../src/sprite.js"
-import Img from "../../src/image.js"
-import ImageArray from "../../src/image_array.js"
-import Layer from "../../src/layer.js"
-import Key from "../../src/key.js"
-import LoopArea from "../../src/actions/sprite/loop_area.js"
-import Move from "../../src/actions/sprite/move.js"
-import Animate from "../../src/actions/sprite/animate.js"
-import Constraint from "../../src/constraint.js"
-import RemoveIfOutside from "../../src/actions/sprite/remove_if_outside.js"
+import {Label} from "../../src/gui/label.js"
+import {Align, defaultCanvas, loc} from "../../src/system.js"
+import {Sprite} from "../../src/sprite.js"
+import {Img} from "../../src/image.js"
+import {ImageArray}from "../../src/image_array.js"
+import {Layer} from "../../src/layer.js"
+import {Key} from "../../src/key.js"
+import {LoopArea} from "../../src/actions/sprite/loop_area.js"
+import {Move} from "../../src/actions/sprite/move.js"
+import {Animate} from "../../src/actions/sprite/animate.js"
+import {Constraint} from "../../src/constraint.js"
+import {RemoveIfOutside} from "../../src/actions/sprite/remove_if_outside.js"
 import {project} from "../../src/project.js"
 import {initUpdate} from "./code.js"
-import Rnd from "../../src/function/rnd.js"
+import {Rnd} from "../../src/function/rnd.js"
 import {rnds} from "../../src/function/random_sign.js"
-import Mul from "../../src/function/mul.js"
-import Turbo from "../../src/actions/turbo.js"
-import Point from "../../src/point.js"
-import AnimateOpacity from "../../src/actions/sprite/blink.js"
-import Cos from "../../src/function/cos.js"
-import AnimateSize from "../../src/actions/sprite/animate_size.js"
+import {Mul} from "../../src/function/mul.js"
+import {Turbo} from "./turbo.js"
+import {Point} from "../../src/point.js"
+import {Cos} from "../../src/function/cos.js"
+import {AnimateSize} from "../../src/actions/sprite/animate_size.js"
+import {rad} from "../../src/functions.js"
+import {Blink} from "../../src/actions/sprite/blink.js"
 
 project.locales.en = {
     // hud
@@ -225,7 +226,7 @@ project.init = (texture) => {
     // ship
     
     shipSprite = Sprite.createFromTemplate(template.ship)
-    invulnerabilityAction = new AnimateOpacity(shipSprite, new Cos(0.2, 0.5, 0, 0.5))
+    invulnerabilityAction = new Blink(shipSprite, new Cos(0.2, 0.5, 0, 0.5))
     shipLayer.add(shipSprite)
 
     let flameImages = new ImageArray(texture["flame"], 3, 3, 0.5, 1)

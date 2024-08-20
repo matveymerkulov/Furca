@@ -1,8 +1,8 @@
-import {removeFromArray} from "./system.js"
 import {Renderable} from "./renderable.js"
 import {addIndent, indent, removeIndent} from "./save_load.js"
+import {removeFromArray} from "./functions.js"
 
-export default class Layer extends Renderable {
+export class Layer extends Renderable {
     constructor(...items) {
         super()
         this.items = items
@@ -40,6 +40,10 @@ export default class Layer extends Renderable {
 
     clear() {
         this.items = []
+    }
+
+    has(item) {
+        return this.items.includes(item)
     }
 
     add(...objects) {

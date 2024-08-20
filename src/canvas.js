@@ -1,6 +1,6 @@
-import Sprite from "./sprite.js"
-import {canvasMouse, max, min, mouse, screenMouse} from "./system.js"
-import Box from "./box.js"
+import {Sprite} from "./sprite.js"
+import {canvasMouse, mouse} from "./system.js"
+import {Box} from "./box.js"
 import {project} from "./project.js"
 
 export let currentCanvas, canvasUnderCursor, ctx, zk = 1.2
@@ -11,7 +11,7 @@ export function setCanvas(canvas) {
     mouse.setPosition(xFromScreen(canvasMouse.x), yFromScreen(canvasMouse.y))
 }
 
-export default class Canvas extends Box {
+export class Canvas extends Box {
     constructor(node, x, y, width, height, viewport, active = true) {
         super(x, y, width, height, 0.0, 0.0)
 

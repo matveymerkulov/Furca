@@ -1,5 +1,5 @@
-import ImageArray from "../image_array.js"
-import TileMap from "../tile_map.js"
+import {ImageArray} from "../image_array.js"
+import {TileMap} from "../tile_map.js"
 
 function getImageData(image, x = 0, y = 0, width, height) {
     if(width === undefined) width = image.width

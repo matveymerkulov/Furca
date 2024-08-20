@@ -1,9 +1,9 @@
-import Point from "./point.js"
+import {Point} from "./point.js"
 import {unc} from "./system.js"
 import {drawDashedRegion} from "./draw.js"
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
 
-export default class Box extends Point {
+export class Box extends Point {
     constructor(x = 0.0, y = 0.0, width = 0.0, height = 0.0) {
         super(x, y)
         this.halfWidth = 0.5 * width
@@ -78,6 +78,11 @@ export default class Box extends Point {
     setSize(width, height) {
         this.width = width
         this.height = height
+    }
+
+    alterSize(dWidth, dHeight) {
+        this.width += dWidth
+        this.height += dHeight
     }
 
     setSizeAs(shape) {

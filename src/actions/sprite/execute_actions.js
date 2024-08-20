@@ -1,8 +1,8 @@
-import Layer from "../../layer.js"
+import {Layer} from "../../layer.js"
 import {current} from "../../variable/sprite.js"
 import {Action} from "../action.js"
 
-export default class ExecuteActions extends Action {
+export class ExecuteActions extends Action {
     constructor(object) {
         super()
         this.object = object

@@ -1,7 +1,7 @@
-import Layer from "../../layer.js"
+import {Layer} from "../../layer.js"
 import {Action} from "../action.js"
 
-export default class LoopArea extends Action {
+export class LoopArea extends Action {
     constructor(object, area) {
         super()
         this.object = object

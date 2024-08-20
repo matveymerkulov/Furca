@@ -1,11 +1,12 @@
-import Box from "../box.js"
-import {Align} from "../system.js"
+import {Box} from "../box.js"
+import {Align, defaultFontSize, setFontSize} from "../system.js"
 import {ctx, xToScreen, yToScreen} from "../canvas.js"
 
-export default class Label extends Box {
-    constructor(sprite, items, horizontalAlign, verticalAlign, format, image, sizeMul = 1) {
+export class Label extends Box {
+    constructor(sprite, items, fontSize, horizontalAlign, verticalAlign, format, image, sizeMul = 1) {
         super(sprite.x, sprite.y, sprite.width, sprite.height)
         this.items = items
+        this.fontSize = fontSize
         this.horizontalAlign = horizontalAlign
         this.verticalAlign = verticalAlign
         this.format = format
@@ -14,8 +15,10 @@ export default class Label extends Box {
     }
 
     draw() {
+        setFontSize(this.fontSize)
+
         let text = ""
-        this.items.forEach(item => text += typeof item === "string" ? item : item.toString())
+        this.items.forEach(item => text += (typeof item === "string" ? item : item.toString()))
 
         let formatString = this.format?.substring(1)
         if (this.format === undefined) {
@@ -75,8 +78,15 @@ export default class Label extends Box {
                     , width - 1, height - 1)
             }
         } else {
+            ctx.fillStyle = "black"
+            for(let dy = -2; dy <= 2; dy += 2) {
+                for(let dx = -2; dx <= 2; dx += 2) {
+                    ctx.fillText(text, x + dx, y + dy)
+                }
+            }
             ctx.fillStyle = "white"
             ctx.fillText(text, x, y)
+            setFontSize(defaultFontSize)
         }
     }
 

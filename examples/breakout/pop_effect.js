@@ -1,6 +1,5 @@
 import {Action} from "../../src/actions/action.js"
 import {fx} from "./main.js"
-import {cos, rad, sin, sqrt} from "../../src/system.js"
 
 export const PopEffectType = {
     disappear: Symbol("disappear"),

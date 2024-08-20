@@ -1,7 +1,7 @@
 import {Action} from "../action.js"
 import {apsk} from "../../system.js"
 
-export default class AnimateOpacity extends Action {
+export class AnimateOpacity extends Action {
     constructor(object, func) {
         super()
         this.object = object

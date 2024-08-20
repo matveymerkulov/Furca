@@ -1,6 +1,6 @@
 import {Action} from "./actions/action.js"
 
-export default class Constraint extends Action {
+export class Constraint extends Action {
     constructor(sprite, parent) {
         super()
         this.sprite = sprite

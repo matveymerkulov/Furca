@@ -1,4 +1,4 @@
-import Layer from "./layer.js"
+import {Layer} from "./layer.js"
 import {currentCanvas} from "./canvas.js"
 
 export let tileSet, tileMap, tileMaps
@@ -14,7 +14,7 @@ export let project = {
     locales: {},
     scene: new Layer(),
     actions: [],
-    sound: {},
+    sound: [],
     texture: null,
 
     render() {

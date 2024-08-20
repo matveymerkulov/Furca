@@ -1,11 +1,11 @@
 // noinspection DuplicatedCode
 
-import TileSet from "../../src/tile_set.js"
+import {TileSet} from "../../src/tile_set.js"
 import {tileMap, tileMaps, tileSet} from "../../src/project.js"
-import ImageArray from "../../src/image_array.js"
+import {ImageArray} from "../../src/image_array.js"
 import {Block} from "../../src/block.js"
 import {Category, Pos, Rule} from "../../src/auto_tiling.js"
-import TileMap from "../../src/tile_map.js"
+import {TileMap} from "../../src/tile_map.js"
 
 export function loadData(texture) {
     tileSet["blocks"] = new TileSet(new ImageArray(texture.blocks, 4, 14, 0.5, 0.5, 1, 1), [

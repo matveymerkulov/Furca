@@ -1,6 +1,6 @@
 import {Action} from "../action.js"
 
-export default class RemoveIfOutside extends Action {
+export class RemoveIfOutside extends Action {
     constructor(layer, bounds) {
         super()
         this.layer = layer

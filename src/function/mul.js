@@ -1,7 +1,7 @@
 import {num} from "../system.js"
 import {Function} from "./function.js"
 
-export default class Mul extends Function {
+export class Mul extends Function {
     constructor(value1, value2) {
         super()
         this.value1 = value1

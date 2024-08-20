@@ -1,4 +1,4 @@
- export default class Region {
+ export class Region {
     x
     y
     width

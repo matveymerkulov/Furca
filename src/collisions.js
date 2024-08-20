@@ -1,5 +1,6 @@
-import Box from "./box.js"
-import {clamp} from "./system.js"
+import {Box} from "./box.js"
+import {clamp} from "./functions.js"
+
 
 export let serviceSprite1 = new Box()
 export let serviceSprite2 = new Box()
@@ -7,12 +8,12 @@ export let serviceSprite2 = new Box()
 export function toCircle(pill, point, servicePill) {
     if(pill.halfWidth === pill.halfHeight) return pill
     if(pill.halfWidth > pill.halfHeight) {
-        let dwidth = pill.halfWidth - pill.halfHeight
-        servicePill.setPosition(clamp(point.x, pill.x - dwidth, pill.x + dwidth), pill.y)
+        let dWidth = pill.halfWidth - pill.halfHeight
+        servicePill.setPosition(clamp(point.x, pill.x - dWidth, pill.x + dWidth), pill.y)
         servicePill.size = pill.height
     } else {
-        let dheight = pill.halfHeight - pill.halfWidth
-        servicePill.setPosition(pill.x, clamp(point.y, pill.y - dheight, pill.y + dheight))
+        let dHeight = pill.halfHeight - pill.halfWidth
+        servicePill.setPosition(pill.x, clamp(point.y, pill.y - dHeight, pill.y + dHeight))
         servicePill.size = pill.width
     }
     return servicePill

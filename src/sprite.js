@@ -1,7 +1,7 @@
-import Box from "./box.js"
+import {Box} from "./box.js"
 import {ctx, distToScreen, xToScreen, yToScreen} from "./canvas.js"
-import {apsk, num, rad} from "./system.js"
-import Animate from "./actions/sprite/animate.js"
+import {apsk, num} from "./system.js"
+import {Animate} from "./actions/sprite/animate.js"
 import {
     boxWithBoxCollision,
     boxWithPillCollision,
@@ -19,8 +19,9 @@ import {
     pillFromPillVector,
 } from "./physics.js"
 import {ShapeType} from "./shape.js"
+import {rad} from "./functions.js"
 
-export default class Sprite extends Box {
+export class Sprite extends Box {
     constructor(image, x = 0.0, y = 0.0, width = 1.0, height = 1.0
                 , shapeType = ShapeType.circle, angle = 0.0, speed = 0.0, imageAngle
                 , active = true, visible = true) {
@@ -33,7 +34,6 @@ export default class Sprite extends Box {
         this.visible = visible
         this.active = active
         this.opacity = 1.0
-        this.actions = []
         this.flipped = false
     }
 
@@ -102,17 +102,6 @@ export default class Sprite extends Box {
             , this.flipped)
 
         ctx.globalAlpha = 1.0
-    }
-
-    add(action, key) {
-        action.key = key
-        this.actions.push(action)
-    }
-
-    update() {
-        if(this.active) {
-            this.actions.forEach(action => action.execute())
-        }
     }
 
     move() {

@@ -1,6 +1,6 @@
 import {Action} from "../action.js"
 
-export default class Move extends Action {
+export class Move extends Action {
     constructor(object) {
         super()
         this.object = object

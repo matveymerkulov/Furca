@@ -2,7 +2,7 @@ import {Action} from "./actions/action.js"
 
 let current
 
-export default class Drag extends Action {
+export class Drag extends Action {
     key
 
     conditions() {

@@ -1,7 +1,7 @@
 import {Action} from "../action.js"
 import {apsk} from "../../system.js"
 
-export default class Blink extends Action {
+export class Blink extends Action {
     constructor(object, func) {
         super()
         this.object = object

@@ -1,14 +1,15 @@
 import {project} from "../../src/project.js"
-import Layer from "../../src/layer.js"
-import Move from "../../src/actions/sprite/move.js"
-import Box from "../../src/box.js"
+import {Layer} from "../../src/layer.js"
+import {Move} from "../../src/actions/sprite/move.js"
+import {Box} from "../../src/box.js"
 import {currentCanvas} from "../../src/canvas.js"
-import Interval from "../../src/actions/interval.js"
-import Generator from "../../src/actions/generator.js"
-import Img from "../../src/image.js"
-import {defaultCanvas, rad, rnd} from "../../src/system.js"
-import RemoveIfOutside from "../../src/actions/sprite/remove_if_outside.js"
+import {Interval} from "../../src/actions/interval.js"
+import {Img} from "../../src/image.js"
+import {defaultCanvas} from "../../src/system.js"
+import {RemoveIfOutside} from "../../src/actions/sprite/remove_if_outside.js"
 import {ShapeType} from "../../src/shape.js"
+import Generator from "./generator.js"
+import {rad, rnd} from "../../src/functions.js"
 
 project.getAssets = () => {
     return {

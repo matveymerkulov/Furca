@@ -1,20 +1,21 @@
-import Key from "../../src/key.js"
-import {Align, apsk, atan2, clamp, cos, defaultCanvas, floor, mouse, play, rad, sin} from "../../src/system.js"
+import {Key} from "../../src/key.js"
 import {project, tileMap, tileSet} from "../../src/project.js"
 import {loadData} from "./data.js"
-import Sprite from "../../src/sprite.js"
-import Img from "../../src/image.js"
+import {Sprite} from "../../src/sprite.js"
+import {Img} from "../../src/image.js"
 import {ctx, currentCanvas, distToScreen, xToScreen, yToScreen} from "../../src/canvas.js"
 import {registry} from "./registry.js"
-import Shape, {ShapeType} from "../../src/shape.js"
+import {Shape, ShapeType} from "../../src/shape.js"
 import {emptyTile} from "../../src/tile_map.js"
 import {NinePatch} from "../../src/nine_patch.js"
 import {Action} from "../../src/actions/action.js"
-import Layer from "../../src/layer.js"
+import {Layer} from "../../src/layer.js"
 import {PopEffect, PopEffectType} from "./pop_effect.js"
-import Box from "../../src/box.js"
-import Label from "../../src/gui/label.js"
-import Num from "../../src/variable/number.js"
+import {Box} from "../../src/box.js"
+import {Label} from "../../src/gui/label.js"
+import {Num} from "../../src/variable/number.js"
+import {Align, apsk, defaultCanvas, mouse, play} from "../../src/system.js"
+import {atan2, clamp, cos, floor, rad, sin} from "../../src/functions.js"
 
 project.getAssets = () => {
     return {
@@ -34,7 +35,7 @@ project.init = (texture) => {
 
     defaultCanvas(40,24)
 
-    let ballImage = new Img(texture.blocks, 3 * 32, 13 * 32, 32, 32)
+    let ballImage = new Img(texture["blocks"], 3 * 32, 13 * 32, 32, 32)
 
     let blocksLeft = new Num()
     let score = new Num()
@@ -93,7 +94,7 @@ project.init = (texture) => {
         project.scene.replace(0, level)
 
         blocksLeft.value = 0
-        level.processTiles((column, row, tileNum) => {
+        level.processTilesByPos((column, row, tileNum) => {
             if(tileNum >= horizontalBlocks) {
                 blocksLeft.increment()
             }

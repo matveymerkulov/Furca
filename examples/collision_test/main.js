@@ -1,8 +1,8 @@
 import {defaultCanvas, mouse} from "../../src/system.js"
-import Sprite from "../../src/sprite.js"
+import {Sprite} from "../../src/sprite.js"
 import {project} from "../../src/project.js"
-import Shape, {ShapeType} from "../../src/shape.js"
-import Key from "../../src/key.js"
+import {Shape, ShapeType} from "../../src/shape.js"
+import {Key} from "../../src/key.js"
 
 project.init = (texture) => {
     let switchType = new Key("Space", "LMB", "WheelUp", "WheelDown")

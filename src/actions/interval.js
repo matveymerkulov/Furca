@@ -1,7 +1,7 @@
 import {apsk} from "../system.js"
 import {Action} from "./action.js"
 
-export default class Interval extends Action {
+export class Interval extends Action {
     constructor(interval) {
         super()
         this.interval = interval

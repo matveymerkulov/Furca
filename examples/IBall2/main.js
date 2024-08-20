@@ -1,11 +1,11 @@
 import {project} from "../../src/project.js"
-import TileMap from "../../src/tile_map.js"
-import ImageArray from "../../src/image_array.js"
+import {TileMap} from "../../src/tile_map.js"
+import {ImageArray} from "../../src/image_array.js"
 import {apsk, defaultCanvas} from "../../src/system.js"
-import Key from "../../src/key.js"
-import Sprite from "../../src/sprite.js"
-import Layer from "../../src/layer.js"
-import TileSet from "../../src/tile_set.js"
+import {Key} from "../../src/key.js"
+import {Sprite} from "../../src/sprite.js"
+import {Layer} from "../../src/layer.js"
+import {TileSet} from "../../src/tile_set.js"
 import {currentCanvas} from "../../src/canvas.js"
 import {ShapeType} from "../../src/shape.js"
 
@@ -83,7 +83,7 @@ project.init = (texture) => {
 
     let panels = new Layer()
 
-    tiles.processTiles((column, row, tileNum) => {
+    tiles.processTilesByPos((column, row, tileNum) => {
         if(tileNum === panelTile) {
             let panel = tiles.extractTileByPos(column, row, ShapeType.box)
             panel.dy = -panelSpeed

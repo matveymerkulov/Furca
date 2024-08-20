@@ -1,7 +1,7 @@
-import {apsk} from "../system.js"
-import {Action} from "./action.js"
+import {apsk} from "../../src/system.js"
+import {Action} from "../../src/actions/action.js"
 
-export default class Turbo extends Action {
+export class Turbo extends Action {
     constructor(key, cooldown) {
         super()
         this.key = key

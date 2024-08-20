@@ -1,7 +1,7 @@
 import {Renderable} from "./renderable.js"
-import {rad, rnd, rndi} from "./system.js"
+import {rad, rnd, rndi} from "./functions.js"
 
-export default class Point extends Renderable {
+export class Point extends Renderable {
     constructor(x = 0.0, y = 0.0) {
         super()
         this.x = x
@@ -22,6 +22,11 @@ export default class Point extends Renderable {
     setPositionAs(point, dx = 0, dy = 0) {
         this.x = point.x + dx
         this.y = point.y + dy
+    }
+
+    shift(dx, dy) {
+        this.x += dx
+        this.y += dy
     }
 
     moveToCircle(x, y, radius) {
@@ -62,5 +67,9 @@ export default class Point extends Renderable {
 
     angleTo(x, y) {
         return Math.atan2(y - this.y, x - this.x)
+    }
+
+    angleToPoint(point) {
+        return this.angleTo(point.x, point.y)
     }
 }

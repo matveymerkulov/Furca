@@ -1,7 +1,6 @@
-import {randomSign} from "../system.js"
 import {Function} from "./function.js"
 
-export default class RandomSign extends Function {
+export class RandomSign extends Function {
     toNumber() {
         return randomSign()
     }

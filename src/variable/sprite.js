@@ -1,6 +1,6 @@
 import {Function} from "../function/function.js"
 
-export default class SpriteVariable extends Function {
+export class SpriteVariable extends Function {
     constructor() {
         super()
         this._id = name

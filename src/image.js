@@ -1,11 +1,11 @@
 import {Renderable} from "./renderable.js"
-import Shape from "./shape.js"
+import {Shape} from "./shape.js"
 import {ctx} from "./canvas.js"
 import {showCollisionShapes} from "./input.js"
 
 let collisionShape = new Shape("rgb(255, 0, 255)", 0.5)
 
-export default class Img extends Renderable {
+export class Img extends Renderable {
     constructor(texture, x = 0, y = 0, width = texture.width, height = texture.height
         , xMul = 0.5, yMul = 0.5, widthMul = 1.0, heightMul = 1.0) {
         super()

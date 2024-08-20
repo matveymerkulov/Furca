@@ -1,7 +1,7 @@
 import {apsk, num} from "../../system.js"
 import {Action} from "../action.js"
 
-export default class DelayedHide extends Action {
+export class DelayedHide extends Action {
     constructor(object, time) {
         super()
         this.object = object

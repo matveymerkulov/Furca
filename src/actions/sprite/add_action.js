@@ -1,6 +1,6 @@
 import {Action} from "../action.js"
 
-export default class AddAction extends Action {
+export class AddAction extends Action {
     constructor(sprite, action) {
         super()
         this.sprite = sprite
