@@ -91,7 +91,10 @@ export function shuffleArray(array) {
 }
 
 export function removeFromArray(item, array) {
-    let i = array.indexOf(item)
-    if(i < 0) return
-    array.splice(i, 1)
+    removeFromArrayByIndex(array.indexOf(item), array)
+}
+
+export function removeFromArrayByIndex(index, array) {
+    if(index < 0) return
+    array.splice(index, 1)
 }

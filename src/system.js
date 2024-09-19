@@ -4,11 +4,13 @@ import {initData, project} from "./project.js"
 import {Function} from "./function/function.js"
 import {keys} from "./key.js"
 import {initInput} from "./input.js"
+import {initTileMap} from "./tile_map.js"
 
 // global variables
 
 export let zk = 1.2, fps = 60, aps = 200, paused = false
 export let mouse, screenMouse, canvasMouse, apsk = 1 / aps, unc = 0.0000001
+export const texture = new Map(), sound = new Map()
 
 // enums
 
@@ -40,7 +42,7 @@ export function element(name) {
 export let masterVolume = 0.25
 
 export function play(name) {
-    let newSound = new Audio(project.sound[name].src)
+    let newSound = new Audio(sound[name].src)
     newSound.volume = masterVolume
     newSound.play()
     return newSound
@@ -61,13 +63,13 @@ export function stopSound(sound) {
 }
 
 export function mutedSound(name) {
-    let newSound = new Audio(project.sound[name].src)
+    let newSound = new Audio(sound[name].src)
     newSound.volume = masterVolume
     return newSound
 }
 
 export function loopedSound(name, loopStart = 0, loopEnd, play = true, volume = masterVolume) {
-    let newSound = new Audio(project.sound[name].src)
+    let newSound = new Audio(sound[name].src)
     if(loopStart === 0 && loopEnd === undefined) {
         newSound.loop = true
     } else {
@@ -126,6 +128,7 @@ document.addEventListener("DOMContentLoaded", function() {
     mouse = new Point()
     screenMouse = new Point()
     canvasMouse = new Point()
+    initTileMap()
     loadAssets("", project.getAssets())
 })
 
@@ -159,12 +162,7 @@ export function loadAssets(path, asset) {
         return newArray
     }
 
-    asset.texture = process(asset.texture)
-    asset.sound = process(asset.sound)
-
-    const textures = new Map()
-
-    for(const textureFileName of asset.texture) {
+    for(const textureFileName of process(asset.texture)) {
         const img = new Image()
         img.onload = () => {
             assetsToLoad--
@@ -173,7 +171,7 @@ export function loadAssets(path, asset) {
         const key = removeExtension(textureFileName)
         img.src = path + textureFileName
         img.id = key
-        textures[key] = img
+        texture[key] = img
         assetsToLoad++
     }
 
@@ -186,18 +184,14 @@ export function loadAssets(path, asset) {
         audio.addEventListener("canplaythrough", listener, false)
     }
 
-    let sounds = new Map()
-    for(const soundFileName of asset.sound) {
+    for(const soundFileName of process(asset.sound)) {
         let audio = new Audio()
         addAudioListener(audio)
         let key = removeExtension(soundFileName)
         audio.src = path + soundFileName
-        sounds[key] = audio
+        sound[key] = audio
         assetsToLoad++
     }
-
-    project._assets = {texture: textures, sound: sounds}
-    project.sound = project._assets.sound
 
     if(assetsToLoad <= 0) start()
 }
@@ -206,8 +200,7 @@ function start() {
     initInput()
     initData()
 
-    project.init(project._assets.texture)
-    delete project._assets
+    project.init()
 
     document.onmousemove = (event) => {
         mouse.setPosition(xFromScreen(event.offsetX), yFromScreen(event.offsetY))

@@ -1,7 +1,7 @@
 import {tileHeight, tileWidth} from "./main.js"
 import {canvasMouse} from "../src/system.js"
-import Drag from "../src/drag.js"
-import Region from "../src/region.js"
+import {Drag} from "../src/drag.js"
+import {Region} from "../src/region.js"
 import {currentTileSet} from "./tile_set.js"
 
 export let tileSetRegion

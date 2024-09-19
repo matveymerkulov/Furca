@@ -1,6 +1,6 @@
 import {Box} from "./box.js"
 import {ctx, distToScreen, xToScreen, yToScreen} from "./canvas.js"
-import {apsk, num} from "./system.js"
+import {apsk, num, texture} from "./system.js"
 import {Animate} from "./actions/sprite/animate.js"
 import {
     boxWithBoxCollision,
@@ -20,6 +20,7 @@ import {
 } from "./physics.js"
 import {ShapeType} from "./shape.js"
 import {rad} from "./functions.js"
+import {Img} from "./image.js"
 
 export class Sprite extends Box {
     constructor(image, x = 0.0, y = 0.0, width = 1.0, height = 1.0
@@ -37,60 +38,10 @@ export class Sprite extends Box {
         this.flipped = false
     }
 
-    static create(layer, image, x, y, width, height, shapeType, angle, speed, animationSpeed, imageAngle
-                  , active, visible) {
-        if(typeof x === "object") {
-            let pos = x
-            x = pos.x
-            y = pos.y
-        }
-        let sprite = new Sprite(image, x, y, width, height, shapeType, angle, speed, imageAngle, active, visible)
-        if(layer) layer.add(sprite)
-        if(animationSpeed !== undefined) {
-            sprite.actions = [new Animate(sprite, image, animationSpeed)]
-            sprite.image = image.image(0)
-        }
-        return sprite
-    }
-
-    static createFromTemplate(template) {
-        let sprite = new Sprite()
-        sprite.setFromTemplate(template)
-        if(template.layer !== undefined) template.layer.add(sprite)
-        if(template.animationSpeed !== undefined) {
-            sprite.actions = [new Animate(sprite, template.images, num(template.animationSpeed))]
-            sprite.image = template.images.image(0)
-        }
-        if(template.parameters) {
-            for(const [key, value] of Object.entries(template.parameters)) {
-                sprite[key] = value
-            }
-        }
-        return sprite
-    }
-
-    setFromTemplate(template) {
-        if(template.shapeType !== undefined) this.shapeType = template.shapeType
-        if(template.image !== undefined) this.image = template.image
-        if(template.pos !== undefined) {
-            let pos = template.pos.toSprite()
-            this.x = pos.x
-            this.y = pos.y
-        } else {
-            if(template.x !== undefined) this.x = num(template.x)
-            if(template.y !== undefined) this.y = num(template.y)
-        }
-        if(template.size !== undefined) {
-            this.width = this.height = num(template.size)
-        } else {
-            if(template.width !== undefined) this.width = num(template.width)
-            if(template.height !== undefined) this.height = num(template.height)
-        }
-        if(template.speed !== undefined) this.speed = num(template.speed)
-        if(template.angle !== undefined) this.angle = rad(num(template.angle))
-        if(template.imageAngle !== undefined) this.imageAngle = num(template.imageAngle)
-        if(template.active !== undefined) this.active = template.active
-        if(template.visible !== undefined) this.visible = template.visible
+    static create(template) {
+        return new Sprite(Img.create(template.image), num(template.x), num(template.y), num(template.width)
+            , num(template.height), template.shape, num(template.angle), num(template.speed)
+            , template.visible, template.active)
     }
 
     draw() {

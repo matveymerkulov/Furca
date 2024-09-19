@@ -1,5 +1,6 @@
 import {Renderable} from "./renderable.js"
 import {ctx} from "./canvas.js"
+import {Img} from "./image.js"
 
 export class NinePatch extends Renderable {
     #texture
@@ -8,13 +9,19 @@ export class NinePatch extends Renderable {
     #width
     #height
 
-    constructor(image, horizontal1, horizontal2, vertical1, vertical2) {
+    constructor(image, horizontal1 = 0, horizontal2 = image.width
+                , vertical1 = 0, vertical2 = image.height) {
         super()
         this.#texture = image.texture
         this.#x = [0, horizontal1, horizontal2]
         this.#y = [0, vertical1, vertical2]
         this.#width = [horizontal1, horizontal2 - horizontal1, image.width - horizontal2]
         this.#height = [vertical1, vertical2 - vertical1, image.height - vertical2]
+    }
+
+    static create(template) {
+        return new NinePatch(Img.create(template.image), template.horizontal1, template.horizontal2
+            , template.vertical1, template.vertical2)
     }
 
     drawResized(sx, sy, swidth, sheight, shapeType) {

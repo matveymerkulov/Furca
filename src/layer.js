@@ -1,6 +1,7 @@
 import {Renderable} from "./renderable.js"
 import {addIndent, indent, removeIndent} from "./save_load.js"
 import {removeFromArray} from "./functions.js"
+import {bullets, deadBullets} from "../breakout/main.js"
 
 export class Layer extends Renderable {
     constructor(...items) {
@@ -34,7 +35,11 @@ export class Layer extends Renderable {
 
     // items management
 
-    isEmpty() {
+    get quantity() {
+        return this.items.length
+    }
+
+    get isEmpty() {
         return this.items.length === 0
     }
 
@@ -56,6 +61,15 @@ export class Layer extends Renderable {
 
     remove(object) {
         removeFromArray(object, this.items)
+    }
+
+    removeAll(itemsToRemove) {
+        if(itemsToRemove.length > 0) {
+            for(let item of itemsToRemove) {
+                this.remove(item)
+            }
+            itemsToRemove.length = 0
+        }
     }
 
     // sprite manipulations

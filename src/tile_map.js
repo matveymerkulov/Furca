@@ -6,9 +6,13 @@ import {arrayToString} from "./save_load.js"
 import {showCollisionShapes} from "./input.js"
 import {tileMap} from "./project.js"
 
-let collisionShape = new Shape("rgb(255, 0, 255)", 0.5)
-let collisionSprite = new Sprite()
+let collisionShape, collisionSprite
 export const emptyTile = -1
+
+export function initTileMap() {
+    collisionShape = new Shape("rgb(255, 0, 255)", 0.5)
+    collisionSprite = new Sprite()
+}
 
 export class TileMap extends Box {
     #tileSet

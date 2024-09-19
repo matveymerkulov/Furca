@@ -1,6 +1,6 @@
 import {screenMouse} from "../src/system.js"
 import {distFromScreen} from "../src/canvas.js"
-import Drag from "../src/drag.js"
+import {Drag} from "../src/drag.js"
 
 export default class MovePoint extends Drag {
     constructor(direction = 1) {

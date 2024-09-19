@@ -8,7 +8,7 @@ import {visibility} from "../src/tile_set.js"
 import {blockType} from "../src/block.js"
 import TileZoom, {tilesPerRow} from "./tile_zoom.js"
 import {TilePan, updateY0, y0} from "./tile_pan.js"
-import Key from "../src/key.js"
+import {Key} from "../src/key.js"
 import {mainWindow} from "./main_window.js"
 import {currentWindow} from "../src/gui/window.js"
 

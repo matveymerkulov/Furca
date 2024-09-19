@@ -8,7 +8,7 @@ import {blockType} from "../src/block.js"
 import {visibility} from "../src/tile_set.js"
 import {setTileSize, tileHeight, tileWidth,} from "./main.js"
 import {Win} from "../src/gui/window.js"
-import Key from "../src/key.js"
+import {Key} from "../src/key.js"
 
 let selectKey = new Key("LMB")
 let delKey = new Key("Delete")

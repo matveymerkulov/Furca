@@ -1,8 +1,8 @@
 // noinspection DuplicatedCode
 
-import TileSet from "../src/tile_set.js"
-import TileMap from "../src/tile_map.js"
-import ImageArray from "../src/image_array.js"
+import {TileSet} from "../src/tile_set.js"
+import {TileMap} from "../src/tile_map.js"
+import {ImageArray} from "../src/image_array.js"
 import {tileMap, tileMaps, tileSet} from "../src/project.js"
 import {Block} from "../src/block.js"
 import {Category, Pos, Rule} from "../src/auto_tiling.js"

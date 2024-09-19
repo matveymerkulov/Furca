@@ -2,12 +2,13 @@ import {currentTileSet} from "./tile_set.js"
 import {tileHeight, tileWidth} from "./main.js"
 import {renderTileSetCanvas} from "./tile_set_properties.js"
 import {canvasUnderCursor, ctx, currentCanvas} from "../src/canvas.js"
-import {canvasMouse, element, removeFromArray} from "../src/system.js"
+import {canvasMouse, element} from "../src/system.js"
 import {drawDashedRegion, drawRect} from "../src/draw.js"
 import {tilesPerRow} from "./tile_zoom.js"
 import {Win} from "../src/gui/window.js"
 import {Category, Pos, Rule} from "../src/auto_tiling.js"
-import Key from "../src/key.js"
+import {Key} from "../src/key.js"
+import {removeFromArray} from "../src/functions.js"
 
 let currentCategory, currentRule
 

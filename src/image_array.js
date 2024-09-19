@@ -1,5 +1,6 @@
 import {Img} from "./image.js"
 import {getTexturePart} from "./texture.js"
+import {texture} from "./system.js"
 
 export class ImageArray {
     #images
@@ -23,6 +24,19 @@ export class ImageArray {
         this.#images = images
     }
 
+    static create(template) {
+        let object = template.object
+
+        if(object === undefined) {
+            object = new ImageArray(texture[template.texture], template.columns, template.rows
+                , template.x, template.y, template.width, template.height
+                , template.xMul, template.yMul, template.widthMul, template.heightMul)
+            template.object = object
+        }
+
+        return object
+    }
+
     toString() {
         return `new ImageArray(texture.${this.texture.id}, ${this.columns}, ${this.rows}, ${this.xMul}, ${this.yMul}`
             + `, ${this.heightMul}, ${this.widthMul})`
@@ -34,22 +48,5 @@ export class ImageArray {
 
     get quantity() {
         return this.#images.length
-    }
-
-    addColorBlocks(color, column, row, columns, rows, addImages) {
-        const width = Math.floor(this.texture.width / this.columns)
-        const height = Math.floor(this.texture.height / this.rows)
-
-        if(addImages) {
-            for(let y = 0; y < rows; y++) {
-                for(let x = 0; x < columns; x++) {
-                    this.#images.push(new Img(getTexturePart(this.texture, (x + column) * width, (y + row) * height
-                            , width, height, color), 0, 0, width, height))
-                }
-            }
-        }
-
-        return new Img(getTexturePart(this.texture, column * width, row * height
-            , columns * width, rows * height, color), 0, 0, columns * width, rows * height)
     }
 }

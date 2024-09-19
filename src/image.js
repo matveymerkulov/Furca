@@ -2,6 +2,8 @@ import {Renderable} from "./renderable.js"
 import {Shape} from "./shape.js"
 import {ctx} from "./canvas.js"
 import {showCollisionShapes} from "./input.js"
+import {num, texture} from "./system.js"
+import {NinePatch} from "./nine_patch.js"
 
 let collisionShape = new Shape("rgb(255, 0, 255)", 0.5)
 
@@ -18,7 +20,22 @@ export class Img extends Renderable {
         this.yMul = yMul
         this.widthMul = widthMul
         this.heightMul = heightMul
-        this.visible = true
+    }
+
+    static create(template) {
+        if(template.class === "NinePatch") {
+            return NinePatch.create(template)
+        }
+
+        let object = template.object
+
+        if(object === undefined) {
+            object = new Img(texture[template.texture], template.x, template.y, template.width, template.height
+                , template.xMul, template.yMul, template.widthMul, template.heightMul)
+            template.object = object
+        }
+
+        return object
     }
 
     drawResized(sx, sy, swidth, sheight, shapeType) {

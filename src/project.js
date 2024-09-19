@@ -14,8 +14,6 @@ export let project = {
     locales: {},
     scene: new Layer(),
     actions: [],
-    sound: [],
-    texture: null,
 
     render() {
     },

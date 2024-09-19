@@ -1,6 +1,7 @@
-import Drag from "../src/drag.js"
-import {clamp, screenMouse} from "../src/system.js"
+import {Drag} from "../src/drag.js"
+import {screenMouse} from "../src/system.js"
 import {maxY0} from "./tile_set.js"
+import {clamp} from "../src/functions.js"
 
 
 export let y0 = 0

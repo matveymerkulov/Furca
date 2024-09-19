@@ -1,5 +1,5 @@
 import {mouse} from "../src/system.js"
-import Drag from "../src/drag.js"
+import {Drag} from "../src/drag.js"
 import {currentBlock, currentTile, currentTileSet} from "./tile_set.js"
 import {Block, blockType} from "../src/block.js"
 import {currentTileMap, rectangleMode, setBlockSize, setTiles} from "./tile_map.js"
