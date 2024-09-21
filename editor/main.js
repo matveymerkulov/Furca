@@ -2,7 +2,8 @@ import {mainWindow} from "./main_window.js"
 import {project, tileMap, tileSet} from "../src/project.js"
 import {currentWindow, hideWindow} from "../src/gui/window.js"
 import {setName} from "../src/names.js"
-import {loadData} from "./data.js"
+import {loadData} from "../data/breakout.js"
+//import {loadData} from "./data.js"
 import {initTileSetSelectionWindow} from "./new_map.js"
 import {deleteCurrentDrag} from "../src/drag.js"
 import {projectFromStorage, projectToStorage} from "../src/save_load.js"
@@ -11,13 +12,7 @@ import {currentTileSet} from "./tile_set.js"
 import {resetRegionSelector} from "./select_tile_set_region.js"
 import {tileSetPropertiesWindow} from "./tile_set_properties.js"
 import {rulesWindow, updateCategoriesList} from "./auto_tiling.js"
-
-project.getAssets = () => {
-    return {
-        texture: ["farm_floor.png", "farm_furniture.png", "blocks.png", "smooth.png"],
-        sound: []
-    }
-}
+import {texture} from "../src/system.js"
 
 let saveKey = new Key("KeyS")
 let loadKey = new Key("KeyL")
@@ -56,7 +51,7 @@ project.updateNode = () => {
 
 
 
-project.init = (texture) => {
+project.init = () => {
     /*if(localStorage.getItem("project") === null) {
         loadData(texture)
     } else {
@@ -69,7 +64,7 @@ project.init = (texture) => {
         projectToClipboard()
     }*/
 
-    loadData(texture)
+    loadData()
     initData()
 
     initTileSetSelectionWindow()

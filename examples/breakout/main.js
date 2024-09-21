@@ -3,18 +3,16 @@ import {project, tileMap, tileSet} from "../../src/project.js"
 import {loadData} from "./data.js"
 import {Sprite} from "../../src/sprite.js"
 import {Img} from "../../src/image.js"
-import {ctx, currentCanvas, distToScreen, xToScreen, yToScreen} from "../../src/canvas.js"
 import {registry} from "./registry.js"
-import {Shape, ShapeType} from "../../src/shape.js"
+import {ShapeType} from "../../src/shape.js"
 import {emptyTile} from "../../src/tile_map.js"
 import {NinePatch} from "../../src/nine_patch.js"
-import {Action} from "../../src/actions/action.js"
 import {Layer} from "../../src/layer.js"
 import {PopEffect, PopEffectType} from "./pop_effect.js"
 import {Box} from "../../src/box.js"
 import {Label} from "../../src/gui/label.js"
 import {Num} from "../../src/variable/number.js"
-import {Align, apsk, defaultCanvas, mouse, play} from "../../src/system.js"
+import {Align, apsk, defaultCanvas, defaultFontSize, mouse, play} from "../../src/system.js"
 import {atan2, clamp, cos, floor, rad, sin} from "../../src/functions.js"
 
 project.getAssets = () => {
@@ -42,10 +40,10 @@ project.init = (texture) => {
     let lives = new Num(3)
 
     let hud = new Box(0, 1, tileMap.blocks.width - 3, tileMap.blocks.height - 1)
-    let blocksLeftLabel = new Label(hud, [""/*"Blocks left: ", blocksLeft*/], Align.left, Align.top)
-    let messageLabel = new Label(hud, [""], Align.center, Align.center)
-    let scoreLabel = new Label(hud, [score], Align.center, Align.top, "Z8")
-    let livesLabel = new Label(hud, [lives], Align.right, Align.top, "I1", ballImage, 0.5)
+    let blocksLeftLabel = new Label(hud, [""/*"Blocks left: ", blocksLeft*/], defaultFontSize, Align.left, Align.top)
+    let messageLabel = new Label(hud, [""], defaultFontSize, Align.center, Align.center)
+    let scoreLabel = new Label(hud, [score], defaultFontSize, Align.center, Align.top, "Z8")
+    let livesLabel = new Label(hud, [lives], defaultFontSize, Align.right, Align.top, "I1", ballImage, 0.5)
 
     const tileSetWidth = 4
 

@@ -1,7 +1,6 @@
 import {Renderable} from "./renderable.js"
 import {addIndent, indent, removeIndent} from "./save_load.js"
 import {removeFromArray} from "./functions.js"
-import {bullets, deadBullets} from "../breakout/main.js"
 
 export class Layer extends Renderable {
     constructor(...items) {
@@ -22,14 +21,16 @@ export class Layer extends Renderable {
     }
 
     draw() {
-        if(this.visible) {
-            this.items.forEach(item => item.draw())
+        if(!this.visible) return
+        for(const item of this.items) {
+            item.draw()
         }
     }
 
     update() {
-        if(this.active) {
-            this.items.forEach(item => item.update())
+        if(!this.active) return
+        for(const item of this.items) {
+            item.update()
         }
     }
 
@@ -64,34 +65,42 @@ export class Layer extends Renderable {
     }
 
     removeAll(itemsToRemove) {
-        if(itemsToRemove.length > 0) {
-            for(let item of itemsToRemove) {
-                this.remove(item)
-            }
-            itemsToRemove.length = 0
+        for(const item of itemsToRemove) {
+            this.remove(item)
         }
+        itemsToRemove.length = 0
     }
 
     // sprite manipulations
 
     move() {
-        this.items.forEach(item => item.move())
+        for(const item of this.items) {
+            item.move()
+        }
     }
 
     setPositionAs(sprite) {
-        this.items.forEach(item => item.setPositionAs(sprite))
+        for(const item of this.items) {
+            item.setPositionAs(sprite)
+        }
     }
 
     loop(bounds) {
-        this.items.forEach(item => item.loop(bounds))
+        for(const item of this.items) {
+            item.loop(bounds)
+        }
     }
 
     turn(angle) {
-        this.items.forEach(item => item.turn(angle))
+        for(const item of this.items) {
+            item.turn(angle)
+        }
     }
 
     turnImage(angle) {
-        this.items.forEach(item => item.turnImage(angle))
+        for(const item of this.items) {
+            item.turnImage(angle)
+        }
     }
 
     hide() {

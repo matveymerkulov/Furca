@@ -29,7 +29,6 @@ export class ImageArray {
 
         if(object === undefined) {
             object = new ImageArray(texture[template.texture], template.columns, template.rows
-                , template.x, template.y, template.width, template.height
                 , template.xMul, template.yMul, template.widthMul, template.heightMul)
             template.object = object
         }

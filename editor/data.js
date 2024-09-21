@@ -6,8 +6,9 @@ import {ImageArray} from "../src/image_array.js"
 import {tileMap, tileMaps, tileSet} from "../src/project.js"
 import {Block} from "../src/block.js"
 import {Category, Pos, Rule} from "../src/auto_tiling.js"
+import {texture} from "../src/system.js"
 
-export function loadData(texture) {
+export function loadData() {
     tileSet["floor"] = new TileSet(new ImageArray(texture["farm_floor"], 9, 11, 0.5, 0.5, 1, 1), [
         0, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 0,

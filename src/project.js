@@ -34,9 +34,9 @@ export let project = {
 
     updateNode() {
         this.update()
-        this.actions.forEach(action => {
+        for(const action of this.actions) {
             action.execute()
-        })
+        }
         this.scene.update()
     },
 }

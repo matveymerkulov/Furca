@@ -2,7 +2,7 @@ import {Renderable} from "./renderable.js"
 import {Shape} from "./shape.js"
 import {ctx} from "./canvas.js"
 import {showCollisionShapes} from "./input.js"
-import {num, texture} from "./system.js"
+import {texture} from "./system.js"
 import {NinePatch} from "./nine_patch.js"
 
 let collisionShape = new Shape("rgb(255, 0, 255)", 0.5)
@@ -23,6 +23,8 @@ export class Img extends Renderable {
     }
 
     static create(template) {
+        if(template === undefined) return
+
         if(template.class === "NinePatch") {
             return NinePatch.create(template)
         }

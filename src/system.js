@@ -4,7 +4,6 @@ import {initData, project} from "./project.js"
 import {Function} from "./function/function.js"
 import {keys} from "./key.js"
 import {initInput} from "./input.js"
-import {initTileMap} from "./tile_map.js"
 
 // global variables
 
@@ -128,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function() {
     mouse = new Point()
     screenMouse = new Point()
     canvasMouse = new Point()
-    initTileMap()
+    //initTileMap()
     loadAssets("", project.getAssets())
 })
 

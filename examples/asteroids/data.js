@@ -2,10 +2,10 @@ import {Num} from "../../src/variable/number.js"
 import {Box} from "../../src/box.js"
 import {currentCanvas} from "../../src/canvas.js"
 import {Label} from "../../src/gui/label.js"
-import {Align, defaultCanvas, loc} from "../../src/system.js"
+import {Align, defaultCanvas, defaultFontSize, loc, texture} from "../../src/system.js"
 import {Sprite} from "../../src/sprite.js"
 import {Img} from "../../src/image.js"
-import {ImageArray}from "../../src/image_array.js"
+import {ImageArray} from "../../src/image_array.js"
 import {Layer} from "../../src/layer.js"
 import {Key} from "../../src/key.js"
 import {LoopArea} from "../../src/actions/sprite/loop_area.js"
@@ -103,7 +103,7 @@ export const state = {
     gameOver: 2,
 }
 
-project.init = (texture) => {
+project.init = () => {
     let fire = new Key("Space")
 
     let asteroidImages = new ImageArray(texture["asteroid"], 8, 4
@@ -225,13 +225,13 @@ project.init = (texture) => {
 
     // ship
     
-    shipSprite = Sprite.createFromTemplate(template.ship)
+    shipSprite = Sprite.create(template.ship, shipLayer)
     invulnerabilityAction = new Blink(shipSprite, new Cos(0.2, 0.5, 0, 0.5))
-    shipLayer.add(shipSprite)
 
     let flameImages = new ImageArray(texture["flame"], 3, 3, 0.5, 1)
-    flameSprite = Sprite.create(shipLayer, flameImages.image(0), -0.6, 0
+    flameSprite = new Sprite(flameImages.image(0), -0.6, 0
         , 1, 1, undefined, rad(-90))
+    shipLayer.add(flameImages)
 
     // weapon
 
@@ -246,11 +246,11 @@ project.init = (texture) => {
 
     let hudArea = new Box(0, 0, currentCanvas.width - 1, currentCanvas.height - 1)
 
-    let scoreLabel = new Label(hudArea, [score], Align.left, Align.top, "Z8")
-    let levelLabel = new Label(hudArea, [loc("level"), level], Align.center, Align.top)
-    let livesLabel = new Label(hudArea, [lives], Align.right, Align.top, "I1", new Img(texture.ship))
+    let scoreLabel = new Label(hudArea, [score], defaultFontSize, Align.left, Align.top, "Z8")
+    let levelLabel = new Label(hudArea, [loc("level"), level], defaultFontSize, Align.center, Align.top)
+    let livesLabel = new Label(hudArea, [lives], defaultFontSize, Align.right, Align.top, "I1", new Img(texture.ship))
 
-    messageLabel = new Label(hudArea, [""], Align.center, Align.center)
+    messageLabel = new Label(hudArea, [""], defaultFontSize, Align.center, Align.center)
     hud = new Layer(scoreLabel, levelLabel, livesLabel, messageLabel)
 
     // other
@@ -258,7 +258,7 @@ project.init = (texture) => {
     currentCanvas.background = "rgb(9, 44, 84)"
     project.scene.add(bullets, asteroids, bonuses, particles, shipLayer, explosions, hud)
 
-    project.actions = [
+    project.actions.push(
         new LoopArea(shipSprite, bounds),
         new Animate(flameSprite, flameImages, 16),
         new AnimateSize(flameSprite, new Cos(0.1, 0.1, 0, 0.95)),
@@ -271,7 +271,7 @@ project.init = (texture) => {
         new LoopArea(asteroids, bounds),
 
         new Move(project.scene),
-    ]
+    )
 
     initUpdate()
 }

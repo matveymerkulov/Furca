@@ -1,6 +1,6 @@
 import {Box} from "./box.js"
 import {ctx, distToScreen, xToScreen, yToScreen} from "./canvas.js"
-import {apsk, num, texture} from "./system.js"
+import {apsk, num} from "./system.js"
 import {Animate} from "./actions/sprite/animate.js"
 import {
     boxWithBoxCollision,
@@ -19,10 +19,22 @@ import {
     pillFromPillVector,
 } from "./physics.js"
 import {ShapeType} from "./shape.js"
-import {rad} from "./functions.js"
 import {Img} from "./image.js"
+import {project} from "./project.js"
+import {ImageArray} from "./image_array.js"
 
 export class Sprite extends Box {
+    shapeType
+    image
+    imageAngle
+    angle
+    speed
+    visible
+    active
+    opacity
+    flipped
+    actions
+
     constructor(image, x = 0.0, y = 0.0, width = 1.0, height = 1.0
                 , shapeType = ShapeType.circle, angle = 0.0, speed = 0.0, imageAngle
                 , active = true, visible = true) {
@@ -36,12 +48,38 @@ export class Sprite extends Box {
         this.active = active
         this.opacity = 1.0
         this.flipped = false
+        this.actions = []
     }
 
-    static create(template) {
-        return new Sprite(Img.create(template.image), num(template.x), num(template.y), num(template.width)
-            , num(template.height), template.shape, num(template.angle), num(template.speed)
+    static create(template, layer) {
+        let sprite = new Sprite(Img.create(template.image), num(template.x), num(template.y), num(template.width)
+            , num(template.height), template.shape, num(template.angle), num(template.speed), num(template.imageAngle)
             , template.visible, template.active)
+
+        if(template.size !== undefined) {
+            sprite.width = sprite.height = num(template.size)
+        }
+
+        if(layer !== undefined) {
+            layer.add(sprite)
+        }
+
+        if(template.images !== undefined) {
+            const images = ImageArray.create(template.images)
+            sprite.image = images.image(0)
+            sprite.actions.push(new Animate(sprite, images, num(template.animationSpeed)))
+        }
+
+        if(template.parameters !== undefined) {
+            for(const [key, value] of Object.entries(template.parameters)) {
+                sprite[key] = value
+            }
+        }
+        return sprite
+    }
+
+    add(...actions) {
+        this.actions.push(...actions)
     }
 
     draw() {
@@ -53,6 +91,12 @@ export class Sprite extends Box {
             , this.flipped)
 
         ctx.globalAlpha = 1.0
+    }
+
+    update() {
+        for(const action of this.actions) {
+            action.execute()
+        }
     }
 
     move() {

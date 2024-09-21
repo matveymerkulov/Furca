@@ -20,8 +20,16 @@ export class NinePatch extends Renderable {
     }
 
     static create(template) {
-        return new NinePatch(Img.create(template.image), template.horizontal1, template.horizontal2
-            , template.vertical1, template.vertical2)
+        let object = template.object
+
+        if(object === undefined) {
+            object = new NinePatch(Img.create(template.image), template.horizontal1, template.horizontal2
+                , template.vertical1, template.vertical2)
+
+            template.object = object
+        }
+
+        return object
     }
 
     drawResized(sx, sy, swidth, sheight, shapeType) {

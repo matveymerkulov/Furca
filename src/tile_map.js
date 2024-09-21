@@ -19,7 +19,6 @@ export class TileMap extends Box {
     #columns
     #rows
     #array
-    operation
     constructor(tileSet, columns, rows, x, y, cellWidth, cellHeight, array) {
         super(x, y, cellWidth * columns, cellHeight * rows)
         this.#tileSet = tileSet
