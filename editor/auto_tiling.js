@@ -186,7 +186,7 @@ rulesGridCanvas.render = () => {
             , gridSize * cellSize + 1, cellSize - 1, cellSize - 1)
     }
 
-    if(canvasUnderCursor !== currentCanvas) return
+    if(canvasUnderCursor !== rulesGridCanvas) return
 
     drawDashedRegion(Math.floor(canvasMouse.x / cellSize) * cellSize + 4
         , Math.floor(canvasMouse.y / cellSize) * cellSize + 4, cellSize - 6, cellSize - 6)
@@ -223,12 +223,13 @@ function findPos(dx, dy, add = true) {
 }
 
 rulesGridCanvas.update = () => {
+    if(canvasUnderCursor !== rulesGridCanvas) return
     let cellSize = (rulesGridCanvas.viewport.width - 1) / (gridSize * 2 + 1)
     let dx = Math.floor(canvasMouse.x / cellSize) - gridSize
     let dy = Math.floor(canvasMouse.y / cellSize) - gridSize
     if(selectKey.wasPressed) {
-        let pos = findPos(dx, dy)
         if(currentRule === undefined) return
+        let pos = findPos(dx, dy)
         let positions = currentRule.positions
         if(pos === undefined) {
             positions.push(new Pos(dx, dy))
@@ -239,6 +240,7 @@ rulesGridCanvas.update = () => {
 }
 
 tileSetCanvas.update = () => {
+    if(canvasUnderCursor !== tileSetCanvas) return
     if(!selectKey.wasPressed || currentRule === undefined) return
     let x = Math.floor(canvasMouse.x / tileWidth)
     let y = Math.floor(canvasMouse.y / tileHeight)
@@ -246,7 +248,8 @@ tileSetCanvas.update = () => {
 }
 
 rulesListCanvas.update = () => {
-    if(currentCategory === undefined) return
+    if(canvasUnderCursor !== rulesListCanvas || currentCategory === undefined
+        || !selectKey.wasPressed) return
 
     let size = rulesListCanvas.viewport.width / tilesPerRow
     let x = Math.floor(canvasMouse.x / size)

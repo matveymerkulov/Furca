@@ -2,7 +2,7 @@ import {tabs} from "./main.js"
 import {Layer} from "../src/layer.js"
 import {setTileMaps, tileMaps} from "../src/project.js"
 
-let currentTabName
+export let currentTabName
 
 export function selectTab(name) {
     setTileMaps(tabs[name])

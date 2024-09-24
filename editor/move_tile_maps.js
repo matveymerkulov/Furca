@@ -29,7 +29,7 @@ export default class MoveTileMaps extends MovePoint {
             this.mouseY0 = canvasMouse.y
             this.objectX0 = new Array(selectedTileMaps.length)
             this.objectY0 = new Array(selectedTileMaps.length)
-            for(const i of selectedTileMaps) {
+            for(let i = 0; i < selectedTileMaps.length; i++) {
                 this.objectX0[i] = selectedTileMaps[i].x
                 this.objectY0[i] = selectedTileMaps[i].y
             }
@@ -41,7 +41,7 @@ export default class MoveTileMaps extends MovePoint {
             super.process()
             this.snapToGrid(this.object)
         } else {
-            for(const i of selectedTileMaps) {
+            for(let i = 0; i < selectedTileMaps.length; i++) {
                 this.updateObject(selectedTileMaps[i], this.objectX0[i], this.objectY0[i])
                 this.snapToGrid(selectedTileMaps[i])
             }
