@@ -1,5 +1,5 @@
 import {tileSet} from "../src/project.js"
-import {ctx} from "../src/canvas.js"
+import {canvasUnderCursor, ctx} from "../src/canvas.js"
 import {drawDashedRegion} from "../src/draw.js"
 import {pointWithParamBoxCollision} from "../src/collisions.js"
 import {canvasMouse} from "../src/system.js"
@@ -114,7 +114,7 @@ export function updateBlockSize() {
 }
 
 tileSetCanvas.update = () => {
-    if(currentWindow !== undefined) return
+    if(canvasUnderCursor !== tileSetCanvas) return
     processTiles((set, images, i, x, y, size) => {
         if((selectKey.wasPressed || delKey.wasPressed) && pointWithParamBoxCollision(canvasMouse, x, y, size, size)) {
             if(selectKey.wasPressed) {

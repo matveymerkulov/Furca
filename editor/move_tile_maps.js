@@ -1,6 +1,6 @@
 import MovePoint from "./move_point.js"
 import {selectedTileMaps} from "./select_tile_maps.js"
-import {mouse, screenMouse} from "../src/system.js"
+import {canvasMouse, mouse, screenMouse} from "../src/system.js"
 import {currentMode, mode, tileMapUnderCursor} from "./tile_map.js"
 
 export default class MoveTileMaps extends MovePoint {
@@ -25,8 +25,8 @@ export default class MoveTileMaps extends MovePoint {
             this.object = tileMapUnderCursor
             super.start()
         } else {
-            this.mouseX0 = screenMouse.x
-            this.mouseY0 = screenMouse.y
+            this.mouseX0 = canvasMouse.x
+            this.mouseY0 = canvasMouse.y
             this.objectX0 = new Array(selectedTileMaps.length)
             this.objectY0 = new Array(selectedTileMaps.length)
             for(const i of selectedTileMaps) {

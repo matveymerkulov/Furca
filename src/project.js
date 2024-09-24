@@ -1,6 +1,5 @@
 import {Layer} from "./layer.js"
 import {currentCanvas} from "./canvas.js"
-import {tabs} from "../editor/main.js"
 
 export let tileSet, tileMap, tileMaps
 

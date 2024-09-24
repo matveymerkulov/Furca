@@ -1,5 +1,5 @@
 import {Point} from "./point.js"
-import {Canvas, ctx, setCanvas, xFromScreen, yFromScreen} from "./canvas.js"
+import {Canvas, canvasUnderCursor, ctx, setCanvas, xFromScreen, yFromScreen} from "./canvas.js"
 import {initData, project} from "./project.js"
 import {Function} from "./function/function.js"
 import {keys} from "./key.js"
@@ -127,7 +127,6 @@ document.addEventListener("DOMContentLoaded", function() {
     mouse = new Point()
     screenMouse = new Point()
     canvasMouse = new Point()
-    //initTileMap()
     loadAssets("", project.getAssets())
 })
 
@@ -204,7 +203,6 @@ function start() {
     document.onmousemove = (event) => {
         mouse.setPosition(xFromScreen(event.offsetX), yFromScreen(event.offsetY))
         screenMouse.setPosition(event.clientX, event.clientY)
-        canvasMouse.setPosition(event.offsetX, event.offsetY)
     }
 
     let apsTime = 0, realAps = 0, apsCounter = 0

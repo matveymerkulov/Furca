@@ -1,5 +1,5 @@
-import {element} from "../system.js"
-import {Canvas} from "../canvas.js"
+import {element, mouse, screenMouse} from "../system.js"
+import {Canvas, currentCanvas} from "../canvas.js"
 
 export let currentWindow, windows = []
 

@@ -1,5 +1,5 @@
 import {Sprite} from "./sprite.js"
-import {canvasMouse, mouse} from "./system.js"
+import {canvasMouse, mouse, screenMouse} from "./system.js"
 import {Box} from "./box.js"
 import {project} from "./project.js"
 
@@ -8,6 +8,8 @@ export let currentCanvas, canvasUnderCursor, ctx, zk = 1.2
 export function setCanvas(canvas) {
     currentCanvas = canvas
     ctx = canvas.node.getContext("2d")
+    let rect = canvas.node.getBoundingClientRect()
+    canvasMouse.setPosition(screenMouse.x - rect.left, screenMouse.y - rect.top)
     mouse.setPosition(xFromScreen(canvasMouse.x), yFromScreen(canvasMouse.y))
 }
 
@@ -40,7 +42,7 @@ export class Canvas extends Box {
         const width = adaptive ? fwidth * k : node.clientWidth
         const height = adaptive ? fheight * k : node.clientHeight
         node.width = width
-        node.height = height - document.getElementById("tabs").clientHeight * 2
+        node.height = height// - document.getElementById("tabs").clientHeight * 2
         //node.style.width = width
         //node.style.height = height
         return new Canvas(node, 0.0, 0.0, fwidth, fheight, Box.fromArea(node.offsetLeft

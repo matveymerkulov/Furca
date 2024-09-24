@@ -1,5 +1,5 @@
 import {Drag} from "../src/drag.js"
-import {screenMouse} from "../src/system.js"
+import {canvasMouse, screenMouse} from "../src/system.js"
 import {maxY0} from "./tile_set.js"
 import {clamp} from "../src/functions.js"
 
@@ -10,11 +10,11 @@ export class TilePan extends Drag {
     startingY
 
     start() {
-        this.startingY = screenMouse.y + y0
+        this.startingY = canvasMouse.y + y0
     }
 
     process() {
-        y0 = this.startingY - screenMouse.y
+        y0 = this.startingY - canvasMouse.y
         updateY0()
     }
 }

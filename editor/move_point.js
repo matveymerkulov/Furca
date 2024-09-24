@@ -1,4 +1,4 @@
-import {screenMouse} from "../src/system.js"
+import {canvasMouse, screenMouse} from "../src/system.js"
 import {distFromScreen} from "../src/canvas.js"
 import {Drag} from "../src/drag.js"
 
@@ -9,8 +9,8 @@ export default class MovePoint extends Drag {
     }
 
     prepareObject(object) {
-        this.mouseX0 = screenMouse.x
-        this.mouseY0 = screenMouse.y
+        this.mouseX0 = canvasMouse.x
+        this.mouseY0 = canvasMouse.y
         this.objectX0 = object.x
         this.objectY0 = object.y
     }
@@ -20,8 +20,8 @@ export default class MovePoint extends Drag {
     }
 
     updateObject(object, x0, y0) {
-        object.x = x0 + this.direction * distFromScreen(screenMouse.x - this.mouseX0)
-        object.y = y0 + this.direction * distFromScreen(screenMouse.y - this.mouseY0)
+        object.x = x0 + this.direction * distFromScreen(canvasMouse.x - this.mouseX0)
+        object.y = y0 + this.direction * distFromScreen(canvasMouse.y - this.mouseY0)
     }
 
     process() {

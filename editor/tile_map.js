@@ -2,7 +2,7 @@ import {mouse} from "../src/system.js"
 import {tileMap, tileMaps} from "../src/project.js"
 import {addTileMap} from "./create_tile_map.js"
 import {getName, incrementName, setName} from "../src/names.js"
-import {ctx, distToScreen, setCanvas, xToScreen, yToScreen} from "../src/canvas.js"
+import {canvasUnderCursor, ctx, distToScreen, setCanvas, xToScreen, yToScreen} from "../src/canvas.js"
 import SelectTileMaps, {clearSelection, mapSelectionRegion, selectedTileMaps} from "./select_tile_maps.js"
 import {altGroup, currentBlock, currentGroup, currentTile, currentTileSet, updateBlockSize} from "./tile_set.js"
 import {newMap} from "./new_map.js"
@@ -107,6 +107,8 @@ mapsCanvas.update = () => {
     if(newMapKey.wasPressed) {
         newMap()
     }
+
+    if(canvasUnderCursor !== mapsCanvas) return
 
     setCanvas(mapsCanvas)
 

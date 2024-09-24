@@ -1,6 +1,6 @@
 import {Action} from "../src/actions/action.js"
 import {canvasUnderCursor, currentCanvas} from "../src/canvas.js"
-import {screenMouse} from "../src/system.js"
+import {canvasMouse, screenMouse} from "../src/system.js"
 
 export default class Zoom extends Action {
     constructor(zoomIn, zoomOut) {
@@ -21,6 +21,6 @@ export default class Zoom extends Action {
             return
         }
 
-        currentCanvas.setZoomXY(zoom, screenMouse.x, screenMouse.y)
+        currentCanvas.setZoomXY(zoom, canvasMouse.x, canvasMouse.y)
     }
 }
