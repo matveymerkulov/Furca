@@ -36,13 +36,13 @@ export class Canvas extends Box {
     }
 
     static create(node, fwidth, fheight, adaptive = true) {
-        let k = Math.min(window.innerWidth / fwidth, window.innerHeight / fheight)
-        let width = adaptive ? fwidth * k : node.clientWidth
-        let height = adaptive ? fheight * k : node.clientHeight
+        const k = Math.min(window.innerWidth / fwidth, window.innerHeight / fheight)
+        const width = adaptive ? fwidth * k : node.clientWidth
+        const height = adaptive ? fheight * k : node.clientHeight
         node.width = width
-        node.height = height
-        node.style.width = width
-        node.style.height = height
+        node.height = height - document.getElementById("tabs").clientHeight * 2
+        //node.style.width = width
+        //node.style.height = height
         return new Canvas(node, 0.0, 0.0, fwidth, fheight, Box.fromArea(node.offsetLeft
             , node.offsetTop, width, height))
     }

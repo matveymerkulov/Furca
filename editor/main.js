@@ -2,8 +2,8 @@ import {mainWindow} from "./main_window.js"
 import {project, tileMap, tileSet} from "../src/project.js"
 import {currentWindow, hideWindow} from "../src/gui/window.js"
 import {setName} from "../src/names.js"
-import {loadData} from "../data/breakout.js"
-//import {loadData} from "./data.js"
+//import {loadData} from "../data/breakout.js"
+import {loadData} from "./data.js"
 import {initTileSetSelectionWindow} from "./new_map.js"
 import {deleteCurrentDrag} from "../src/drag.js"
 import {projectFromStorage, projectToStorage} from "../src/save_load.js"
@@ -13,11 +13,20 @@ import {resetRegionSelector} from "./select_tile_set_region.js"
 import {tileSetPropertiesWindow} from "./tile_set_properties.js"
 import {rulesWindow, updateCategoriesList} from "./auto_tiling.js"
 import {texture} from "../src/system.js"
+import {Layer} from "../src/layer.js"
+
+project.getAssets = () => {
+    return {
+        texture: ["farm_floor.png", "farm_furniture.png", "bricks.png", "smooth.png"],
+        sound: []
+    }
+}
 
 let saveKey = new Key("KeyS")
 let loadKey = new Key("KeyL")
 
 export let tileWidth, tileHeight
+export let tabs = new Map()
 
 export function setTileSize(width, height) {
     tileWidth = width

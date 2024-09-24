@@ -1,5 +1,6 @@
 import {Layer} from "./layer.js"
 import {currentCanvas} from "./canvas.js"
+import {tabs} from "../editor/main.js"
 
 export let tileSet, tileMap, tileMaps
 
@@ -7,6 +8,10 @@ export function initData() {
     tileSet = new Map()
     tileMap = new Map()
     tileMaps = new Layer()
+}
+
+export function setTileMaps(maps) {
+    tileMaps = maps
 }
 
 export let project = {
