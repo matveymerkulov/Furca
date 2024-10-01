@@ -47,25 +47,25 @@ export class Label extends Box {
 
         switch(this.horizontalAlign) {
             case Align.left:
-                x = xToScreen(this.leftX)
+                x = xToScreen(this.left)
                 break
             case Align.center:
                 x = xToScreen(this.x) - 0.5 * width
                 break
             case Align.right:
-                x = xToScreen(this.rightX) - width
+                x = xToScreen(this.right) - width
                 break
         }
 
         switch(this.verticalAlign) {
             case Align.top:
-                y = yToScreen(this.topY)
+                y = yToScreen(this.top)
                 break
             case Align.center:
                 y = yToScreen(this.y) - 0.5 * height
                 break
             case Align.bottom:
-                y = yToScreen(this.bottomY) - height
+                y = yToScreen(this.bottom) - height
                 break
         }
 

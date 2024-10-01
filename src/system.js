@@ -1,5 +1,5 @@
 import {Point} from "./point.js"
-import {Canvas, canvasUnderCursor, ctx, setCanvas, xFromScreen, yFromScreen} from "./canvas.js"
+import {Canvas, ctx, setCanvas, xFromScreen, yFromScreen} from "./canvas.js"
 import {initData, project} from "./project.js"
 import {Function} from "./function/function.js"
 import {keys} from "./key.js"

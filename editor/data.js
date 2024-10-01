@@ -3,13 +3,15 @@
 import {TileSet} from "../src/tile_set.js"
 import {TileMap} from "../src/tile_map.js"
 import {ImageArray} from "../src/image_array.js"
-import {tileMap, tileMaps, tileSet} from "../src/project.js"
+import {tileMap, tileSet} from "../src/project.js"
 import {Block} from "../src/block.js"
 import {Category, Pos, Rule} from "../src/auto_tiling.js"
 import {texture} from "../src/system.js"
 import {addTab, selectTab} from "./tabs.js"
 
 export function loadData() {
+    tileSet["trespasser"] = new TileSet(new ImageArray(texture["tiles"], 9, 1))
+
     tileSet["floor"] = new TileSet(new ImageArray(texture["farm_floor"], 9, 11, 0.5, 0.5, 1, 1), [
         0, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 0,
@@ -474,6 +476,19 @@ export function loadData() {
         11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
         15,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  15,
     ])
+    tileMap["level1"] = new TileMap(tileSet["trespasser"], 11, 11, -2, -2, 1, 1, [
+        0,   2,   5,   0,   0,   0,   0,   0,   5,   0,   0,
+        0,   1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   0,
+        0,   8,   0,   0,   0,   1,   0,   1,   0,   8,   0,
+        0,  -1,  -1,  -1,  -1,   1,  -1,   1,  -1,  -1,   0,
+        0,   1,   0,   1,   0,   8,   0,   1,   0,  -1,   0,
+        0,   1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   0,
+        0,   8,   0,   1,   0,   1,   0,   8,   0,  -1,   0,
+        0,  -1,  -1,  -1,  -1,   1,  -1,  -1,  -1,  -1,   0,
+        0,   1,   0,   0,   0,   8,   0,   0,   0,   1,   0,
+        0,   1,   4,  -1,  -1,  -1,  -1,  -1,  -1,   1,   0,
+        0,   2,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    ])
 
     addTab("tetris", tileMap["field"], tileMap["0-0"], tileMap["1-0"], tileMap["2-0"], tileMap["3-0"],
         tileMap["4-0"], tileMap["5-0"], tileMap["6-0"], tileMap["0-1"],
@@ -482,6 +497,7 @@ export function loadData() {
         tileMap["5-1"], tileMap["5-2"], tileMap["5-3"], )
     addTab("breakout", tileMap["blocks"], tileMap["border"])
     addTab("rpg", tileMap["ground"], tileMap["objects"], tileMap["smooth"],)
+    addTab("trespasser", tileMap.level1)
 
-    selectTab("breakout")
+    selectTab("trespasser")
 }

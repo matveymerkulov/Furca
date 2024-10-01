@@ -38,7 +38,7 @@ export function pointWithCircleCollision(point, circle) {
 }
 
 export function pointWithBoxCollision(point, box) {
-    return point.x >= box.leftX && point.x < box.rightX && point.y >= box.topY && point.y < box.bottomY
+    return point.x >= box.left && point.x < box.right && point.y >= box.top && point.y < box.bottom
 }
 
 export function pointWithPillCollision(point, pill) {
@@ -56,11 +56,11 @@ export function circleWithCircleCollision(circle1, circle2) {
 export function circleWithBoxCollision(circle, box) {
     if(!boxWithBoxCollision(circle, box)) return false
 
-    if(circle.x >= box.leftX && circle.x < box.rightX) return true
-    if(circle.y >= box.topY && circle.y < box.bottomY) return true
+    if(circle.x >= box.left && circle.x < box.right) return true
+    if(circle.y >= box.top && circle.y < box.bottom) return true
 
-    let x = circle.x < box.x ? box.leftX : box.rightX
-    let y = circle.y < box.y ? box.topY : box.bottomY
+    let x = circle.x < box.x ? box.left : box.right
+    let y = circle.y < box.y ? box.top : box.bottom
     return circleWithParamPointCollision(circle, x, y)
 }
 
@@ -80,7 +80,7 @@ export function boxWithPillCollision(box, pill) {
     return circleWithBoxCollision(toCircle(pill, box, serviceSprite1), box)
 }
 
-//    return point.x >= box.leftX && point.x < box.rightX && point.y >= box.topY && point.y < box.y.bottomY
+//    return point.x >= box.left && point.x < box.right && point.y >= box.top && point.y < box.y.bottom
 //If ( Rectangle.X - Rectangle.Width * 0.5 <= Oval.X And Oval.X <= Rectangle.X + Rectangle.Width * 0.5 )
 // Or ( Rectangle.Y - Rectangle.Height * 0.5 <= Oval.Y And Oval.Y <= Rectangle.Y + Rectangle.Height * 0.5 ) Then
 

@@ -55,7 +55,7 @@ export class Canvas extends Box {
         setCanvas(this)
 
         ctx.fillStyle = this.background
-        //g.setClip(viewport.leftX, viewport.topY, viewport.width, viewport.height)
+        //g.setClip(viewport.left, viewport.top, viewport.width, viewport.height)
         ctx.fillRect(0, 0, viewport.width, viewport.height)
 
         ctx.fillStyle = "white"
@@ -133,7 +133,7 @@ export class Canvas extends Box {
     drawDefaultCamera() {
         let pos = this._defaultPosition
         ctx.fillStyle("blue")
-        ctx.strokeRect(xToScreen(pos.leftX), yToScreen(pos.topY), distToScreen(pos.width), distToScreen(pos.height))
+        ctx.strokeRect(xToScreen(pos.left), yToScreen(pos.top), distToScreen(pos.width), distToScreen(pos.height))
         ctx.fillStyle("white")
     }
 

@@ -1,7 +1,7 @@
 import {project} from "../../src/project.js"
-import {TileMap} from "../../src/tile_map.js"
+import {initTileMap, TileMap} from "../../src/tile_map.js"
 import {ImageArray} from "../../src/image_array.js"
-import {apsk, defaultCanvas} from "../../src/system.js"
+import {apsk, defaultCanvas, texture} from "../../src/system.js"
 import {Key} from "../../src/key.js"
 import {Sprite} from "../../src/sprite.js"
 import {Layer} from "../../src/layer.js"
@@ -30,13 +30,15 @@ let panelTile = 241
 let bombTile = 57
 let figureTile = 51
 
-project.init = (texture) => {
+project.init = () => {
+    initTileMap()
+
     let left = new Key("KeyA")
     let right = new Key("KeyD")
     let jump = new Key("KeyW")
 
-    //let tileMap = tilemapFromImage(texture.levels, texture.tiles, 16, 16, 16, 0, 0, 1, 1)
-    let tileSet = new TileSet(new ImageArray(texture["tiles"], 16, 21))
+    //let tileMap = tileMapFromImage(texture.levels, texture.tiles, 16, 16, 16, 0, 0, 1, 1)
+    let tileSet = new TileSet(new ImageArray(texture.tiles, 16, 21))
     tileSet.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.box), 2)
     tileSet.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.circle)
         , [keyTile, diamondTile, bombTile, figureTile])
@@ -48,7 +50,7 @@ project.init = (texture) => {
         ,98,115,100,101,0,0,0,100,0,116,117,98,115,114,99,116,117,0,0,0,116])
     //tileMap.array = [0,96,97,0,0,0,0,0,0,0,96,97,0,41,112,113,0,0,0,0,0,0,0,112,113,65,257,257,257,257,0,0,0,0,0,257,257,257,257,0,0,0,0,257,0,0,0,257,0,0,0,0,0,1,0,0,0,330,330,330,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,257,257,257,257,257,0,0,0,0,0,0,257,257,87,0,0,0,87,257,257,0,0,0,0,0,87,0,0,0,0,0,87,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,17]
 
-    let player = tiles.extract(playerTile, ShapeType.circle)
+    let player = tiles.extractVectorTile(playerTile, ShapeType.circle)
     player.dx = 0
     player.dy = 0
     player.size = 0.99
@@ -85,7 +87,7 @@ project.init = (texture) => {
 
     tiles.processTilesByPos((column, row, tileNum) => {
         if(tileNum === panelTile) {
-            let panel = tiles.extractTileByPos(column, row, ShapeType.box)
+            let panel = tiles.extractVectorTileByPos(column, row, ShapeType.box)
             panel.dy = -panelSpeed
             panels.add(panel)
         }

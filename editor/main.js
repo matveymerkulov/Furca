@@ -13,11 +13,10 @@ import {resetRegionSelector} from "./select_tile_set_region.js"
 import {tileSetPropertiesWindow} from "./tile_set_properties.js"
 import {rulesWindow, updateCategoriesList} from "./auto_tiling.js"
 import {texture} from "../src/system.js"
-import {Layer} from "../src/layer.js"
 
 project.getAssets = () => {
     return {
-        texture: ["farm_floor.png", "farm_furniture.png", "bricks.png", "smooth.png"],
+        texture: ["farm_floor.png", "farm_furniture.png", "bricks.png", "smooth.png", "tiles.png"],
         sound: []
     }
 }

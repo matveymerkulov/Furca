@@ -111,6 +111,12 @@ export class Layer extends Renderable {
         this.visible = true
     }
 
+    processSprites(code) {
+        for(const item of this.items) {
+            item.processSprites(code)
+        }
+    }
+
     // collisions
 
     firstCollisionWithPoint(x, y) {
@@ -131,8 +137,8 @@ export class Layer extends Renderable {
         this.items.forEach(item => item.collisionWithSprite(sprite, code))
     }
 
-    collisionWithTilemap(tilemap, code) {
-        this.items.forEach(item => item.collisionWithTilemap(tilemap, code))
+    collisionWithTileMap(tileMap, code) {
+        this.items.forEach(item => item.collisionWithTileMap(tileMap, code))
     }
 
     collisionWithPoint(x, y, code) {

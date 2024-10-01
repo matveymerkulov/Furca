@@ -1,6 +1,6 @@
-import {initData, tileMap, tileMaps, tileSet} from "./project.js"
-import {getString, getSymbol, getTileMap, getTileSet, getToken, initParser} from "./parser.js"
-import {getName} from "./names.js"
+//import {initData, tileMap, tileMaps, tileSet} from "./project.js"
+//import {getString, getSymbol, getTileMap, getTileSet, getToken, initParser} from "./parser.js"
+//import {getName} from "./names.js"
 
 export let indent = ""
 

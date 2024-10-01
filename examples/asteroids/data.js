@@ -3,7 +3,6 @@ import {Box} from "../../src/box.js"
 import {currentCanvas} from "../../src/canvas.js"
 import {Label} from "../../src/gui/label.js"
 import {Align, defaultCanvas, defaultFontSize, loc, texture} from "../../src/system.js"
-import {Sprite} from "../../src/sprite.js"
 import {Img} from "../../src/image.js"
 import {ImageArray} from "../../src/image_array.js"
 import {Layer} from "../../src/layer.js"
@@ -24,6 +23,7 @@ import {Cos} from "../../src/function/cos.js"
 import {AnimateSize} from "../../src/actions/sprite/animate_size.js"
 import {rad} from "../../src/functions.js"
 import {Blink} from "../../src/actions/sprite/blink.js"
+import {AngularSprite} from "../../src/angular_sprite.js"
 
 project.locales.en = {
     // hud
@@ -106,20 +106,33 @@ export const state = {
 project.init = () => {
     let fire = new Key("Space")
 
-    let asteroidImages = new ImageArray(texture["asteroid"], 8, 4
-        , 0.5, 0.5, 1.5, 1.5)
+    let asteroidImages = {
+        texture: "asteroid",
+        columns: 8,
+        rows: 4,
+        widthMul: 1.5,
+        heightMul: 1.5,
+    }
 
     template = {
         ship: {
-            image: new Img(texture["ship"], 0, 0, undefined, undefined
-                , 0.5, 0.5, 1.75, 1.75),
+            image: {
+                texture: "ship",
+                widthMul: 1.75,
+                heightMul: 1.75,
+            },
             angle: 0,
             speed: 0,
         },
 
         explosion: {
-            layer: explosions,
-            images: new ImageArray(texture["explosion"], 4, 4, 0.5, 0.5, 2, 2),
+            images: {
+                texture: "explosion",
+                rows: 4,
+                columns: 4,
+                widthMul: 2,
+                heightMul: 2,
+            },
             angle: new Rnd(360),
             animationSpeed: 16
         },
@@ -128,7 +141,6 @@ project.init = () => {
 
         asteroidType: {
             big: {
-                layer: asteroids,
                 images: asteroidImages,
                 size: 3,
                 angle: new Rnd(-15, 15),
@@ -142,7 +154,6 @@ project.init = () => {
             },
 
             medium: {
-                layer: asteroids,
                 images: asteroidImages,
                 size: 2,
                 angle: new Rnd(-15, 15),
@@ -156,7 +167,6 @@ project.init = () => {
             },
 
             small: {
-                layer: asteroids,
                 images: asteroidImages,
                 size: 1,
                 angle: new Rnd(-15, 15),
@@ -178,9 +188,15 @@ project.init = () => {
 
             fireball: {
                 bullet: {
-                    layer: bullets,
-                    images: new ImageArray(texture["fireball"], 1, 16
-                        , 43 / 48, 5.5 / 12, 5.25, 1.5),
+                    images: {
+                        texture: "fireball",
+                        columns: 1,
+                        rows: 16,
+                        xMul: 43 / 48,
+                        yMul: 5.5 / 12,
+                        widthMul: 5.25,
+                        heightMul: 1.5,
+                    },
                     size: 0.3,
                     speed: 15,
                     //angle: new Rnd(rad(-10), rad(10)),
@@ -225,13 +241,13 @@ project.init = () => {
 
     // ship
     
-    shipSprite = Sprite.create(template.ship, shipLayer)
+    shipSprite = AngularSprite.create(template.ship, shipLayer)
     invulnerabilityAction = new Blink(shipSprite, new Cos(0.2, 0.5, 0, 0.5))
 
     let flameImages = new ImageArray(texture["flame"], 3, 3, 0.5, 1)
-    flameSprite = new Sprite(flameImages.image(0), -0.6, 0
-        , 1, 1, undefined, rad(-90))
-    shipLayer.add(flameImages)
+    flameSprite = new AngularSprite(flameImages.image(0), -0.6, 0
+        , 1, 1, undefined, rad(-90), 0)
+    shipLayer.add(flameSprite)
 
     // weapon
 

@@ -37,22 +37,22 @@ export class Point extends Renderable {
     }
 
     moveToPerimeter(bounds) {
-        let dx = bounds.rightX - bounds.leftX
-        let dy = bounds.bottomY - bounds.topY
+        let dx = bounds.right - bounds.left
+        let dy = bounds.bottom - bounds.top
         if (rnd(dx + dy) < dx) {
-            this.x = rnd(bounds.leftX, bounds.rightX)
-            this.y = rndi(2) ? bounds.topY : bounds.bottomY
+            this.x = rnd(bounds.left, bounds.right)
+            this.y = rndi(2) ? bounds.top : bounds.bottom
         } else {
-            this.x = rndi(2) ? bounds.leftX : bounds.rightX
-            this.y = rnd(bounds.topY, bounds.bottomY)
+            this.x = rndi(2) ? bounds.left : bounds.right
+            this.y = rnd(bounds.top, bounds.bottom)
         }
     }
 
     wrap(bounds) {
-        while(this.x < bounds.leftX) this.x += bounds.width
-        while(this.x >= bounds.rightX) this.x -= bounds.width
-        while(this.y < bounds.topY) this.y += bounds.height
-        while(this.y >= bounds.bottomY) this.y -= bounds.height
+        while(this.x < bounds.left) this.x += bounds.width
+        while(this.x >= bounds.right) this.x -= bounds.width
+        while(this.y < bounds.top) this.y += bounds.height
+        while(this.y >= bounds.bottom) this.y -= bounds.height
     }
 
     distance2To(point) {

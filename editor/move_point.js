@@ -1,4 +1,4 @@
-import {canvasMouse, screenMouse} from "../src/system.js"
+import {canvasMouse} from "../src/system.js"
 import {distFromScreen} from "../src/canvas.js"
 import {Drag} from "../src/drag.js"
 

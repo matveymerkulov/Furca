@@ -5,6 +5,9 @@ import {Shape} from "./shape.js"
 import {arrayToString} from "./save_load.js"
 import {showCollisionShapes} from "./input.js"
 import {tileMap} from "./project.js"
+import {inBounds} from "./functions.js"
+import {VectorSprite} from "./vector_sprite.js"
+import {AngularSprite} from "./angular_sprite.js"
 
 let collisionShape, collisionSprite
 export const emptyTile = -1
@@ -66,44 +69,73 @@ export class TileMap extends Box {
         return ""
     }
 
-    fColumn(point) {
-        return (point.x - this.leftX) / this.cellWidth
-    }
-
-    fRow(point) {
-        return (point.y - this.topY) / this.cellHeight
-    }
-
-    tileForPoint(point) {
-        const column = Math.floor(this.fColumn(point))
-        if(column < 0 || column >= this.#columns) return emptyTile
-        const row = Math.floor(this.fRow(point))
-        if(row < 0 || row >= this.#rows) return emptyTile
-        return column + row * this.#columns
-    }
-
-    indexForPos(column, row) {
-        return column + row * this.#columns
-    }
-
-    tileColumn(index) {
-        return index % this.#columns
-    }
-
-    tileRow(index) {
-        return Math.floor(index / this.#columns)
-    }
-
     image(num) {
         return this.#tileSet.image(num)
+    }
+
+    tileColumnByPoint(point) {
+        return (point.x - this.left) / this.cellWidth
+    }
+
+    tileRowByPoint(point) {
+        return (point.y - this.top) / this.cellHeight
+    }
+
+    tileColumnByX(x) {
+        return Math.floor((x - this.left) / this.cellWidth)
+    }
+
+    tileRowByY(y) {
+        return Math.floor((y - this.top) / this.cellHeight)
     }
 
     tileByIndex(index) {
         return this.#array[index]
     }
 
+    tileByCoords(x, y) {
+        const column = this.tileColumnByX(x)
+        if(column < 0 || column >= this.columns) return emptyTile
+        const row = this.tileRowByY(y)
+        if(row < 0 || row >= this.rows) return emptyTile
+        return this.tileByPos(column, row)
+    }
+
+    tileByPoint(point) {
+        return this.tileByCoords(point.x, point.y)
+    }
+
+    tileIndexForPos(column, row) {
+        return column + row * this.#columns
+    }
+
+    tileColumnByIndex(index) {
+        return index % this.#columns
+    }
+
+    tileRowByIndex(index) {
+        return Math.floor(index / this.#columns)
+    }
+
+    tileXByColumn(column) {
+        return this.left + this.cellWidth * (0.5 + column)
+    }
+
+    tileYByRow(row) {
+        return this.top + this.cellHeight * (0.5 + row)
+    }
+
+    tileXByIndex(index) {
+        return this.left + this.cellWidth * (0.5 + this.tileColumnByIndex(index))
+    }
+
+    tileYByIndex(index) {
+        return this.top + this.cellHeight * (0.5 + this.tileRowByIndex(index))
+    }
+
     tileByPos(column, row) {
-        return this.#array[column + row * this.columns]
+        if(!inBounds(column, 0, this.columns) || !inBounds(row, 0, this.rows)) return -1
+        return this.tileByIndex(this.tileIndexForPos(column, row))
     }
 
     setTileByIndex(index, tileNum) {
@@ -111,7 +143,11 @@ export class TileMap extends Box {
     }
 
     setTileByPos(column, row, tileNum) {
-        this.#array[column + row * this.columns] = tileNum
+        this.setTileByIndex(this.tileIndexForPos(column, row), tileNum)
+    }
+
+    setTileByCoords(x, y, tile) {
+        this.setTileByPos(this.tileColumnByX(x), this.tileRowByY(y), tile)
     }
 
     setArray(array) {
@@ -124,8 +160,8 @@ export class TileMap extends Box {
     }
 
     draw() {
-        const x0 = Math.floor(xToScreen(this.leftX))
-        const y0 = Math.floor(yToScreen(this.topY))
+        const x0 = Math.floor(xToScreen(this.left))
+        const y0 = Math.floor(yToScreen(this.top))
         const tileSet = this.tileSet
 
         ctx.strokeStyle = "white"
@@ -158,47 +194,88 @@ export class TileMap extends Box {
         this.tileSet.images.image(tileNum).drawResized(intX, intY, intWidth, intHeight)
     }
 
-    tileXByColumn(column) {
-        return this.leftX + this.cellWidth * (0.5 + column)
-    }
 
-    tileYByRow(row) {
-        return this.topY + this.cellHeight * (0.5 + row)
-    }
-
-    tileXByIndex(index) {
-        return this.leftX + this.cellWidth * (0.5 + this.tileColumn(index))
-    }
-
-    tileYByIndex(index) {
-        return this.topY + this.cellHeight * (0.5 + this.tileRow(index))
-    }
-
-
-    tileSpriteByIndex(shapeType, index) {
-        return new Sprite(this.image(this.tileByIndex(index)), this.tileXByIndex(index), this.tileYByIndex(index)
-            , this.cellWidth, this.cellHeight, shapeType)
-    }
-
-    tileSpriteByPos(shapeType, column, row) {
-        return new Sprite(this.image(this.tileByPos(column, row)), this.tileXByColumn(column), this.tileYByRow(row)
-            , this.cellWidth, this.cellHeight, shapeType)
-    }
-
-    extract(tileNumber, shapeType) {
-        for(let row = 0; row < this.rows; row++) {
-            for(let column = 0; column < this.columns; column++) {
-                if(tileNumber !== this.tileByPos(column, row)) continue
-                return this.extractTileByPos(column, row, shapeType)
-            }
+    countTiles(tile) {
+        let quantity = 0
+        for(let index = 0; index < this.quantity; index++) {
+            if(tile === this.tileByIndex(index)) quantity++
         }
-        throw new Error("Cannot find tile " + tileNumber)
+        return quantity
     }
 
-    extractTileByPos(column, row, shapeType) {
-        let sprite = this.tileSpriteByPos(shapeType, column, row)
-        this.setTileByPos(column, row, 0)
+    findTileIndex(tile) {
+        for(let index = 0; index < this.quantity; index++) {
+            if(tile === this.tileByIndex(index)) return index
+        }
+        throw new Error("Cannot find tile " + tile)
+    }
+
+    tileAngularSpriteByIndex(shapeType, index) {
+        return new AngularSprite(this.image(this.tileByIndex(index)), this.tileXByIndex(index), this.tileYByIndex(index)
+            , this.cellWidth, this.cellHeight, shapeType)
+    }
+
+    tileVectorSpriteByIndex(shapeType, index) {
+        return new VectorSprite(this.image(this.tileByIndex(index)), this.tileXByIndex(index), this.tileYByIndex(index)
+            , this.cellWidth, this.cellHeight, shapeType)
+    }
+
+    tileAngularSpriteByPos(shapeType, column, row) {
+        return this.tileAngularSpriteByIndex(this.tileIndexForPos(column, row))
+    }
+
+    tileVectorSpriteByPos(shapeType, column, row) {
+        return this.tileVectorSpriteByIndex(this.tileIndexForPos(column, row))
+    }
+
+    extractAngularTile(tile, shapeType) {
+        for(let index = 0; index < this.quantity; index++) {
+            if(tile !== this.tileByIndex(index)) continue
+            return this.extractAngularTileByIndex(index, shapeType)
+        }
+        throw new Error("Cannot find tile " + tile)
+    }
+
+    extractVectorTile(tile, shapeType) {
+        for(let index = 0; index < this.quantity; index++) {
+            if(tile !== this.tileByIndex(index)) continue
+            return this.extractVectorTileByIndex(index, shapeType)
+        }
+        throw new Error("Cannot find tile " + tile)
+    }
+
+    extractAngularTiles(tile, shapeType, layer) {
+        for(let index = 0; index < this.quantity; index++) {
+            if(tile !== this.tileByIndex(index)) continue
+            layer.add(this.extractAngularTileByIndex(index, shapeType))
+        }
+    }
+
+    extractVectorTiles(tile, shapeType, layer) {
+        for(let index = 0; index < this.quantity; index++) {
+            if(tile !== this.tileByIndex(index)) continue
+            layer.add(this.extractVectorTileByIndex(index, shapeType))
+        }
+    }
+
+    extractAngularTileByIndex(index, shapeType) {
+        let sprite = this.tileAngularSpriteByIndex(shapeType, index)
+        this.setTileByIndex(index, emptyTile)
         return sprite
+    }
+
+    extractVectorTileByIndex(index, shapeType) {
+        let sprite = this.tileVectorSpriteByIndex(shapeType, index)
+        this.setTileByIndex(index, emptyTile)
+        return sprite
+    }
+
+    extractAngularTileByPos(column, row, shapeType) {
+        return this.extractAngularTileByIndex(this.tileIndexForPos(column, row))
+    }
+
+    extractVectorTileByPos(column, row, shapeType) {
+        return this.extractVectorTileByIndex(this.tileIndexForPos(column, row))
     }
 
     processTilesByPos(code) {
@@ -217,18 +294,18 @@ export class TileMap extends Box {
 
     collisionWithSprite(sprite, code) {
         let tileSet = this.#tileSet
-        let x0 = Math.floor((sprite.leftX - this.leftX) / this.cellWidth)
-        let x1 = Math.ceil((sprite.rightX - this.leftX) / this.cellWidth)
-        let y0 = Math.floor((sprite.topY - this.topY) / this.cellHeight)
-        let y1 = Math.ceil((sprite.bottomY - this.topY) / this.cellHeight)
+        let x0 = Math.floor((sprite.left - this.left) / this.cellWidth)
+        let x1 = Math.ceil((sprite.right - this.left) / this.cellWidth)
+        let y0 = Math.floor((sprite.top - this.top) / this.cellHeight)
+        let y1 = Math.ceil((sprite.bottom - this.top) / this.cellHeight)
         for(let y = y0; y <= y1; y++) {
             for(let x = x0; x <= x1; x++) {
                 let tileNum = this.tileByPos(x, y)
                 let shape = tileSet.collisionShape(tileNum)
                 if(shape === undefined) continue
                 collisionSprite.shapeType = shape.shapeType
-                collisionSprite.setPosition(this.leftX + (shape.x + x) * this.cellWidth
-                    , this.topY + (shape.y + y) * this.cellHeight)
+                collisionSprite.setPosition(this.left + (shape.x + x) * this.cellWidth
+                    , this.top + (shape.y + y) * this.cellHeight)
                 collisionSprite.setSize(this.cellWidth * shape.width, this.cellHeight * shape.height)
                 if(!sprite.collidesWithSprite(collisionSprite)) continue
                 code.call(null, collisionSprite, tileNum, x, y)

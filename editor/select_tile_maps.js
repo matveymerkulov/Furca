@@ -1,7 +1,6 @@
 import {Drag} from "../src/drag.js"
 import {Box} from "../src/box.js"
 import {mouse} from "../src/system.js"
-import {tileMap} from "../src/project.js"
 import {currentMode, mode, tileMapUnderCursor} from "./tile_map.js"
 import {tabs} from "./main.js"
 import {currentTabName} from "./tabs.js"

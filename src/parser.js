@@ -1,6 +1,7 @@
 import {tileMap, tileSet} from "./project.js"
 import {TileSet} from "./tile_set.js"
 import {ImageArray} from "./image_array.js"
+import {Sprite} from "./sprite.js"
 import {TileMap} from "./tile_map.js"
 import {Block} from "./block.js"
 import {Category, Pos, Rule} from "./auto_tiling.js"

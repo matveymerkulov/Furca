@@ -47,12 +47,12 @@ export function circleFromCircleVector(circle, fromCircle) {
 
 
 export function circleFromBoxVector(circle, fromBox) {
-    if(circle.x >= fromBox.leftX && circle.x < fromBox.rightX
-            || circle.y >= fromBox.topY && circle.y < fromBox.bottomY) {
+    if(circle.x >= fromBox.left && circle.x < fromBox.right
+            || circle.y >= fromBox.top && circle.y < fromBox.bottom) {
         return boxFromBoxVector(circle, fromBox)
     } else {
-        serviceSprite1.x = circle.x < fromBox.x ? fromBox.leftX : fromBox.rightX
-        serviceSprite1.y = circle.y < fromBox.y ? fromBox.topY : fromBox.bottomY
+        serviceSprite1.x = circle.x < fromBox.x ? fromBox.left : fromBox.right
+        serviceSprite1.y = circle.y < fromBox.y ? fromBox.top : fromBox.bottom
         serviceSprite1.radius = 0
         return circleFromCircleVector(circle, serviceSprite1)
     }
@@ -85,9 +85,9 @@ export function pillFromBoxVector(box, fromPill) {
     let xDistance = Math.abs(dx)
     let yDistance = Math.abs(dy)
     let a = yDistance * box.width >= xDistance * box.height
-    if(fromPill.x > box.leftX && fromPill.x < box.rightX && a) {
+    if(fromPill.x > box.left && fromPill.x < box.right && a) {
         return new Vector(0, (box.halfHeight + fromPill.halfHeight - yDistance) * -Math.sign(dy))
-    } else if (fromPill.y > box.topY && fromPill.y < box.bottomY && !a) {
+    } else if (fromPill.y > box.top && fromPill.y < box.bottom && !a) {
         return new Vector((box.halfWidth + fromPill.halfWidth - xDistance) * -Math.sign(dx), 0)
     } else {
         serviceSprite1.x = box.x + box.halfWidth * Math.sign(dx)

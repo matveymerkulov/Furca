@@ -1,5 +1,5 @@
 import {Drag} from "../src/drag.js"
-import {canvasMouse, screenMouse} from "../src/system.js"
+import {canvasMouse} from "../src/system.js"
 import {maxY0} from "./tile_set.js"
 import {clamp} from "../src/functions.js"
 

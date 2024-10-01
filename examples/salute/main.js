@@ -1,7 +1,7 @@
 import {project} from "../../src/project.js"
 import {Img} from "../../src/image.js"
 import {Sprite} from "../../src/sprite.js"
-import {apsk, defaultCanvas} from "../../src/system.js"
+import {apsk, defaultCanvas, texture} from "../../src/system.js"
 import {Layer} from "../../src/layer.js"
 import {RemoveIfOutside} from "../../src/actions/sprite/remove_if_outside.js"
 import {ctx, currentCanvas, distToScreen, xToScreen, yToScreen} from "../../src/canvas.js"
@@ -29,7 +29,7 @@ const particleSize = new Rnd(0.25, 0.75)
 const particleColor = new Rnd(128, 255)
 const fadingSpeed = new Rnd(0.25, 0.5)
 
-project.init = (texture) => {
+project.init = () => {
     let particles = new Layer()
     particles.isShot = false
 
@@ -42,7 +42,7 @@ project.init = (texture) => {
         gradient.addColorStop(0, `rgba(${this.color},255)`)
         gradient.addColorStop(1, `rgba(${this.color},0)`)
         ctx.fillStyle = gradient;
-        ctx.fillRect(xToScreen(this.leftX), yToScreen(this.topY), distToScreen(this.width), distToScreen(this.height));
+        ctx.fillRect(xToScreen(this.left), yToScreen(this.top), distToScreen(this.width), distToScreen(this.height));
         ctx.fillStyle = "white"
         ctx.globalAlpha = 1
     }

@@ -1,6 +1,6 @@
 import MovePoint from "./move_point.js"
 import {selectedTileMaps} from "./select_tile_maps.js"
-import {canvasMouse, mouse, screenMouse} from "../src/system.js"
+import {canvasMouse, mouse} from "../src/system.js"
 import {currentMode, mode, tileMapUnderCursor} from "./tile_map.js"
 
 export default class MoveTileMaps extends MovePoint {
@@ -16,8 +16,8 @@ export default class MoveTileMaps extends MovePoint {
     }
 
     snapToGrid(object) {
-        object.leftX = Math.round(object.leftX)
-        object.topY = Math.round(object.topY)
+        object.left = Math.round(object.left)
+        object.top = Math.round(object.top)
     }
 
     start() {

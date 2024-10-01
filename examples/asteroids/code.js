@@ -1,5 +1,4 @@
-import {Sprite} from "../../src/sprite.js"
-import {apsk, loc, loopedSound, num, paused, play, togglePause} from "../../src/system.js"
+import {apsk, loc, loopedSound, num, paused, play, texture, togglePause} from "../../src/system.js"
 import {LinearChange} from "../../src/actions/linear_change.js"
 import {project} from "../../src/project.js"
 import {RotateImage} from "../../src/actions/sprite/rotate_image.js"
@@ -35,6 +34,9 @@ import {
 import {Key} from "../../src/key.js"
 import {ShapeType} from "../../src/shape.js"
 import {rad, rnd, rndi} from "../../src/functions.js"
+import {AngularSprite} from "../../src/angular_sprite.js"
+import {ImageArray} from "../../src/image_array.js"
+import {Img} from "../../src/image.js"
 
 export function initUpdate() {
     let left = new Key("ArrowLeft")
@@ -70,7 +72,7 @@ export function initUpdate() {
     // asteroid
 
     function createAsteroid(type, angle = 0) {
-        let asteroid = Sprite.createFromTemplate(type)
+        let asteroid = AngularSprite.create(type, asteroids)
         asteroid.turn(angle)
         asteroid.type = type
         asteroid.imageAngle = 0
@@ -102,7 +104,7 @@ export function initUpdate() {
     // explosion
 
     function createSingleExplosion(sprite, size, playSnd = true) {
-        let explosion = Sprite.createFromTemplate(template.explosion)
+        let explosion = AngularSprite.create(template.explosion, explosions)
         explosion.size = size
         explosion.setPosition(sprite.x, sprite.y)
         explosion.add(new DelayedRemove(explosion, explosions, 1.0))
@@ -119,10 +121,11 @@ export function initUpdate() {
             let length = first ? 0 : Math.sqrt(rnd(1))
             let particleSize = first ? size : (1 - length / 2) * size
 
-            let explosion = Sprite.create(explosions, template.explosion.images
+            let explosion = new AngularSprite(new Img(texture["explosion"])
                 , sprite.x + length * Math.cos(angle), sprite.y + length * Math.sin(angle)
                 , particleSize, particleSize, ShapeType.circle, rad(rnd(360)), 0, 16)
             explosion.add(new DelayedRemove(explosion, explosions, 1))
+            explosions.add(explosion)
             times--
             if(times > 0) setTimeout(createParticle, 100)
         }
@@ -132,7 +135,7 @@ export function initUpdate() {
 
     function destroyShip() {
         createExplosion(shipSprite, 2)
-        shipSprite.setFromTemplate(template.ship)
+        shipSprite.init(template.ship, shipLayer)
         shipLayer.hide()
         if(lives.value === 0) {
             messageLabel.show(loc("gameOver"))
@@ -156,7 +159,7 @@ export function initUpdate() {
         if(currentWeapon !== this || currentState !== state.alive) return
 
         if(this.controller.active()) {
-            let bullet = Sprite.createFromTemplate(weapon.fireball.bullet)
+            let bullet = AngularSprite.create(weapon.fireball.bullet)
             bullet.setPositionAs(gun)
             bullet.turn(shipSprite.angle)
             play("fireball")
@@ -221,7 +224,7 @@ export function initUpdate() {
             if(!flameSound.paused) flameSound.pause()
         }
 
-        if(asteroids.isEmpty()) {
+        if(asteroids.isEmpty) {
             level.increment()
             initLevel(level.value)
             play("new_level")

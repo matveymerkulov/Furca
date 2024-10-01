@@ -5,15 +5,17 @@ import {Sprite} from "../../src/sprite.js"
 import {Img} from "../../src/image.js"
 import {registry} from "./registry.js"
 import {ShapeType} from "../../src/shape.js"
-import {emptyTile} from "../../src/tile_map.js"
+import {emptyTile, initTileMap} from "../../src/tile_map.js"
 import {NinePatch} from "../../src/nine_patch.js"
 import {Layer} from "../../src/layer.js"
 import {PopEffect, PopEffectType} from "./pop_effect.js"
 import {Box} from "../../src/box.js"
 import {Label} from "../../src/gui/label.js"
 import {Num} from "../../src/variable/number.js"
-import {Align, apsk, defaultCanvas, defaultFontSize, mouse, play} from "../../src/system.js"
+import {Align, apsk, defaultCanvas, defaultFontSize, mouse, play, texture} from "../../src/system.js"
 import {atan2, clamp, cos, floor, rad, sin} from "../../src/functions.js"
+import {AngularSprite} from "../../src/angular_sprite.js"
+import {VectorSprite} from "../../src/vector_sprite.js"
 
 project.getAssets = () => {
     return {
@@ -26,10 +28,11 @@ project.getAssets = () => {
 export let minPaddleX, maxPaddleX, paddleY, initialBallY, level
 export let fx = new Layer()
 
-project.init = (texture) => {
+project.init = () => {
     let key = new Key("LMB")
 
-    loadData(texture)
+    loadData()
+    initTileMap()
 
     defaultCanvas(40,24)
 
@@ -48,7 +51,7 @@ project.init = (texture) => {
     const tileSetWidth = 4
 
     // new Img(texture.blocks, 0, 192, 96, 32, 0.5, 1.0, 1.0, 0.5)
-    let paddle = new Sprite(new NinePatch(new Img(texture["blocks"], 0, 0, 96, 32), 16
+    let paddle = new AngularSprite(new NinePatch(new Img(texture["blocks"], 0, 0, 96, 32), 16
         , 80, 8, 24), 0, 10.5, 5, 1, ShapeType.box)
 
     const BallStatus = {
@@ -58,7 +61,7 @@ project.init = (texture) => {
         gameOver: 3
     }
 
-    let ball = new Sprite(ballImage, 0, 9.25, 0.5, 0.5, ShapeType.circle)
+    let ball = new VectorSprite(ballImage, 0, 9.25, 0.5, 0.5, ShapeType.circle)
     let ballStatus = BallStatus.onPaddle
 
     tileSet.blocks.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.box), 0, tileSetWidth * 14)
@@ -75,7 +78,7 @@ project.init = (texture) => {
         minPaddleX = -level.halfWidth + d
         maxPaddleX = level.halfWidth - d
         paddleY = level.halfHeight - paddle.halfHeight
-        initialBallY = paddle.topY - ball.halfHeight
+        initialBallY = paddle.top - ball.halfHeight
     }
 
     function initLevel() {
@@ -136,7 +139,7 @@ project.init = (texture) => {
                 play("win")
             }
 
-            let sprite = level.tileSpriteByPos(undefined, column, row)
+            let sprite = level.tileAngularSpriteByPos(undefined, column, row)
             sprite.setPosition(sprite.x + 0.5 * dx, sprite.y + 0.5 * dy)
             sprite.setSize(1 + dx, 1 + dy)
 
@@ -183,7 +186,7 @@ project.init = (texture) => {
                 play("collision3")
             }
 
-            if(ball.topY > paddle.bottomY) {
+            if(ball.top > paddle.bottom) {
                 if(lives.value <= 0) {
                     messageLabel.items[0] = "ИГРА ОКОНЧЕНА"
                     ballStatus = BallStatus.gameOver

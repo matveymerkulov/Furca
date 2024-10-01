@@ -10,8 +10,8 @@ export class Box extends Point {
         this.halfHeight = 0.5 * height
     }
 
-    static fromArea(leftX, topY, width, height) {
-        return new Box(leftX + 0.5 * width, topY + 0.5 * height, width, height)
+    static fromArea(left, top, width, height) {
+        return new Box(left + 0.5 * width, top + 0.5 * height, width, height)
     }
 
     get size() {
@@ -42,37 +42,37 @@ export class Box extends Point {
         this.halfHeight = value * 0.5
     }
 
-    get leftX() {
+    get left() {
         return this.x - this.halfWidth
     }
-    set leftX(value) {
+    set left(value) {
         this.x = value + this.halfWidth
     }
 
-    get topY() {
+    get top() {
         return this.y - this.halfHeight
     }
-    set topY(value) {
+    set top(value) {
         this.y = value + this.halfHeight
     }
 
-    get rightX() {
+    get right() {
         return this.x + this.halfWidth
     }
-    set rightX(value) {
+    set right(value) {
         this.x = value - this.halfWidth
     }
 
-    get bottomY() {
+    get bottom() {
         return this.y + this.halfHeight
     }
-    set bottomY(value) {
+    set bottom(value) {
         this.y = value - this.halfHeight
     }
 
     setCorner(x, y) {
-        this.leftX = x
-        this.topY = y
+        this.left = x
+        this.top = y
     }
 
     setSize(width, height) {
@@ -91,19 +91,19 @@ export class Box extends Point {
     }
 
     drawDashedRegion(isCircle) {
-        drawDashedRegion(xToScreen(this.leftX), yToScreen(this.topY), distToScreen(this.width), distToScreen(this.height)
+        drawDashedRegion(xToScreen(this.left), yToScreen(this.top), distToScreen(this.width), distToScreen(this.height)
             , isCircle)
     }
 
     limit(box) {
-        if(this.leftX < box.leftX) this.leftX = box.leftX + unc
-        if(this.rightX > box.rightX) this.rightX = box.rightX - unc
-        if(this.topY < box.topY) this.topY = box.topY + unc
-        if(this.bottomY > box.bottomY) this.bottomY = box.bottomY - unc
+        if(this.left < box.left) this.left = box.left + unc
+        if(this.right > box.right) this.right = box.right - unc
+        if(this.top < box.top) this.top = box.top + unc
+        if(this.bottom > box.bottom) this.bottom = box.bottom - unc
     }
 
     collidesWithPoint(x, y) {
-        return x >= this.leftX && x < this.rightX && y >= this.topY && y < this.bottomY
+        return x >= this.left && x < this.right && y >= this.top && y < this.bottom
     }
 
     firstCollisionWithPoint(x, y) {
@@ -115,8 +115,8 @@ export class Box extends Point {
     }
 
     overlaps(box) {
-        return box.leftX >= this.leftX && box.topY >= this.topY && box.rightX < this.rightX
-            && box.bottomY < this.bottomY
+        return box.left >= this.left && box.top >= this.top && box.right < this.right
+            && box.bottom < this.bottom
     }
 
     isInside(box) {

@@ -66,15 +66,15 @@ mapsCanvas.render = () => {
         let metrics = ctx.measureText(name)
         // noinspection JSCheckFunctionSignatures
         ctx.fillText(name, xToScreen(map.x) - 0.5 * metrics.width
-            , yToScreen(map.topY) - 0.5 * metrics.actualBoundingBoxDescent - 4)
+            , yToScreen(map.top) - 0.5 * metrics.actualBoundingBoxDescent - 4)
     })
 
     if(currentMode === mode.tiles) {
         if(mapRegion !== undefined && regionTileMap !== undefined) {
             let cellWidth = regionTileMap.cellWidth
             let cellHeight = regionTileMap.cellHeight
-            drawDashedRegion(xToScreen(regionTileMap.leftX + mapRegion.x * cellWidth)
-                , yToScreen(regionTileMap.topY + mapRegion.y * cellHeight)
+            drawDashedRegion(xToScreen(regionTileMap.left + mapRegion.x * cellWidth)
+                , yToScreen(regionTileMap.top + mapRegion.y * cellHeight)
                 , distToScreen((mapRegion.width + 1) * cellWidth)
                 , distToScreen((mapRegion.height + 1) * cellHeight))
         } else if(currentTileSprite !== undefined) {
@@ -182,8 +182,8 @@ export function tileModeOperations() {
         if(currentBlock === undefined) setBlockSize(brushSize, brushSize)
     }
 
-    let x = currentTileMap.leftX + currentTileMap.cellWidth * column + 0.5 * brushWidth
-    let y = currentTileMap.topY + currentTileMap.cellHeight * row + 0.5 * brushHeight
+    let x = currentTileMap.left + currentTileMap.cellWidth * column + 0.5 * brushWidth
+    let y = currentTileMap.top + currentTileMap.cellHeight * row + 0.5 * brushHeight
     tileSprite.setPosition(x, y)
     tileSprite.setSize(brushWidth, brushHeight)
     currentTileSprite = tileSprite

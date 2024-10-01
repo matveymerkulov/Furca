@@ -1,6 +1,6 @@
 import {tabs} from "./main.js"
 import {Layer} from "../src/layer.js"
-import {setTileMaps, tileMaps} from "../src/project.js"
+import {setTileMaps} from "../src/project.js"
 
 export let currentTabName
 

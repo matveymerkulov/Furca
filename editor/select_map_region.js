@@ -16,16 +16,16 @@ export default class SelectMapRegion extends Drag {
     }
 
     start() {
-        this.#x = Math.floor((mouse.x - currentTileMap.leftX) / currentTileMap.cellWidth)
-        this.#y = Math.floor((mouse.y - currentTileMap.topY) / currentTileMap.cellHeight)
+        this.#x = Math.floor((mouse.x - currentTileMap.left) / currentTileMap.cellWidth)
+        this.#y = Math.floor((mouse.y - currentTileMap.top) / currentTileMap.cellHeight)
         mapRegion = new Block()
         regionTileMap = currentTileMap
         regionTileSet = currentTileSet
     }
 
     process() {
-        let width = Math.floor((mouse.x - regionTileMap.leftX) / regionTileMap.cellWidth) - this.#x
-        let height = Math.floor((mouse.y - regionTileMap.topY) / regionTileMap.cellHeight) - this.#y
+        let width = Math.floor((mouse.x - regionTileMap.left) / regionTileMap.cellWidth) - this.#x
+        let height = Math.floor((mouse.y - regionTileMap.top) / regionTileMap.cellHeight) - this.#y
         if(this.#x + width < 0) width = -this.#x
         if(this.#x + width >= regionTileMap.columns) width = regionTileMap.columns - this.#x - 1
         if(this.#y + height < 0) height = -this.#y

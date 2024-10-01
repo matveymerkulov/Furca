@@ -5,11 +5,11 @@ import {Box} from "../../src/box.js"
 import {currentCanvas} from "../../src/canvas.js"
 import {Interval} from "../../src/actions/interval.js"
 import {Img} from "../../src/image.js"
-import {defaultCanvas} from "../../src/system.js"
+import {defaultCanvas, texture} from "../../src/system.js"
 import {RemoveIfOutside} from "../../src/actions/sprite/remove_if_outside.js"
 import {ShapeType} from "../../src/shape.js"
 import Generator from "./generator.js"
-import {rad, rnd} from "../../src/functions.js"
+import {rnd} from "../../src/functions.js"
 
 project.getAssets = () => {
     return {
@@ -18,13 +18,13 @@ project.getAssets = () => {
     }
 }
 
-project.init = (texture) => {
+project.init = () => {
     defaultCanvas(16, 16)
     currentCanvas.background = "rgb(9, 44, 84)"
 
     let flakes = new Layer()
-    let generator = new Generator(new Img(texture["snowflake"]), new Box(0, currentCanvas.topY - 3, currentCanvas.width + 3
-        , 2), ShapeType.box)
+    let generator = new Generator(new Img(texture["snowflake"]), new Box(0
+        , currentCanvas.top - 3, currentCanvas.width + 3, 2), ShapeType.box)
 
     project.scene.add(flakes)
 
@@ -39,8 +39,7 @@ project.init = (texture) => {
         if(interval.active()) {
             let flake = generator.execute()
             flake.size = rnd(0.5, 2)
-            flake.angle = rad(90)
-            flake.speed = rnd(0.5, 2)
+            flake.dy = rnd(0.5, 2)
             flakes.add(flake)
         }
     }

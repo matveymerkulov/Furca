@@ -1,7 +1,7 @@
 import {currentTileSet} from "./tile_set.js"
 import {tileHeight, tileWidth} from "./main.js"
 import {renderTileSetCanvas} from "./tile_set_properties.js"
-import {canvasUnderCursor, ctx, currentCanvas} from "../src/canvas.js"
+import {canvasUnderCursor, ctx} from "../src/canvas.js"
 import {canvasMouse, element} from "../src/system.js"
 import {drawDashedRegion, drawRect} from "../src/draw.js"
 import {tilesPerRow} from "./tile_zoom.js"

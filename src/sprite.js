@@ -1,6 +1,6 @@
 import {Box} from "./box.js"
 import {ctx, distToScreen, xToScreen, yToScreen} from "./canvas.js"
-import {apsk, num} from "./system.js"
+import {num} from "./system.js"
 import {Animate} from "./actions/sprite/animate.js"
 import {
     boxWithBoxCollision,
@@ -20,15 +20,12 @@ import {
 } from "./physics.js"
 import {ShapeType} from "./shape.js"
 import {Img} from "./image.js"
-import {project} from "./project.js"
 import {ImageArray} from "./image_array.js"
 
 export class Sprite extends Box {
     shapeType
     image
     imageAngle
-    angle
-    speed
     visible
     active
     opacity
@@ -36,14 +33,11 @@ export class Sprite extends Box {
     actions
 
     constructor(image, x = 0.0, y = 0.0, width = 1.0, height = 1.0
-                , shapeType = ShapeType.circle, angle = 0.0, speed = 0.0, imageAngle
-                , active = true, visible = true) {
+                , shapeType = ShapeType.circle, imageAngle, active = true, visible = true) {
         super(x, y, width, height)
         this.shapeType = shapeType
         this.image = image
         this.imageAngle = imageAngle
-        this.angle = angle
-        this.speed = speed
         this.visible = visible
         this.active = active
         this.opacity = 1.0
@@ -53,29 +47,32 @@ export class Sprite extends Box {
 
     static create(template, layer) {
         let sprite = new Sprite(Img.create(template.image), num(template.x), num(template.y), num(template.width)
-            , num(template.height), template.shape, num(template.angle), num(template.speed), num(template.imageAngle)
-            , template.visible, template.active)
+            , num(template.height), template.shape, num(template.imageAngle), template.visible, template.active)
+        sprite.init(template, layer)
+        return sprite
+    }
 
+    init(template, layer) {
         if(template.size !== undefined) {
-            sprite.width = sprite.height = num(template.size)
+            this.width = this.height = num(template.size)
         }
 
         if(layer !== undefined) {
-            layer.add(sprite)
+            layer.add(this)
         }
 
         if(template.images !== undefined) {
             const images = ImageArray.create(template.images)
-            sprite.image = images.image(0)
-            sprite.actions.push(new Animate(sprite, images, num(template.animationSpeed)))
+            this.image = images.image(0)
+            this.actions.push(new Animate(this, images, num(template.animationSpeed)))
         }
 
         if(template.parameters !== undefined) {
             for(const [key, value] of Object.entries(template.parameters)) {
-                sprite[key] = value
+                this[key] = value
             }
         }
-        return sprite
+        return this
     }
 
     add(...actions) {
@@ -99,27 +96,6 @@ export class Sprite extends Box {
         }
     }
 
-    move() {
-        this.x += Math.cos(this.angle) * this.speed * apsk
-        this.y += Math.sin(this.angle) * this.speed * apsk
-    }
-
-    moveHorizontally() {
-        this.x += Math.cos(this.angle) * this.speed * apsk
-    }
-
-    moveVertically() {
-        this.y += Math.sin(this.angle) * this.speed * apsk
-    }
-
-    setAngleAs(sprite) {
-        this.angle = sprite.angle
-    }
-
-    turn(value) {
-        this.angle += value
-    }
-
     turnImage(value) {
         this.imageAngle += value
     }
@@ -130,6 +106,10 @@ export class Sprite extends Box {
 
     show() {
         this.visible = true
+    }
+
+    processSprites(code) {
+        code.call(this)
     }
 
     // collisions
@@ -144,7 +124,7 @@ export class Sprite extends Box {
         }
     }
 
-    collisionWithTilemap(tilemap, code) {
+    collisionWithTileMap(tileMap, code) {
     }
 
     collidesWithSprite(sprite) {

@@ -13,8 +13,8 @@ export class RemoveIfOutside extends Action {
         let i = 0
         while(i < items.length) {
             let sprite = items[i]
-            if (sprite.rightX < bounds.leftX || sprite.leftX > bounds.rightX
-                    || sprite.bottomY < bounds.topY || sprite.topY > bounds.bottomY) {
+            if (sprite.right < bounds.left || sprite.left > bounds.right
+                    || sprite.bottom < bounds.top || sprite.top > bounds.bottom) {
                 items.splice(i, 1)
             } else {
                 i++
