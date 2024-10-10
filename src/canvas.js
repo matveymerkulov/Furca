@@ -7,6 +7,7 @@ export let currentCanvas, canvasUnderCursor, ctx, zk = 1.2
 
 export function setCanvas(canvas) {
     currentCanvas = canvas
+    if(canvas.node === undefined) return
     ctx = canvas.node.getContext("2d")
     let rect = canvas.node.getBoundingClientRect()
     canvasMouse.setPosition(screenMouse.x - rect.left, screenMouse.y - rect.top)
@@ -17,13 +18,15 @@ export class Canvas extends Box {
     constructor(node, x, y, width, height, viewport, active = true) {
         super(x, y, width, height, 0.0, 0.0)
 
-        this.node = node
-        node.addEventListener("mouseover", () => {
-            canvasUnderCursor = this
-        })
-        node.addEventListener("mouseout", () => {
-            canvasUnderCursor = undefined
-        })
+        if(node !== undefined) {
+            this.node = node
+            node.addEventListener("mouseover", () => {
+                canvasUnderCursor = this
+            })
+            node.addEventListener("mouseout", () => {
+                canvasUnderCursor = undefined
+            })
+        }
 
         this.active = true
         this.viewport = viewport

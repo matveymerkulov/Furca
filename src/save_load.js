@@ -2,6 +2,10 @@
 //import {getString, getSymbol, getTileMap, getTileSet, getToken, initParser} from "./parser.js"
 //import {getName} from "./names.js"
 
+import {initData, tileMap, tileMaps, tileSet} from "./project.js"
+import {getName} from "./names.js"
+import {getString, getSymbol, getTileMap, getTileSet, getToken, initParser} from "./parser.js"
+
 export let indent = ""
 
 export function addIndent() {
@@ -52,31 +56,41 @@ export function booleanArrayToString(array) {
     return `\"${text}\"`
 }
 
-export function projectToText() {
+export function projectToText(tabs) {
     let text = ""
-    text += `export function loadData(texture) {\n`
+    text += 'import {TileSet} from "../src/tile_set.js"\n'
+    text += 'import {TileMap} from "../src/tile_map.js"\n'
+    text += 'import {ImageArray} from "../src/image_array.js"\n'
+    text += 'import {tileMap, tileMaps, tileSet} from "../src/project.js"\n'
+    text += 'import {Block} from "../src/block.js"\n'
+    text += 'import {Category, Pos, Rule} from "../src/auto_tiling.js"\n'
+    text += 'import {texture} from "../src/system.js"\n'
+    text += 'import {addTab, selectTab} from "./tabs.js"\n'
+    text += 'export function loadData() {\n'
 
     indent = "\t"
     for(const set of Object.values(tileSet)) {
-        text += `\ttileSet["${getName(set)}"] = ${set.toString()}\n`
+        text += `\ttileSet.${getName(set)} = ${set.toString()}\n`
     }
 
     text += "\t\n"
 
-    for(let map of tileMaps.items) {
-        text += `\ttileMap["${getName(map)}"] = ${map.toString()}\n`
-    }
-
-    text += "\n\ttileMaps.add("
-    for(let pos = 0; pos < tileMaps.items.length; pos++) {
-        if(pos % 4 === 0) {
-            text +="\n\t\t"
+    for(const[name, layer] of Object.entries(tabs)) {
+        for(let map of layer.items) {
+            text += `\ttileMap.${getName(map)} = ${map.toString()}\n`
         }
-        text += `tileMap["${getName(tileMaps.items[pos])}"], `
-    }
-    text += "\n\t)\n"
 
-    text += "}"
+        text += `\taddTab("${name}"`
+        for(let pos = 0; pos < layer.quantity; pos++) {
+            if(pos > 0 && pos % 4 === 0) {
+                text +="\n\t\t"
+            }
+            text += `, tileMap.${getName(layer.items[pos])}`
+        }
+        text += ")\n"
+    }
+
+    text += '\tselectTab("trespasser")\n}'
     return text
 }
 
@@ -108,12 +122,12 @@ export function projectFromText(data, texture) {
     }
 }
 
-export function projectToClipboard() {
-    navigator.clipboard.writeText(projectToText()).then()
+export function projectToClipboard(tabs) {
+    navigator.clipboard.writeText(projectToText(tabs)).then()
 }
 
-export function projectToStorage() {
-    localStorage.setItem("project", projectToText())
+export function projectToStorage(tabs) {
+    localStorage.setItem("project", projectToText(tabs))
 }
 
 export function projectFromStorage(texture) {

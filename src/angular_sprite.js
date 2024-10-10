@@ -7,7 +7,7 @@ export class AngularSprite extends Sprite {
     angle
     speed
     constructor(image, x = 0.0, y = 0.0, width = 1.0, height = 1.0
-        , shapeType = ShapeType.circle, angle, speed, imageAngle, active = true, visible = true) {
+        , shapeType = ShapeType.circle, angle = 0, speed = 0, imageAngle, active = true, visible = true) {
         super(image, x, y, width, height, shapeType, imageAngle, active, visible)
         this.angle = angle
         this.speed = speed

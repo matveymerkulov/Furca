@@ -109,7 +109,7 @@ export class Sprite extends Box {
     }
 
     processSprites(code) {
-        code.call(this)
+        code.call(undefined, this)
     }
 
     // collisions

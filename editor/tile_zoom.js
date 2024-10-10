@@ -1,7 +1,7 @@
 import {Action} from "../src/actions/action.js"
 import {canvasUnderCursor, currentCanvas} from "../src/canvas.js"
 
-export let tilesPerRow = 8
+export let tilesPerRow = 2
 
 export default class TileZoom extends Action {
     constructor(zoomIn, zoomOut) {

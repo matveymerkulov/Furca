@@ -1,9 +1,10 @@
 import {Point} from "./point.js"
-import {Canvas, ctx, setCanvas, xFromScreen, yFromScreen} from "./canvas.js"
+import {Canvas, ctx, currentCanvas, setCanvas, xFromScreen, yFromScreen} from "./canvas.js"
 import {initData, project} from "./project.js"
 import {Function} from "./function/function.js"
 import {keys} from "./key.js"
 import {initInput} from "./input.js"
+import {Box} from "./box.js"
 
 // global variables
 
@@ -112,7 +113,7 @@ export function setFontSize(size) {
 
 export function defaultCanvas(width, height) {
     let canvas = document.getElementById("canvas")
-    canvas.style.display = "flex"
+    canvas.style.display = "block"
     canvas.focus()
 
     setCanvas(Canvas.create(canvas, width, height))
@@ -124,6 +125,7 @@ export function defaultCanvas(width, height) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
+    setCanvas(new Canvas(undefined, 0, 0, 1, 1, new Box()))
     mouse = new Point()
     screenMouse = new Point()
     canvasMouse = new Point()

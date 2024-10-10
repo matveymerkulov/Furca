@@ -35,7 +35,6 @@ import {Key} from "../../src/key.js"
 import {ShapeType} from "../../src/shape.js"
 import {rad, rnd, rndi} from "../../src/functions.js"
 import {AngularSprite} from "../../src/angular_sprite.js"
-import {ImageArray} from "../../src/image_array.js"
 import {Img} from "../../src/image.js"
 
 export function initUpdate() {

@@ -145,8 +145,8 @@ export function setBlockSize(width, height) {
 export function tileModeOperations() {
     let brushWidth = currentTileMap.cellWidth * blockWidth
     let brushHeight = currentTileMap.cellWidth * blockHeight
-    let column = Math.floor(currentTileMap.fColumn(mouse) - 0.5 * (brushWidth - 1))
-    let row = Math.floor(currentTileMap.fRow(mouse) - 0.5 * (brushHeight - 1))
+    let column = Math.floor(currentTileMap.tileColumnByPoint(mouse) - 0.5 * (brushWidth - 1))
+    let row = Math.floor(currentTileMap.tileRowByPoint(mouse) - 0.5 * (brushHeight - 1))
 
     if(selectKey.wasPressed) {
         startTileColumn = column

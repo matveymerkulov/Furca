@@ -16,7 +16,7 @@ import {texture} from "../src/system.js"
 
 project.getAssets = () => {
     return {
-        texture: ["farm_floor.png", "farm_furniture.png", "bricks.png", "smooth.png", "tiles.png"],
+        texture: ["bricks.png", "tiles.png", "objects.png"],
         sound: []
     }
 }
@@ -84,7 +84,7 @@ project.init = () => {
         }
 
         if(saveKey.wasPressed) {
-            projectToStorage()
+            projectToStorage(tabs)
         }
     }
 

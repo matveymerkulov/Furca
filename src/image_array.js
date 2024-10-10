@@ -45,6 +45,10 @@ export class ImageArray {
         return this.#images[num]
     }
 
+    setImage(num, image) {
+        this.#images[num] = image
+    }
+
     get quantity() {
         return this.#images.length
     }

@@ -139,7 +139,7 @@ project.init = () => {
                 play("win")
             }
 
-            let sprite = level.tileAngularSpriteByPos(undefined, column, row)
+            let sprite = level.tileAngularSpriteByPos(column, row)
             sprite.setPosition(sprite.x + 0.5 * dx, sprite.y + 0.5 * dy)
             sprite.setSize(1 + dx, 1 + dy)
 

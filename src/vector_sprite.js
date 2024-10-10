@@ -22,6 +22,11 @@ export class VectorSprite extends Sprite {
         return sprite
     }
 
+    setMovingVector(dx, dy) {
+        this.dx = dx
+        this.dy = dy
+    }
+
     move() {
         this.x += this.dx * apsk
         this.y += this.dy * apsk
