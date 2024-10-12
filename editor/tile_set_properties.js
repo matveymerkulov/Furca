@@ -9,17 +9,12 @@ import {visibility} from "../src/tile_set.js"
 import {setTileSize, tileHeight, tileWidth,} from "./main.js"
 import {Win} from "../src/gui/window.js"
 import {Key} from "../src/key.js"
-
-let selectKey = new Key("LMB")
-let delKey = new Key("Delete")
-let toggleVisibilityKey = new Key("KeyV")
-let newBlockKey = new Key("KeyB")
-let newFrameKey = new Key("KeyF")
+import {delPropertiesKey, newBlockKey, newFrameKey, selectTilePropertiesKey, toggleVisibilityKey} from "./keys.js"
 
 export let tileSetPropertiesWindow = new Win("tile_set_window")
 
 let blocksCanvas = tileSetPropertiesWindow.addCanvas("tile_set_blocks", 9, 16)
-blocksCanvas.add(new SelectTileSetRegion(), selectKey)
+blocksCanvas.add(new SelectTileSetRegion(), selectTilePropertiesKey)
 
 
 export function renderTileSetCanvas() {
@@ -81,7 +76,7 @@ blocksCanvas.render = () => {
 
 
 blocksCanvas.update = () => {
-    if(delKey.wasPressed) {
+    if(delPropertiesKey.wasPressed) {
         currentTileSet.removeBlock(Math.floor(canvasMouse.x / tileWidth), Math.floor(canvasMouse.y / tileHeight))
     }
 

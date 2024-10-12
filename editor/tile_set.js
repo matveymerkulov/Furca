@@ -10,19 +10,14 @@ import TileZoom, {tilesPerRow} from "./tile_zoom.js"
 import {TilePan, updateY0, y0} from "./tile_pan.js"
 import {Key} from "../src/key.js"
 import {mainWindow} from "./main_window.js"
+import {delTileSetKey, panTileSetKey, selectTileKey, zoomInTileSetKey, zoomOutTileSetKey} from "./keys.js"
 
 export let currentTile = 1, currentTileSet, currentBlock, currentGroup, altGroup
 export let maxY0 = 0
 
-let selectKey = new Key("LMB")
-let delKey = new Key("Delete")
-let panKey = new Key("ControlLeft", "MMB")
-let zoomInKey = new Key("WheelUp")
-let zoomOutKey = new Key("WheelDown")
-
 let tileSetCanvas = mainWindow.addCanvas("tiles", 8, 14)
-tileSetCanvas.add(new TilePan(), panKey)
-tileSetCanvas.add(new TileZoom(zoomInKey, zoomOutKey))
+tileSetCanvas.add(new TilePan(), panTileSetKey)
+tileSetCanvas.add(new TileZoom(zoomInTileSetKey, zoomOutTileSetKey))
 
 
 function processTiles(tileFunction, blockFunction) {
@@ -115,21 +110,21 @@ export function updateBlockSize() {
 tileSetCanvas.update = () => {
     if(canvasUnderCursor !== tileSetCanvas) return
     processTiles((set, images, i, x, y, size) => {
-        if((selectKey.wasPressed || delKey.wasPressed) && pointWithParamBoxCollision(canvasMouse, x, y, size, size)) {
-            if(selectKey.wasPressed) {
+        if((selectTileKey.wasPressed || delTileSetKey.wasPressed) && pointWithParamBoxCollision(canvasMouse, x, y, size, size)) {
+            if(selectTileKey.wasPressed) {
                 currentTile = i
                 currentBlock = undefined
                 updateBlockSize()
                 currentTileSet = set
                 currentGroup = findGroup(set, currentTile)
-            } else if(delKey.wasPressed) {
+            } else if(delTileSetKey.wasPressed) {
                 set.altTile = set.altTile === i ? -1 : i
                 altGroup = findGroup(set, set.altTile)
                 updateBlockSize()
             }
         }
     }, (set, block, texture, tx, ty, tWidth, tHeight, x, y, size) => {
-        if(selectKey.wasPressed && pointWithParamBoxCollision(canvasMouse, x, y, size, size)) {
+        if(selectTileKey.wasPressed && pointWithParamBoxCollision(canvasMouse, x, y, size, size)) {
             currentBlock = block
             currentTile = -1
             currentTileSet = set

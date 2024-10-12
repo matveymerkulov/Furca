@@ -13,6 +13,7 @@ import {resetRegionSelector} from "./select_tile_set_region.js"
 import {tileSetPropertiesWindow} from "./tile_set_properties.js"
 import {rulesWindow, updateCategoriesList} from "./auto_tiling.js"
 import {texture} from "../src/system.js"
+import {autoTilingEditorKey, loadKey, saveKey, tileSetPropertiesKey} from "./keys.js"
 
 project.getAssets = () => {
     return {
@@ -20,9 +21,6 @@ project.getAssets = () => {
         sound: []
     }
 }
-
-let saveKey = new Key("KeyS")
-let loadKey = new Key("KeyL")
 
 export let tileWidth, tileHeight
 export let tabs = new Map()
@@ -95,10 +93,6 @@ project.init = () => {
         }
     }
 }
-
-
-let tileSetPropertiesKey = new Key("KeyI")
-let autoTilingEditorKey = new Key("KeyA")
 
 
 mainWindow.update = () => {

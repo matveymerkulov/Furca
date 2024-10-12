@@ -17,6 +17,17 @@ import {Key} from "../src/key.js"
 import {enframeTile} from "../src/auto_tiling.js"
 import {mainWindow} from "./main_window.js"
 import {removeFromArray, rndi} from "../src/functions.js"
+import {
+    changeBrushTypeKey, copyMapKey, decrementBrushSizeKey, deleteMapKey,
+    delKey, incrementBrushSizeKey,
+    newMapKey,
+    panKey,
+    rectangleModeKey, renameMapKey,
+    selectKey,
+    switchModeKey,
+    zoomInKey,
+    zoomOutKey
+} from "./keys.js"
 
 export let currentTileMap, tileMapUnderCursor, currentTileSprite
 
@@ -26,24 +37,6 @@ export const mode = {
 }
 
 export let currentMode = mode.tiles
-
-let switchModeKey = new Key("Space")
-
-let selectKey = new Key("LMB")
-let delKey = new Key("Delete")
-let panKey = new Key("ControlLeft", "MMB")
-let zoomInKey = new Key("WheelUp")
-let zoomOutKey = new Key("WheelDown")
-
-let newMapKey = new Key("KeyN")
-let renameMapKey = new Key("KeyR")
-let copyMapKey = new Key("KeyC")
-let deleteMapKey = new Key("Delete")
-
-let changeBrushTypeKey = new Key("KeyB")
-let incrementBrushSizeKey = new Key("NumpadAdd")
-let decrementBrushSizeKey = new Key("NumpadSubtract")
-let rectangleModeKey = new Key("KeyR")
 
 
 let mapsCanvas = mainWindow.addCanvas("map", 30, 14)
