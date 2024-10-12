@@ -19,6 +19,9 @@ let tileSetCanvas = mainWindow.addCanvas("tiles", 8, 14)
 tileSetCanvas.add(new TilePan(), panTileSetKey)
 tileSetCanvas.add(new TileZoom(zoomInTileSetKey, zoomOutTileSetKey))
 
+export function setCurrentTile(tile) {
+    currentTile = tile
+}
 
 function processTiles(tileFunction, blockFunction) {
     let quantity = 0

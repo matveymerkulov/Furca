@@ -135,7 +135,7 @@ export function updateCategoriesList() {
 
 
 tileSetCanvas.render = () => {
-    renderTileSetCanvas()
+    renderTileSetCanvas(300, 100)
 
     if(currentCategory === undefined) return
 

@@ -4,7 +4,15 @@ import {addTileMap} from "./create_tile_map.js"
 import {getName, incrementName, setName} from "../src/names.js"
 import {canvasUnderCursor, ctx, distToScreen, setCanvas, xToScreen, yToScreen} from "../src/canvas.js"
 import SelectTileMaps, {clearSelection, mapSelectionRegion, selectedTileMaps} from "./select_tile_maps.js"
-import {altGroup, currentBlock, currentGroup, currentTile, currentTileSet, updateBlockSize} from "./tile_set.js"
+import {
+    altGroup,
+    currentBlock,
+    currentGroup,
+    currentTile,
+    currentTileSet,
+    setCurrentTile,
+    updateBlockSize
+} from "./tile_set.js"
 import {newMap} from "./new_map.js"
 import {Sprite} from "../src/sprite.js"
 import SelectMapRegion, {mapRegion, regionTileMap} from "./select_map_region.js"
@@ -21,13 +29,14 @@ import {
     changeBrushTypeKey, copyMapKey, decrementBrushSizeKey, deleteMapKey,
     delKey, incrementBrushSizeKey,
     newMapKey,
-    panKey,
+    panKey, pipetteKey,
     rectangleModeKey, renameMapKey,
     selectKey,
     switchModeKey,
     zoomInKey,
     zoomOutKey
 } from "./keys.js"
+import {emptyTile} from "../src/tile_map.js"
 
 export let currentTileMap, tileMapUnderCursor, currentTileSprite
 
@@ -180,6 +189,11 @@ export function tileModeOperations() {
     tileSprite.setPosition(x, y)
     tileSprite.setSize(brushWidth, brushHeight)
     currentTileSprite = tileSprite
+
+    if(pipetteKey.wasPressed && currentTileSet !== undefined) {
+        const tile = currentTileMap.tileByPos(column, row)
+        if(tile !== emptyTile) setCurrentTile(tile)
+    }
 }
 
 

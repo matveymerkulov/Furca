@@ -17,11 +17,11 @@ let blocksCanvas = tileSetPropertiesWindow.addCanvas("tile_set_blocks", 9, 16)
 blocksCanvas.add(new SelectTileSetRegion(), selectTilePropertiesKey)
 
 
-export function renderTileSetCanvas() {
+export function renderTileSetCanvas(dWidth, dHeight) {
     let images = currentTileSet.images
     let tex = images.texture
-    let scale = Math.min((document.body.offsetWidth - 100) / tex.width
-        , (document.body.offsetHeight - 100) / tex.height, 2)
+    let scale = Math.min((document.body.offsetWidth - dWidth) / tex.width
+        , (document.body.offsetHeight - dHeight) / tex.height, 2)
     let style = currentCanvas.node.style
     let canvasWidth = tex.width * scale
     let canvasHeight = tex.height * scale
@@ -43,7 +43,7 @@ export function renderTileSetCanvas() {
 
 
 blocksCanvas.render = () => {
-    renderTileSetCanvas()
+    renderTileSetCanvas(100, 100)
 
     for(let y = 0; y < currentTileSet.rows; y++) {
         for(let x = 0; x < currentTileSet.columns; x++) {

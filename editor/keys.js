@@ -8,7 +8,7 @@ export const switchModeKey = new Key("Space")
 export const tileSetPropertiesKey = new Key("KeyI")
 export const autoTilingEditorKey = new Key("KeyA")
 
-// tile map mode
+// map mode
 
 export const selectKey = new Key("LMB")
 export const delKey = new Key("Delete")
@@ -27,6 +27,7 @@ export const changeBrushTypeKey = new Key("KeyB")
 export const incrementBrushSizeKey = new Key("NumpadAdd")
 export const decrementBrushSizeKey = new Key("NumpadSubtract")
 export const rectangleModeKey = new Key("KeyR")
+export const pipetteKey = new Key("KeyP")
 
 // tile set
 
