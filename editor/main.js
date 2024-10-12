@@ -14,6 +14,7 @@ import {tileSetPropertiesWindow} from "./tile_set_properties.js"
 import {rulesWindow, updateCategoriesList} from "./auto_tiling.js"
 import {texture} from "../src/system.js"
 import {autoTilingEditorKey, loadKey, saveKey, tileSetPropertiesKey} from "./keys.js"
+import {currentTabName} from "./tabs.js"
 
 project.getAssets = () => {
     return {
@@ -82,7 +83,7 @@ project.init = () => {
         }
 
         if(saveKey.wasPressed) {
-            projectToStorage(tabs)
+            projectToStorage(tabs, currentTabName)
         }
     }
 

@@ -6,6 +6,7 @@ import {Block} from "../src/block.js"
 import {Category, Pos, Rule} from "../src/auto_tiling.js"
 import {texture} from "../src/system.js"
 import {addTab, selectTab} from "./tabs.js"
+
 export function loadData() {
     tileSet.tiles = new TileSet(new ImageArray(texture.tiles, 6, 1, 0.5, 0.5, 1, 1), [
         0, 0, 0, 0, 0, 0,
@@ -107,8 +108,8 @@ export function loadData() {
     ])
     addTab("breakout", tileMap.blocks, tileMap.border)
     tileMap.window_tiles = new TileMap(tileSet.tiles, 11, 11, -11.5, 18.5, 1, 1, [
-        0,   0,  -1,   0,   0,   0,   0,   0,  -1,   0,   0,
-        0,   2,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   0,
+        0,   2,  -1,   0,   0,   0,   0,   0,  -1,   0,   0,
+        0,   1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   0,
         0,  -1,   0,   0,   0,   1,   0,   1,   0,  -1,   0,
         0,  -1,  -1,  -1,  -1,   1,  -1,   1,  -1,  -1,   0,
         0,   1,   0,   1,   0,  -1,   0,   1,   0,  -1,   0,
@@ -163,7 +164,7 @@ export function loadData() {
         0,   1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   0,
         0,  -1,   0,   1,   0,   0,   0,   1,   0,   0,   0,
         0,  -1,  -1,  -1,  -1,  -1,  -1,   1,  -1,  -1,   0,
-        0,   0,   0,   1,   0,  -1,   0,   0,   1,   0,   0,
+        0,   0,   0,   1,   0,  -1,   0,   0,   1,  -1,   0,
         0,  -1,  -1,   1,  -1,  -1,  -1,  -1,   1,  -1,   0,
         0,   1,   0,   1,   0,   5,   0,   1,   0,  -1,   0,
         0,   1,  -1,   1,  -1,  -1,  -1,  -1,  -1,  -1,   0,
@@ -406,7 +407,7 @@ export function loadData() {
         -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
     ])
     tileMap.square_tiles = new TileMap(tileSet.tiles, 11, 11, -11.5, 42.5, 1, 1, [
-        0,   0,  -1,   0,   0,   2,   0,   0,  -1,   0,   5,
+        0,   0,   0,   0,   0,   2,   0,   0,  -1,   0,   0,
         0,  -1,  -1,  -1,  -1,   1,  -1,  -1,  -1,  -1,   0,
         0,  -1,   0,   1,   0,   1,   0,   1,   0,  -1,   0,
         0,  -1,  -1,  -1,  -1,   1,  -1,  -1,  -1,  -1,   0,
@@ -419,7 +420,7 @@ export function loadData() {
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
     ])
     tileMap.dont_jump_tiles = new TileMap(tileSet.tiles, 11, 11, 0.5, 42.5, 1, 1, [
-        0,   0,   0,   0,   0,   0,   0,   0,  -1,   2,   0,
+        0,   0,  -1,   0,   0,   0,   0,   0,  -1,   2,   0,
         0,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   1,   0,
         0,   1,   5,   1,   5,   1,   5,   1,   5,   1,   0,
         0,   1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   0,
@@ -432,8 +433,8 @@ export function loadData() {
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
     ])
     tileMap.two_areas_tiles = new TileMap(tileSet.tiles, 11, 11, 12.5, 42.5, 1, 1, [
-        0,   0,  -1,   0,   0,   0,   0,   0,  -1,   2,   0,
-        0,  -1,  -1,  -1,  -1,  -1,   0,  -1,  -1,   1,   0,
+        0,   0,  -1,   0,   0,   0,   0,   2,  -1,   0,   0,
+        0,  -1,  -1,  -1,  -1,  -1,   0,   1,  -1,  -1,   0,
         0,   0,   0,   1,   0,   1,   0,   1,   0,  -1,   0,
         0,  -1,   0,   1,   0,   1,   0,   1,   0,  -1,   0,
         0,  -1,  -1,   1,   0,   1,  -1,   1,   0,  -1,   0,
@@ -444,17 +445,17 @@ export function loadData() {
         0,   1,   5,   1,   5,   1,   5,   1,   5,   1,   0,
         0,   0,   0,   0,   0,   0,   0,   0,   0,   2,   0,
     ])
-    tileMap.tiles14 = new TileMap(tileSet.tiles, 11, 11, 24.5, 42.5, 1, 1, [
-        0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-        0,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   0,
-        0,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   0,
-        0,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   0,
-        0,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   0,
-        0,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   0,
-        0,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   0,
-        0,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   0,
-        0,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   0,
-        0,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   0,
+    tileMap.hieroglyph_I_tiles = new TileMap(tileSet.tiles, 11, 11, 24.5, 42.5, 1, 1, [
+        0,   0,  -1,   0,   0,   2,   0,   0,  -1,   0,   0,
+        0,  -1,  -1,  -1,  -1,   1,  -1,  -1,  -1,  -1,   0,
+        0,  -1,   5,   5,   5,   1,   5,   5,   5,  -1,   0,
+        0,  -1,  -1,  -1,   0,   1,   0,  -1,  -1,  -1,   0,
+        0,  -1,  -1,   0,  -1,   1,  -1,   0,  -1,  -1,   0,
+        0,  -1,   0,  -1,  -1,   1,  -1,  -1,   0,  -1,   0,
+        0,   1,  -1,  -1,  -1,   1,  -1,  -1,  -1,   1,   0,
+        0,  -1,  -1,   0,   0,   1,   0,   0,  -1,  -1,   0,
+        0,  -1,  -1,  -1,  -1,   1,  -1,  -1,  -1,  -1,   0,
+        0,   1,   0,  -1,  -1,   1,  -1,  -1,   0,   1,   0,
         0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
     ])
     tileMap.tiles15 = new TileMap(tileSet.tiles, 11, 11, 36.5, 42.5, 1, 1, [
@@ -522,14 +523,14 @@ export function loadData() {
         -1,  -1,   3,  -1,   3,  -1,   3,  -1,   3,   0,  -1,
         -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
     ])
-    tileMap.objects14 = new TileMap(tileSet.objects, 11, 11, 24.5, 42.5, 1, 1, [
+    tileMap.hieroglyph_I_objects = new TileMap(tileSet.objects, 11, 11, 24.5, 42.5, 1, 1, [
+        -1,  -1,   1,  -1,  -1,  -1,  -1,  -1,   1,  -1,  -1,
+        -1,   3,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   3,  -1,
         -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
         -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
+        -1,  -1,   3,  -1,   3,  -1,   3,  -1,   3,  -1,  -1,
         -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
-        -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
-        -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
-        -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
-        -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
+        -1,  -1,   3,  -1,  -1,  -1,  -1,  -1,   3,  -1,  -1,
         -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
         -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
         -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
@@ -684,9 +685,9 @@ export function loadData() {
         , tileMap.snake_tiles, tileMap.nn_tiles, tileMap.koi_centuries_tiles, tileMap.vase_objects
         , tileMap.house_objects, tileMap.clock_objects, tileMap.twists_objects, tileMap.pron_objects
         , tileMap.corridors_objects, tileMap.snake_objects, tileMap.nn_objects, tileMap.square_tiles
-        , tileMap.dont_jump_tiles, tileMap.two_areas_tiles, tileMap.tiles14, tileMap.tiles15
+        , tileMap.dont_jump_tiles, tileMap.two_areas_tiles, tileMap.hieroglyph_I_tiles, tileMap.tiles15
         , tileMap.koi_centuries_objects, tileMap.square_objects, tileMap.dont_jump_objects, tileMap.two_areas_objects
-        , tileMap.objects14, tileMap.objects15, tileMap.tiles16, tileMap.objects16
+        , tileMap.hieroglyph_I_objects, tileMap.objects15, tileMap.tiles16, tileMap.objects16
         , tileMap.tiles17, tileMap.tiles18, tileMap.tiles19, tileMap.tiles20
         , tileMap.objects17, tileMap.objects18, tileMap.objects19, tileMap.objects20)
     selectTab("trespasser")

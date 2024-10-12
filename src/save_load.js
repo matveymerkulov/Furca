@@ -56,29 +56,43 @@ export function booleanArrayToString(array) {
     return `\"${text}\"`
 }
 
-export function projectToText(tabs) {
+export function projectToText(tabs, tabName) {
+    const path = tabName === undefined ? "../src" : "../Furca/src"
+
     let text = ""
-    text += 'import {TileSet} from "../src/tile_set.js"\n'
-    text += 'import {TileMap} from "../src/tile_map.js"\n'
-    text += 'import {ImageArray} from "../src/image_array.js"\n'
-    text += 'import {tileMap, tileMaps, tileSet} from "../src/project.js"\n'
-    text += 'import {Block} from "../src/block.js"\n'
-    text += 'import {Category, Pos, Rule} from "../src/auto_tiling.js"\n'
-    text += 'import {texture} from "../src/system.js"\n'
-    text += 'import {addTab, selectTab} from "./tabs.js"\n'
-    text += 'export function loadData() {\n'
+    text += `import {TileSet} from "${path}/tile_set.js"\n`
+    text += `import {TileMap} from "${path}/tile_map.js"\n`
+    text += `import {ImageArray} from "${path}/image_array.js"\n`
+    text += `import {tileMap, tileMaps, tileSet} from "${path}/project.js"\n`
+    text += `import {Block} from "${path}/block.js"\n`
+    text += `import {Category, Pos, Rule} from "${path}/auto_tiling.js"\n`
+    text += `import {texture} from "${path}/system.js"\n`
+    if(tabName === undefined) text += `import {addTab, selectTab} from "./tabs.js"\n`
+    text += '\nexport function loadData() {\n'
+
+    const tileSets = new Set()
+    if(tabName !== undefined) {
+        for(let map of tabs[tabName].items) {
+            tileSets.add(map.tileSet)
+        }
+    }
 
     indent = "\t"
     for(const set of Object.values(tileSet)) {
+        if(tabName !== undefined && !tileSets.has(set)) continue
         text += `\ttileSet.${getName(set)} = ${set.toString()}\n`
     }
 
     text += "\t\n"
 
     for(const[name, layer] of Object.entries(tabs)) {
+        if(tabName !== undefined && tabName !== name) continue
+
         for(let map of layer.items) {
             text += `\ttileMap.${getName(map)} = ${map.toString()}\n`
         }
+
+        if(tabName !== undefined) continue
 
         text += `\taddTab("${name}"`
         for(let pos = 0; pos < layer.quantity; pos++) {
@@ -89,6 +103,8 @@ export function projectToText(tabs) {
         }
         text += ")\n"
     }
+
+    if(tabName !== undefined) return text + "}"
 
     text += '\tselectTab("trespasser")\n}'
     return text
@@ -126,8 +142,9 @@ export function projectToClipboard(tabs) {
     navigator.clipboard.writeText(projectToText(tabs)).then()
 }
 
-export function projectToStorage(tabs) {
-    localStorage.setItem("project", projectToText(tabs))
+export function projectToStorage(tabs, name) {
+    localStorage.setItem("all", projectToText(tabs))
+    localStorage.setItem("tab", projectToText(tabs, name))
 }
 
 export function projectFromStorage(texture) {
