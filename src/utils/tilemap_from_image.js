@@ -26,7 +26,7 @@ function downloadCanvas(canvas) {
     downloadImage.remove();
 }
 
-export function tilemapFromImage(image, tilesImage, cellWidth, cellHeight, columns, tx, ty, twidth, theight) {
+export function tileMapFromImage(image, tilesImage, cellWidth, cellHeight, columns, tx, ty, twidth, theight) {
     let tiles = []
 
     let tileSetColumns = tilesImage.width / cellWidth
@@ -91,7 +91,7 @@ export function tilemapFromImage(image, tilesImage, cellWidth, cellHeight, colum
 
     //downloadCanvas(canvas)
 
-    let tilemap = new TileMap(imageArray, screenColumns, screenRows, tx, ty, twidth, theight)
-    tilemap.array = tilemapArray
-    return tilemap
+    let tileMap = new TileMap(imageArray, screenColumns, screenRows, tx, ty, twidth, theight)
+    tileMap.array = tilemapArray
+    return tileMap
 }

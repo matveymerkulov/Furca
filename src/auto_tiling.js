@@ -97,3 +97,13 @@ export function enframeTile(map, column, row) {
         return
     }
 }
+
+export function enframe(map) {
+    for(let row = 0; row < map.rows; row++) {
+        for(let column = 0; column < map.columns; column++) {
+            enframeTile(map, column, row)
+        }
+
+    }
+
+}

@@ -1,6 +1,6 @@
+import {Box} from "./box.js"
 import {Sprite} from "./sprite.js"
 import {ctx, distToScreen, xToScreen, yToScreen} from "./canvas.js"
-import {Box} from "./box.js"
 import {Shape} from "./shape.js"
 import {arrayToString} from "./save_load.js"
 import {showCollisionShapes} from "./input.js"
@@ -20,7 +20,7 @@ export class TileMap extends Box {
     #columns
     #rows
     #array
-    constructor(tileSet, columns, rows, x, y, cellWidth, cellHeight, array) {
+    constructor(tileSet, columns, rows, x = 0, y = 0, cellWidth = 1, cellHeight = 1, array) {
         super(x, y, cellWidth * columns, cellHeight * rows)
         this.#tileSet = tileSet
         this.#columns = columns
@@ -165,7 +165,7 @@ export class TileMap extends Box {
         const tileSet = this.tileSet
 
         ctx.strokeStyle = "white"
-        ctx.strokeRect(x0, y0, distToScreen(this.width), distToScreen((this.height)))
+        //ctx.strokeRect(x0, y0, distToScreen(this.width), distToScreen((this.height)))
 
         const width = distToScreen(this.cellWidth)
         const height = distToScreen(this.cellHeight)
@@ -263,6 +263,13 @@ export class TileMap extends Box {
         return this.extractTileByIndex(sprite, this.tileIndexForPos(column, row))
     }
 
+    shiftTiles(d) {
+        for(let index = 0; index < this.quantity; index++) {
+            if(this.#array[index] === emptyTile) continue
+            this.#array[index] += d
+        }
+    }
+
     processTilesByPos(code) {
         for(let row = 0; row < this.rows; row++) {
             for(let column = 0; column < this.columns; column++) {
@@ -274,6 +281,20 @@ export class TileMap extends Box {
     processTilesByIndex(code) {
         for(let index = 0; index < this.#array.length; index++) {
             code.call(this, index, this.tileByIndex(index))
+        }
+    }
+
+    pasteTo(toMap, dColumn = 0, dRow = 0) {
+        for(let row = 0; row < this.rows; row++) {
+            const mapRow = row + dRow
+            if(mapRow < 0 || mapRow >= toMap.rows) continue
+            for(let column = 0; column < this.columns; column++) {
+                const mapColumn = column + dColumn
+                if(mapColumn < 0 || mapColumn >= toMap.columns) continue
+                const tile = this.tileByPos(column, row)
+                if(tile < 0) continue
+                toMap.setTileByPos(mapColumn, mapRow, tile)
+            }
         }
     }
 
@@ -296,5 +317,18 @@ export class TileMap extends Box {
                 code.call(null, collisionSprite, tileNum, x, y)
             }
         }
+    }
+
+    collidesWithTileMap(map, dColumn, dRow) {
+        for(let row = 0; row < map.rows; row++) {
+            const thisRow = row + dRow
+            if(thisRow < 0 || thisRow >= this.rows) continue
+            for(let column = 0; column < map.columns; column++) {
+                const thisColumn = column + dColumn
+                if(thisColumn < 0 || thisColumn >= this.columns) continue
+                if(map.tileByPos(column, row) >= 0 && this.tileByPos(thisColumn, thisRow) >= 0) return true
+            }
+        }
+        return false
     }
 }

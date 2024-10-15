@@ -18,7 +18,7 @@ import {currentTabName} from "./tabs.js"
 
 project.getAssets = () => {
     return {
-        texture: ["bricks.png", "tiles.png", "objects.png"],
+        texture: ["blocks.png", "tiles.png", "objects.png"],
         sound: []
     }
 }

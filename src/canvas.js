@@ -1,6 +1,6 @@
+import {Box} from "./box.js"
 import {Sprite} from "./sprite.js"
 import {canvasMouse, mouse, screenMouse} from "./system.js"
-import {Box} from "./box.js"
 import {project} from "./project.js"
 
 export let currentCanvas, canvasUnderCursor, ctx, zk = 1.2

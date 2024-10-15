@@ -14,29 +14,12 @@ export function loadData() {
     tileSet.objects = new TileSet(new ImageArray(texture.objects, 7, 1, 0.5, 0.5, 1, 1), [
         0, 0, 0, 0, 0, 0, 0,
     ], [], [], -1, [])
-    tileSet.blocks = new TileSet(new ImageArray(texture.bricks, 4, 14, 0.5, 0.5, 1, 1), [
+    tileSet.blocks = new TileSet(new ImageArray(texture.blocks, 4, 4, 0.5, 0.5, 1, 1), [
         1, 1, 1, 0,
         1, 1, 1, 1,
         1, 1, 1, 1,
         1, 1, 1, 1,
-        2, 2, 2, 2,
-        2, 2, 2, 2,
-        2, 2, 2, 2,
-        2, 2, 1, 1,
-        2, 2, 2, 2,
-        2, 2, 2, 2,
-        2, 2, 2, 1,
-        2, 2, 2, 1,
-        0, 0, 0, 0,
-        0, 0, 0, 1,
     ], [
-        new Block(0, 4, 2, 1, 0), new Block(2, 4, 2, 1, 0),
-        new Block(2, 5, 2, 1, 0), new Block(0, 5, 2, 1, 0),
-        new Block(0, 6, 2, 1, 0), new Block(2, 6, 2, 1, 0),
-        new Block(0, 7, 2, 1, 0), new Block(0, 8, 1, 2, 0),
-        new Block(1, 8, 1, 2, 0), new Block(2, 8, 1, 2, 0),
-        new Block(3, 8, 1, 2, 0), new Block(2, 10, 1, 2, 0),
-        new Block(1, 10, 1, 2, 0), new Block(0, 10, 1, 2, 0),
     ], [
         new Category("blocks", [
             new Rule(3, [new Pos(0, 1), new Pos(1, 0), new Pos(0, -1), new Pos(-1, 0), ]),
@@ -690,5 +673,150 @@ export function loadData() {
         , tileMap.hieroglyph_I_objects, tileMap.objects15, tileMap.tiles16, tileMap.objects16
         , tileMap.tiles17, tileMap.tiles18, tileMap.tiles19, tileMap.tiles20
         , tileMap.objects17, tileMap.objects18, tileMap.objects19, tileMap.objects20)
-    selectTab("trespasser")
+    tileMap.field = new TileMap(tileSet.blocks, 12, 24, 9, 4, 1, 1, [
+        7,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,   7,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
+        12,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,  14,
+    ])
+    tileMap.shape0_0 = new TileMap(tileSet.blocks, 4, 4, -18, -10, 1, 1, [
+        -1,  -1,  -1,  -1,
+        0,   1,   1,   2,
+        -1,  -1,  -1,  -1,
+        -1,  -1,  -1,  -1,
+    ])
+    tileMap.shape0_1 = new TileMap(tileSet.blocks, 4, 4, -13, -10, 1, 1, [
+        -1,   7,  -1,  -1,
+        -1,  11,  -1,  -1,
+        -1,  11,  -1,  -1,
+        -1,  15,  -1,  -1,
+    ])
+    tileMap.shape1_0 = new TileMap(tileSet.blocks, 4, 4, -18, -5, 1, 1, [
+        -1,   7,  -1,  -1,
+        0,  10,  -1,  -1,
+        -1,  15,  -1,  -1,
+        -1,  -1,  -1,  -1,
+    ])
+    tileMap.shape1_1 = new TileMap(tileSet.blocks, 4, 4, -13, -5, 1, 1, [
+        -1,   7,  -1,  -1,
+        0,  13,   2,  -1,
+        -1,  -1,  -1,  -1,
+        -1,  -1,  -1,  -1,
+    ])
+    tileMap.shape1_2 = new TileMap(tileSet.blocks, 4, 4, -8, -5, 1, 1, [
+        -1,   7,  -1,  -1,
+        -1,   8,   2,  -1,
+        -1,  15,  -1,  -1,
+        -1,  -1,  -1,  -1,
+    ])
+    tileMap.shape1_3 = new TileMap(tileSet.blocks, 4, 4, -3, -5, 1, 1, [
+        -1,  -1,  -1,  -1,
+        0,   5,   2,  -1,
+        -1,  15,  -1,  -1,
+        -1,  -1,  -1,  -1,
+    ])
+    tileMap.shape2_0 = new TileMap(tileSet.blocks, 4, 4, -18, 0, 1, 1, [
+        -1,   7,  -1,  -1,
+        4,  14,  -1,  -1,
+        15,  -1,  -1,  -1,
+        -1,  -1,  -1,  -1,
+    ])
+    tileMap.shape2_1 = new TileMap(tileSet.blocks, 4, 4, -13, 0, 1, 1, [
+        0,   6,  -1,  -1,
+        -1,  12,   2,  -1,
+        -1,  -1,  -1,  -1,
+        -1,  -1,  -1,  -1,
+    ])
+    tileMap.shape3_0 = new TileMap(tileSet.blocks, 4, 4, -18, 5, 1, 1, [
+        7,  -1,  -1,  -1,
+        12,   6,  -1,  -1,
+        -1,  15,  -1,  -1,
+        -1,  -1,  -1,  -1,
+    ])
+    tileMap.shape3_1 = new TileMap(tileSet.blocks, 4, 4, -13, 5, 1, 1, [
+        -1,   4,   2,  -1,
+        0,  14,  -1,  -1,
+        -1,  -1,  -1,  -1,
+        -1,  -1,  -1,  -1,
+    ])
+    tileMap.shape4_0 = new TileMap(tileSet.blocks, 4, 4, -18, 10, 1, 1, [
+        0,   6,  -1,  -1,
+        -1,  11,  -1,  -1,
+        -1,  15,  -1,  -1,
+        -1,  -1,  -1,  -1,
+    ])
+    tileMap.shape4_1 = new TileMap(tileSet.blocks, 4, 4, -13, 10, 1, 1, [
+        -1,  -1,   7,  -1,
+        0,   1,  14,  -1,
+        -1,  -1,  -1,  -1,
+        -1,  -1,  -1,  -1,
+    ])
+    tileMap.shape4_2 = new TileMap(tileSet.blocks, 4, 4, -8, 10, 1, 1, [
+        -1,   7,  -1,  -1,
+        -1,  11,  -1,  -1,
+        -1,  12,   2,  -1,
+        -1,  -1,  -1,  -1,
+    ])
+    tileMap.shape4_3 = new TileMap(tileSet.blocks, 4, 4, -3, 10, 1, 1, [
+        -1,  -1,  -1,  -1,
+        4,   1,   2,  -1,
+        15,  -1,  -1,  -1,
+        -1,  -1,  -1,  -1,
+    ])
+    tileMap.shape5_0 = new TileMap(tileSet.blocks, 4, 4, -18, 15, 1, 1, [
+        -1,   4,   2,  -1,
+        -1,  11,  -1,  -1,
+        -1,  15,  -1,  -1,
+        -1,  -1,  -1,  -1,
+    ])
+    tileMap.shape5_1 = new TileMap(tileSet.blocks, 4, 4, -13, 15, 1, 1, [
+        -1,  -1,  -1,  -1,
+        0,   1,   6,  -1,
+        -1,  -1,  15,  -1,
+        -1,  -1,  -1,  -1,
+    ])
+    tileMap.shape5_2 = new TileMap(tileSet.blocks, 4, 4, -8, 15, 1, 1, [
+        -1,   7,  -1,  -1,
+        -1,  11,  -1,  -1,
+        0,  14,  -1,  -1,
+        -1,  -1,  -1,  -1,
+    ])
+    tileMap.shape5_3 = new TileMap(tileSet.blocks, 4, 4, -3, 15, 1, 1, [
+        7,  -1,  -1,  -1,
+        12,   1,   2,  -1,
+        -1,  -1,  -1,  -1,
+        -1,  -1,  -1,  -1,
+    ])
+    tileMap.shape6_0 = new TileMap(tileSet.blocks, 4, 4, -18, 20, 1, 1, [
+        4,   6,  -1,  -1,
+        12,  14,  -1,  -1,
+        -1,  -1,  -1,  -1,
+        -1,  -1,  -1,  -1,
+    ])
+    addTab("nasty_tetris", tileMap.field, tileMap.shape0_0, tileMap.shape0_1, tileMap.shape1_0
+        , tileMap.shape1_1, tileMap.shape1_2, tileMap.shape1_3, tileMap.shape2_0
+        , tileMap.shape2_1, tileMap.shape3_0, tileMap.shape3_1, tileMap.shape4_0
+        , tileMap.shape4_1, tileMap.shape4_2, tileMap.shape4_3, tileMap.shape5_0
+        , tileMap.shape5_1, tileMap.shape5_2, tileMap.shape5_3, tileMap.shape6_0)
+    selectTab("nasty_tetris")
 }

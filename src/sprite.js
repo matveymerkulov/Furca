@@ -2,6 +2,9 @@ import {Box} from "./box.js"
 import {ctx, distToScreen, xToScreen, yToScreen} from "./canvas.js"
 import {num} from "./system.js"
 import {Animate} from "./actions/sprite/animate.js"
+import {ShapeType} from "./shape.js"
+import {Img} from "./image.js"
+import {ImageArray} from "./image_array.js"
 import {
     boxWithBoxCollision,
     boxWithPillCollision,
@@ -18,9 +21,6 @@ import {
     pillFromBoxVector,
     pillFromPillVector,
 } from "./physics.js"
-import {ShapeType} from "./shape.js"
-import {Img} from "./image.js"
-import {ImageArray} from "./image_array.js"
 
 export class Sprite extends Box {
     shapeType
@@ -83,9 +83,8 @@ export class Sprite extends Box {
         if(!this.image || !this.visible) return
         ctx.globalAlpha = this.opacity
 
-        this.image.drawRotated(xToScreen(this.x), yToScreen(this.y)
-            , distToScreen(this.width), distToScreen(this.height), this.shapeType, this.imageAngle ?? this.angle
-            , this.flipped)
+        this.image.drawRotated(xToScreen(this.x), yToScreen(this.y), distToScreen(this.width)
+            , distToScreen(this.height), this.shapeType, this.imageAngle ?? this.angle, this.flipped)
 
         ctx.globalAlpha = 1.0
     }

@@ -2,7 +2,7 @@ export function transformTileMap(tileMap, centerX = 0.5 * tileMap.columns, cente
     , mirrorVertically, swap) {
     centerX -= 0.5
     centerY -= 0.5
-    let newArray = new Array(tileMap.rows * tileMap.columns).fill(0)
+    let newArray = new Array(tileMap.rows * tileMap.columns).fill(-1)
     let newK = swap ? tileMap.columns : tileMap.rows
     for(let y = 0; y < tileMap.rows; y++) {
         for(let x = 0; x < tileMap.columns; x++) {
