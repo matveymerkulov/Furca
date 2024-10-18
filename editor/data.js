@@ -14,6 +14,50 @@ export function loadData() {
     tileSet.objects = new TileSet(new ImageArray(texture.objects, 7, 1, 0.5, 0.5, 1, 1), [
         0, 0, 0, 0, 0, 0, 0,
     ], [], [], -1, [])
+    tileSet.bricks = new TileSet(new ImageArray(texture.bricks, 4, 14, 0.5, 0.5, 1, 1), [
+        1, 1, 1, 0,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        2, 2, 2, 2,
+        2, 2, 2, 2,
+        2, 2, 2, 2,
+        2, 2, 1, 1,
+        2, 2, 2, 2,
+        2, 2, 2, 2,
+        2, 2, 2, 1,
+        2, 2, 2, 1,
+        0, 0, 0, 0,
+        0, 0, 0, 1,
+    ], [
+        new Block(0, 4, 2, 1, 0), new Block(2, 4, 2, 1, 0),
+        new Block(2, 5, 2, 1, 0), new Block(0, 5, 2, 1, 0),
+        new Block(0, 6, 2, 1, 0), new Block(2, 6, 2, 1, 0),
+        new Block(0, 7, 2, 1, 0), new Block(0, 8, 1, 2, 0),
+        new Block(1, 8, 1, 2, 0), new Block(2, 8, 1, 2, 0),
+        new Block(3, 8, 1, 2, 0), new Block(2, 10, 1, 2, 0),
+        new Block(1, 10, 1, 2, 0), new Block(0, 10, 1, 2, 0),
+    ], [
+        new Category("blocks", [
+            new Rule(3, [new Pos(0, 1), new Pos(1, 0), new Pos(0, -1), new Pos(-1, 0), ]),
+            new Rule(0, [new Pos(0, 1), new Pos(-1, 0), new Pos(0, -1), ]),
+            new Rule(2, [new Pos(0, -1), new Pos(1, 0), new Pos(0, 1), ]),
+            new Rule(7, [new Pos(-1, 0), new Pos(0, -1), new Pos(1, 0), ]),
+            new Rule(15, [new Pos(-1, 0), new Pos(0, 1), new Pos(1, 0), ]),
+            new Rule(1, [new Pos(0, 1), new Pos(0, -1), ]),
+            new Rule(11, [new Pos(-1, 0), new Pos(1, 0), ]),
+            new Rule(4, [new Pos(-1, 0), new Pos(0, -1), ]),
+            new Rule(6, [new Pos(1, 0), new Pos(0, -1), ]),
+            new Rule(12, [new Pos(-1, 0), new Pos(0, 1), ]),
+            new Rule(14, [new Pos(0, 1), new Pos(1, 0), ]),
+            new Rule(8, [new Pos(-1, 0), ]),
+            new Rule(5, [new Pos(0, -1), ]),
+            new Rule(10, [new Pos(1, 0), ]),
+            new Rule(13, [new Pos(0, 1), ]),
+            new Rule(9, []),
+        ], false),
+    ], -1, [])
+
     tileSet.blocks = new TileSet(new ImageArray(texture.blocks, 4, 4, 0.5, 0.5, 1, 1), [
         1, 1, 1, 0,
         1, 1, 1, 1,
@@ -41,7 +85,7 @@ export function loadData() {
         ], false),
     ], -1, [])
 
-    tileMap.blocks = new TileMap(tileSet.blocks, 40, 22, 0, -27, 1, 1, [
+    tileMap.blocks = new TileMap(tileSet.bricks, 40, 22, 0, -27, 1, 1, [
         -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
         -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
         -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
@@ -65,7 +109,7 @@ export function loadData() {
         -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
         -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
     ])
-    tileMap.border = new TileMap(tileSet.blocks, 40, 22, 0, -2, 1, 1, [
+    tileMap.border = new TileMap(tileSet.bricks, 40, 22, 0, -2, 1, 1, [
         4,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   6,
         11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
         11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,

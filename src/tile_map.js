@@ -15,6 +15,11 @@ export function initTileMap() {
     collisionSprite = new Sprite()
 }
 
+export let showBorder = false
+export function setBorderVisibility(value) {
+    showBorder = value
+}
+
 export class TileMap extends Box {
     #tileSet
     #columns
@@ -132,8 +137,8 @@ export class TileMap extends Box {
     }
 
     tileByPos(column, row) {
-        if(!inBounds(column, 0, this.columns) || !inBounds(row, 0, this.rows)) {
-            return -1
+        if(column < 0 || column >= this.columns || row < 0 || row >= this.rows) {
+            return emptyTile
         }
         return this.tileByIndex(this.tileIndexForPos(column, row))
     }
@@ -164,8 +169,10 @@ export class TileMap extends Box {
         const y0 = Math.floor(yToScreen(this.top))
         const tileSet = this.tileSet
 
-        ctx.strokeStyle = "white"
-        //ctx.strokeRect(x0, y0, distToScreen(this.width), distToScreen((this.height)))
+        if(showBorder) {
+            ctx.strokeStyle = "white"
+            ctx.strokeRect(x0, y0, distToScreen(this.width), distToScreen((this.height)))
+        }
 
         const width = distToScreen(this.cellWidth)
         const height = distToScreen(this.cellHeight)

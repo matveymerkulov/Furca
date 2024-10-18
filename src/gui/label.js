@@ -12,9 +12,12 @@ export class Label extends Box {
         this.format = format
         this.image = image
         this.sizeMul = sizeMul
+        this.visible = true
     }
 
     draw() {
+        if(!this.visible) return
+
         setFontSize(this.fontSize)
 
         let text = ""

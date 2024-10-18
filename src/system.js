@@ -125,6 +125,10 @@ export function defaultCanvas(width, height) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
+    const locale = Intl.DateTimeFormat().resolvedOptions().locale.substring(0, 2)
+    if(project.locales[locale] !== undefined) {
+        project.locale = locale
+    }
     setCanvas(new Canvas(undefined, 0, 0, 1, 1, new Box()))
     mouse = new Point()
     screenMouse = new Point()

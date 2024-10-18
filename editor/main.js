@@ -15,10 +15,11 @@ import {rulesWindow, updateCategoriesList} from "./auto_tiling.js"
 import {texture} from "../src/system.js"
 import {autoTilingEditorKey, loadKey, saveKey, tileSetPropertiesKey} from "./keys.js"
 import {currentTabName} from "./tabs.js"
+import {setBorderVisibility, showBorder} from "../src/tile_map.js"
 
 project.getAssets = () => {
     return {
-        texture: ["blocks.png", "tiles.png", "objects.png"],
+        texture: ["blocks.png", "bricks.png", "tiles.png", "objects.png"],
         sound: []
     }
 }
@@ -75,6 +76,8 @@ project.init = () => {
     initData()
 
     initTileSetSelectionWindow()
+
+    setBorderVisibility(true)
 
     project.update = () => {
         if(loadKey.wasPressed) {
