@@ -48,7 +48,7 @@ export const mode = {
 export let currentMode = mode.tiles
 
 
-let mapsCanvas = mainWindow.addCanvas("map", 30, 14)
+export let mapsCanvas = mainWindow.addCanvas("map", 30, 14)
 mapsCanvas.background = "rgb(9, 44, 84)"
 mapsCanvas.setZoom(-19)
 mapsCanvas.add(new Pan(), panKey)
