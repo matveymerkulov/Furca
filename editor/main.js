@@ -19,7 +19,7 @@ import {setBorderVisibility, showBorder} from "../src/tile_map.js"
 
 project.getAssets = () => {
     return {
-        texture: ["blocks.png", "bricks.png", "tiles.png", "objects.png"],
+        texture: ["blocks.png", "bricks.png", "tiles.png", "objects.png", "farm_floor.png", "farm_furniture.png", "smooth.png"],
         sound: []
     }
 }
