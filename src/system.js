@@ -8,7 +8,7 @@ import {Box} from "./box.js"
 
 // global variables
 
-export let zk = 1.2, fps = 60, aps = 200, paused = false
+export let fps = 60, aps = 200, paused = false
 export let mouse, screenMouse, canvasMouse, apsk = 1 / aps, unc = 0.0000001
 export const texture = new Map(), sound = new Map()
 

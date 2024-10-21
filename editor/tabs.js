@@ -1,8 +1,9 @@
 import {tabs} from "./main.js"
 import {Layer} from "../src/layer.js"
 import {setTileMaps, tileMaps} from "../src/project.js"
-import {currentCanvas} from "../src/canvas.js"
+import {currentCanvas, zk} from "../src/canvas.js"
 import {mapsCanvas} from "./tile_map.js"
+import {max, min} from "../src/functions.js"
 
 export let currentTabName
 
@@ -23,8 +24,8 @@ export function selectTab(name) {
     }
 
     mapsCanvas.setPosition(0.5 * (x0 + x1), 0.5 * (y0 + y1))
-    mapsCanvas.setSize(x1 - x0, y1 - y0)
-    mapsCanvas.updateParameters()
+    mapsCanvas.setZoom(Math.log(max((x1 - x0) / mapsCanvas.viewport.width
+        , (y1 - y0) / mapsCanvas.viewport.height)) / Math.log(zk) * 0.95)
 }
 
 export function addTab(name, ...maps) {
