@@ -121,7 +121,10 @@ project.init = () => {
         }
 
         if(saveKey.wasPressed) {
-            window.electron.saveDialog('showSaveDialog', {})//.then(result => console.log(result))
+            window.electron.saveDialog('showSaveDialog', {}).then(result => {
+                if(result.canceled) return
+                window.electron.saveFile(result.filePath, projectToText())
+            })
         }
     }
 

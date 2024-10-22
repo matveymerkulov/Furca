@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('node:path');
 const fs = require("fs")
 
@@ -31,8 +31,8 @@ const createWindow = () => {
 app.whenReady().then(() => {
   createWindow();
 
-  ipcMain.handle('dialog', (event, method, params) => {       
-    console.log(dialog[method](params))
+  ipcMain.handle('dialog', (event, method, params) => {
+    return dialog[method](params)
   });
 
   // On OS X it's common to re-create a window in the app when the
