@@ -121,7 +121,7 @@ project.init = () => {
         }
 
         if(saveKey.wasPressed) {
-            window.electron.saveFile("data.fur", projectToText())
+            window.electron.saveDialog('showSaveDialog', {})//.then(result => console.log(result))
         }
     }
 

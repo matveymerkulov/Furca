@@ -4,13 +4,8 @@
 const { contextBridge, ipcRenderer } = require('electron')
 const fs = require("fs")
 
-contextBridge.exposeInMainWorld(
-    'electron',
-    {
-        saveFile: (fileName, text) => {
-            fs.writeFile(fileName, text, (err) => {
-                if(err) alert(err.toString())
-            })
-        }
+contextBridge.exposeInMainWorld('electron', {
+    saveDialog: (method, config) => {
+        return ipcRenderer.invoke('dialog', method, config)
     }
-)
+})
