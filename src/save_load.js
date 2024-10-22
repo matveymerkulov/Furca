@@ -59,8 +59,8 @@ export function booleanArrayToString(array) {
     return `\"${text}\"`
 }
 
-export function projectToText(tabs, tabName, all) {
-    const path = all ? "../src" : "../Furca/src"
+export function projectToText() {
+    const path = "../src"
 
     let text = ""
     text += `import {TileSet} from "${path}/tile_set.js"\n`
@@ -70,50 +70,23 @@ export function projectToText(tabs, tabName, all) {
     text += `import {Block} from "${path}/block.js"\n`
     text += `import {Category, Pos, Rule} from "${path}/auto_tiling.js"\n`
     text += `import {texture} from "${path}/system.js"\n`
-    if(all) text += `import {addTab, selectTab} from "./tabs.js"\n`
     text += '\nexport function loadData() {\n'
-
-    const tileSets = new Set()
-    if(!all) {
-        for(let map of tabs[tabName].items) {
-            tileSets.add(map.tileSet)
-        }
-    }
 
     indent = "\t"
     for(const set of Object.values(tileSet)) {
-        if(!all && !tileSets.has(set)) continue
         text += `\ttileSet.${getName(set)} = ${set.toString()}\n`
     }
 
     text += "\t\n"
 
-    for(const[name, layer] of Object.entries(tabs)) {
-        if(!all && tabName !== name) continue
-
-        for(let map of layer.items) {
-            text += `\ttileMap.${getName(map)} = ${map.toString()}\n`
-        }
-
-        if(!all) continue
-
-        text += `\taddTab("${name}"`
-        for(let pos = 0; pos < layer.quantity; pos++) {
-            if(pos > 0 && pos % 4 === 0) {
-                text +="\n\t\t"
-            }
-            text += `, tileMap.${getName(layer.items[pos])}`
-        }
-        text += ")\n"
+    for(const[name, map] of Object.entries(tileMap)) {
+        text += `\ttileMap.${name} = ${map.toString()}\n`
     }
 
-    if(!all) return text + "}"
-
-    text += `\tselectTab("${tabName}")\n}`
-    return text
+    return text + "}"
 }
 
-export function projectFromText(data, texture) {
+export function projectFromText(data) {
     initParser(data)
     getSymbol("(")
     getSymbol("{")

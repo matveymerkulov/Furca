@@ -1,12 +1,12 @@
 import {mainWindow} from "./main_window.js"
-import {project, tileMap, tileMaps, tileSet} from "../src/project.js"
-import {currentWindow, hideWindow} from "../src/gui/window.js"
+import {initData, project, tileMap, tileMaps, tileSet} from "../src/project.js"
+import {currentWindow, hideWindow, windows} from "../src/gui/window.js"
 import {setName} from "../src/names.js"
 //import {loadData} from "../data/breakout.js"
 import {loadData} from "./data.js"
 import {initTileSetSelectionWindow} from "./new_map.js"
 import {deleteCurrentDrag} from "../src/drag.js"
-import {projectFromStorage, projectFromText, projectToStorage} from "../src/save_load.js"
+import {projectFromStorage, projectFromText, projectToStorage, projectToText} from "../src/save_load.js"
 import {Key} from "../src/key.js"
 import {currentTileSet} from "./tile_set.js"
 import {resetRegionSelector} from "./select_tile_set_region.js"
@@ -49,7 +49,7 @@ export function showAll()  {
         , (y1 - y0) / mapsCanvas.viewport.height)) / Math.log(zk) * 0.95)
 }
 
-function initData() {
+function initNames() {
     for(const[name, object] of Object.entries(tileSet)) {
         setName(object, name)
     }
@@ -90,7 +90,7 @@ project.init = () => {
     }*/
 
     //loadData()
-    initData()
+    initNames()
 
     initTileSetSelectionWindow()
 
@@ -105,8 +105,9 @@ project.init = () => {
                 }
                 let reader = new FileReader()
                 reader.onload = function(e) {
-                    projectFromText(e.target.result)
                     initData()
+                    projectFromText(e.target.result)
+                    initNames()
                     showAll()
                 }
                 reader.readAsText(file)
@@ -117,11 +118,10 @@ project.init = () => {
             fileInput.onchange=readFile
             document.body.appendChild(fileInput)
             fileInput.click()
-
         }
 
         if(saveKey.wasPressed) {
-            projectToStorage(tabs, currentTabName)
+            window.electron.saveFile("data.fur", projectToText())
         }
     }
 

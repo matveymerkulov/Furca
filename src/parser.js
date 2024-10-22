@@ -178,10 +178,11 @@ export function getTileSet(name) {
     let visibility = getIntArray()
     let blocks = getBlocks()
     let categories = getCategories()
-    let prolong = getInt()
+    //let prolong = getInt()
+    let altTile = getInt()
     let groups = getIntArray()
     tileSet[name] = new TileSet(new ImageArray(texture[textureName], columns, rows, xMul, yMul, heightMul, widthMul)
-        , visibility, blocks, categories, prolong === 1, groups)
+        , visibility, blocks, categories, altTile, groups)
     getSymbol(")")
 }
 
@@ -196,8 +197,7 @@ export function getTileMap(name) {
     let cellWidth = getFloat()
     let cellHeight = getFloat()
     let array = getIntArray()
-    let emptyTile = getInt()
-    const map = new TileMap(mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array, emptyTile)
+    const map = new TileMap(mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array)
     tileMap[name] = map
     tileMaps.add(map)
     getSymbol(")")
