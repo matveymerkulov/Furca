@@ -120,7 +120,7 @@ project.init = () => {
             fileInput.click()
         }
 
-        if(saveKey.wasPressed) {
+        if(saveKey.wasPressed && window.electron !== undefined) {
             window.electron.saveDialog('showSaveDialog', {}).then(result => {
                 if(result.canceled) return
                 window.electron.saveFile(result.filePath, projectToText())
