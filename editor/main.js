@@ -1,12 +1,12 @@
 import {mainWindow} from "./main_window.js"
-import {project, tileMap, tileSet} from "../src/project.js"
+import {project, tileMap, tileMaps, tileSet} from "../src/project.js"
 import {currentWindow, hideWindow} from "../src/gui/window.js"
 import {setName} from "../src/names.js"
 //import {loadData} from "../data/breakout.js"
 import {loadData} from "./data.js"
 import {initTileSetSelectionWindow} from "./new_map.js"
 import {deleteCurrentDrag} from "../src/drag.js"
-import {projectFromStorage, projectToStorage} from "../src/save_load.js"
+import {projectFromStorage, projectFromText, projectToStorage} from "../src/save_load.js"
 import {Key} from "../src/key.js"
 import {currentTileSet} from "./tile_set.js"
 import {resetRegionSelector} from "./select_tile_set_region.js"
@@ -16,6 +16,9 @@ import {texture} from "../src/system.js"
 import {autoTilingEditorKey, loadKey, saveKey, tileSetPropertiesKey} from "./keys.js"
 import {currentTabName} from "./tabs.js"
 import {setBorderVisibility, showBorder} from "../src/tile_map.js"
+import {mapsCanvas} from "./tile_map.js"
+import {max} from "../src/functions.js"
+import {zk} from "../src/canvas.js"
 
 project.getAssets = () => {
     return {
@@ -30,6 +33,20 @@ export let tabs = new Map()
 export function setTileSize(width, height) {
     tileWidth = width
     tileHeight = height
+}
+
+export function showAll()  {
+    let x0, y0, x1, y1
+    for(let tileMap of tileMaps.items) {
+        if(x0 === undefined || tileMap.left < x0) x0 = tileMap.left
+        if(y0 === undefined || tileMap.top < y0) y0 = tileMap.top
+        if(x1 === undefined || tileMap.right > x1) x1 = tileMap.right
+        if(y1 === undefined || tileMap.bottom > y1) y1 = tileMap.bottom
+    }
+
+    mapsCanvas.setPosition(0.5 * (x0 + x1), 0.5 * (y0 + y1))
+    mapsCanvas.setZoom(Math.log(max((x1 - x0) / mapsCanvas.viewport.width
+        , (y1 - y0) / mapsCanvas.viewport.height)) / Math.log(zk) * 0.95)
 }
 
 function initData() {
@@ -72,7 +89,7 @@ project.init = () => {
         projectToClipboard()
     }*/
 
-    loadData()
+    //loadData()
     initData()
 
     initTileSetSelectionWindow()
@@ -81,8 +98,26 @@ project.init = () => {
 
     project.update = () => {
         if(loadKey.wasPressed) {
-            projectFromStorage(texture)
-            initData()
+            const readFile = function(e) {
+                let file = e.target.files[0]
+                if (!file) {
+                    return;
+                }
+                let reader = new FileReader()
+                reader.onload = function(e) {
+                    projectFromText(e.target.result)
+                    initData()
+                    showAll()
+                }
+                reader.readAsText(file)
+            }
+            const fileInput = document.createElement("input")
+            fileInput.type='file'
+            fileInput.style.display='none'
+            fileInput.onchange=readFile
+            document.body.appendChild(fileInput)
+            fileInput.click()
+
         }
 
         if(saveKey.wasPressed) {

@@ -9,7 +9,7 @@ import {TileMap} from "../../src/tile_map.js"
 import {texture} from "../../src/system.js"
 
 export function loadData() {
-    tileSet["blocks"] = new TileSet(new ImageArray(texture.blocks, 4, 14, 0.5, 0.5, 1, 1), [
+    tileSet.blocks = new TileSet(new ImageArray(texture.blocks, 4, 14, 0.5, 0.5, 1, 1), [
         1, 1, 1, 0,
         1, 1, 1, 1,
         1, 1, 1, 1,
@@ -53,7 +53,7 @@ export function loadData() {
         ], false),
     ], -1, [])
 
-    tileMap["blocks"] = new TileMap(tileSet["blocks"], 40, 22, 0, 0, 1, 1, [
+    tileMap.blocks = new TileMap(tileSet.blocks, 40, 22, 0, 0, 1, 1, [
         4,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   6,
         11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
         11,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  11,
@@ -79,6 +79,6 @@ export function loadData() {
     ])
 
     tileMaps.add(
-        tileMap["blocks"],
+        tileMap.blocks,
     )
 }

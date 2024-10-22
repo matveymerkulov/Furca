@@ -4,6 +4,7 @@ import {mouse} from "../src/system.js"
 import {currentMode, mode, tileMapUnderCursor} from "./tile_map.js"
 import {tabs} from "./main.js"
 import {currentTabName} from "./tabs.js"
+import {tileMap} from "../src/project.js"
 
 export let selectedTileMaps = [], mapSelectionRegion
 
@@ -28,7 +29,7 @@ export default class SelectTileMaps extends Drag {
 
     end() {
         selectedTileMaps = []
-        for(const map of Object.values(tabs[currentTabName].items)) {
+        for(const map of Object.values(tileMap)) {
             if(map.isInside(mapSelectionRegion)) {
                 selectedTileMaps.push(map)
             }

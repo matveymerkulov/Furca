@@ -4,8 +4,8 @@ import {currentCanvas} from "./canvas.js"
 export let tileSet, tileMap, tileMaps
 
 export function initData() {
-    tileSet = new Map()
-    tileMap = new Map()
+    tileSet = {}
+    tileMap = {}
     tileMaps = new Layer()
 }
 

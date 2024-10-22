@@ -5,6 +5,9 @@
 import {initData, tileMap, tileMaps, tileSet} from "./project.js"
 import {getName} from "./names.js"
 import {getString, getSymbol, getTileMap, getTileSet, getToken, initParser} from "./parser.js"
+import {TileSet} from "./tile_set.js"
+import {ImageArray} from "./image_array.js"
+import {texture} from "./system.js"
 
 export let indent = ""
 
@@ -112,28 +115,24 @@ export function projectToText(tabs, tabName, all) {
 
 export function projectFromText(data, texture) {
     initParser(data)
+    getSymbol("(")
     getSymbol("{")
 
     while(true) {
-        switch(getToken()) {
+        let token = getToken("}")
+        if(token === "") break
+        switch(token) {
             case "tileSet":
-                getSymbol("[")
-                let tileSetName = getString()
+                getSymbol(".")
+                let tileSetName = getToken()
                 getSymbol("(")
-                getTileSet(texture, tileSetName)
+                getTileSet(tileSetName)
                 break
             case "tileMap":
-                getSymbol("[")
-                let tileMapName = getString()
+                let tileMapName = getToken()
                 getSymbol("(")
                 getTileMap(tileMapName)
                 break
-            case "tileMaps":
-                while(getToken(")") !== "") {
-                    getSymbol("[")
-                    tileMaps.add(tileMap[getString()])
-                }
-                return
         }
     }
 }

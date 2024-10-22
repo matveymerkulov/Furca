@@ -1,9 +1,10 @@
-import {tileMap, tileSet} from "./project.js"
+import {tileMap, tileMaps, tileSet} from "./project.js"
 import {TileSet} from "./tile_set.js"
 import {ImageArray} from "./image_array.js"
 import {TileMap} from "./tile_map.js"
 import {Block} from "./block.js"
 import {Category, Pos, Rule} from "./auto_tiling.js"
+import {texture} from "./system.js"
 
 let pos, text
 
@@ -133,8 +134,7 @@ function getPositions() {
             return array
         }
         let dy = getInt()
-        let tileNum = getInt()
-        array.push(new Pos(dx, dy, tileNum))
+        array.push(new Pos(dx, dy))
     }
 }
 
@@ -142,7 +142,7 @@ function getRules() {
     let array = []
     getSymbol("[")
     while(true) {
-        let tiles = getIntArray("]")
+        let tiles = getInt("]")
         if(tiles === "")  {
             pos++
             return array
@@ -166,7 +166,7 @@ function getCategories() {
     }
 }
 
-export function getTileSet(texture, name) {
+export function getTileSet(name) {
     getSymbol(".")
     let textureName = getToken()
     let columns = getInt()
@@ -179,13 +179,15 @@ export function getTileSet(texture, name) {
     let blocks = getBlocks()
     let categories = getCategories()
     let prolong = getInt()
+    let groups = getIntArray()
     tileSet[name] = new TileSet(new ImageArray(texture[textureName], columns, rows, xMul, yMul, heightMul, widthMul)
-        , visibility, blocks, categories, prolong === 1)
+        , visibility, blocks, categories, prolong === 1, groups)
     getSymbol(")")
 }
 
 export function getTileMap(name) {
-    let tileSetName = getString()
+    getSymbol(".")
+    let tileSetName = getToken()
     let mapTileSet = tileSet[tileSetName]
     let columns = getInt()
     let rows = getInt()
@@ -195,6 +197,8 @@ export function getTileMap(name) {
     let cellHeight = getFloat()
     let array = getIntArray()
     let emptyTile = getInt()
-    tileMap[name] = new TileMap(mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array, emptyTile)
+    const map = new TileMap(mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array, emptyTile)
+    tileMap[name] = map
+    tileMaps.add(map)
     getSymbol(")")
 }
