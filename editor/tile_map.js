@@ -37,6 +37,7 @@ import {
     zoomOutKey
 } from "./keys.js"
 import {emptyTile} from "../src/tile_map.js"
+import {enterString} from "./input.js"
 
 export let currentTileMap, tileMapUnderCursor, currentTileSprite
 
@@ -200,10 +201,10 @@ export function tileModeOperations() {
 export function mapModeOperations() {
     if(renameMapKey.wasPressed) {
         // noinspection JSCheckFunctionSignatures
-        let name = prompt("Введите новое название карты:", getName(tileMapUnderCursor))
-        if(name !== null) {
+        enterString("Введите новое название карты:", getName(tileMapUnderCursor), (name) => {
             setName(tileMapUnderCursor, name)
-        }
+
+        })
     }
 
     if(copyMapKey.wasPressed) {

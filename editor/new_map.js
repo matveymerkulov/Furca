@@ -2,6 +2,7 @@ import {element, mouse} from "../src/system.js"
 import {hideWindow, Win} from "../src/gui/window.js"
 import {tileSet} from "../src/project.js"
 import {createTileMap} from "./create_tile_map.js"
+import {enterString} from "./input.js"
 
 
 let currentName = "", newX, newY
@@ -35,10 +36,10 @@ export function initTileSetSelectionWindow() {
 export function newMap() {
     newX = Math.round(mouse.x)
     newY = Math.round(mouse.y)
-    currentName = prompt("Введите название новой карты:")
-    if(currentName === null) {
-        hideWindow()
-    } else {
+    enterString("Введите название новой карты:", "", (name) => {
+        currentName = name
         mapSizeWindow.show()
-    }
+    }, () => {
+        hideWindow()
+    })
 }

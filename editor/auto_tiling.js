@@ -13,6 +13,7 @@ import {arrayToString, booleanArrayToString, projectToText} from "../src/save_lo
 import {readText} from "./loader.js"
 import {getCategory, initParser} from "../src/parser.js"
 import {copyCategoryKey, loadCategoryKey, moveCategoryKey} from "./keys.js"
+import {confirm, enterString} from "./input.js"
 
 let currentCategory, currentRule
 
@@ -43,34 +44,44 @@ categoriesBox.onchange = (event) => {
 }
 
 addCategory.onclick = () => {
-    let name = prompt("Введите имя новой категории:")
-    if(name === null) return
-    currentCategory = new Category(name)
-    currentTileSet.categories.push(currentCategory)
-    updateCategoriesList()
+    enterString("Введите имя новой категории:", "", (name) => {
+        currentCategory = new Category(name)
+        currentTileSet.categories.push(currentCategory)
+        updateCategoriesList()
+    })
 }
 
 removeCategory.onclick = () => {
     if(currentCategory === undefined) return
-    if(!confirm(`Действительно удалить категорию ${currentCategory.name}?`)) return
-    let categories = currentTileSet.categories
-    removeFromArray(currentCategory, categories)
-    currentCategory = categories.length > 0 ? categories[0] : undefined
-    updateCategoriesList()
+    confirm(`Действительно удалить категорию ${currentCategory.name}?`, () => {
+        let categories = currentTileSet.categories
+        removeFromArray(currentCategory, categories)
+        currentCategory = categories.length > 0 ? categories[0] : undefined
+        updateCategoriesList()
+    })
 }
 
 renameCategory.onclick = () => {
     if(currentCategory === undefined) return
-    let name = prompt("Введите имя категории:", currentCategory.name)
-    if(name === null) return
-    currentCategory.name = name
-    updateCategoriesList()
+    enterString("Введите имя категории:", currentCategory.name, (name) => {
+        currentCategory.name = name
+        updateCategoriesList()
+    })
 }
 
 saveCategory.onclick = () => {
-    let name = prompt("Введите имя категории:", currentCategory.name)
-    if(name === null) return
-    localStorage.setItem("categories", currentCategory.normalized(name))
+    enterString("Введите имя категории:", currentCategory.name, (name) => {
+        let text = currentCategory.normalized(name)
+        if(window.electron !== undefined) {
+            window.electron.saveDialog('showSaveDialog', {
+                filters: [{ name: 'Auto tiling category', extensions: ['fatc']}],}).then(result => {
+                if(result.canceled) return
+                window.electron.saveFile(result.filePath, text)
+            })
+        } else {
+            localStorage.setItem("categories", text)
+        }
+    })
 }
 
 addRule.onclick = () => {
@@ -117,7 +128,9 @@ export function updateCategoriesList() {
     }
 
     let categories = currentTileSet.categories
-    if(currentCategory === undefined) currentCategory = categories[0]
+    if(!categories.includes(currentCategory) || currentCategory === undefined) {
+        currentCategory = categories[0]
+    }
     for(let i = 0; i < categories.length; i++) {
         let category = categories[i]
         let option = document.createElement("option")
@@ -248,10 +261,10 @@ tileSetCanvas.update = () => {
         const tileNum = getTileNum()
         readText((e) => {
             initParser(e.target.result)
-            let category = getCategory()
-            category.convert(currentTileSet.columns)
-            category.move(tileNum)
-            currentTileSet.categories.push(category)
+            currentCategory = getCategory()
+            currentCategory.convert(currentTileSet.columns)
+            currentCategory.move(tileNum)
+            currentTileSet.categories.push(currentCategory)
             updateCategoriesList()
         })
         return
@@ -261,10 +274,11 @@ tileSetCanvas.update = () => {
         const d = getTileNum() - currentCategory.getCorner()
 
         if(copyCategoryKey.wasPressed) {
-            let name = prompt("Введите имя новой категории:", currentCategory.name)
-            currentCategory = currentCategory.copy(name, d)
-            currentTileSet.categories.push(currentCategory)
-            updateCategoriesList()
+            enterString("Введите имя новой категории:", currentCategory.name, (name) => {
+                currentCategory = currentCategory.copy(name, d)
+                currentTileSet.categories.push(currentCategory)
+                updateCategoriesList()
+            })
         }
 
         if(moveCategoryKey.wasPressed) {
