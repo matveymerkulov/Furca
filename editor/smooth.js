@@ -56,14 +56,14 @@ export function loadData() {
             new Rule(61, [new Pos(-1, 1), ]),
             new Rule(63, [new Pos(1, 1), ]),
             new Rule(0, []),
-        ], true),
+        ], true, 6),
         new Category("grass", [
             new Rule(19, [new Pos(-1, 0), new Pos(0, 1), ]),
             new Rule(13, [new Pos(-1, 0), new Pos(0, -1), ]),
             new Rule(16, [new Pos(1, 0), new Pos(0, -1), ]),
             new Rule(22, [new Pos(0, 1), new Pos(1, 0), ]),
             new Rule(47, []),
-        ], false),
+        ], false, 6),
     ], 0, [])
 
     tileMap.smooth = new TileMap(tileSet.smooth, 32, 32, 34, 4, 1, 1, [

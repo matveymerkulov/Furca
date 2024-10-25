@@ -44,3 +44,9 @@ export const delPropertiesKey = new Key("Delete")
 export const toggleVisibilityKey = new Key("KeyV")
 export const newBlockKey = new Key("KeyB")
 export const newFrameKey = new Key("KeyF")
+
+// tile set auto tiling
+
+export const copyCategoryKey = new Key("KeyC")
+export const moveCategoryKey = new Key("KeyM")
+export const loadCategoryKey = new Key("KeyL")

@@ -66,6 +66,18 @@ export class TileSet {
         return this.#images.quantity
     }
 
+    tileNumByPos(column, row) {
+        return column + row * this.columns
+    }
+
+    tileColumnByIndex(index) {
+        return index % this.columns
+    }
+
+    tileRowByIndex(index) {
+        return Math.floor(index / this.columns)
+    }
+
     addRegion(region, type) {
         this.addBlock(region.x, region.y, region.width + 1, region.height + 1, type)
     }

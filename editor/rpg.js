@@ -47,7 +47,7 @@ export function loadData() {
             new Rule(60, []),
             new Rule(61, []),
             new Rule(62, []),
-        ], true),
+        ], true, 9),
         new Category("dirt", [
             new Rule(30, [new Pos(-1, 0), new Pos(0, -1), ]),
             new Rule(32, [new Pos(0, -1), new Pos(1, 0), ]),
@@ -62,7 +62,7 @@ export function loadData() {
             new Rule(22, [new Pos(1, -1), ]),
             new Rule(23, [new Pos(-1, -1), ]),
             new Rule(40, []),
-        ], true),
+        ], true, 9),
     ], 0, [[0,1,2,3,4,5,6,7,8,15,16], [37,54,55,56,57,58,59,60,61,62], ])
 
     tileSet.furniture = new TileSet(new ImageArray(texture.farm_furniture, 10, 16, 0.5, 0.5, 1, 1), [
@@ -111,7 +111,7 @@ export function loadData() {
             new Rule(71, [new Pos(0, 1), ]),
             new Rule(62, [new Pos(1, 0), ]),
             new Rule(61, []),
-        ], false),
+        ], false, 10),
     ], -1, [])
 
     tileMap.ground = new TileMap(tileSet.floor, 16, 16, 8, 21, 1, 1, [

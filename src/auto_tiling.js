@@ -1,15 +1,18 @@
 import {arrayToString} from "./save_load.js"
+import {floor} from "./functions.js"
 
 
 export class Category {
     name
     rules
     prolong
+    columns
 
-    constructor(name, rules = [], prolong = false) {
+    constructor(name, rules = [], prolong = false, columns) {
         this.name = name
         this.rules = rules
         this.prolong = prolong
+        this.columns = columns
     }
 
     copy(newName, d) {
@@ -17,11 +20,44 @@ export class Category {
         for(let i = 0; i < newRules.length; i++) {
             newRules[i] = this.rules[i].copy(d)
         }
-        return new Category(newName, newRules, this.prolong)
+        return new Category(newName, newRules, this.prolong, this.columns)
+    }
+
+    move(d) {
+        for(let rule of this.rules) {
+            rule.move(d)
+        }
+    }
+
+    convert(toColumns) {
+        for(let rule of this.rules) {
+            rule.convert(this.columns, toColumns)
+        }
+    }
+
+    getCorner() {
+        let minColumn, minRow
+        for(let rule of this.rules) {
+            const column = rule.tile % this.columns
+            const row = floor(rule.tile / this.columns)
+            if(minColumn === undefined || column < minColumn) minColumn = column
+            if(minRow === undefined || row < minRow) minRow = row
+        }
+        return minColumn + minRow * this.columns
+    }
+
+    normalized(newName) {
+        let text = ""
+        let d= this.getCorner()
+        for(let rule of this.rules) {
+            text += `\t${rule.normalized(d)}, \n`
+        }
+
+        return `new Category("${newName}", \n${text}, ${this.prolong}, ${this.columns})`
     }
 
     toString() {
-        return `new Category("${this.name}", ${arrayToString(this.rules, 1)}, ${this.prolong})`
+        return `new Category("${this.name}", ${arrayToString(this.rules, 1)}, ${this.prolong}, ${this.columns})`
     }
 }
 
@@ -40,6 +76,20 @@ export class Rule {
             newPositions[i] = this.positions[i].copy()
         }
         return new Rule(this.tile + d, newPositions)
+    }
+
+    move(d) {
+        this.tile += d
+    }
+
+    convert(fromColumns, toColumns) {
+        const column = this.tile % fromColumns
+        const row = floor(this.tile / fromColumns)
+        this.tile = column + row * toColumns
+    }
+
+    normalized(d) {
+        return `new Rule(${this.tile - d}, ${arrayToString(this.positions)})`
     }
 
     toString() {
@@ -103,7 +153,5 @@ export function enframe(map) {
         for(let column = 0; column < map.columns; column++) {
             enframeTile(map, column, row)
         }
-
     }
-
 }

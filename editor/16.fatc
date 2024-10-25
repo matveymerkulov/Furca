@@ -1,0 +1,18 @@
+new Category("fence1", [
+	new Rule(3, [new Pos(0, 1), new Pos(1, 0), new Pos(0, -1), new Pos(-1, 0), ]), 
+	new Rule(13, [new Pos(-1, 0), new Pos(0, -1), new Pos(1, 0), ]), 
+	new Rule(33, [new Pos(-1, 0), new Pos(0, 1), new Pos(1, 0), ]), 
+	new Rule(0, [new Pos(0, 1), new Pos(-1, 0), new Pos(0, -1), ]), 
+	new Rule(2, [new Pos(0, 1), new Pos(1, 0), new Pos(0, -1), ]), 
+	new Rule(10, [new Pos(-1, 0), new Pos(0, -1), ]), 
+	new Rule(12, [new Pos(0, -1), new Pos(1, 0), ]), 
+	new Rule(30, [new Pos(-1, 0), new Pos(0, 1), ]), 
+	new Rule(32, [new Pos(0, 1), new Pos(1, 0), ]), 
+	new Rule(1, [new Pos(0, 1), new Pos(0, -1), ]), 
+	new Rule(23, [new Pos(-1, 0), new Pos(1, 0), ]), 
+	new Rule(11, [new Pos(0, -1), ]), 
+	new Rule(20, [new Pos(-1, 0), ]), 
+	new Rule(31, [new Pos(0, 1), ]), 
+	new Rule(22, [new Pos(1, 0), ]), 
+	new Rule(21, []), 
+], false, 10)

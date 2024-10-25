@@ -60,7 +60,7 @@ export function booleanArrayToString(array) {
 }
 
 export function projectToText() {
-    const path = "../src"
+    const path = "../Furca/src"
 
     let text = ""
     text += `import {TileSet} from "${path}/tile_set.js"\n`

@@ -19,6 +19,7 @@ import {setBorderVisibility, showBorder} from "../src/tile_map.js"
 import {mapsCanvas} from "./tile_map.js"
 import {max} from "../src/functions.js"
 import {zk} from "../src/canvas.js"
+import {readText} from "./loader.js"
 
 project.getAssets = () => {
     return {
@@ -96,38 +97,6 @@ project.init = () => {
 
     setBorderVisibility(true)
 
-    project.update = () => {
-        if(loadKey.wasPressed) {
-            const readFile = function(e) {
-                let file = e.target.files[0]
-                if (!file) {
-                    return;
-                }
-                let reader = new FileReader()
-                reader.onload = function(e) {
-                    initData()
-                    projectFromText(e.target.result)
-                    initNames()
-                    showAll()
-                }
-                reader.readAsText(file)
-            }
-            const fileInput = document.createElement("input")
-            fileInput.type='file'
-            fileInput.style.display='none'
-            fileInput.onchange=readFile
-            document.body.appendChild(fileInput)
-            fileInput.click()
-        }
-
-        if(saveKey.wasPressed && window.electron !== undefined) {
-            window.electron.saveDialog('showSaveDialog', {}).then(result => {
-                if(result.canceled) return
-                window.electron.saveFile(result.filePath, projectToText())
-            })
-        }
-    }
-
     for(let item of document.getElementsByClassName("cancel")) {
         item.onclick = () => {
             hideWindow()
@@ -138,6 +107,22 @@ project.init = () => {
 
 
 mainWindow.update = () => {
+    if(loadKey.wasPressed) {
+        readText(function(e) {
+            initData()
+            projectFromText(e.target.result)
+            initNames()
+            showAll()
+        })
+    }
+
+    if(saveKey.wasPressed && window.electron !== undefined) {
+        window.electron.saveDialog('showSaveDialog', {}).then(result => {
+            if(result.canceled) return
+            window.electron.saveFile(result.filePath, projectToText())
+        })
+    }
+
     if(currentTileSet === undefined) return
 
     if(tileSetPropertiesKey.wasPressed) {

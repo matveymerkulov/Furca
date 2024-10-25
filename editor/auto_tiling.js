@@ -9,6 +9,10 @@ import {Win} from "../src/gui/window.js"
 import {Category, Pos, Rule} from "../src/auto_tiling.js"
 import {Key} from "../src/key.js"
 import {removeFromArray} from "../src/functions.js"
+import {arrayToString, booleanArrayToString, projectToText} from "../src/save_load.js"
+import {readText} from "./loader.js"
+import {getCategory, initParser} from "../src/parser.js"
+import {copyCategoryKey, loadCategoryKey, moveCategoryKey} from "./keys.js"
 
 let currentCategory, currentRule
 
@@ -22,7 +26,7 @@ let rulesListCanvas = rulesWindow.addCanvas("rules_list", 9, 16)
 let addCategory = element("add_category")
 let removeCategory = element("remove_category")
 let renameCategory = element("rename_category")
-let copyCategory = element("copy_category")
+let saveCategory = element("save_category")
 
 let categoriesBox = element("category")
 
@@ -30,8 +34,6 @@ let addRule = element("add_rule")
 let removeRule = element("remove_rule")
 let moveRuleLeft = element("move_rule_left")
 let moveRuleRight = element("move_rule_right")
-
-
 
 rulesListCanvas.viewport.width = rulesListCanvas.node.offsetWidth
 rulesListCanvas.viewport.height = rulesListCanvas.node.offsetHeight
@@ -65,14 +67,10 @@ renameCategory.onclick = () => {
     updateCategoriesList()
 }
 
-copyCategory.onclick = () => {
-    if(currentCategory === undefined) return
-    let name = prompt("Введите имя новой категории:", currentCategory.name)
+saveCategory.onclick = () => {
+    let name = prompt("Введите имя категории:", currentCategory.name)
     if(name === null) return
-    let d = parseInt(prompt("Введите смещение:"))
-    if(isNaN(d)) return
-    currentCategory = currentCategory.copy(name, d)
-    currentTileSet.categories.push(currentCategory)
+    localStorage.setItem("categories", currentCategory.normalized(name))
 }
 
 addRule.onclick = () => {
@@ -112,15 +110,14 @@ moveRuleRight.onclick = () => {
     if(currentRule !== undefined) moveRule(currentRule, 1)
 }
 
-
 export function updateCategoriesList() {
     while(categoriesBox.options.length > 0) {
         // noinspection JSCheckFunctionSignatures
         categoriesBox.remove(0)
     }
 
-    currentCategory = undefined
     let categories = currentTileSet.categories
+    if(currentCategory === undefined) currentCategory = categories[0]
     for(let i = 0; i < categories.length; i++) {
         let category = categories[i]
         let option = document.createElement("option")
@@ -128,7 +125,6 @@ export function updateCategoriesList() {
         option.value = i.toString()
         option.innerHTML = category.name
         categoriesBox.appendChild(option)
-        if(i === 0 && currentCategory === undefined) currentCategory = categories[0]
         if(category === currentCategory) option.selected = true
     }
 }
@@ -240,11 +236,44 @@ rulesGridCanvas.update = () => {
 }
 
 tileSetCanvas.update = () => {
+    function getTileNum() {
+        let x = Math.floor(canvasMouse.x / tileWidth)
+        let y = Math.floor(canvasMouse.y / tileHeight)
+        return x + y * currentTileSet.columns
+    }
+
     if(canvasUnderCursor !== tileSetCanvas) return
+
+    if(loadCategoryKey.wasPressed) {
+        const tileNum = getTileNum()
+        readText((e) => {
+            initParser(e.target.result)
+            let category = getCategory()
+            category.convert(currentTileSet.columns)
+            category.move(tileNum)
+            currentTileSet.categories.push(category)
+            updateCategoriesList()
+        })
+        return
+    }
+
+    if(currentCategory !== undefined) {
+        const d = getTileNum() - currentCategory.getCorner()
+
+        if(copyCategoryKey.wasPressed) {
+            let name = prompt("Введите имя новой категории:", currentCategory.name)
+            currentCategory = currentCategory.copy(name, d)
+            currentTileSet.categories.push(currentCategory)
+            updateCategoriesList()
+        }
+
+        if(moveCategoryKey.wasPressed) {
+            currentCategory.move(d)
+        }
+    }
+
     if(!selectKey.wasPressed || currentRule === undefined) return
-    let x = Math.floor(canvasMouse.x / tileWidth)
-    let y = Math.floor(canvasMouse.y / tileHeight)
-    currentRule.tile = x + y * currentTileSet.columns
+    currentRule.tile = getTileNum()
 }
 
 rulesListCanvas.update = () => {

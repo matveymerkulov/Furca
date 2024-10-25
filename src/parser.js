@@ -56,6 +56,13 @@ export function getToken(terminator) {
     }, terminator)
 }
 
+export function getBoolean(terminator) {
+    let value = getSymbols(symbol => {
+        return isTokenSymbol(symbol)
+    }, terminator)
+    return value === "true"
+}
+
 export function getInt(terminator) {
     let num = getSymbols(symbol => {
         return isDigit(symbol)
@@ -152,7 +159,15 @@ function getRules() {
     }
 }
 
-function getCategories() {
+export function getCategory() {
+    let name = getString()
+    let rules = getRules()
+    let prolong = getBoolean()
+    let columns = getInt()
+    return new Category(name, rules, prolong, columns)
+}
+
+export function getCategories() {
     let array = []
     getSymbol("[")
     while(true) {
@@ -162,7 +177,9 @@ function getCategories() {
             return array
         }
         let rules = getRules()
-        array.push(new Category(name, rules))
+        let prolong = getBoolean()
+        let columns = getInt()
+        array.push(new Category(name, rules, prolong, columns))
     }
 }
 
