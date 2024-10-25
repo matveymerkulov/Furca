@@ -6,11 +6,12 @@ import {canvasMouse} from "../src/system.js"
 import {brushSize, setBlockSize} from "./tile_map.js"
 import {visibility} from "../src/tile_set.js"
 import {blockType} from "../src/block.js"
-import TileZoom, {tilesPerRow} from "./tile_zoom.js"
+import TileZoom, {setTilesPerRow, tilesPerRow} from "./tile_zoom.js"
 import {TilePan, updateY0, y0} from "./tile_pan.js"
 import {Key} from "../src/key.js"
 import {mainWindow} from "./main_window.js"
 import {delTileSetKey, panTileSetKey, selectTileKey, zoomInTileSetKey, zoomOutTileSetKey} from "./keys.js"
+import {ceil, sqrt} from "../src/functions.js"
 
 export let currentTile = 1, currentTileSet, currentBlock, currentGroup, altGroup
 export let maxY0 = 0
@@ -62,6 +63,14 @@ function processTiles(tileFunction, blockFunction) {
 
     maxY0 = Math.max(y + size - tileSetCanvas.viewport.height + y0, 0)
     updateY0()
+
+    return pos
+}
+
+
+export function calculateTilesPerRow() {
+    const quantity = processTiles(() => {}, () => {})
+    setTilesPerRow(ceil(sqrt(quantity / tileSetCanvas.viewport.height * tileSetCanvas.viewport.width)))
 }
 
 

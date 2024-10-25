@@ -19,3 +19,7 @@ export default class TileZoom extends Action {
         }
     }
 }
+
+export function setTilesPerRow(value) {
+    tilesPerRow = value
+}

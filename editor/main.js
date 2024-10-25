@@ -8,7 +8,7 @@ import {initTileSetSelectionWindow} from "./new_map.js"
 import {deleteCurrentDrag} from "../src/drag.js"
 import {projectFromStorage, projectFromText, projectToStorage, projectToText} from "../src/save_load.js"
 import {Key} from "../src/key.js"
-import {currentTileSet} from "./tile_set.js"
+import {calculateTilesPerRow, currentTileSet} from "./tile_set.js"
 import {resetRegionSelector} from "./select_tile_set_region.js"
 import {tileSetPropertiesWindow} from "./tile_set_properties.js"
 import {rulesWindow, updateCategoriesList} from "./auto_tiling.js"
@@ -20,6 +20,7 @@ import {mapsCanvas} from "./tile_map.js"
 import {max} from "../src/functions.js"
 import {zk} from "../src/canvas.js"
 import {readText} from "./loader.js"
+import {setTilesPerRow} from "./tile_zoom.js"
 
 project.getAssets = () => {
     return {
@@ -113,6 +114,7 @@ mainWindow.update = () => {
             projectFromText(e.target.result)
             initNames()
             showAll()
+            calculateTilesPerRow()
         })
     }
 
