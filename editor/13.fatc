@@ -1,4 +1,4 @@
-new Category("dirt", 
+new Category("dirt", [
     new Rule(18, [new Pos(-1, 0), new Pos(0, -1), ]),
     new Rule(20, [new Pos(0, -1), new Pos(1, 0), ]),
     new Rule(36, [new Pos(-1, 0), new Pos(0, 1), ]),
@@ -12,4 +12,4 @@ new Category("dirt",
     new Rule(10, [new Pos(1, -1), ]),
     new Rule(11, [new Pos(-1, -1), ]),
     new Rule(28, []),
-, true, 9)
+], true, 9)

@@ -118,11 +118,15 @@ mainWindow.update = () => {
         })
     }
 
-    if(saveKey.wasPressed && window.electron !== undefined) {
-        window.electron.saveDialog('showSaveDialog', {}).then(result => {
-            if(result.canceled) return
-            window.electron.saveFile(result.filePath, projectToText())
-        })
+    if(saveKey.wasPressed) {
+        if(window.electron !== undefined) {
+            window.electron.saveDialog('showSaveDialog', {}).then(result => {
+                if(result.canceled) return
+                window.electron.saveFile(result.filePath, projectToText())
+            })
+        } else {
+            localStorage.setItem("project", projectToText())
+        }
     }
 
     if(currentTileSet === undefined) return

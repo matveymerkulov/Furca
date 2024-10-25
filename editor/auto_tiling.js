@@ -4,11 +4,11 @@ import {renderTileSetCanvas} from "./tile_set_properties.js"
 import {canvasUnderCursor, ctx} from "../src/canvas.js"
 import {canvasMouse, element} from "../src/system.js"
 import {drawDashedRegion, drawRect} from "../src/draw.js"
-import {tilesPerRow} from "./tile_zoom.js"
+import {setTilesPerRow, tilesPerRow} from "./tile_zoom.js"
 import {Win} from "../src/gui/window.js"
 import {Category, Pos, Rule} from "../src/auto_tiling.js"
 import {Key} from "../src/key.js"
-import {removeFromArray} from "../src/functions.js"
+import {ceil, floor, removeFromArray, sqrt} from "../src/functions.js"
 import {arrayToString, booleanArrayToString, projectToText} from "../src/save_load.js"
 import {readText} from "./loader.js"
 import {getCategory, initParser} from "../src/parser.js"
@@ -202,18 +202,25 @@ rulesGridCanvas.render = () => {
 }
 
 
+let rulesListTilesPerRow = 8
+
 rulesListCanvas.render = () =>  {
     if(currentCategory === undefined) return
 
     ctx.canvas.width = rulesListCanvas.node.offsetWidth
     ctx.canvas.height = rulesListCanvas.node.offsetHeight
 
-    let rules = currentCategory.rules
-    let size = rulesListCanvas.viewport.width / tilesPerRow
+    const viewport = rulesListCanvas.viewport
+    viewport.width = rulesListCanvas.node.offsetWidth
+    viewport.height = rulesListCanvas.node.offsetWidth
+
+    const rules = currentCategory.rules
+    rulesListTilesPerRow = ceil(sqrt(rules.length / viewport.height * viewport.width)) + 1
+    let size = rulesListCanvas.viewport.width / rulesListTilesPerRow
     for(let i = 0; i < rules.length; i++) {
-        let rule = rules[i]
-        let x = (i % tilesPerRow) * size
-        let y = (Math.floor(i / tilesPerRow)) * size
+        const rule = rules[i]
+        const x = (i % rulesListTilesPerRow) * size
+        const y = (Math.floor(i / rulesListTilesPerRow)) * size
 
         currentTileSet.image(rule.tile).drawResized(x, y, size, size)
 
@@ -294,11 +301,11 @@ rulesListCanvas.update = () => {
     if(canvasUnderCursor !== rulesListCanvas || currentCategory === undefined
         || !selectKey.wasPressed) return
 
-    let size = rulesListCanvas.viewport.width / tilesPerRow
-    let x = Math.floor(canvasMouse.x / size)
-    let y = Math.floor(canvasMouse.y / size)
-    let ruleNum = x + y * tilesPerRow
-    let rules = currentCategory.rules
+    const size = rulesListCanvas.viewport.width / rulesListTilesPerRow
+    const x = Math.floor(canvasMouse.x / size)
+    const y = Math.floor(canvasMouse.y / size)
+    const rules = currentCategory.rules
+    const ruleNum = x + y * rulesListTilesPerRow
     if(ruleNum < rules.length) {
         currentRule = rules[ruleNum]
     }

@@ -167,7 +167,7 @@ export function getCategory() {
     return new Category(name, rules, prolong, columns)
 }
 
-export function getCategories() {
+export function getCategories(columns) {
     let array = []
     getSymbol("[")
     while(true) {
@@ -178,7 +178,7 @@ export function getCategories() {
         }
         let rules = getRules()
         let prolong = getBoolean()
-        let columns = getInt()
+        getInt()
         array.push(new Category(name, rules, prolong, columns))
     }
 }
@@ -194,7 +194,7 @@ export function getTileSet(name) {
     let widthMul = getFloat()
     let visibility = getIntArray()
     let blocks = getBlocks()
-    let categories = getCategories()
+    let categories = getCategories(columns)
     //let prolong = getInt()
     let altTile = getInt()
     let groups = getIntArray()

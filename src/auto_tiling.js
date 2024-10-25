@@ -33,6 +33,7 @@ export class Category {
         for(let rule of this.rules) {
             rule.convert(this.columns, toColumns)
         }
+        this.columns = toColumns
     }
 
     getCorner() {
@@ -48,7 +49,7 @@ export class Category {
 
     normalized(newName) {
         let text = ""
-        let d= this.getCorner()
+        let d = this.getCorner()
         for(let rule of this.rules) {
             text += `\t${rule.normalized(d)}, \n`
         }
