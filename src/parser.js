@@ -1,4 +1,4 @@
-import {tileMap, tileMaps, tileSet} from "./project.js"
+import {tileMap, tileSet, world} from "./project.js"
 import {TileSet} from "./tile_set.js"
 import {ImageArray} from "./image_array.js"
 import {TileMap} from "./tile_map.js"
@@ -216,6 +216,23 @@ export function getTileMap(name) {
     let array = getIntArray()
     const map = new TileMap(mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array)
     tileMap[name] = map
-    tileMaps.add(map)
+    world.add(map)
+    getSymbol(")")
+}
+
+export function getLayer(name) {
+    getSymbol("(")
+    let tileSetName = getToken()
+    let mapTileSet = tileSet[tileSetName]
+    let columns = getInt()
+    let rows = getInt()
+    let x = getFloat()
+    let y = getFloat()
+    let cellWidth = getFloat()
+    let cellHeight = getFloat()
+    let array = getIntArray()
+    const map = new TileMap(mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array)
+    tileMap[name] = map
+    world.add(map)
     getSymbol(")")
 }

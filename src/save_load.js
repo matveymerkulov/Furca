@@ -2,12 +2,10 @@
 //import {getString, getSymbol, getTileMap, getTileSet, getToken, initParser} from "./parser.js"
 //import {getName} from "./names.js"
 
-import {initData, tileMap, tileMaps, tileSet} from "./project.js"
+import {initData, tileMap, tileSet, world} from "./project.js"
 import {getName} from "./names.js"
-import {getString, getSymbol, getTileMap, getTileSet, getToken, initParser} from "./parser.js"
-import {TileSet} from "./tile_set.js"
-import {ImageArray} from "./image_array.js"
-import {texture} from "./system.js"
+import {getSymbol, getTileMap, getTileSet, getToken, initParser} from "./parser.js"
+import {TileMap} from "./tile_map.js"
 
 export let indent = ""
 
@@ -73,14 +71,14 @@ export function projectToText() {
     text += '\nexport function loadData() {\n'
 
     indent = "\t"
-    for(const set of Object.values(tileSet)) {
-        text += `\ttileSet.${getName(set)} = ${set.toString()}\n`
+    for(const[name, set] of Object.entries(tileSet)) {
+        text += `\ttileSet.${name} = ${set.toString()}\n`
     }
 
     text += "\t\n"
 
-    for(const[name, map] of Object.entries(tileMap)) {
-        text += `\ttileMap.${name} = ${map.toString()}\n`
+    for(let object of world.items) {
+        text += `\t${object instanceof TileMap ? "tileMap" : "layer"}.${getName(object)} = ${object.toString()}\n`
     }
 
     return text + "}"
@@ -106,21 +104,11 @@ export function projectFromText(data) {
                 getSymbol("(")
                 getTileMap(tileMapName)
                 break
+            case "layer":
+                let layerName = getToken()
+                getSymbol("(")
+                getLayer(layerName)
+                break
         }
     }
-}
-
-export function projectToClipboard(tabs) {
-    navigator.clipboard.writeText(projectToText(tabs)).then()
-}
-
-export function projectToStorage(tabs, name) {
-    localStorage.setItem("all", projectToText(tabs, name, true))
-    localStorage.setItem("tab", projectToText(tabs, name))
-}
-
-export function projectFromStorage(texture) {
-    initData()
-    let text = localStorage.getItem("project")
-    if(text !== null) projectFromText(text, texture)
 }

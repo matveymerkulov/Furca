@@ -1,5 +1,5 @@
 import {mouse} from "../src/system.js"
-import {tileMap, tileMaps} from "../src/project.js"
+import {tileMap, world} from "../src/project.js"
 import {addTileMap} from "./create_tile_map.js"
 import {getName, incrementName, setName} from "../src/names.js"
 import {canvasUnderCursor, ctx, distToScreen, setCanvas, xToScreen, yToScreen} from "../src/canvas.js"
@@ -21,16 +21,21 @@ import {drawDashedRegion} from "../src/draw.js"
 import {Pan} from "./pan.js"
 import Zoom from "./zoom.js"
 import MoveTileMaps from "./move_tile_maps.js"
-import {Key} from "../src/key.js"
 import {enframeTile} from "../src/auto_tiling.js"
 import {mainWindow} from "./main_window.js"
 import {removeFromArray, rndi} from "../src/functions.js"
 import {
-    changeBrushTypeKey, copyMapKey, decrementBrushSizeKey, deleteMapKey,
-    delKey, incrementBrushSizeKey,
+    changeBrushTypeKey,
+    copyMapKey,
+    decrementBrushSizeKey,
+    deleteMapKey,
+    delKey, groupKey,
+    incrementBrushSizeKey,
     newMapKey,
-    panKey, pipetteKey,
-    rectangleModeKey, renameMapKey,
+    panKey,
+    pipetteKey,
+    rectangleModeKey,
+    renameMapKey,
     selectKey,
     switchModeKey,
     zoomInKey,
@@ -38,6 +43,7 @@ import {
 } from "./keys.js"
 import {emptyTile} from "../src/tile_map.js"
 import {enterString} from "./input.js"
+import {Layer} from "../src/layer.js"
 
 export let currentTileMap, tileMapUnderCursor, currentTileSprite
 
@@ -60,7 +66,7 @@ mapsCanvas.add(new SelectMapRegion(), selectKey)
 
 
 mapsCanvas.render = () => {
-    tileMaps.items.forEach(map => {
+    world.items.forEach(map => {
         map.draw()
         let name = getName(map)
         ctx.fillStyle = "white"
@@ -68,6 +74,7 @@ mapsCanvas.render = () => {
         // noinspection JSCheckFunctionSignatures
         let metrics = ctx.measureText(name)
         // noinspection JSCheckFunctionSignatures
+        if(map instanceof Layer) map = map.items[0]
         ctx.fillText(name, xToScreen(map.x) - 0.5 * metrics.width
             , yToScreen(map.top) - 0.5 * metrics.actualBoundingBoxDescent - 4)
     })
@@ -203,7 +210,6 @@ export function mapModeOperations() {
         // noinspection JSCheckFunctionSignatures
         enterString("Введите новое название карты:", getName(tileMapUnderCursor), (name) => {
             setName(tileMapUnderCursor, name)
-
         })
     }
 
@@ -211,17 +217,28 @@ export function mapModeOperations() {
         addTileMap(incrementName(getName(tileMapUnderCursor)), tileMapUnderCursor.copy(1 + tileMapUnderCursor.width, 0))
     }
 
+    function removeMaps(maps) {
+        for(let map of maps) {
+            removeFromArray(map, world.items)
+            delete tileMap[getName(map)]
+        }
+    }
+
     if(deleteMapKey.wasPressed) {
         if(selectedTileMaps.length === 0) {
-            removeFromArray(tileMapUnderCursor, tileMaps.items)
+            world.remove(tileMapUnderCursor)
             delete tileMap[getName(tileMapUnderCursor)]
         } else {
-            for(let map of selectedTileMaps) {
-                removeFromArray(map, tileMaps.items)
-                delete tileMap[getName(map)]
-            }
+            removeMaps(selectedTileMaps)
             clearSelection()
         }
+    }
+
+    if(groupKey.wasPressed && selectedTileMaps.length > 1) {
+        const newLayer = new Layer(...selectedTileMaps)
+        setName(newLayer, getName(selectedTileMaps[0]))
+        removeMaps(selectedTileMaps)
+        world.add(newLayer)
     }
 }
 
@@ -231,12 +248,15 @@ export function checkMapsWindowCollisions() {
     tileMapUnderCursor = undefined
     currentTileSprite = undefined
 
-    tileMaps.collisionWithPoint(mouse.x, mouse.y, (x, y, map) => {
-        tileMapUnderCursor = map
-        if(currentTileSet === map.tileSet || currentMode === mode.maps) {
-            currentTileMap = map
+    for(let object of world.items) {
+        if(object.collidesWithPoint(mouse.x, mouse.y)) {
+            tileMapUnderCursor = object
+            if(currentTileSet === object.tileSet || currentMode === mode.maps) {
+                currentTileMap = object
+            }
+            break
         }
-    })
+    }
 
     if(currentTileMap !== undefined) {
         tileMapUnderCursor = currentTileMap

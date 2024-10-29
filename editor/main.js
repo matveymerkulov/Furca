@@ -1,26 +1,21 @@
 import {mainWindow} from "./main_window.js"
-import {initData, project, tileMap, tileMaps, tileSet} from "../src/project.js"
-import {currentWindow, hideWindow, windows} from "../src/gui/window.js"
+import {initData, project, tileMap, tileSet, world} from "../src/project.js"
+import {currentWindow, hideWindow} from "../src/gui/window.js"
 import {setName} from "../src/names.js"
 //import {loadData} from "../data/breakout.js"
-import {loadData} from "./data.js"
 import {initTileSetSelectionWindow} from "./new_map.js"
 import {deleteCurrentDrag} from "../src/drag.js"
-import {projectFromStorage, projectFromText, projectToStorage, projectToText} from "../src/save_load.js"
-import {Key} from "../src/key.js"
+import {projectFromText, projectToText} from "../src/save_load.js"
 import {calculateTilesPerRow, currentTileSet} from "./tile_set.js"
 import {resetRegionSelector} from "./select_tile_set_region.js"
 import {tileSetPropertiesWindow} from "./tile_set_properties.js"
 import {rulesWindow, updateCategoriesList} from "./auto_tiling.js"
-import {texture} from "../src/system.js"
 import {autoTilingEditorKey, loadKey, saveKey, tileSetPropertiesKey} from "./keys.js"
-import {currentTabName} from "./tabs.js"
-import {setBorderVisibility, showBorder} from "../src/tile_map.js"
+import {setBorderVisibility} from "../src/tile_map.js"
 import {mapsCanvas} from "./tile_map.js"
 import {max} from "../src/functions.js"
 import {zk} from "../src/canvas.js"
 import {readText} from "./loader.js"
-import {setTilesPerRow} from "./tile_zoom.js"
 
 project.getAssets = () => {
     return {
@@ -39,7 +34,7 @@ export function setTileSize(width, height) {
 
 export function showAll()  {
     let x0, y0, x1, y1
-    for(let tileMap of tileMaps.items) {
+    for(let tileMap of world.items) {
         if(x0 === undefined || tileMap.left < x0) x0 = tileMap.left
         if(y0 === undefined || tileMap.top < y0) y0 = tileMap.top
         if(x1 === undefined || tileMap.right > x1) x1 = tileMap.right
@@ -79,19 +74,6 @@ project.updateNode = () => {
 
 
 project.init = () => {
-    /*if(localStorage.getItem("project") === null) {
-        loadData(texture)
-    } else {
-        loadData(texture)
-        //projectFromStorage(texture)
-    }
-
-    window.onbeforeunload = function() {
-        projectToStorage()
-        projectToClipboard()
-    }*/
-
-    //loadData()
     initNames()
 
     initTileSetSelectionWindow()

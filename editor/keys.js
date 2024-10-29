@@ -28,6 +28,8 @@ export const incrementBrushSizeKey = new Key("NumpadAdd")
 export const decrementBrushSizeKey = new Key("NumpadSubtract")
 export const rectangleModeKey = new Key("KeyR")
 export const pipetteKey = new Key("KeyP")
+export const groupKey = new Key("KeyG")
+export const ungroupKey = new Key("KeyU")
 
 // tile set
 

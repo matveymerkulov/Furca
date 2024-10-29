@@ -4,12 +4,10 @@ import {renderTileSetCanvas} from "./tile_set_properties.js"
 import {canvasUnderCursor, ctx} from "../src/canvas.js"
 import {canvasMouse, element} from "../src/system.js"
 import {drawDashedRegion, drawRect} from "../src/draw.js"
-import {setTilesPerRow, tilesPerRow} from "./tile_zoom.js"
 import {Win} from "../src/gui/window.js"
 import {Category, Pos, Rule} from "../src/auto_tiling.js"
 import {Key} from "../src/key.js"
-import {ceil, floor, removeFromArray, sqrt} from "../src/functions.js"
-import {arrayToString, booleanArrayToString, projectToText} from "../src/save_load.js"
+import {ceil, removeFromArray, sqrt} from "../src/functions.js"
 import {readText} from "./loader.js"
 import {getCategory, initParser} from "../src/parser.js"
 import {copyCategoryKey, loadCategoryKey, moveCategoryKey} from "./keys.js"
@@ -212,10 +210,10 @@ rulesListCanvas.render = () =>  {
 
     const viewport = rulesListCanvas.viewport
     viewport.width = rulesListCanvas.node.offsetWidth
-    viewport.height = rulesListCanvas.node.offsetWidth
+    viewport.height = rulesListCanvas.node.offsetHeight
 
     const rules = currentCategory.rules
-    rulesListTilesPerRow = ceil(sqrt(rules.length / viewport.height * viewport.width)) + 1
+    rulesListTilesPerRow = ceil(sqrt(rules.length / viewport.height * viewport.width))
     let size = rulesListCanvas.viewport.width / rulesListTilesPerRow
     for(let i = 0; i < rules.length; i++) {
         const rule = rules[i]

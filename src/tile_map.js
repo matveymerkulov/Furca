@@ -5,7 +5,7 @@ import {Shape} from "./shape.js"
 import {arrayToString} from "./save_load.js"
 import {showCollisionShapes} from "./input.js"
 import {tileMap} from "./project.js"
-import {floor, inBounds} from "./functions.js"
+import {floor} from "./functions.js"
 
 let collisionShape, collisionSprite
 export const emptyTile = -1

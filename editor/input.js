@@ -1,4 +1,3 @@
-import {currentWindow} from "../src/gui/window.js"
 import {element} from "../src/system.js"
 
 const enterStringWindow = element("enter_string")

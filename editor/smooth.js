@@ -1,11 +1,9 @@
 import {TileSet} from "../src/tile_set.js"
 import {TileMap} from "../src/tile_map.js"
 import {ImageArray} from "../src/image_array.js"
-import {tileMap, tileMaps, tileSet} from "../src/project.js"
-import {Block} from "../src/block.js"
+import {tileMap, tileSet} from "../src/project.js"
 import {Category, Pos, Rule} from "../src/auto_tiling.js"
 import {texture} from "../src/system.js"
-import {addTab, selectTab} from "./tabs.js"
 
 export function loadData() {
     tileSet.smooth = new TileSet(new ImageArray(texture.smooth, 6, 12, 0.5, 0.5, 1, 1), [

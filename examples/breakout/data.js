@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
 import {TileSet} from "../../src/tile_set.js"
-import {tileMap, tileMaps, tileSet} from "../../src/project.js"
+import {tileMap, tileSet, world} from "../../src/project.js"
 import {ImageArray} from "../../src/image_array.js"
 import {Block} from "../../src/block.js"
 import {Category, Pos, Rule} from "../../src/auto_tiling.js"
@@ -78,7 +78,7 @@ export function loadData() {
         15,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,  15,
     ])
 
-    tileMaps.add(
+    world.add(
         tileMap.blocks,
     )
 }

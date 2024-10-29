@@ -1,6 +1,7 @@
 import {Renderable} from "./renderable.js"
 import {addIndent, indent, removeIndent} from "./save_load.js"
 import {removeFromArray} from "./functions.js"
+import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
 
 export class Layer extends Renderable {
     constructor(...items) {
@@ -25,6 +26,10 @@ export class Layer extends Renderable {
         for(const item of this.items) {
             item.draw()
         }
+    }
+
+    drawDashedRegion(isCircle) {
+        this.items[0].drawDashedRegion(isCircle)
     }
 
     update() {
@@ -61,7 +66,14 @@ export class Layer extends Renderable {
     }
 
     remove(object) {
-        removeFromArray(object, this.items)
+        for(let item of this.items) {
+            if(item === object) {
+                removeFromArray(object, this.items)
+                return
+            }
+            item.remove(object)
+        }
+
     }
 
     removeAll(itemsToRemove) {
@@ -129,6 +141,13 @@ export class Layer extends Renderable {
         return undefined
     }
 
+    collidesWithPoint(x, y) {
+        for(let item of this.items) {
+            if(item.collidesWithPoint(x, y)) return true
+        }
+        return false
+    }
+
     collisionWith(object, code) {
         this.items.forEach(item => item.collisionWith(object, code))
     }
@@ -153,7 +172,8 @@ export class Layer extends Renderable {
 
     isInside(box) {
         for(let item of this.items) {
-            if(item.isInside(box)) return true
+            if(!item.isInside(box)) return false
         }
+        return true
     }
 }

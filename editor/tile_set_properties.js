@@ -8,7 +8,6 @@ import {blockType} from "../src/block.js"
 import {visibility} from "../src/tile_set.js"
 import {setTileSize, tileHeight, tileWidth,} from "./main.js"
 import {Win} from "../src/gui/window.js"
-import {Key} from "../src/key.js"
 import {delPropertiesKey, newBlockKey, newFrameKey, selectTilePropertiesKey, toggleVisibilityKey} from "./keys.js"
 
 export let tileSetPropertiesWindow = new Win("tile_set_window")
