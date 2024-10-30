@@ -72,4 +72,8 @@ export class Point extends Renderable {
     angleToPoint(point) {
         return this.angleTo(point.x, point.y)
     }
+
+    processSprites(code) {
+        code.call(undefined, this)
+    }
 }

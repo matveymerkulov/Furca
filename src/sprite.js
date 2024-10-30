@@ -107,10 +107,6 @@ export class Sprite extends Box {
         this.visible = true
     }
 
-    processSprites(code) {
-        code.call(undefined, this)
-    }
-
     // collisions
 
     collisionWith(object, code) {

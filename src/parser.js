@@ -1,10 +1,12 @@
-import {tileMap, tileSet, world} from "./project.js"
+import {layer, tileMap, tileSet, world} from "./project.js"
 import {TileSet} from "./tile_set.js"
 import {ImageArray} from "./image_array.js"
 import {TileMap} from "./tile_map.js"
 import {Block} from "./block.js"
 import {Category, Pos, Rule} from "./auto_tiling.js"
 import {texture} from "./system.js"
+import {Layer} from "./layer.js"
+import {setName} from "./names.js"
 
 let pos, text
 
@@ -203,7 +205,7 @@ export function getTileSet(name) {
     getSymbol(")")
 }
 
-export function getTileMap(name) {
+export function getTileMap(name, layer) {
     getSymbol(".")
     let tileSetName = getToken()
     let mapTileSet = tileSet[tileSetName]
@@ -215,24 +217,22 @@ export function getTileMap(name) {
     let cellHeight = getFloat()
     let array = getIntArray()
     const map = new TileMap(mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array)
-    tileMap[name] = map
-    world.add(map)
+    if(layer === undefined) {
+        tileMap[name] = map
+        world.add(map)
+    } else {
+        layer.add(map)
+    }
     getSymbol(")")
 }
 
 export function getLayer(name) {
-    getSymbol("(")
-    let tileSetName = getToken()
-    let mapTileSet = tileSet[tileSetName]
-    let columns = getInt()
-    let rows = getInt()
-    let x = getFloat()
-    let y = getFloat()
-    let cellWidth = getFloat()
-    let cellHeight = getFloat()
-    let array = getIntArray()
-    const map = new TileMap(mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array)
-    tileMap[name] = map
-    world.add(map)
-    getSymbol(")")
+    const l = new Layer()
+    while(true) {
+        if(!getSymbol("(", ")")) break
+        getTileMap(undefined, l)
+    }
+    layer[name] = l
+    setName(l, name)
+    world.add(l)
 }

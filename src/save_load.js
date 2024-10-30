@@ -4,7 +4,7 @@
 
 import {initData, tileMap, tileSet, world} from "./project.js"
 import {getName} from "./names.js"
-import {getSymbol, getTileMap, getTileSet, getToken, initParser} from "./parser.js"
+import {getLayer, getSymbol, getTileMap, getTileSet, getToken, initParser} from "./parser.js"
 import {TileMap} from "./tile_map.js"
 
 export let indent = ""
@@ -64,10 +64,11 @@ export function projectToText() {
     text += `import {TileSet} from "${path}/tile_set.js"\n`
     text += `import {TileMap} from "${path}/tile_map.js"\n`
     text += `import {ImageArray} from "${path}/image_array.js"\n`
-    text += `import {tileMap, tileMaps, tileSet} from "${path}/project.js"\n`
+    text += `import {layer, tileMap, tileSet} from "${path}/project.js"\n`
     text += `import {Block} from "${path}/block.js"\n`
     text += `import {Category, Pos, Rule} from "${path}/auto_tiling.js"\n`
     text += `import {texture} from "${path}/system.js"\n`
+    text += `import {Layer} from "${path}/layer.js"`
     text += '\nexport function loadData() {\n'
 
     indent = "\t"

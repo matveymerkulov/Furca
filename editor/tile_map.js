@@ -70,7 +70,7 @@ mapsCanvas.render = () => {
         map.draw()
         let name = getName(map)
         ctx.fillStyle = "white"
-        ctx.font = "16px serif"
+        ctx.font = `${distToScreen(2)}px serif`
         // noinspection JSCheckFunctionSignatures
         let metrics = ctx.measureText(name)
         // noinspection JSCheckFunctionSignatures
@@ -153,6 +153,8 @@ export function setBlockSize(width, height) {
 
 
 export function tileModeOperations() {
+    if(currentTileMap instanceof Layer) return
+
     let brushWidth = currentTileMap.cellWidth * blockWidth
     let brushHeight = currentTileMap.cellWidth * blockHeight
     let column = Math.floor(currentTileMap.tileColumnByPoint(mouse) - 0.5 * (brushWidth - 1))

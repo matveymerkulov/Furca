@@ -4,6 +4,7 @@ import {mouse} from "../src/system.js"
 import {currentMode, mode, tileMapUnderCursor} from "./tile_map.js"
 import {tileMap, world} from "../src/project.js"
 import {Layer} from "../src/layer.js"
+import {abs} from "../src/functions.js"
 
 export let selectedTileMaps = [], mapSelectionRegion
 
@@ -38,6 +39,8 @@ export default class SelectTileMaps extends Drag {
 
     end() {
         selectedTileMaps = []
+        mapSelectionRegion.width = abs(mapSelectionRegion.width)
+        mapSelectionRegion.height = abs(mapSelectionRegion.height)
         for(const object of world.items) {
             this.select(object)
         }

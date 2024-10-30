@@ -129,6 +129,12 @@ export class Layer extends Renderable {
         }
     }
 
+    findTileMap(tileSet) {
+        for(const item of this.items) {
+            if(item.tileSet === tileSet) return item
+        }
+    }
+
     // collisions
 
     firstCollisionWithPoint(x, y) {

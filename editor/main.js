@@ -34,12 +34,13 @@ export function setTileSize(width, height) {
 
 export function showAll()  {
     let x0, y0, x1, y1
-    for(let tileMap of world.items) {
-        if(x0 === undefined || tileMap.left < x0) x0 = tileMap.left
-        if(y0 === undefined || tileMap.top < y0) y0 = tileMap.top
-        if(x1 === undefined || tileMap.right > x1) x1 = tileMap.right
-        if(y1 === undefined || tileMap.bottom > y1) y1 = tileMap.bottom
-    }
+
+    world.processSprites((sprite) => {
+        if(x0 === undefined || sprite.left < x0) x0 = sprite.left
+        if(y0 === undefined || sprite.top < y0) y0 = sprite.top
+        if(x1 === undefined || sprite.right > x1) x1 = sprite.right
+        if(y1 === undefined || sprite.bottom > y1) y1 = sprite.bottom
+    })
 
     mapsCanvas.setPosition(0.5 * (x0 + x1), 0.5 * (y0 + y1))
     mapsCanvas.setZoom(Math.log(max((x1 - x0) / mapsCanvas.viewport.width
