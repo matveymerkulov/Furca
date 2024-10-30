@@ -15,7 +15,9 @@ export function setWorld(newWorld) {
 }
 
 export let project = {
+    texturePath: "",
     textures: [],
+    soundPath: "",
     sounds: [],
     locale: "en",
     locales: {},

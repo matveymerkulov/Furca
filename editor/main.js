@@ -17,6 +17,7 @@ import {max} from "../src/functions.js"
 import {zk} from "../src/canvas.js"
 import {readText} from "./loader.js"
 
+project.texturePath = "textures/"
 project.textures = ["blocks.png", "bricks.png", "tiles.png", "objects.png", "farm_floor.png", "farm_furniture.png", "smooth.png"]
 
 export let tileWidth, tileHeight

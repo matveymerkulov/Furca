@@ -71,7 +71,7 @@ export class Layer extends Renderable {
                 removeFromArray(object, this.items)
                 return
             }
-            item.remove(object)
+            if(item.remove !== undefined) item.remove(object)
         }
 
     }
