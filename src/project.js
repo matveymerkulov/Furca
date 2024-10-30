@@ -1,9 +1,10 @@
 import {Layer} from "./layer.js"
 import {currentCanvas} from "./canvas.js"
 
-export let tileSet, tileMap, layer, world
+export let tileSet, tileMap, layer, world, imageArray
 
 export function initData() {
+    imageArray = {}
     tileSet = {}
     tileMap = {}
     layer = {}

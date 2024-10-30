@@ -2,9 +2,9 @@
 //import {getString, getSymbol, getTileMap, getTileSet, getToken, initParser} from "./parser.js"
 //import {getName} from "./names.js"
 
-import {initData, tileMap, tileSet, world} from "./project.js"
+import {imageArray, initData, tileMap, tileSet, world} from "./project.js"
 import {getName} from "./names.js"
-import {getLayer, getSymbol, getTileMap, getTileSet, getToken, initParser} from "./parser.js"
+import {getImageArray, getLayer, getSymbol, getTileMap, getTileSet, getToken, initParser} from "./parser.js"
 import {TileMap} from "./tile_map.js"
 
 export let indent = ""
@@ -81,10 +81,15 @@ export function projectToText() {
     text += ']\n\nexport function loadData() {\n'
 
     indent = "\t"
+
+    for(const[name, images] of Object.entries(imageArray)) {
+        text += `\timageArray.${name} = ${images.toString()}\n`
+    }
+    text += "\n"
+
     for(const[name, set] of Object.entries(tileSet)) {
         text += `\ttileSet.${name} = ${set.toString()}\n`
     }
-
     text += "\t\n"
 
     for(let object of world.items) {
@@ -104,15 +109,13 @@ export function projectFromText(data) {
         if(token === "") break
         switch(token) {
             case "tileSet":
-                getSymbol(".")
-                let tileSetName = getToken()
-                getSymbol("(")
-                getTileSet(tileSetName)
+                getTileSet()
                 break
             case "tileMap":
-                let tileMapName = getToken()
-                getSymbol("(")
-                getTileMap(tileMapName)
+                getTileMap()
+                break
+            case "imageArray":
+                getImageArray()
                 break
             case "layer":
                 let layerName = getToken()

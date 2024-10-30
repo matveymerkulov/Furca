@@ -1,4 +1,4 @@
-import {layer, tileMap, tileSet, world} from "./project.js"
+import {imageArray, layer, tileMap, tileSet, world} from "./project.js"
 import {TileSet} from "./tile_set.js"
 import {ImageArray} from "./image_array.js"
 import {TileMap} from "./tile_map.js"
@@ -44,7 +44,7 @@ export function getSymbols(comparison, terminator) {
         pos++
     }
 
-    let start = pos
+    const start = pos
     while(comparison(text.charAt(pos))) {
         pos++
     }
@@ -59,21 +59,21 @@ export function getToken(terminator) {
 }
 
 export function getBoolean(terminator) {
-    let value = getSymbols(symbol => {
+    const value = getSymbols(symbol => {
         return isTokenSymbol(symbol)
     }, terminator)
     return value === "true"
 }
 
 export function getInt(terminator) {
-    let num = getSymbols(symbol => {
+    const num = getSymbols(symbol => {
         return isDigit(symbol)
     }, terminator)
     return num === "" ? "" : parseInt(num)
 }
 
 export function getFloat(terminator) {
-    let num = getSymbols(symbol => {
+    const num = getSymbols(symbol => {
         return isDigit(symbol) || symbol === "."
     }, terminator)
     return num === "" ? "" : parseFloat(num)
@@ -88,16 +88,16 @@ export function getString(terminator) {
 
 export function getIntArray(terminator) {
     if(!getSymbol("[", terminator)) return ""
-    let array = []
+    const array = []
     while(true) {
-        let num = getInt("]")
+        const num = getInt("]")
         if(num === "") return array
         array.push(parseInt(num))
     }
 }
 
 export function getBooleanArray(values) {
-    let array = new Array(values.length)
+    const array = new Array(values.length)
     for(let i = 0; i < values.length; i++) {
         array[i] = values.charAt(i) === "1"
     }
@@ -105,7 +105,7 @@ export function getBooleanArray(values) {
 }
 
 export function readSymbol() {
-    let char = text.charAt(pos)
+    const char = text.charAt(pos)
     pos++
     return char
 }
@@ -117,105 +117,115 @@ export function eof() {
 
 
 function getBlocks() {
-    let array = []
+    const array = []
     getSymbol("[")
     while(true) {
-        let x = getInt("]")
+        const x = getInt("]")
         if(x === "")  {
             pos++
             return array
         }
-        let y = getInt()
-        let width = getInt()
-        let height = getInt()
-        let type = getInt()
+        const y = getInt()
+        const width = getInt()
+        const height = getInt()
+        const type = getInt()
         array.push(new Block(x, y, width, height, type))
     }
 }
 
 function getPositions() {
-    let array = []
+    const array = []
     getSymbol("[")
     while(true) {
-        let dx = getInt("]")
+        const dx = getInt("]")
         if(dx === "") {
             pos++
             return array
         }
-        let dy = getInt()
+        const dy = getInt()
         array.push(new Pos(dx, dy))
     }
 }
 
 function getRules() {
-    let array = []
+    const array = []
     getSymbol("[")
     while(true) {
-        let tiles = getInt("]")
+        const tiles = getInt("]")
         if(tiles === "")  {
             pos++
             return array
         }
-        let positions = getPositions()
+        const positions = getPositions()
         array.push(new Rule(tiles, positions))
     }
 }
 
 export function getCategory() {
-    let name = getString()
-    let rules = getRules()
-    let prolong = getBoolean()
-    let columns = getInt()
+    const name = getString()
+    const rules = getRules()
+    const prolong = getBoolean()
+    const columns = getInt()
     return new Category(name, rules, prolong, columns)
 }
 
 export function getCategories(columns) {
-    let array = []
+    const array = []
     getSymbol("[")
     while(true) {
-        let name = getString("]")
+        const name = getString("]")
         if(name === "") {
             pos++
             return array
         }
-        let rules = getRules()
-        let prolong = getBoolean()
+        const rules = getRules()
+        const prolong = getBoolean()
         getInt()
         array.push(new Category(name, rules, prolong, columns))
     }
 }
 
-export function getTileSet(name) {
+export function getImageArray() {
+    const name = getToken()
     getSymbol(".")
-    let textureName = getToken()
-    let columns = getInt()
-    let rows = getInt()
-    let xMul = getFloat()
-    let yMul = getFloat()
-    let heightMul = getFloat()
-    let widthMul = getFloat()
-    let visibility = getIntArray()
-    let blocks = getBlocks()
-    let categories = getCategories(columns)
-    //let prolong = getInt()
-    let altTile = getInt()
-    let groups = getIntArray()
-    tileSet[name] = new TileSet(new ImageArray(texture[textureName], columns, rows, xMul, yMul, heightMul, widthMul)
-        , visibility, blocks, categories, altTile, groups)
+    const textureName = getToken()
+    const columns = getInt()
+    const rows = getInt()
+    const xMul = getFloat()
+    const yMul = getFloat()
+    const heightMul = getFloat()
+    const widthMul = getFloat()
+    imageArray[name] = new ImageArray(texture[textureName], columns, rows, xMul, yMul, heightMul, widthMul)
     getSymbol(")")
 }
 
-export function getTileMap(name, layer) {
+export function getTileSet() {
     getSymbol(".")
-    let tileSetName = getToken()
-    let mapTileSet = tileSet[tileSetName]
-    let columns = getInt()
-    let rows = getInt()
-    let x = getFloat()
-    let y = getFloat()
-    let cellWidth = getFloat()
-    let cellHeight = getFloat()
-    let array = getIntArray()
+    const name = getToken()
+    getSymbol(".")
+    const array = imageArray[getToken()]
+    const visibility = getIntArray()
+    const blocks = getBlocks()
+    const categories = getCategories(imageArray.columns)
+    //const prolong = getInt()
+    const altTile = getInt()
+    const groups = getIntArray()
+    tileSet[name] = new TileSet(array, visibility, blocks, categories, altTile, groups)
+    getSymbol(")")
+}
+
+export function getTileMap(layer) {
+    const name = getToken()
+    getSymbol(".")
+    const tileSetName = getToken()
+    const mapTileSet = tileSet[tileSetName]
+    const columns = getInt()
+    const rows = getInt()
+    const x = getFloat()
+    const y = getFloat()
+    const cellWidth = getFloat()
+    const cellHeight = getFloat()
+    const array = getIntArray()
     const map = new TileMap(mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array)
     if(layer === undefined) {
         tileMap[name] = map
@@ -230,7 +240,7 @@ export function getLayer(name) {
     const l = new Layer()
     while(true) {
         if(!getSymbol("(", ")")) break
-        getTileMap(undefined, l)
+        getTileMap(l)
     }
     layer[name] = l
     setName(l, name)

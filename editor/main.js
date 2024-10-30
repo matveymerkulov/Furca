@@ -1,5 +1,5 @@
 import {mainWindow} from "./main_window.js"
-import {initData, project, tileMap, tileSet, world} from "../src/project.js"
+import {initData, layer, project, tileMap, tileSet, world} from "../src/project.js"
 import {currentWindow, hideWindow} from "../src/gui/window.js"
 import {setName} from "../src/names.js"
 //import {loadData} from "../data/breakout.js"
@@ -48,6 +48,10 @@ function initNames() {
     }
 
     for(const[name, object] of Object.entries(tileMap)) {
+        setName(object, name)
+    }
+
+    for(const[name, object] of Object.entries(layer)) {
         setName(object, name)
     }
 }

@@ -52,8 +52,7 @@ export const mode = {
     maps: Symbol("maps"),
 }
 
-export let currentMode = mode.tiles
-
+export let currentMode = mode.maps
 
 export let mapsCanvas = mainWindow.addCanvas("map", 30, 14)
 mapsCanvas.background = "rgb(9, 44, 84)"
@@ -250,15 +249,20 @@ export function checkMapsWindowCollisions() {
     tileMapUnderCursor = undefined
     currentTileSprite = undefined
 
-    for(let object of world.items) {
-        if(object.collidesWithPoint(mouse.x, mouse.y)) {
-            tileMapUnderCursor = object
-            if(currentTileSet === object.tileSet || currentMode === mode.maps) {
-                currentTileMap = object
+    function checkLayer(layer) {
+        for(let object of layer.items) {
+            if(object instanceof Layer) {
+                checkLayer(object)
+            } else if(object.collidesWithPoint(mouse.x, mouse.y)) {
+                tileMapUnderCursor = object
+                if(currentTileSet === object.tileSet || currentMode === mode.maps) {
+                    currentTileMap = object
+                }
             }
-            break
         }
     }
+
+    checkLayer(world)
 
     if(currentTileMap !== undefined) {
         tileMapUnderCursor = currentTileMap

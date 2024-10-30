@@ -3,8 +3,14 @@ import {keys} from "./key.js"
 
 export let showCollisionShapes = false
 
+export let keyBlock = false
+export function setKeyBlock(value) {
+    keyBlock = value
+}
+
 export function initInput() {
     document.addEventListener("keydown", event => {
+        if(keyBlock) return
         //event.preventDefault();
 
         switch(event.code) {
@@ -22,6 +28,7 @@ export function initInput() {
     }, false)
 
     document.addEventListener("keyup", event => {
+        if(keyBlock) return
         keys.forEach(key => {
             key.processKeyUpEvent(event)
         })
