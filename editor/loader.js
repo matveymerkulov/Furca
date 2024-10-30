@@ -1,9 +1,7 @@
 export function readText(func) {
     const readFile = function(e) {
         let file = e.target.files[0]
-        if(!file) {
-            return;
-        }
+        if(!file) return
         let reader = new FileReader()
         reader.onload = func
         reader.readAsText(file)

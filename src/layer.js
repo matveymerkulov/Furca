@@ -129,7 +129,7 @@ export class Layer extends Renderable {
         }
     }
 
-    findTileMap(tileSet) {
+    findTileMapByTileSet(tileSet) {
         for(const item of this.items) {
             if(item.tileSet === tileSet) return item
         }

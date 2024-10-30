@@ -15,6 +15,8 @@ export function setWorld(newWorld) {
 }
 
 export let project = {
+    textures: [],
+    sounds: [],
     locale: "en",
     locales: {},
     scene: new Layer(),
@@ -26,10 +28,6 @@ export let project = {
     renderNode() {
         this.render()
         currentCanvas.renderNode()
-    },
-
-    getAssets() {
-        return {texture: [], sound: []}
     },
 
     init: () => {},

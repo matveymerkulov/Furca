@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function() {
     mouse = new Point()
     screenMouse = new Point()
     canvasMouse = new Point()
-    loadAssets("", project.getAssets())
+    loadAssets("")
 })
 
 // assets loader
@@ -145,7 +145,7 @@ export function removeExtension(fileName) {
 }
 
 let assetsToLoad = 0
-export function loadAssets(path, asset) {
+export function loadAssets(path) {
     function process(assets) {
         const newArray = []
         for(const fileName of assets) {
@@ -166,7 +166,7 @@ export function loadAssets(path, asset) {
         return newArray
     }
 
-    for(const textureFileName of process(asset.texture)) {
+    for(const textureFileName of process(project.textures)) {
         const img = new Image()
         img.onload = () => {
             assetsToLoad--
@@ -174,6 +174,7 @@ export function loadAssets(path, asset) {
         }
         const key = removeExtension(textureFileName)
         img.src = path + textureFileName
+        img.fileName = textureFileName
         img.id = key
         texture[key] = img
         assetsToLoad++
@@ -188,7 +189,7 @@ export function loadAssets(path, asset) {
         audio.addEventListener("canplaythrough", listener, false)
     }
 
-    for(const soundFileName of process(asset.sound)) {
+    for(const soundFileName of process(project.sounds)) {
         let audio = new Audio()
         addAudioListener(audio)
         let key = removeExtension(soundFileName)

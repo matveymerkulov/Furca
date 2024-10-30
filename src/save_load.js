@@ -64,12 +64,21 @@ export function projectToText() {
     text += `import {TileSet} from "${path}/tile_set.js"\n`
     text += `import {TileMap} from "${path}/tile_map.js"\n`
     text += `import {ImageArray} from "${path}/image_array.js"\n`
-    text += `import {layer, tileMap, tileSet} from "${path}/project.js"\n`
+    text += `import {layer, tileMap, tileSet, project} from "${path}/project.js"\n`
     text += `import {Block} from "${path}/block.js"\n`
     text += `import {Category, Pos, Rule} from "${path}/auto_tiling.js"\n`
     text += `import {texture} from "${path}/system.js"\n`
-    text += `import {Layer} from "${path}/layer.js"`
-    text += '\nexport function loadData() {\n'
+    text += `import {Layer} from "${path}/layer.js"\n\n`
+
+    text += `project.textures = [`
+    const textureSet = new Set()
+    for(const[name, set] of Object.entries(tileSet)) {
+        const tex = set.images.texture
+        if(textureSet.has(tex)) continue
+        text += `"${tex.fileName}", `
+    }
+
+    text += ']\n\nexport function loadData() {\n'
 
     indent = "\t"
     for(const[name, set] of Object.entries(tileSet)) {

@@ -17,15 +17,9 @@ import {max} from "../src/functions.js"
 import {zk} from "../src/canvas.js"
 import {readText} from "./loader.js"
 
-project.getAssets = () => {
-    return {
-        texture: ["blocks.png", "bricks.png", "tiles.png", "objects.png", "farm_floor.png", "farm_furniture.png", "smooth.png"],
-        sound: []
-    }
-}
+project.textures = ["blocks.png", "bricks.png", "tiles.png", "objects.png", "farm_floor.png", "farm_furniture.png", "smooth.png"]
 
 export let tileWidth, tileHeight
-export let tabs = new Map()
 
 export function setTileSize(width, height) {
     tileWidth = width
