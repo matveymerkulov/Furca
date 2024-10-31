@@ -10,6 +10,8 @@ import {setTileSize, tileHeight, tileWidth,} from "./main.js"
 import {Win} from "../src/gui/window.js"
 import {delPropertiesKey, newBlockKey, newFrameKey, selectTilePropertiesKey, toggleVisibilityKey} from "./keys.js"
 import {imageArray} from "../src/project.js"
+import {enterString} from "./input.js"
+import {ImageArray} from "../src/image_array.js"
 
 export let tileSetPropertiesWindow = new Win("tile_set_window")
 
@@ -51,7 +53,6 @@ export function renderTileSetCanvas(dWidth, dHeight) {
     drawDashedRegion(Math.floor(canvasMouse.x / tileWidth) * tileWidth + 3
         , Math.floor(canvasMouse.y / tileHeight) * tileHeight + 3, tileWidth - 7, tileHeight - 7)
 }
-
 
 
 blocksCanvas.render = () => {
@@ -109,4 +110,11 @@ blocksCanvas.update = () => {
     } else if(newFrameKey.wasPressed) {
         currentTileSet.addRegion(tileSetRegion, blockType.frame)
     }
+}
+
+
+element("new_image_array").onclick = () => {
+    enterString("Введите название нового массива изображений:", (string) => {
+        const array = new ImageArray()
+    })
 }

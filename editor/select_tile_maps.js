@@ -1,7 +1,7 @@
 import {Drag} from "../src/drag.js"
 import {Box} from "../src/box.js"
 import {mouse} from "../src/system.js"
-import {currentMode, mode, tileMapUnderCursor} from "./tile_map.js"
+import {currentMode, mode, objectUnderCursor} from "./tile_map.js"
 import {tileMap, world} from "../src/project.js"
 import {Layer} from "../src/layer.js"
 import {abs} from "../src/functions.js"
@@ -13,7 +13,7 @@ export default class SelectTileMaps extends Drag {
     #y
 
     conditions() {
-        return tileMapUnderCursor === undefined && currentMode === mode.maps
+        return objectUnderCursor === undefined && currentMode === mode.maps
     }
 
     start() {

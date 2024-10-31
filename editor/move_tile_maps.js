@@ -1,7 +1,7 @@
 import MovePoint from "./move_point.js"
 import {selectedTileMaps} from "./select_tile_maps.js"
 import {canvasMouse, mouse} from "../src/system.js"
-import {currentMode, mode, tileMapUnderCursor} from "./tile_map.js"
+import {currentMode, mode, objectUnderCursor} from "./tile_map.js"
 import {Layer} from "../src/layer.js"
 
 export default class MoveTileMaps extends MovePoint {
@@ -13,7 +13,7 @@ export default class MoveTileMaps extends MovePoint {
             }
             return false
         }
-        return tileMapUnderCursor !== undefined
+        return objectUnderCursor !== undefined
     }
 
     snapToGrid(object) {
@@ -23,7 +23,7 @@ export default class MoveTileMaps extends MovePoint {
 
     start() {
         if(selectedTileMaps.length === 0) {
-            this.object = tileMapUnderCursor
+            this.object = objectUnderCursor
             if(this.object instanceof Layer) {
                 selectedTileMaps.push(...this.object.items)
             } else {
@@ -42,7 +42,9 @@ export default class MoveTileMaps extends MovePoint {
     }
 
     process() {
-        if(selectedTileMaps.length === 0) {
+        if(this.object instanceof Layer) {
+
+        } else if(selectedTileMaps.length === 0) {
             super.process()
             this.snapToGrid(this.object)
         } else {

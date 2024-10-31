@@ -1,5 +1,5 @@
 import {mainWindow} from "./main_window.js"
-import {initData, layer, project, tileMap, tileSet, world} from "../src/project.js"
+import {imageArray, initData, layer, project, tileMap, tileSet, world} from "../src/project.js"
 import {currentWindow, hideWindow} from "../src/gui/window.js"
 import {setName} from "../src/names.js"
 //import {loadData} from "../data/breakout.js"
@@ -40,6 +40,10 @@ export function showAll()  {
 }
 
 function initNames() {
+    for(const[name, object] of Object.entries(imageArray)) {
+        setName(object, name)
+    }
+
     for(const[name, object] of Object.entries(tileSet)) {
         setName(object, name)
     }

@@ -1,17 +1,22 @@
 import {TileMap} from "../src/tile_map.js"
-import {tileMap, world} from "../src/project.js"
+import {layer, tileMap, world} from "../src/project.js"
 import {eof, getInt, getSymbol, getToken, initParser, readSymbol} from "../src/parser.js"
 import {setName} from "../src/names.js"
+import {Layer} from "../src/layer.js"
 
-export function addTileMap(name, map) {
-    setName(map, name)
-    tileMap[name] = map
-    world.add(map)
+export function addObject(name, object) {
+    setName(object, name)
+    if(object instanceof Layer) {
+        layer[name] = object
+    } else {
+        tileMap[name] = object
+    }
+    world.add(object)
 }
 
 export function createTileMap(string, set, columns, rows, cornerX, cornerY) {
     function newMap(name, x, y) {
-        addTileMap(name, new TileMap(set, columns, rows, x, y, 1, 1))
+        addObject(name, new TileMap(set, columns, rows, x, y, 1, 1))
     }
 
     let fromX = 0, toX = 0, fromY = 0, toY = 0

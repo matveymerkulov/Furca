@@ -17,9 +17,9 @@ export const zoomInKey = new Key("WheelUp")
 export const zoomOutKey = new Key("WheelDown")
 
 export const newMapKey = new Key("KeyN")
-export const renameMapKey = new Key("KeyR")
-export const copyMapKey = new Key("KeyC")
-export const deleteMapKey = new Key("Delete")
+export const renameObjectKey = new Key("KeyR")
+export const copyObjectKey = new Key("KeyC")
+export const deleteObjectKey = new Key("Delete")
 
 // tile mode
 

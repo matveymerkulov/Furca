@@ -11,6 +11,14 @@ export class Layer extends Renderable {
         this.active = true
     }
 
+    copy(dx = 0, dy = 0) {
+        const lay = new Layer()
+        for(let item of this.items) {
+            lay.add(item.copy(item.x + dx, item.y + dy))
+        }
+        return lay
+    }
+
     toString() {
         let text = `new Layer(`
         addIndent()
@@ -29,7 +37,9 @@ export class Layer extends Renderable {
     }
 
     drawDashedRegion(isCircle) {
-        this.items[0].drawDashedRegion(isCircle)
+        for(const item of this.items) {
+            item.drawDashedRegion(isCircle)
+        }
     }
 
     update() {
