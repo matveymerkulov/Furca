@@ -42,9 +42,7 @@ export default class MoveTileMaps extends MovePoint {
     }
 
     process() {
-        if(this.object instanceof Layer) {
-
-        } else if(selectedTileMaps.length === 0) {
+        if(selectedTileMaps.length === 0) {
             super.process()
             this.snapToGrid(this.object)
         } else {
@@ -52,6 +50,12 @@ export default class MoveTileMaps extends MovePoint {
                 this.updateObject(selectedTileMaps[i], this.objectX0[i], this.objectY0[i])
                 this.snapToGrid(selectedTileMaps[i])
             }
+        }
+    }
+
+    end() {
+        if(objectUnderCursor instanceof Layer) {
+            selectedTileMaps.length = 0
         }
     }
 }

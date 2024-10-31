@@ -254,6 +254,7 @@ function findTileMap(items) {
         if(object instanceof Layer) {
             findTileMap(object.items)
             objectUnderCursor = object
+            return
         } else {
             objectUnderCursor = object
             if(currentTileSet === object.tileSet || currentMode === mode.maps) {
@@ -270,10 +271,6 @@ export function checkObjectsWindowCollisions() {
     currentTileSprite = undefined
 
     findTileMap(world.items)
-
-    if(currentTileMap !== undefined) {
-        objectUnderCursor = currentTileMap
-    }
 }
 
 

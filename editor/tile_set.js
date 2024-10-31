@@ -68,7 +68,7 @@ function processTiles(tileFunction, blockFunction) {
 
 
 export function calculateTilesPerRow() {
-    const quantity = processTiles(() => {}, () => {})
+    const quantity = processTiles(() => {}, () => {}) + 1
     setTilesPerRow(ceil(sqrt(quantity / tileSetCanvas.viewport.height * tileSetCanvas.viewport.width)))
 }
 
