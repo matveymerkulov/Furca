@@ -1,7 +1,7 @@
 import {canvasUnderCursor, ctx, currentCanvas} from "../src/canvas.js"
 import SelectTileSetRegion, {tileSetRegion} from "./select_tile_set_region.js"
 import {drawDashedRegion, drawRect} from "../src/draw.js"
-import {canvasMouse} from "../src/system.js"
+import {canvasMouse, element} from "../src/system.js"
 import {drawX} from "./draw.js"
 import {currentTileSet} from "./tile_set.js"
 import {blockType} from "../src/block.js"
@@ -9,12 +9,25 @@ import {visibility} from "../src/tile_set.js"
 import {setTileSize, tileHeight, tileWidth,} from "./main.js"
 import {Win} from "../src/gui/window.js"
 import {delPropertiesKey, newBlockKey, newFrameKey, selectTilePropertiesKey, toggleVisibilityKey} from "./keys.js"
+import {imageArray} from "../src/project.js"
 
 export let tileSetPropertiesWindow = new Win("tile_set_window")
 
-let blocksCanvas = tileSetPropertiesWindow.addCanvas("tile_set_blocks", 9, 16)
+export const blocksCanvas = tileSetPropertiesWindow.addCanvas("tile_set_blocks", 9, 16)
 blocksCanvas.add(new SelectTileSetRegion(), selectTilePropertiesKey)
 
+const imageArrayComboBox = element("image_arrays")
+export function updateImageArraysList() {
+    imageArrayComboBox.innerText = ""
+    for(const [name, array] of Object.entries(imageArray)) {
+        const option = document.createElement("option")
+        option.value = name
+        option.innerText = name
+        option.array = array
+        if(currentTileSet.images === array) option.selected = true
+        imageArrayComboBox.append(option)
+    }
+}
 
 export function renderTileSetCanvas(dWidth, dHeight) {
     let images = currentTileSet.images

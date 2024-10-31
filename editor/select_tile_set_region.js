@@ -3,6 +3,7 @@ import {canvasMouse} from "../src/system.js"
 import {Drag} from "../src/drag.js"
 import {Region} from "../src/region.js"
 import {currentTileSet} from "./tile_set.js"
+import {canvasUnderCursor, currentCanvas} from "../src/canvas.js"
 
 export let tileSetRegion
 
@@ -13,6 +14,10 @@ export function resetRegionSelector() {
 export default class SelectTileSetRegion extends Drag {
     #x
     #y
+
+    conditions() {
+        return canvasUnderCursor === currentCanvas
+    }
 
     start() {
         this.#x = Math.floor(canvasMouse.x / tileWidth)

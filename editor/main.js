@@ -5,10 +5,10 @@ import {setName} from "../src/names.js"
 //import {loadData} from "../data/breakout.js"
 import {initTileSetSelectionWindow} from "./new_map.js"
 import {deleteCurrentDrag} from "../src/drag.js"
-import {projectFromText, projectToText} from "../src/save_load.js"
+import {loadTextures, projectFromText, projectToText} from "../src/save_load.js"
 import {calculateTilesPerRow, currentTileSet} from "./tile_set.js"
 import {resetRegionSelector} from "./select_tile_set_region.js"
-import {tileSetPropertiesWindow} from "./tile_set_properties.js"
+import {tileSetPropertiesWindow, updateImageArraysList} from "./tile_set_properties.js"
 import {rulesWindow, updateCategoriesList} from "./auto_tiling.js"
 import {autoTilingEditorKey, loadKey, saveKey, tileSetPropertiesKey} from "./keys.js"
 import {setBorderVisibility} from "../src/tile_map.js"
@@ -16,9 +16,6 @@ import {mapsCanvas} from "./tile_map.js"
 import {max} from "../src/functions.js"
 import {zk} from "../src/canvas.js"
 import {readText} from "./loader.js"
-
-project.texturePath = "textures/"
-project.textures = ["blocks.png", "bricks.png", "tiles.png", "objects.png", "farm_floor.png", "farm_furniture.png", "smooth.png"]
 
 export let tileWidth, tileHeight
 
@@ -93,10 +90,13 @@ mainWindow.update = () => {
     if(loadKey.wasPressed) {
         readText(function(e) {
             initData()
-            projectFromText(e.target.result)
-            initNames()
-            showAll()
-            calculateTilesPerRow()
+            const text = e.target.result
+            loadTextures(text, () => {
+                projectFromText(text)
+                initNames()
+                showAll()
+                calculateTilesPerRow()
+            })
         })
     }
 
@@ -115,6 +115,7 @@ mainWindow.update = () => {
 
     if(tileSetPropertiesKey.wasPressed) {
         resetRegionSelector()
+        updateImageArraysList()
         tileSetPropertiesWindow.show()
     }
 

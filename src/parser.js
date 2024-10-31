@@ -46,6 +46,7 @@ export function getSymbols(comparison, terminator) {
 
     const start = pos
     while(comparison(text.charAt(pos))) {
+        if(pos > text.length) throw new Error("file end reached")
         pos++
     }
 
@@ -86,6 +87,14 @@ export function getString(terminator) {
     }, terminator)
 }
 
+export function getBooleanArray(values) {
+    const array = new Array(values.length)
+    for(let i = 0; i < values.length; i++) {
+        array[i] = values.charAt(i) === "1"
+    }
+    return array
+}
+
 export function getIntArray(terminator) {
     if(!getSymbol("[", terminator)) return ""
     const array = []
@@ -96,12 +105,15 @@ export function getIntArray(terminator) {
     }
 }
 
-export function getBooleanArray(values) {
-    const array = new Array(values.length)
-    for(let i = 0; i < values.length; i++) {
-        array[i] = values.charAt(i) === "1"
+export function getStringArray(terminator) {
+    if(!getSymbol("[", terminator)) return ""
+    const array = []
+    while(true) {
+        const string = getString("]")
+        if(string === "") return array
+        array.push(string)
+        pos++
     }
-    return array
 }
 
 export function readSymbol() {
@@ -196,6 +208,7 @@ export function getImageArray() {
     const heightMul = getFloat()
     const widthMul = getFloat()
     imageArray[name] = new ImageArray(texture[textureName], columns, rows, xMul, yMul, heightMul, widthMul)
+    let t = text.substring(0, pos)
     getSymbol(")")
 }
 
@@ -236,7 +249,10 @@ export function getTileMap(layer) {
     getSymbol(")")
 }
 
-export function getLayer(name) {
+export function getLayer() {
+    let name = getToken()
+    getSymbol("(")
+
     const l = new Layer()
     while(true) {
         if(!getSymbol("(", ")")) break

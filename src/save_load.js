@@ -2,10 +2,21 @@
 //import {getString, getSymbol, getTileMap, getTileSet, getToken, initParser} from "./parser.js"
 //import {getName} from "./names.js"
 
-import {imageArray, initData, tileMap, tileSet, world} from "./project.js"
+import {imageArray, initData, project, tileMap, tileSet, world} from "./project.js"
 import {getName} from "./names.js"
-import {getImageArray, getLayer, getSymbol, getTileMap, getTileSet, getToken, initParser} from "./parser.js"
+import {
+    getImageArray,
+    getLayer,
+    getString,
+    getStringArray,
+    getSymbol,
+    getTileMap,
+    getTileSet,
+    getToken,
+    initParser
+} from "./parser.js"
 import {TileMap} from "./tile_map.js"
+import {loadTexture} from "./system.js"
 
 export let indent = ""
 
@@ -70,9 +81,10 @@ export function projectToText() {
     text += `import {texture} from "${path}/system.js"\n`
     text += `import {Layer} from "${path}/layer.js"\n\n`
 
+    text += `project.texturePath = ${project.texturePath}\n`
     text += `project.textures = [`
     const textureSet = new Set()
-    for(const[name, set] of Object.entries(tileSet)) {
+    for(let set of Object.values(tileSet)) {
         const tex = set.images.texture
         if(textureSet.has(tex)) continue
         text += `"${tex.fileName}", `
@@ -99,6 +111,17 @@ export function projectToText() {
     return text + "}"
 }
 
+export function loadTextures(data, func) {
+    initParser(data)
+    getSymbol("=")
+    project.texturePath = getString()
+    getSymbol("=")
+    project.textures = getStringArray()
+    for(const textureFileName of project.textures) {
+        loadTexture(textureFileName, func)
+    }
+}
+
 export function projectFromText(data) {
     initParser(data)
     getSymbol("(")
@@ -118,10 +141,10 @@ export function projectFromText(data) {
                 getImageArray()
                 break
             case "layer":
-                let layerName = getToken()
-                getSymbol("(")
-                getLayer(layerName)
+                getLayer()
                 break
+            default:
+                console.log("Wrong token " + token)
         }
     }
 }

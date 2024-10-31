@@ -10,7 +10,7 @@ import {Box} from "./box.js"
 
 export let fps = 60, aps = 200, paused = false
 export let mouse, screenMouse, canvasMouse, apsk = 1 / aps, unc = 0.0000001
-export const texture = new Map(), sound = new Map()
+export const texture = {}, sound = {}
 
 // enums
 
@@ -145,6 +145,22 @@ export function removeExtension(fileName) {
 }
 
 let assetsToLoad = 0
+export function loadTexture(textureFileName, func) {
+    const tex = new Image()
+    tex.onload = () => {
+        assetsToLoad--
+        if(assetsToLoad <= 0) func()
+    }
+    const key = removeExtension(textureFileName)
+    tex.src = project.texturePath + textureFileName
+    tex.fileName = textureFileName
+    tex.id = key
+    texture[key] = tex
+    assetsToLoad++
+
+    return tex
+}
+
 export function loadAssets() {
     function process(assets) {
         const newArray = []
@@ -167,17 +183,7 @@ export function loadAssets() {
     }
 
     for(const textureFileName of process(project.textures)) {
-        const img = new Image()
-        img.onload = () => {
-            assetsToLoad--
-            if(assetsToLoad <= 0) start()
-        }
-        const key = removeExtension(textureFileName)
-        img.src = project.texturePath + textureFileName
-        img.fileName = textureFileName
-        img.id = key
-        texture[key] = img
-        assetsToLoad++
+        loadTexture(textureFileName, start)
     }
 
     function addAudioListener(audio) {
@@ -214,6 +220,8 @@ function start() {
 
     let apsTime = 0, realAps = 0, apsCounter = 0
     setInterval(function () {
+        if(assetsToLoad > 0) return
+
         project.updateNode()
 
         keys.forEach(key => {
@@ -232,6 +240,8 @@ function start() {
 
     let fpsTime = 0, realFps = 0, fpsCounter = 0
     setInterval(function () {
+        if(assetsToLoad > 0) return
+
         let time = new Date().getTime()
         if (time >= fpsTime) {
             realFps = fpsCounter
