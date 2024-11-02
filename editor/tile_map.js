@@ -37,7 +37,7 @@ import {
     rectangleModeKey,
     renameObjectKey,
     selectKey,
-    switchModeKey,
+    switchModeKey, ungroupKey,
     zoomInKey,
     zoomOutKey
 } from "./keys.js"
@@ -69,7 +69,7 @@ mapsCanvas.render = () => {
         map.draw()
         let name = getName(map)
         ctx.fillStyle = "white"
-        ctx.font = `${distToScreen(2)}px serif`
+        ctx.font = `${distToScreen(1)}px serif`
         // noinspection JSCheckFunctionSignatures
         let metrics = ctx.measureText(name)
         // noinspection JSCheckFunctionSignatures
@@ -208,14 +208,14 @@ export function tileModeOperations() {
 export function mapModeOperations() {
     if(renameObjectKey.wasPressed) {
         // noinspection JSCheckFunctionSignatures
-        enterString("Введите новое название карты:", getName(objectUnderCursor), (name) => {
+        enterString("Введите новое название объекта:", getName(objectUnderCursor), (name) => {
             setName(objectUnderCursor, name)
         })
     }
 
     if(copyObjectKey.wasPressed) {
-        if(objectUnderCursor instanceof Layer)
-        addObject(incrementName(getName(objectUnderCursor)), objectUnderCursor.copy(1 + objectUnderCursor.width, 0))
+        const width = objectUnderCursor instanceof Layer ? objectUnderCursor.items[0].width : objectUnderCursor.width
+        addObject(incrementName(getName(objectUnderCursor)), objectUnderCursor.copy(1 + width, 0))
     }
 
     function removeObjects(objects) {
@@ -244,6 +244,16 @@ export function mapModeOperations() {
         setName(newLayer, getName(selectedTileMaps[0]))
         removeObjects(selectedTileMaps)
         world.add(newLayer)
+    }
+
+    if(ungroupKey.wasPressed && objectUnderCursor !== undefined) {
+        let index = 0
+        for(const item of objectUnderCursor.items) {
+            world.add(item)
+            setName(item, getName(objectUnderCursor) + index)
+            index++
+        }
+        world.remove(objectUnderCursor)
     }
 }
 

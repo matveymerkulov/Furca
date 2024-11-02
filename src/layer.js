@@ -14,7 +14,7 @@ export class Layer extends Renderable {
     copy(dx = 0, dy = 0) {
         const lay = new Layer()
         for(let item of this.items) {
-            lay.add(item.copy(item.x + dx, item.y + dy))
+            lay.add(item.copy(dx, dy))
         }
         return lay
     }

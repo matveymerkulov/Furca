@@ -54,7 +54,7 @@ export default class MoveTileMaps extends MovePoint {
     }
 
     end() {
-        if(objectUnderCursor instanceof Layer) {
+        if(objectUnderCursor instanceof Layer && selectedTileMaps.length <= objectUnderCursor.items.length) {
             selectedTileMaps.length = 0
         }
     }
