@@ -108,27 +108,26 @@ mapsCanvas.update = () => {
         currentMode = currentMode === mode.tiles ? mode.maps : mode.tiles
     }
 
-    if(rectangleModeKey.wasPressed) {
-        rectangleMode = !rectangleMode
-        updateBlockSize(currentBlock)
-    }
-
-    if(newMapKey.wasPressed) {
-        newMap()
-    }
-
     if(canvasUnderCursor !== mapsCanvas) return
 
     setCanvas(mapsCanvas)
 
     checkObjectsWindowCollisions()
 
-    if(objectUnderCursor === undefined) return
-
     if(currentMode === mode.tiles) {
+        if(rectangleModeKey.wasPressed) {
+            rectangleMode = !rectangleMode
+            updateBlockSize(currentBlock)
+        }
+
         if(currentTileMap === undefined) return
         tileModeOperations()
     } else if(currentMode === mode.maps) {
+        if(newMapKey.wasPressed) {
+            newMap()
+        }
+
+        if(selectedObjects.length === 0 && objectUnderCursor === undefined) return
         mapModeOperations()
     }
 }
@@ -206,22 +205,35 @@ export function tileModeOperations() {
 
 
 export function mapModeOperations() {
+    const objects = selectedObjects.length > 0 ? selectedObjects : [objectUnderCursor]
+    const firstObject = objects[0]
+
     if(renameObjectKey.wasPressed) {
         // noinspection JSCheckFunctionSignatures
-        enterString("Введите новое название объекта:", getName(objectUnderCursor), (name) => {
-            setName(objectUnderCursor, name)
-        })
+        if(objects.length === 1) {
+            enterString("Введите новое название объекта:", getName(firstObject), (name) => {
+                setName(firstObject, name)
+            })
+        } else {
+            enterString("Введите постфикс объектов:", "", (postfix) => {
+                for(let object of objects) {
+                    setName(object, getName(object) + postfix)
+                }
+            })
+        }
     }
 
     if(copyObjectKey.wasPressed) {
-        const width = objectUnderCursor instanceof Layer ? objectUnderCursor.items[0].width : objectUnderCursor.width
-        addObject(incrementName(getName(objectUnderCursor)), objectUnderCursor.copy(1 + width, 0))
+        const width = firstObject.isLayer ? firstObject.items[0].width : firstObject.width
+        for(let object of objects) {
+            addObject(incrementName(getName(object)), object.copy(1 + width, 0))
+        }
     }
 
-    function removeObjects(objects) {
+    function removeObjects() {
         for(let object of objects) {
             removeFromArray(object, world.items)
-            if(object instanceof Layer) {
+            if(object.isLayer) {
                 delete layer[getName(object)]
             } else {
                 delete tileMap[getName(object)]
@@ -230,30 +242,35 @@ export function mapModeOperations() {
     }
 
     if(deleteObjectKey.wasPressed) {
-        if(selectedObjects.length === 0) {
-            world.remove(objectUnderCursor)
-            delete tileMap[getName(objectUnderCursor)]
-        } else {
-            removeObjects(selectedObjects)
-            clearSelection()
-        }
+        removeObjects()
+        selectedObjects.length = 0
     }
 
-    if(groupKey.wasPressed && selectedObjects.length > 1) {
-        const newLayer = new Layer(...selectedObjects)
-        setName(newLayer, getName(selectedObjects[0]))
-        removeObjects(selectedObjects)
+    function hasNoLayer() {
+        for(const object of objects) {
+            if(object.isLayer) return false
+        }
+        return true
+    }
+    
+    if(groupKey.wasPressed && objects.length > 1 && hasNoLayer()) {
+        const newLayer = new Layer(...objects)
+        setName(newLayer, getName(firstObject))
+        removeObjects()
         world.add(newLayer)
     }
 
-    if(ungroupKey.wasPressed && objectUnderCursor !== undefined) {
-        let index = 0
-        for(const item of objectUnderCursor.items) {
-            world.add(item)
-            setName(item, getName(objectUnderCursor) + index)
-            index++
+    if(ungroupKey.wasPressed) {
+        for(const object of objects) {
+            if(!object.isLayer) continue
+            let index = 0
+            for(const item of object.items) {
+                world.add(item)
+                setName(item, getName(objectUnderCursor) + index)
+                index++
+            }
+            world.remove(object)
         }
-        world.remove(objectUnderCursor)
     }
 }
 

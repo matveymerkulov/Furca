@@ -20,6 +20,7 @@ export const newMapKey = new Key("KeyN")
 export const renameObjectKey = new Key("KeyR")
 export const copyObjectKey = new Key("KeyC")
 export const deleteObjectKey = new Key("Delete")
+export const newPointKey = new Key("KeyP")
 
 // tile mode
 
