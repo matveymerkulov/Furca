@@ -2,6 +2,7 @@ import {Renderable} from "./renderable.js"
 import {addIndent, indent, removeIndent} from "./save_load.js"
 import {removeFromArray} from "./functions.js"
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
+import {Box} from "./box.js"
 
 export class Layer extends Renderable {
     constructor(...items) {
@@ -12,11 +13,11 @@ export class Layer extends Renderable {
     }
 
     copy(dx = 0, dy = 0) {
-        const lay = new Layer()
+        const newLayer = new Layer()
         for(let item of this.items) {
-            lay.add(item.copy(dx, dy))
+            newLayer.add(item.copy(dx, dy))
         }
-        return lay
+        return newLayer
     }
 
     toString() {
@@ -27,6 +28,10 @@ export class Layer extends Renderable {
         })
         removeIndent()
         return `${text}${indent})`
+    }
+
+    get isLayer() {
+        return true
     }
 
     draw() {

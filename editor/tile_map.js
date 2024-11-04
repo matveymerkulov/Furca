@@ -3,7 +3,7 @@ import {layer, tileMap, world} from "../src/project.js"
 import {addObject} from "./create_tile_map.js"
 import {getName, incrementName, setName} from "../src/names.js"
 import {canvasUnderCursor, ctx, distToScreen, setCanvas, xToScreen, yToScreen} from "../src/canvas.js"
-import SelectTileMaps, {clearSelection, mapSelectionRegion, selectedTileMaps} from "./select_tile_maps.js"
+import SelectTileMaps, {clearSelection, mapSelectionRegion, selectedObjects} from "./select_tile_maps.js"
 import {
     altGroup,
     currentBlock,
@@ -92,8 +92,8 @@ mapsCanvas.render = () => {
     } else if(currentMode === mode.maps) {
         if(mapSelectionRegion !== undefined) {
             mapSelectionRegion.drawDashedRegion()
-        } else if(selectedTileMaps.length > 0) {
-            for(let map of selectedTileMaps) {
+        } else if(selectedObjects.length > 0) {
+            for(let map of selectedObjects) {
                 map.drawDashedRegion()
             }
         } else if(objectUnderCursor !== undefined) {
@@ -230,19 +230,19 @@ export function mapModeOperations() {
     }
 
     if(deleteObjectKey.wasPressed) {
-        if(selectedTileMaps.length === 0) {
+        if(selectedObjects.length === 0) {
             world.remove(objectUnderCursor)
             delete tileMap[getName(objectUnderCursor)]
         } else {
-            removeObjects(selectedTileMaps)
+            removeObjects(selectedObjects)
             clearSelection()
         }
     }
 
-    if(groupKey.wasPressed && selectedTileMaps.length > 1) {
-        const newLayer = new Layer(...selectedTileMaps)
-        setName(newLayer, getName(selectedTileMaps[0]))
-        removeObjects(selectedTileMaps)
+    if(groupKey.wasPressed && selectedObjects.length > 1) {
+        const newLayer = new Layer(...selectedObjects)
+        setName(newLayer, getName(selectedObjects[0]))
+        removeObjects(selectedObjects)
         world.add(newLayer)
     }
 

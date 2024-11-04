@@ -8,6 +8,10 @@ export class Point extends Renderable {
         this.y = y
     }
 
+    get isLayer() {
+        return false
+    }
+
     draw() {}
 
     update() {}

@@ -6,7 +6,7 @@ import {tileMap, world} from "../src/project.js"
 import {Layer} from "../src/layer.js"
 import {abs} from "../src/functions.js"
 
-export let selectedTileMaps = [], mapSelectionRegion
+export let selectedObjects = [], mapSelectionRegion
 
 export default class SelectTileMaps extends Drag {
     #x
@@ -27,27 +27,17 @@ export default class SelectTileMaps extends Drag {
         mapSelectionRegion.setCorner(this.#x, this.#y)
     }
 
-    select(object) {
-        if(object instanceof Layer) {
-            for(const item of object.items) {
-                this.select(item)
-            }
-        } else if(object.isInside(mapSelectionRegion)) {
-            selectedTileMaps.push(object)
-        }
-    }
-
     end() {
-        selectedTileMaps = []
+        selectedObjects = []
         mapSelectionRegion.width = abs(mapSelectionRegion.width)
         mapSelectionRegion.height = abs(mapSelectionRegion.height)
         for(const object of world.items) {
-            this.select(object)
+            if(object.isInside(mapSelectionRegion)) selectedObjects.push(object)
         }
         mapSelectionRegion = undefined
     }
 }
 
 export function clearSelection() {
-    selectedTileMaps = []
+    selectedObjects = []
 }
