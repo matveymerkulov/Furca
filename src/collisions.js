@@ -2,13 +2,8 @@ import {Box} from "./box.js"
 import {clamp} from "./functions.js"
 
 
-export let serviceSprite1
-export let serviceSprite2
-
-export function initCollisions() {
-    serviceSprite1 = new Box()
-    serviceSprite2 = new Box()
-}
+export let serviceSprite1 = new Box()
+export let serviceSprite2 = new Box()
 
 export function toCircle(pill, point, servicePill) {
     if(pill.halfWidth === pill.halfHeight) return pill

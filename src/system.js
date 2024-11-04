@@ -5,6 +5,8 @@ import {Function} from "./function/function.js"
 import {keys} from "./key.js"
 import {initInput} from "./input.js"
 import {Box} from "./box.js"
+import {Shape} from "./shape.js"
+import {Sprite} from "./sprite.js"
 
 // global variables
 
@@ -256,3 +258,6 @@ function start() {
         //ctx.fillText(`fps: ${realFps}, aps: ${realAps}`, 5, 5)
     }, 1000.0 / 150)
 }
+
+export let collisionShape = new Shape("rgb(255, 0, 255)", 0.5)
+export let collisionSprite = new Sprite()
