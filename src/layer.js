@@ -30,10 +30,6 @@ export class Layer extends Renderable {
         return `${text}${indent})`
     }
 
-    get isLayer() {
-        return true
-    }
-
     draw() {
         if(!this.visible) return
         for(const item of this.items) {

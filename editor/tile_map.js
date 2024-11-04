@@ -23,7 +23,7 @@ import Zoom from "./zoom.js"
 import MoveTileMaps from "./move_tile_maps.js"
 import {enframeTile} from "../src/auto_tiling.js"
 import {mainWindow} from "./main_window.js"
-import {removeFromArray, rndi} from "../src/functions.js"
+import {abs, dist, removeFromArray, rndi} from "../src/functions.js"
 import {
     changeBrushTypeKey,
     copyObjectKey,
@@ -31,7 +31,7 @@ import {
     deleteObjectKey,
     delKey, groupKey,
     incrementBrushSizeKey,
-    newMapKey,
+    newMapKey, newPointKey,
     panKey,
     pipetteKey,
     rectangleModeKey,
@@ -44,6 +44,9 @@ import {
 import {emptyTile} from "../src/tile_map.js"
 import {enterString} from "./input.js"
 import {Layer} from "../src/layer.js"
+import {drawCross} from "./draw.js"
+import {Point} from "../src/point.js"
+import {circleWithParamPointCollision} from "../src/collisions.js"
 
 export let currentTileMap, objectUnderCursor, currentTileSprite, currentLayer
 
@@ -65,18 +68,26 @@ mapsCanvas.add(new SelectMapRegion(), selectKey)
 
 
 mapsCanvas.render = () => {
-    world.items.forEach(map => {
-        map.draw()
-        let name = getName(map)
+    for(let object of world.items) {
+        object.draw()
+        if(object.constructor.name === "Point") {
+            drawCross(object.x, object.y, 4, 13, "black")
+            drawCross(object.x, object.y, 2, 11, "white")
+            if(selectedObjects.includes(object) || objectUnderCursor === object) {
+                drawDashedRegion(xToScreen(object.x) - 7, yToScreen(object.y) - 7, 15, 15, true)
+            }
+            continue
+        }
+        let name = getName(object)
         ctx.fillStyle = "white"
         ctx.font = `${distToScreen(1)}px serif`
         // noinspection JSCheckFunctionSignatures
         let metrics = ctx.measureText(name)
         // noinspection JSCheckFunctionSignatures
-        if(map instanceof Layer) map = map.items[0]
-        ctx.fillText(name, xToScreen(map.x) - 0.5 * metrics.width
-            , yToScreen(map.top) - 0.5 * metrics.actualBoundingBoxDescent - 4)
-    })
+        if(object instanceof Layer) object = object.items[0]
+        ctx.fillText(name, xToScreen(object.x) - 0.5 * metrics.width
+            , yToScreen(object.top) - 0.5 * metrics.actualBoundingBoxDescent - 4)
+    }
 
     if(currentMode === mode.tiles) {
         if(mapRegion !== undefined && regionTileMap !== undefined) {
@@ -125,6 +136,10 @@ mapsCanvas.update = () => {
     } else if(currentMode === mode.maps) {
         if(newMapKey.wasPressed) {
             newMap()
+        }
+
+        if(newPointKey.wasPressed) {
+            world.add(new Point(mouse.x, mouse.y))
         }
 
         if(selectedObjects.length === 0 && objectUnderCursor === undefined) return
@@ -224,7 +239,7 @@ export function mapModeOperations() {
     }
 
     if(copyObjectKey.wasPressed) {
-        const width = firstObject.isLayer ? firstObject.items[0].width : firstObject.width
+        const width = firstObject instanceof Layer ? firstObject.items[0].width : firstObject.width
         for(let object of objects) {
             addObject(incrementName(getName(object)), object.copy(1 + width, 0))
         }
@@ -233,7 +248,7 @@ export function mapModeOperations() {
     function removeObjects() {
         for(let object of objects) {
             removeFromArray(object, world.items)
-            if(object.isLayer) {
+            if(object instanceof Layer) {
                 delete layer[getName(object)]
             } else {
                 delete tileMap[getName(object)]
@@ -248,7 +263,7 @@ export function mapModeOperations() {
 
     function hasNoLayer() {
         for(const object of objects) {
-            if(object.isLayer) return false
+            if(object instanceof Layer) return false
         }
         return true
     }
@@ -262,7 +277,7 @@ export function mapModeOperations() {
 
     if(ungroupKey.wasPressed) {
         for(const object of objects) {
-            if(!object.isLayer) continue
+            if(!object instanceof Layer) continue
             let index = 0
             for(const item of object.items) {
                 world.add(item)
@@ -275,11 +290,20 @@ export function mapModeOperations() {
 }
 
 
-function findTileMap(items) {
+export const pointRadius = 11
+
+function findObject(items) {
     for(let object of items) {
+        if(object.constructor.name === "Point") {
+            if(distToScreen(dist(object.x - mouse.x, object.y - mouse.y)) <= pointRadius) {
+                objectUnderCursor = object
+                continue
+            }
+        }
+
         if(!object.collidesWithPoint(mouse.x, mouse.y)) continue
         if(object instanceof Layer) {
-            findTileMap(object.items)
+            findObject(object.items)
             objectUnderCursor = object
             return
         } else {
@@ -297,7 +321,7 @@ export function checkObjectsWindowCollisions() {
     objectUnderCursor = undefined
     currentTileSprite = undefined
 
-    findTileMap(world.items)
+    findObject(world.items)
 }
 
 

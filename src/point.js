@@ -8,11 +8,10 @@ export class Point extends Renderable {
         this.y = y
     }
 
-    get isLayer() {
-        return false
-    }
-
     draw() {}
+
+    drawDashedRegion(isCircle) {
+    }
 
     update() {}
 
@@ -79,5 +78,27 @@ export class Point extends Renderable {
 
     processSprites(code) {
         code.call(undefined, this)
+    }
+
+    // collisions
+
+    collidesWithPoint(x, y) {
+        return x === this.x && y === this.y
+    }
+
+    firstCollisionWithPoint(x, y) {
+        return this.collidesWithPoint(x, y) ? this : undefined
+    }
+
+    collisionWithPoint(x, y, code) {
+        if(this.collidesWithPoint(x, y)) code.call(null, x, y, this)
+    }
+
+    overlaps(box) {
+        return false
+    }
+
+    isInside(box) {
+        return this.x >= box.left && this.x < box.right && this.y >= box.top && this.y < box.bottom
     }
 }

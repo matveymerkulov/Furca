@@ -106,14 +106,6 @@ export class Box extends Point {
         return x >= this.left && x < this.right && y >= this.top && y < this.bottom
     }
 
-    firstCollisionWithPoint(x, y) {
-        return this.collidesWithPoint(x, y) ? this : undefined
-    }
-
-    collisionWithPoint(x, y, code) {
-        if(this.collidesWithPoint(x, y)) code.call(null, x, y, this)
-    }
-
     overlaps(box) {
         return box.left >= this.left && box.top >= this.top && box.right < this.right
             && box.bottom < this.bottom
@@ -123,3 +115,7 @@ export class Box extends Point {
         return box.overlaps(this)
     }
 }
+
+
+export let serviceSprite1 = new Box()
+export let serviceSprite2 = new Box()
