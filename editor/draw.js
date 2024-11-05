@@ -27,3 +27,11 @@ export function drawX(x, y, width, length, color) {
     ctx.strokeStyle = "white"
     ctx.lineWidth = 1
 }
+
+export function drawEllipse(x, y, width, height, color) {
+    ctx.beginPath()
+    ctx.strokeStyle = color
+    ctx.ellipse(x + 0.5 * width,  y + 0.5 * height, 0.5 * width, 0.5 * height, 0, 0, 2.0 * Math.PI)
+    ctx.fill()
+    ctx.strokeStyle = "white"
+}

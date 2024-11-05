@@ -44,7 +44,7 @@ import {
 import {emptyTile} from "../src/tile_map.js"
 import {enterString} from "./input.js"
 import {Layer} from "../src/layer.js"
-import {drawCross} from "./draw.js"
+import {drawCross, drawEllipse} from "./draw.js"
 import {Point} from "../src/point.js"
 import {circleWithParamPointCollision} from "../src/collisions.js"
 
@@ -71,10 +71,12 @@ mapsCanvas.render = () => {
     for(let object of world.items) {
         object.draw()
         if(object.constructor.name === "Point") {
-            drawCross(object.x, object.y, 4, 13, "black")
-            drawCross(object.x, object.y, 2, 11, "white")
+            const x = xToScreen(object.x)
+            const y = yToScreen(object.y)
+            drawEllipse(x - 4, y - 4, 8, 8, "black")
+            drawEllipse(x - 2, y - 2, 4, 4, "white")
             if(selectedObjects.includes(object) || objectUnderCursor === object) {
-                drawDashedRegion(xToScreen(object.x) - 7, yToScreen(object.y) - 7, 15, 15, true)
+                drawDashedRegion(x - 6, y - 6, 12, 12, true)
             }
             continue
         }
