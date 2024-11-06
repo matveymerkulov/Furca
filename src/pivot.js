@@ -9,9 +9,11 @@ export class Pivot extends Point {
 
     addBone(pivot2) {
         for(const bone of this.bones) {
-            if(bone.pivot === this) return
+            if(bone.pivot1 === this) return
         }
-        this.bones.push(new Bone(this, pivot2))
+        const bone = new Bone(this, pivot2)
+        this.bones.push(bone)
+        pivot2.bones.push(bone)
     }
 }
 

@@ -7,7 +7,7 @@ import {distToScreen} from "../src/canvas.js"
 import {dist} from "../src/functions.js"
 import {Pivot} from "../src/pivot.js"
 
-let selectedTileMaps
+let objects
 
 export default class MoveTileMaps extends MovePoint {
     conditions() {
@@ -31,13 +31,20 @@ export default class MoveTileMaps extends MovePoint {
     }
 
     start() {
-        selectedTileMaps = []
+        objects = []
 
         function addObject(object) {
             if(object instanceof Layer) {
-                selectedTileMaps.push(...object.items)
+                objects.push(...object.items)
             } else {
-                selectedTileMaps.push(object)
+                objects.push(object)
+            }
+
+            if(object instanceof Pivot) {
+                for(const bone of object.bones) {
+                    if(bone.pivot2 !== object) continue
+                    objects.push(bone.pivot1)
+                }
             }
         }
 
@@ -51,19 +58,21 @@ export default class MoveTileMaps extends MovePoint {
 
         this.mouseX0 = canvasMouse.x
         this.mouseY0 = canvasMouse.y
-        this.objectX0 = new Array(selectedTileMaps.length)
-        this.objectY0 = new Array(selectedTileMaps.length)
-        for(let i = 0; i < selectedTileMaps.length; i++) {
-            this.objectX0[i] = selectedTileMaps[i].x
-            this.objectY0[i] = selectedTileMaps[i].y
+        this.objectX0 = new Array(objects.length)
+        this.objectY0 = new Array(objects.length)
+
+        for(let i = 0; i < objects.length; i++) {
+            const object = objects[i]
+            this.objectX0[i] = object.x
+            this.objectY0[i] = object.y
         }
     }
 
     process() {
-        for(let i = 0; i < selectedTileMaps.length; i++) {
-            this.updateObject(selectedTileMaps[i], this.objectX0[i], this.objectY0[i])
+        for(let i = 0; i < objects.length; i++) {
+            this.updateObject(objects[i], this.objectX0[i], this.objectY0[i])
             if(this instanceof Pivot) continue
-            this.snapToGrid(selectedTileMaps[i])
+            this.snapToGrid(objects[i])
         }
     }
 }
