@@ -12,6 +12,4 @@ export const settings = {
             angle: rad(150),
         }
     }
-
-
 }

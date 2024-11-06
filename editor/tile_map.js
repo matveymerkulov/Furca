@@ -70,16 +70,17 @@ mapsCanvas.add(new MoveTileMaps(), selectKey)
 mapsCanvas.add(new SelectMapRegion(), selectKey)
 
 
+export function drawPivotArrow(x1, y1, x2, y2) {
+    const pivotSettings = settings.pivot
+    const arrowSettings = pivotSettings.arrow
+    drawArrow(x1, y1, x2, y2, arrowSettings.width, arrowSettings.angle, arrowSettings.length, "white")
+}
+
 mapsCanvas.render = () => {
-    function drawPivotArrow(x1, y1, x2, y2) {
-        const pivotSettings = settings.pivot
-        const arrowSettings = pivotSettings.arrow
-        drawArrow(x1, y1, x2, y2, arrowSettings.width, arrowSettings.angle, arrowSettings.length, "white")
-    }
 
     for(let object of world.items) {
         object.draw()
-        if(object.constructor.name === "Pivot") {
+        if(object instanceof Pivot) {
             const x = xToScreen(object.x)
             const y = yToScreen(object.y)
             drawEllipse(x - 4, y - 4, 8, 8, "black")
@@ -88,7 +89,11 @@ mapsCanvas.render = () => {
                 drawDashedRegion(x - 6, y - 6, 12, 12, true)
             }
 
-            if(object.link !== undefined) drawPivotArrow(x, y, xToScreen(object.link.x), yToScreen(object.link.y))
+            for(const bone of object.bones) {
+                if(bone.pivot1 !== object) continue
+                drawPivotArrow(xToScreen(bone.pivot1.x), yToScreen(bone.pivot1.y)
+                    , xToScreen(bone.pivot2.x), yToScreen(bone.pivot2.y))
+            }
         }
         let name = getName(object)
         ctx.fillStyle = "white"
@@ -250,7 +255,7 @@ export function mapModeOperations() {
 
         if(selectedPivot !== undefined && selectedPivot !== objectUnderCursor) {
             if(selectKey.wasPressed) {
-                selectedPivot.link = objectUnderCursor
+                selectedPivot.addBone(objectUnderCursor)
                 selectedPivot = undefined
             }
         }
@@ -327,8 +332,8 @@ export const pivotRadius = 11
 
 function findObject(items) {
     for(let object of items) {
-        if(object.constructor.name === "Pivot") {
-            if(distToScreen(dist(object.x - mouse.x, object.y - mouse.y)) <= pivotRadius) {
+        if(object instanceof Pivot) {
+            if(distToScreen(dist(object.x - mouse.x, object.y - mouse.y)) <= settings.pivot.diameter) {
                 objectUnderCursor = object
                 continue
             }
