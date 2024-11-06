@@ -1,7 +1,7 @@
 import MovePoint from "./move_point.js"
 import {selectedObjects} from "./select_tile_maps.js"
 import {canvasMouse, mouse} from "../src/system.js"
-import {currentMode, mode, objectUnderCursor, pointRadius} from "./tile_map.js"
+import {currentMode, mode, objectUnderCursor, pivotRadius} from "./tile_map.js"
 import {Layer} from "../src/layer.js"
 import {distToScreen} from "../src/canvas.js"
 import {dist} from "../src/functions.js"
@@ -13,8 +13,8 @@ export default class MoveTileMaps extends MovePoint {
         if(currentMode !== mode.maps) return false
         if(selectedObjects.length > 0) {
             for(const object of selectedObjects) {
-                if(object.constructor.name === "Point") {
-                    if(distToScreen(dist(object.x - mouse.x, object.y - mouse.y)) <= pointRadius) return true
+                if(object.constructor.name === "Pivot") {
+                    if(distToScreen(dist(object.x - mouse.x, object.y - mouse.y)) <= pivotRadius) return true
                 } else if(object.collidesWithPoint(mouse.x, mouse.y)) {
                     return true
                 }

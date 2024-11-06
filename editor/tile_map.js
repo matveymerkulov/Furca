@@ -1,9 +1,9 @@
-import {mouse} from "../src/system.js"
+import {canvasMouse, mouse} from "../src/system.js"
 import {layer, tileMap, world} from "../src/project.js"
 import {addObject} from "./create_tile_map.js"
 import {getName, incrementName, setName} from "../src/names.js"
 import {canvasUnderCursor, ctx, distToScreen, setCanvas, xToScreen, yToScreen} from "../src/canvas.js"
-import SelectTileMaps, {clearSelection, mapSelectionRegion, selectedObjects} from "./select_tile_maps.js"
+import {SelectTileMaps, clearSelection, mapSelectionRegion, selectedObjects} from "./select_tile_maps.js"
 import {
     altGroup,
     currentBlock,
@@ -15,7 +15,7 @@ import {
 } from "./tile_set.js"
 import {newMap} from "./new_map.js"
 import {Sprite} from "../src/sprite.js"
-import SelectMapRegion, {mapRegion, regionTileMap} from "./select_map_region.js"
+import {SelectMapRegion, mapRegion, regionTileMap} from "./select_map_region.js"
 import {blockType} from "../src/block.js"
 import {drawDashedRegion} from "../src/draw.js"
 import {Pan} from "./pan.js"
@@ -23,15 +23,16 @@ import Zoom from "./zoom.js"
 import MoveTileMaps from "./move_tile_maps.js"
 import {enframeTile} from "../src/auto_tiling.js"
 import {mainWindow} from "./main_window.js"
-import {abs, dist, removeFromArray, rndi} from "../src/functions.js"
+import {abs, dist, rad, removeFromArray, rndi} from "../src/functions.js"
 import {
+    cancelKey,
     changeBrushTypeKey,
     copyObjectKey,
     decrementBrushSizeKey,
     deleteObjectKey,
     delKey, groupKey,
-    incrementBrushSizeKey,
-    newMapKey, newPointKey,
+    incrementBrushSizeKey, newLinkKey,
+    newMapKey, newPivotKey,
     panKey,
     pipetteKey,
     rectangleModeKey,
@@ -44,11 +45,13 @@ import {
 import {emptyTile} from "../src/tile_map.js"
 import {enterString} from "./input.js"
 import {Layer} from "../src/layer.js"
-import {drawCross, drawEllipse} from "./draw.js"
+import {drawArrow, drawCross, drawEllipse} from "./draw.js"
 import {Point} from "../src/point.js"
 import {circleWithParamPointCollision} from "../src/collisions.js"
+import {Pivot} from "../src/pivot.js"
+import {settings} from "./settings.js"
 
-export let currentTileMap, objectUnderCursor, currentTileSprite, currentLayer
+export let currentTileMap, objectUnderCursor, currentTileSprite, selectedPivot
 
 export const mode = {
     tiles: Symbol("tiles"),
@@ -68,9 +71,15 @@ mapsCanvas.add(new SelectMapRegion(), selectKey)
 
 
 mapsCanvas.render = () => {
+    function drawPivotArrow(x1, y1, x2, y2) {
+        const pivotSettings = settings.pivot
+        const arrowSettings = pivotSettings.arrow
+        drawArrow(x1, y1, x2, y2, arrowSettings.width, arrowSettings.angle, arrowSettings.length, "white")
+    }
+
     for(let object of world.items) {
         object.draw()
-        if(object.constructor.name === "Point") {
+        if(object.constructor.name === "Pivot") {
             const x = xToScreen(object.x)
             const y = yToScreen(object.y)
             drawEllipse(x - 4, y - 4, 8, 8, "black")
@@ -78,7 +87,8 @@ mapsCanvas.render = () => {
             if(selectedObjects.includes(object) || objectUnderCursor === object) {
                 drawDashedRegion(x - 6, y - 6, 12, 12, true)
             }
-            continue
+
+            if(object.link !== undefined) drawPivotArrow(x, y, xToScreen(object.link.x), yToScreen(object.link.y))
         }
         let name = getName(object)
         ctx.fillStyle = "white"
@@ -112,6 +122,10 @@ mapsCanvas.render = () => {
         } else if(objectUnderCursor !== undefined) {
             objectUnderCursor.drawDashedRegion()
         }
+
+        if(selectedPivot !== undefined) {
+            drawPivotArrow(xToScreen(selectedPivot.x), yToScreen(selectedPivot.y), canvasMouse.x, canvasMouse.y)
+        }
     }
 }
 
@@ -140,8 +154,12 @@ mapsCanvas.update = () => {
             newMap()
         }
 
-        if(newPointKey.wasPressed) {
-            world.add(new Point(mouse.x, mouse.y))
+        if(newPivotKey.wasPressed) {
+            world.add(new Pivot(mouse.x, mouse.y))
+        }
+
+        if(cancelKey.wasPressed) {
+            selectedPivot = undefined
         }
 
         if(selectedObjects.length === 0 && objectUnderCursor === undefined) return
@@ -225,6 +243,19 @@ export function mapModeOperations() {
     const objects = selectedObjects.length > 0 ? selectedObjects : [objectUnderCursor]
     const firstObject = objects[0]
 
+    if(objectUnderCursor instanceof Pivot) {
+        if(newLinkKey.wasPressed) {
+           selectedPivot = objectUnderCursor
+        }
+
+        if(selectedPivot !== undefined && selectedPivot !== objectUnderCursor) {
+            if(selectKey.wasPressed) {
+                selectedPivot.link = objectUnderCursor
+                selectedPivot = undefined
+            }
+        }
+    }
+
     if(renameObjectKey.wasPressed) {
         // noinspection JSCheckFunctionSignatures
         if(objects.length === 1) {
@@ -292,12 +323,12 @@ export function mapModeOperations() {
 }
 
 
-export const pointRadius = 11
+export const pivotRadius = 11
 
 function findObject(items) {
     for(let object of items) {
-        if(object.constructor.name === "Point") {
-            if(distToScreen(dist(object.x - mouse.x, object.y - mouse.y)) <= pointRadius) {
+        if(object.constructor.name === "Pivot") {
+            if(distToScreen(dist(object.x - mouse.x, object.y - mouse.y)) <= pivotRadius) {
                 objectUnderCursor = object
                 continue
             }

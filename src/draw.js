@@ -34,7 +34,6 @@ export function drawDashedRegion(x, y, width, height, isCircle = false) {
     ctx.strokeStyle = "white"
     draw()
     ctx.setLineDash([])
-    ctx.strokeStyle = "black"
     ctx.lineWidth = 1
 }
 
@@ -49,5 +48,5 @@ export function drawRect(innerColor, outerColor, x, y, width, height) {
     ctx.strokeStyle = innerColor
     ctx.lineWidth = 1
     ctx.strokeRect(x, y, width, height)
-    ctx.strokeStyle = "black"
+    ctx.strokeStyle = "white"
 }

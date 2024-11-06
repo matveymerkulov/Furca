@@ -6,7 +6,7 @@ import {currentTileMap, rectangleMode, setBlockSize, setTiles} from "./tile_map.
 
 export let mapRegion, regionTileMap, regionTileSet
 
-export default class SelectMapRegion extends Drag {
+export class SelectMapRegion extends Drag {
     #x
     #y
 

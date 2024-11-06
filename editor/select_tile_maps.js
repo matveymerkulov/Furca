@@ -8,7 +8,7 @@ import {abs} from "../src/functions.js"
 
 export let selectedObjects = [], mapSelectionRegion
 
-export default class SelectTileMaps extends Drag {
+export class SelectTileMaps extends Drag {
     #x
     #y
 

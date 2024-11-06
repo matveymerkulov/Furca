@@ -1,4 +1,5 @@
-import {ctx, xToScreen, yToScreen} from "../src/canvas.js"
+import {ctx, distToScreen, xToScreen, yToScreen} from "../src/canvas.js"
+import {atan2, cos, rad, sin} from "../src/functions.js"
 
 export function drawCross(x, y, width, length, color) {
     ctx.beginPath()
@@ -34,4 +35,25 @@ export function drawEllipse(x, y, width, height, color) {
     ctx.ellipse(x + 0.5 * width,  y + 0.5 * height, 0.5 * width, 0.5 * height, 0, 0, 2.0 * Math.PI)
     ctx.fill()
     ctx.strokeStyle = "white"
+}
+
+export function drawArrow(x1, y1, x2, y2, lineWidth, dAngle, length, color) {
+    const angle = atan2(y2 - y1, x2 - x1)
+
+    ctx.beginPath()
+    ctx.lineWidth = lineWidth
+    ctx.color = color
+
+    ctx.moveTo(x1, y1)
+    ctx.lineTo(x2, y2)
+
+    for(let i = -1; i <= 1; i += 2) {
+        const a = angle + i * dAngle
+        ctx.moveTo(x2, y2)
+        ctx.lineTo(x2 + length * cos(a), y2 + length * sin(a))
+    }
+
+    ctx.stroke()
+    ctx.color = "white"
+    ctx.lineWidth = 1
 }

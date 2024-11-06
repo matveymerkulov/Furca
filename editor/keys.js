@@ -2,6 +2,7 @@ import {Key} from "../src/key.js"
 
 export const saveKey = new Key("KeyS")
 export const loadKey = new Key("KeyL")
+export const cancelKey = new Key("Escape")
 
 export const switchModeKey = new Key("Space")
 
@@ -17,10 +18,12 @@ export const zoomInKey = new Key("WheelUp")
 export const zoomOutKey = new Key("WheelDown")
 
 export const newMapKey = new Key("KeyN")
+export const newPivotKey = new Key("KeyP")
+export const newLinkKey = new Key("KeyK")
+
 export const renameObjectKey = new Key("KeyR")
 export const copyObjectKey = new Key("KeyC")
 export const deleteObjectKey = new Key("Delete")
-export const newPointKey = new Key("KeyP")
 
 // tile mode
 
