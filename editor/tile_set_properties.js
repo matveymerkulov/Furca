@@ -12,6 +12,7 @@ import {imageArray} from "../src/project.js"
 import {enterString} from "./input.js"
 import {ImageArray} from "../src/image_array.js"
 import {settings} from "./settings.js"
+import {floor} from "../src/functions.js"
 
 export let tileSetPropertiesWindow = new Win("tile_set_window")
 
@@ -87,21 +88,31 @@ blocksCanvas.render = () => {
 
 
 blocksCanvas.update = () => {
+    const x = floor(canvasMouse.x / tileWidth)
+    const y = floor(canvasMouse.y / tileHeight)
+
     if(delPropertiesKey.wasPressed) {
-        currentTileSet.removeBlock(Math.floor(canvasMouse.x / tileWidth), Math.floor(canvasMouse.y / tileHeight))
+        currentTileSet.removeBlock(x, y)
+    }
+
+    if(toggleVisibilityKey.wasPressed) {
+        if(tileSetRegion === undefined) {
+            let tileNum = x + y * currentTileSet.columns
+            const vis = currentTileSet.visibility[tileNum]
+            if(vis === visibility.block) return
+            currentTileSet.visibility[tileNum] = vis === visibility.visible ? visibility.hidden : visibility.visible
+        } else {
+            let hide
+            tileSetRegion.process((tileNum) => {
+                let vis = currentTileSet.visibility[tileNum]
+                if(vis === visibility.block) return
+                if(hide === undefined) hide = vis === visibility.visible ? visibility.hidden : visibility.visible
+                currentTileSet.visibility[tileNum] = hide
+            })
+        }
     }
 
     if(tileSetRegion === undefined) return
-
-    if(toggleVisibilityKey.wasPressed) {
-        let hide
-        tileSetRegion.process((tileNum) => {
-            let vis = currentTileSet.visibility[tileNum]
-            if(vis === visibility.block) return
-            if(hide === undefined) hide = vis === visibility.visible ? visibility.hidden : visibility.visible
-            currentTileSet.visibility[tileNum] = hide
-        })
-    }
 
     if(newBlockKey.wasPressed) {
         currentTileSet.addRegion(tileSetRegion, blockType.block)
