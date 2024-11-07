@@ -3,12 +3,16 @@ import {rad} from "../src/functions.js"
 export const settings = {
     pivot: {
         color: "white",
-        diameter: 5,
-        outlineColor: "black",
-        outlineDiameter: 7,
+        diameter: 11,
+        size: 5,
+        outline: {
+            color: "black",
+            size: 7,
+        },
         arrow: {
-            width: 2,
-            length: 9,
+            color: "white",
+            lineWidth: 2,
+            pointerLength: 9,
             angle: rad(150),
         }
     }

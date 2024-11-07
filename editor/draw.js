@@ -37,18 +37,19 @@ export function drawEllipse(x, y, width, height, color) {
     ctx.strokeStyle = "white"
 }
 
-export function drawArrow(x1, y1, x2, y2, lineWidth, dAngle, length, color) {
+export function drawArrow(x1, y1, x2, y2, parameters) {
     const angle = atan2(y2 - y1, x2 - x1)
 
     ctx.beginPath()
-    ctx.lineWidth = lineWidth
-    ctx.color = color
+    ctx.lineWidth = parameters.lineWidth
+    ctx.color = parameters.color
 
     ctx.moveTo(x1, y1)
     ctx.lineTo(x2, y2)
 
+    const length = parameters.pointerLength
     for(let i = -1; i <= 1; i += 2) {
-        const a = angle + i * dAngle
+        const a = angle + i * parameters.angle
         ctx.moveTo(x2, y2)
         ctx.lineTo(x2 + length * cos(a), y2 + length * sin(a))
     }

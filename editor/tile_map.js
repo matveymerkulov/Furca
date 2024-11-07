@@ -70,11 +70,6 @@ mapsCanvas.add(new MoveTileMaps(), selectKey)
 mapsCanvas.add(new SelectMapRegion(), selectKey)
 
 
-export function drawPivotArrow(x1, y1, x2, y2) {
-    const pivotSettings = settings.pivot
-    const arrowSettings = pivotSettings.arrow
-    drawArrow(x1, y1, x2, y2, arrowSettings.width, arrowSettings.angle, arrowSettings.length, "white")
-}
 
 mapsCanvas.render = () => {
 
@@ -91,8 +86,8 @@ mapsCanvas.render = () => {
 
             for(const bone of object.bones) {
                 if(bone.pivot1 !== object) continue
-                drawPivotArrow(xToScreen(bone.pivot1.x), yToScreen(bone.pivot1.y)
-                    , xToScreen(bone.pivot2.x), yToScreen(bone.pivot2.y))
+                drawArrow(xToScreen(bone.pivot1.x), yToScreen(bone.pivot1.y)
+                    , xToScreen(bone.pivot2.x), yToScreen(bone.pivot2.y), settings.pivot.arrow)
             }
         }
         let name = getName(object)
@@ -129,7 +124,8 @@ mapsCanvas.render = () => {
         }
 
         if(selectedPivot !== undefined) {
-            drawPivotArrow(xToScreen(selectedPivot.x), yToScreen(selectedPivot.y), canvasMouse.x, canvasMouse.y)
+            drawArrow(xToScreen(selectedPivot.x), yToScreen(selectedPivot.y)
+                , canvasMouse.x, canvasMouse.y, settings.pivot.arrow)
         }
     }
 }
