@@ -3,7 +3,6 @@ import {tileHeight, tileWidth} from "./main.js"
 import {renderTileSetCanvas} from "./tile_set_properties.js"
 import {canvasUnderCursor, ctx} from "../src/canvas.js"
 import {canvasMouse, element} from "../src/system.js"
-import {drawDashedRegion, drawRect} from "../src/draw.js"
 import {Win} from "../src/gui/window.js"
 import {Category, Pos, Rule} from "../src/auto_tiling.js"
 import {Key} from "../src/key.js"
@@ -12,6 +11,8 @@ import {readText} from "./loader.js"
 import {getCategory, initParser} from "../src/parser.js"
 import {copyCategoryKey, loadCategoryKey, moveCategoryKey} from "./keys.js"
 import {confirm, enterString} from "./input.js"
+import {drawDashedRegion, drawRect} from "./draw.js"
+import {settings} from "./settings.js"
 
 let currentCategory, currentRule
 
@@ -185,8 +186,8 @@ rulesGridCanvas.render = () => {
 
     if(currentRule !== undefined) {
         for(let pos of currentRule.positions) {
-            drawRect("white", "black", (pos.dx + gridSize) * cellSize + 7
-                , (pos.dy + gridSize) * cellSize + 7, cellSize - 12, cellSize - 12)
+            drawRect((pos.dx + gridSize) * cellSize, (pos.dy + gridSize) * cellSize
+                , cellSize, cellSize, settings.tileSet.rule)
         }
 
         currentTileSet.image(currentRule.tile).drawResized(gridSize * cellSize + 1

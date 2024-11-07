@@ -2,7 +2,7 @@
 //import {getString, getSymbol, getTileMap, getTileSet, getToken, initParser} from "./parser.js"
 //import {getName} from "./names.js"
 
-import {imageArray, initData, project, tileMap, tileSet, world} from "./project.js"
+import {imageArray, project, tileMap, tileSet, world} from "./project.js"
 import {getName} from "./names.js"
 import {
     getImageArray,

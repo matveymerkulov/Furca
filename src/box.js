@@ -1,7 +1,7 @@
 import {Point} from "./point.js"
 import {unc} from "./system.js"
-import {drawDashedRegion} from "./draw.js"
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
+import {drawDashedRegion} from "../editor/draw.js"
 
 export class Box extends Point {
     constructor(x = 0.0, y = 0.0, width = 0.0, height = 0.0) {

@@ -1,4 +1,4 @@
-import {Box, serviceSprite1, serviceSprite2} from "./box.js"
+import {serviceSprite1, serviceSprite2} from "./box.js"
 import {clamp} from "./functions.js"
 
 export function toCircle(pill, point, servicePill) {

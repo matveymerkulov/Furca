@@ -1,6 +1,5 @@
 import {tileSet} from "../src/project.js"
 import {canvasUnderCursor, ctx} from "../src/canvas.js"
-import {drawDashedRegion} from "../src/draw.js"
 import {pointWithParamBoxCollision} from "../src/collisions.js"
 import {canvasMouse} from "../src/system.js"
 import {brushSize, setBlockSize} from "./tile_map.js"
@@ -11,6 +10,7 @@ import {TilePan, updateY0, y0} from "./tile_pan.js"
 import {mainWindow} from "./main_window.js"
 import {delTileSetKey, panTileSetKey, selectTileKey, zoomInTileSetKey, zoomOutTileSetKey} from "./keys.js"
 import {ceil, sqrt} from "../src/functions.js"
+import {drawDashedRegion} from "./draw.js"
 
 export let currentTile = 1, currentTileSet, currentBlock, currentGroup, altGroup
 export let maxY0 = 0

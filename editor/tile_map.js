@@ -3,7 +3,7 @@ import {layer, tileMap, world} from "../src/project.js"
 import {addObject} from "./create_tile_map.js"
 import {getName, incrementName, setName} from "../src/names.js"
 import {canvasUnderCursor, ctx, distToScreen, setCanvas, xToScreen, yToScreen} from "../src/canvas.js"
-import {SelectTileMaps, clearSelection, mapSelectionRegion, selectedObjects} from "./select_tile_maps.js"
+import {mapSelectionRegion, selectedObjects, SelectTileMaps} from "./select_tile_maps.js"
 import {
     altGroup,
     currentBlock,
@@ -15,39 +15,40 @@ import {
 } from "./tile_set.js"
 import {newMap} from "./new_map.js"
 import {Sprite} from "../src/sprite.js"
-import {SelectMapRegion, mapRegion, regionTileMap} from "./select_map_region.js"
+import {mapRegion, regionTileMap, SelectMapRegion} from "./select_map_region.js"
 import {blockType} from "../src/block.js"
-import {drawDashedRegion} from "../src/draw.js"
 import {Pan} from "./pan.js"
 import Zoom from "./zoom.js"
 import MoveTileMaps from "./move_tile_maps.js"
 import {enframeTile} from "../src/auto_tiling.js"
 import {mainWindow} from "./main_window.js"
-import {abs, dist, rad, removeFromArray, rndi} from "../src/functions.js"
+import {dist, removeFromArray, rndi} from "../src/functions.js"
 import {
     cancelKey,
     changeBrushTypeKey,
     copyObjectKey,
     decrementBrushSizeKey,
     deleteObjectKey,
-    delKey, groupKey,
-    incrementBrushSizeKey, newLinkKey,
-    newMapKey, newPivotKey,
+    delKey,
+    groupKey,
+    incrementBrushSizeKey,
+    newLinkKey,
+    newMapKey,
+    newPivotKey,
     panKey,
     pipetteKey,
     rectangleModeKey,
     renameObjectKey,
     selectKey,
-    switchModeKey, ungroupKey,
+    switchModeKey,
+    ungroupKey,
     zoomInKey,
     zoomOutKey
 } from "./keys.js"
 import {emptyTile} from "../src/tile_map.js"
 import {enterString} from "./input.js"
 import {Layer} from "../src/layer.js"
-import {drawArrow, drawCross, drawEllipse} from "./draw.js"
-import {Point} from "../src/point.js"
-import {circleWithParamPointCollision} from "../src/collisions.js"
+import {drawArrow, drawDashedRegion, drawShape} from "./draw.js"
 import {Pivot} from "../src/pivot.js"
 import {settings} from "./settings.js"
 
@@ -78,8 +79,7 @@ mapsCanvas.render = () => {
         if(object instanceof Pivot) {
             const x = xToScreen(object.x)
             const y = yToScreen(object.y)
-            drawEllipse(x - 4, y - 4, 8, 8, "black")
-            drawEllipse(x - 2, y - 2, 4, 4, "white")
+            drawShape(x, y, settings.pivot)
             if(selectedObjects.includes(object) || objectUnderCursor === object) {
                 drawDashedRegion(x - 6, y - 6, 12, 12, true)
             }

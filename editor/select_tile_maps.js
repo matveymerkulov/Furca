@@ -2,8 +2,7 @@ import {Drag} from "../src/drag.js"
 import {Box} from "../src/box.js"
 import {mouse} from "../src/system.js"
 import {currentMode, mode, objectUnderCursor} from "./tile_map.js"
-import {tileMap, world} from "../src/project.js"
-import {Layer} from "../src/layer.js"
+import {world} from "../src/project.js"
 import {abs} from "../src/functions.js"
 
 export let selectedObjects = [], mapSelectionRegion

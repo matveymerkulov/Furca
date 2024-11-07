@@ -1,8 +1,6 @@
 import {Renderable} from "./renderable.js"
 import {addIndent, indent, removeIndent} from "./save_load.js"
 import {removeFromArray} from "./functions.js"
-import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
-import {Box} from "./box.js"
 
 export class Layer extends Renderable {
     constructor(...items) {

@@ -1,8 +1,7 @@
 import {canvasUnderCursor, ctx, currentCanvas} from "../src/canvas.js"
 import SelectTileSetRegion, {tileSetRegion} from "./select_tile_set_region.js"
-import {drawDashedRegion, drawRect} from "../src/draw.js"
 import {canvasMouse, element} from "../src/system.js"
-import {drawX} from "./draw.js"
+import {drawDashedRegion, drawRect, drawShape} from "./draw.js"
 import {currentTileSet} from "./tile_set.js"
 import {blockType} from "../src/block.js"
 import {visibility} from "../src/tile_set.js"
@@ -12,6 +11,7 @@ import {delPropertiesKey, newBlockKey, newFrameKey, selectTilePropertiesKey, tog
 import {imageArray} from "../src/project.js"
 import {enterString} from "./input.js"
 import {ImageArray} from "../src/image_array.js"
+import {settings} from "./settings.js"
 
 export let tileSetPropertiesWindow = new Win("tile_set_window")
 
@@ -62,10 +62,7 @@ blocksCanvas.render = () => {
         for(let x = 0; x < currentTileSet.columns; x++) {
             let n = x + y * currentTileSet.columns
             if(currentTileSet.visibility[n] !== visibility.hidden) continue
-            let xx = (x + 0.5) * tileWidth
-            let yy = (y + 0.5) * tileHeight
-            drawX(xx, yy, 5, 6, "black")
-            drawX(xx, yy, 3, 5, "white")
+            drawShape((x + 0.5) * tileWidth, (y + 0.5) * tileHeight, settings.tileSet.visibility)
         }
     }
 
@@ -78,8 +75,9 @@ blocksCanvas.render = () => {
             innerColor = "red"
             outerColor = "darkred"
         }
-        drawRect(innerColor, outerColor,block.x * tileWidth + 2, block.y * tileHeight + 2
-            , block.width * tileWidth - 4, block.height * tileHeight - 4)
+        drawRect(block.x * tileWidth, block.y * tileHeight
+            , block.width * tileWidth, block.height * tileHeight
+            , block.type === blockType.block ? settings.tileSet.block : settings.tileSet.frame)
     }
 
     if(tileSetRegion === undefined) return

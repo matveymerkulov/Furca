@@ -1,39 +1,39 @@
-import {ctx, distToScreen, xToScreen, yToScreen} from "../src/canvas.js"
+import {ctx} from "../src/canvas.js"
 import {atan2, cos, rad, sin} from "../src/functions.js"
 
-export function drawCross(x, y, width, length, color) {
-    ctx.beginPath()
-    ctx.strokeStyle = color
-    ctx.lineWidth = width
-    x = xToScreen(x)
-    y = yToScreen(y)
-    ctx.moveTo(x, y - length)
-    ctx.lineTo(x, y + length)
-    ctx.moveTo(x + length, y)
-    ctx.lineTo(x - length, y)
-    ctx.stroke()
-    ctx.strokeStyle = "white"
-    ctx.lineWidth = 1
-}
+export function drawShape(x, y, parameters, type) {
+    if(parameters.hasOwnProperty("outline")) {
+        drawShape(x, y, parameters.outline, parameters.type)
+    }
 
-export function drawX(x, y, width, length, color) {
-    ctx.beginPath()
-    ctx.strokeStyle = color
-    ctx.lineWidth = width
-    ctx.moveTo(x - length, y - length)
-    ctx.lineTo(x + length, y + length)
-    ctx.moveTo(x + length, y - length)
-    ctx.lineTo(x - length, y + length)
-    ctx.stroke()
-    ctx.strokeStyle = "white"
-    ctx.lineWidth = 1
-}
+    ctx.strokeStyle = parameters.color
+    ctx.lineWidth = parameters.lineWidth
+    const size = parameters.size
 
-export function drawEllipse(x, y, width, height, color) {
     ctx.beginPath()
-    ctx.strokeStyle = color
-    ctx.ellipse(x + 0.5 * width,  y + 0.5 * height, 0.5 * width, 0.5 * height, 0, 0, 2.0 * Math.PI)
-    ctx.fill()
+    switch(type === undefined ? parameters.type : type) {
+        case "x":
+            ctx.moveTo(x - size, y - size)
+            ctx.lineTo(x + size, y + size)
+            ctx.moveTo(x + size, y - size)
+            ctx.lineTo(x - size, y + size)
+            ctx.stroke()
+            break
+        case "+":
+            ctx.moveTo(x, y - size)
+            ctx.lineTo(x, y + size)
+            ctx.moveTo(x + size, y)
+            ctx.lineTo(x - size, y)
+            ctx.stroke()
+            break
+        case "o":
+            const radius = 0.5 * parameters.size
+            ctx.ellipse(x, y, radius, radius, 0, 0, rad(360))
+            ctx.fill()
+            break
+        default:
+            throw Error("invalid shape type")
+    }
     ctx.strokeStyle = "white"
 }
 
@@ -57,4 +57,56 @@ export function drawArrow(x1, y1, x2, y2, parameters) {
     ctx.stroke()
     ctx.color = "white"
     ctx.lineWidth = 1
+}
+
+let dashes = [
+    [4, 4],
+    [0, 1, 4, 3],
+    [0, 2, 4, 2],
+    [0, 3, 4, 1],
+    [0, 4, 4, 0],
+    [1, 4, 3, 0],
+    [2, 4, 2, 0],
+    [3, 4, 1, 0],
+]
+
+export function drawDashedRegion(x, y, width, height, isCircle = false) {
+    function draw() {
+        if(isCircle) {
+            ctx.beginPath()
+            ctx.ellipse(x + 0.5 * width, y + 0.5 * height, 0.5 * width, 0.5 * height, 0, 0, 2.0 * Math.PI)
+            ctx.stroke()
+        } else {
+            ctx.strokeRect(x, y, width, height)
+        }
+    }
+
+    x = Math.floor(x)
+    y = Math.floor(y)
+    width = Math.floor(width)
+    height = Math.floor(height)
+    ctx.strokeStyle = "black"
+    ctx.lineWidth = 2
+    draw()
+    let shift = Math.floor(new Date().getTime() / 100) % 8
+    ctx.setLineDash(dashes[shift])
+    ctx.strokeStyle = "white"
+    draw()
+    ctx.setLineDash([])
+    ctx.lineWidth = 1
+}
+
+export function drawRect(x, y, width, height, parameters, padding) {
+    if(parameters.hasOwnProperty("outline")) {
+        drawRect(x, y, width, height, parameters.outline, parameters.padding)
+    }
+
+    if(padding === undefined) padding = parameters.hasOwnProperty("padding") ? parameters.padding : 0
+    const padding2 = padding * 2.0
+
+    ctx.strokeStyle = parameters.color
+    ctx.lineWidth = parameters.lineWidth
+    ctx.strokeRect(Math.floor(x + padding + 1), Math.floor(y + padding + 1)
+        , Math.floor(width - padding2), Math.floor(height - padding2))
+    ctx.strokeStyle = "white"
 }

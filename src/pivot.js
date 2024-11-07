@@ -1,7 +1,5 @@
 import {Point} from "./point.js"
-import {ctx, xToScreen, yToScreen} from "./canvas.js"
-import {atan2, cos, dist, rad, sin} from "./functions.js"
-import {drawArrow} from "../editor/draw.js"
+import {dist} from "./functions.js"
 
 export class Pivot extends Point {
     bones = []
