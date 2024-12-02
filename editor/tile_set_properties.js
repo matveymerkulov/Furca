@@ -123,7 +123,8 @@ blocksCanvas.update = () => {
 
 
 element("new_image_array").onclick = () => {
-    enterString("Введите название нового массива изображений:", (string) => {
+    enterString("Введите название нового массива изображений:", "", (string) => {
         const array = new ImageArray()
+
     })
 }

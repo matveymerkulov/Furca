@@ -73,7 +73,6 @@ mapsCanvas.add(new SelectMapRegion(), selectKey)
 
 
 mapsCanvas.render = () => {
-
     for(let object of world.items) {
         object.draw()
         if(object instanceof Pivot) {

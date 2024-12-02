@@ -10,7 +10,7 @@ import {calculateTilesPerRow, currentTileSet} from "./tile_set.js"
 import {resetRegionSelector} from "./select_tile_set_region.js"
 import {tileSetPropertiesWindow, updateImageArraysList} from "./tile_set_properties.js"
 import {rulesWindow, updateCategoriesList} from "./auto_tiling.js"
-import {autoTilingEditorKey, loadKey, saveKey, tileSetPropertiesKey} from "./keys.js"
+import {autoTilingEditorKey, cancelKey, loadKey, saveKey, tileSetPropertiesKey} from "./keys.js"
 import {setBorderVisibility} from "../src/tile_map.js"
 import {mapsCanvas} from "./tile_map.js"
 import {max} from "../src/functions.js"
@@ -69,6 +69,10 @@ project.updateNode = () => {
         mainWindow.updateNode()
     } else {
         currentWindow.updateNode()
+        if(cancelKey.wasPressed) {
+            hideWindow()
+            deleteCurrentDrag()
+        }
     }
 }
 

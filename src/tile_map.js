@@ -149,7 +149,7 @@ export class TileMap extends Box {
     }
 
     setArray(array) {
-        if(array.length !== this.#array.length) throw Error("Array size is not equal to tilemap size")
+        if(array.length !== this.#array.length) throw Error("Array size is not equal to tile map size")
         this.#array = array
     }
 
@@ -169,13 +169,14 @@ export class TileMap extends Box {
 
         const width = distToScreen(this.cellWidth)
         const height = distToScreen(this.cellHeight)
+        const quantity = this.quantity
 
         for(let row = 0; row < this.#rows; row++) {
             let intY = Math.floor(y0 + height * row)
             let intHeight = Math.floor(y0 + height * (row + 1)) - intY
             for(let column = 0; column < this.#columns; column++) {
                 const tileNum = this.tileByPos(column, row)
-                if(tileNum < 0) continue
+                if(tileNum < 0 || tileNum >= quantity) continue
                 const intX = Math.floor(x0 + width * column)
                 const intWidth = Math.floor(x0 + width * (column + 1)) - intX
                 this.drawTile(tileNum, column, row, intX, intY, intWidth, intHeight)
