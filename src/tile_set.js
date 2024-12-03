@@ -50,6 +50,10 @@ export class TileSet {
         return this.#images
     }
 
+    set images(value) {
+        this.#images = value
+    }
+
     image(num) {
         return this.#images.image(num)
     }

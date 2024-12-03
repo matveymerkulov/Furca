@@ -4,7 +4,6 @@ import {tileSet} from "../src/project.js"
 import {createTileMap} from "./create_tile_map.js"
 import {enterString} from "./input.js"
 
-
 let currentName = "", newX, newY
 
 let tileSets = element("tile_sets")

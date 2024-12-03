@@ -11,6 +11,8 @@ export class Win {
         this.#node = element(name)
     }
 
+    init() {}
+
     addCanvas(name, fwidth, fheight) {
         let canvas = Canvas.create(element(name), fwidth, fheight, false)
         this.#canvases.push(canvas)
@@ -35,6 +37,7 @@ export class Win {
 
     show() {
         hideWindow()
+        this.init()
         this.#node.style.visibility = "visible"
         currentWindow = this
     }

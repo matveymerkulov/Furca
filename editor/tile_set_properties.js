@@ -13,22 +13,26 @@ import {enterString} from "./input.js"
 import {ImageArray} from "../src/image_array.js"
 import {settings} from "./settings.js"
 import {floor} from "../src/functions.js"
+import {imageArrayPropertiesWindow} from "./image_array_properties.js"
 
-export let tileSetPropertiesWindow = new Win("tile_set_window")
+export const tileSetPropertiesWindow = new Win("tile_set_window")
 
 export const blocksCanvas = tileSetPropertiesWindow.addCanvas("tile_set_blocks", 9, 16)
 blocksCanvas.add(new SelectTileSetRegion(), selectTilePropertiesKey)
 
 const imageArrayComboBox = element("image_arrays")
+
+export let currentImageArray
+
 export function updateImageArraysList() {
     imageArrayComboBox.innerText = ""
     for(const [name, array] of Object.entries(imageArray)) {
         const option = document.createElement("option")
+        imageArrayComboBox.append(option)
         option.value = name
         option.innerText = name
         option.array = array
         if(currentTileSet.images === array) option.selected = true
-        imageArrayComboBox.append(option)
     }
 }
 
@@ -121,10 +125,21 @@ blocksCanvas.update = () => {
     }
 }
 
+const newImageArray = element("new_image_array")
+const editImageArray = element("edit_image_array")
+const deleteImageArray = element("delete_image_array")
 
-element("new_image_array").onclick = () => {
+imageArrayComboBox.onchange = (event) => {
+    currentTileSet.images = event.target[event.target.selectedIndex].array
+}
+
+newImageArray.onclick = () => {
     enterString("Введите название нового массива изображений:", "", (string) => {
         const array = new ImageArray()
-
     })
+}
+
+editImageArray.onclick = () => {
+    currentImageArray = currentTileSet.images
+    imageArrayPropertiesWindow.show()
 }

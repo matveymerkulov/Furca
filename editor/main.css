@@ -29,6 +29,7 @@ body {
     border: 2px outset;
     padding: 8px;
     row-gap: 8px;
+    align-items: center;
 }
 
 .properties {
@@ -61,8 +62,13 @@ body {
     height: 225px;
 }
 
-button {
+button, select {
     flex-grow: 1;
+}
+
+input {
+    flex-grow: 1;
+    width: 50px;
 }
 
 .cancel {
