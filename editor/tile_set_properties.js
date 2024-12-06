@@ -36,7 +36,7 @@ export function updateImageArraysList() {
     }
 }
 
-export function renderTileSetCanvas(dWidth, dHeight) {
+export function renderTileSetCanvas(dWidth, dHeight, selection = true) {
     let images = currentTileSet.images
     let tex = images.texture
     let scale = Math.min((document.body.offsetWidth - dWidth) / tex.width
@@ -53,7 +53,7 @@ export function renderTileSetCanvas(dWidth, dHeight) {
 
     setTileSize(canvasWidth / images.columns, canvasHeight / images.rows)
 
-    if(canvasUnderCursor !== currentCanvas) return
+    if(canvasUnderCursor !== currentCanvas || !selection) return
 
     drawDashedRegion(Math.floor(canvasMouse.x / tileWidth) * tileWidth + 3
         , Math.floor(canvasMouse.y / tileHeight) * tileHeight + 3, tileWidth - 7, tileHeight - 7)

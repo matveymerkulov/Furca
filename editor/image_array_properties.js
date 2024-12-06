@@ -15,22 +15,26 @@ const imageComboBox = element("images")
 
 export function updateTexturesList() {
     imageComboBox.innerText = ""
-    for(const [name, array] of Object.entries(texture)) {
+    for(const [name, tex] of Object.entries(texture)) {
         const option = document.createElement("option")
         option.value = name
         option.innerText = name
-        option.texture = texture
+        option.texture = tex
         if(currentImageArray.texture === texture) option.selected = true
         imageComboBox.append(option)
     }
 }
 
 imageArrayCanvas.render = () => {
-    renderTileSetCanvas(100, 100)
+    renderTileSetCanvas(100, 100, false)
 }
 
 imageArrayPropertiesWindow.init = () => {
     updateTexturesList()
     columnsField.value = currentImageArray.columns
     rowsField.value = currentImageArray.rows
+}
+
+imageComboBox.onchange = (event) => {
+    currentImageArray.texture = event.target[event.target.selectedIndex].texture
 }
