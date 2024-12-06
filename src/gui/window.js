@@ -36,20 +36,24 @@ export class Win {
     }
 
     show() {
-        hideWindow()
+        //hideWindow()
         this.init()
         this.#node.style.visibility = "visible"
+        if(currentWindow !== undefined) windows.push(currentWindow)
         currentWindow = this
     }
 
     hide() {
         this.#node.style.visibility = "hidden"
-        if(currentWindow === this) currentWindow = undefined
+        if(windows.length > 0) {
+            currentWindow = windows.pop()
+        } else {
+            currentWindow = undefined
+        }
     }
 }
 
 export function hideWindow() {
     if(currentWindow === undefined) return
     currentWindow.hide()
-    currentWindow = undefined
 }
