@@ -5,19 +5,113 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f84c1638-8709-4de1-b5ad-06a4a04c8f62" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Furca.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/Administrator.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/editor/blocks.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/editor/data.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/data.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/auto_tiling.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/auto_tiling.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/create_tile_map.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/create_tile_map.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/draw.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/draw.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/image_array_properties.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/image_array_properties.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/editor/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/input.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/input.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/keys.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/keys.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/loader.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/loader.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/editor/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/main_window.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/main_window.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/move_point.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/move_point.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/move_tile_maps.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/move_tile_maps.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/new_map.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/new_map.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/pan.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/pan.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/preload.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/preload.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/rpg.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/rpg.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/select_map_region.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/select_map_region.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/select_tile_maps.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/select_tile_maps.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/select_tile_set_region.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/select_tile_set_region.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/settings.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/settings.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/smooth.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/smooth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/tile_map.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/tile_map.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/tile_pan.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/tile_pan.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/tile_set.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/tile_set.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/tile_set_properties.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/tile_set_properties.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/tile_zoom.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/tile_zoom.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/zoom.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/zoom.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/IBall2/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/examples/IBall2/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/IBall2/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/IBall2/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/asteroids/code.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/asteroids/data.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/asteroids/data.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/asteroids/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/examples/asteroids/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/asteroids/turbo.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/asteroids/turbo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/breakout/data.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/breakout/data.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/breakout/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/examples/breakout/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/breakout/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/breakout/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/breakout/pop_effect.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/breakout/pop_effect.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/breakout/registry.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/breakout/registry.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/collision_test/main.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/salute/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/examples/salute/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/salute/main.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/snow/generator.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/snow/generator.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/snow/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/examples/snow/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/snow/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/snow/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/action.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/actions/action.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/interval.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/linear_change.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/sprite/add_action.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/sprite/animate.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/sprite/animate_angle.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/sprite/animate_opacity.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/sprite/animate_size.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/sprite/blink.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/sprite/delayed_hide.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/sprite/delayed_remove.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/sprite/execute_actions.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/sprite/loop_area.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/sprite/move.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/sprite/remove_if_outside.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/sprite/rotate_image.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/angular_sprite.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/auto_tiling.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/block.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/box.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/canvas.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collisions.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constraint.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/drag.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/function/cos.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/function/cos.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/function/function.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/function/mul.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/function/mul.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/function/random_sign.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/function/random_sign.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/function/rnd.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/function/rnd.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/function/sum.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/function/sum.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/functions.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gui/label.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/label.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gui/window.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/window.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/image.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/image_array.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/input.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/key.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/names.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/nine_patch.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/parser.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/physics.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pivot.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/point.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/project.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/region.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderable.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/save_load.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shape.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sprite.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/system.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/texture.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tile_map.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tile_map_transform.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tile_set.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/tilemap_from_image.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/variable/enum.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/variable/number.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/variable/number.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/variable/sprite.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/vector_sprite.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +122,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -37,8 +132,12 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="2mH4DHFTrYg4BrC2Yf26NwQ5ki1" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+  <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -47,27 +146,49 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "JavaScript Debug.3d_brick_house_fixed.html.executor": "Run",
+    "JavaScript Debug.index.html (1).executor": "Debug",
+    "JavaScript Debug.index.html.executor": "Run",
+    "Node.js.furca.js.executor": "Run",
+    "Node.js.main.ts.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "D:/Dropbox/Games/Furca",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "D:/Dropbox/Dev/Furca",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "web.server",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "settings.typescriptcompiler",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2024.2.4\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
-    <configuration name="index.html" type="JavascriptDebugType" nameIsGenerated="true" uri="http://localhost:8090/Furca/editor/index.html" useBuiltInWebServerPort="true">
-      <method v="2" />
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="JavaScript Debug.index.html" />
-      </list>
-    </recent_temporary>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Dropbox\Dev\Furca" />
+      <recent name="D:\Dropbox\Dev\Furca\src" />
+      <recent name="D:\Dropbox\Games\Furca\examples\salute" />
+      <recent name="D:\Dropbox\Games\Furca" />
+      <recent name="C:\Users\Administrator\AppData\Roaming\JetBrains\WebStorm2025.2\extensions" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Dropbox\Dev\Furca\src" />
+      <recent name="D:\Dropbox\Dev\Furca\examples\collision_test" />
+      <recent name="D:\Dropbox\Dev\Furca\temp" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-WS-252.23892.411" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -82,11 +203,201 @@
       <workItem from="1726721474442" duration="2060000" />
       <workItem from="1726723607926" duration="2331000" />
       <workItem from="1726743566183" duration="174000" />
+      <workItem from="1753784565178" duration="7655000" />
+      <workItem from="1753881218483" duration="2456000" />
+      <workItem from="1753967906332" duration="1689000" />
+      <workItem from="1754150600488" duration="629000" />
+      <workItem from="1754153661603" duration="598000" />
+      <workItem from="1754243487929" duration="1192000" />
+      <workItem from="1754753471195" duration="20580000" />
+      <workItem from="1754841687124" duration="17352000" />
+      <workItem from="1754918517343" duration="12426000" />
+      <workItem from="1755018016009" duration="18578000" />
+      <workItem from="1755288590022" duration="5332000" />
+      <workItem from="1755367731208" duration="1740000" />
+      <workItem from="1755457464550" duration="4336000" />
+      <workItem from="1755758634545" duration="96000" />
+      <workItem from="1755888316602" duration="1798000" />
+      <workItem from="1755990581821" duration="787000" />
+      <workItem from="1756003576877" duration="53000" />
+      <workItem from="1756003781946" duration="95000" />
+      <workItem from="1756113008472" duration="598000" />
+      <workItem from="1756184964160" duration="662000" />
+      <workItem from="1756824988369" duration="49000" />
+      <workItem from="1757431957545" duration="213000" />
+      <workItem from="1757607180710" duration="1497000" />
+      <workItem from="1757608701132" duration="23000" />
+      <workItem from="1757608735488" duration="728000" />
+      <workItem from="1757609492630" duration="3241000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+    <option name="exactExcludedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/src/auto_tiling.js" />
+        <option value="$PROJECT_DIR$/src/auto_tiling.js.map" />
+        <option value="$PROJECT_DIR$/src/function/func.js.map" />
+        <option value="$PROJECT_DIR$/src/function/func.js" />
+        <option value="$PROJECT_DIR$/src/gui/label.js.map" />
+        <option value="$PROJECT_DIR$/src/gui/label.js" />
+        <option value="$PROJECT_DIR$/src/constraint.js" />
+        <option value="$PROJECT_DIR$/src/constraint.js.map" />
+        <option value="$PROJECT_DIR$/src/function/sum.js.map" />
+        <option value="$PROJECT_DIR$/src/function/sum.js" />
+        <option value="$PROJECT_DIR$/src/project.js.map" />
+        <option value="$PROJECT_DIR$/src/project.js" />
+        <option value="$PROJECT_DIR$/src/key.js" />
+        <option value="$PROJECT_DIR$/src/key.js.map" />
+        <option value="$PROJECT_DIR$/src/shape.js.map" />
+        <option value="$PROJECT_DIR$/src/shape.js" />
+        <option value="$PROJECT_DIR$/src/parser.js.map" />
+        <option value="$PROJECT_DIR$/src/parser.js" />
+        <option value="$PROJECT_DIR$/src/texture.js" />
+        <option value="$PROJECT_DIR$/src/texture.js.map" />
+        <option value="$PROJECT_DIR$/src/function/rnd.js.map" />
+        <option value="$PROJECT_DIR$/src/function/rnd.js" />
+        <option value="$PROJECT_DIR$/src/point.js" />
+        <option value="$PROJECT_DIR$/src/point.js.map" />
+        <option value="$PROJECT_DIR$/src/gui/window.js" />
+        <option value="$PROJECT_DIR$/src/gui/window.js.map" />
+        <option value="$PROJECT_DIR$/src/canvas.js" />
+        <option value="$PROJECT_DIR$/src/canvas.js.map" />
+        <option value="$PROJECT_DIR$/src/vector_sprite.js" />
+        <option value="$PROJECT_DIR$/src/vector_sprite.js.map" />
+        <option value="$PROJECT_DIR$/src/system.js" />
+        <option value="$PROJECT_DIR$/src/system.js.map" />
+        <option value="$PROJECT_DIR$/src/block.js" />
+        <option value="$PROJECT_DIR$/src/block.js.map" />
+        <option value="$PROJECT_DIR$/src/angular_sprite.js" />
+        <option value="$PROJECT_DIR$/src/angular_sprite.js.map" />
+        <option value="$PROJECT_DIR$/src/function/random_sign.js.map" />
+        <option value="$PROJECT_DIR$/src/function/random_sign.js" />
+        <option value="$PROJECT_DIR$/src/variable/number.js.map" />
+        <option value="$PROJECT_DIR$/src/variable/number.js" />
+        <option value="$PROJECT_DIR$/src/tile_set.js.map" />
+        <option value="$PROJECT_DIR$/src/physics.js" />
+        <option value="$PROJECT_DIR$/src/tile_set.js" />
+        <option value="$PROJECT_DIR$/src/physics.js.map" />
+        <option value="$PROJECT_DIR$/src/functions.js" />
+        <option value="$PROJECT_DIR$/src/sprite.js.map" />
+        <option value="$PROJECT_DIR$/src/sprite.js" />
+        <option value="$PROJECT_DIR$/src/box.js.map" />
+        <option value="$PROJECT_DIR$/src/box.js" />
+        <option value="$PROJECT_DIR$/src/functions.js.map" />
+        <option value="$PROJECT_DIR$/src/region.js.map" />
+        <option value="$PROJECT_DIR$/src/region.js" />
+        <option value="$PROJECT_DIR$/src/tile_map_transform.js" />
+        <option value="$PROJECT_DIR$/src/tile_map_transform.js.map" />
+        <option value="$PROJECT_DIR$/src/function/mul.js" />
+        <option value="$PROJECT_DIR$/src/function/mul.js.map" />
+        <option value="$PROJECT_DIR$/src/image.js.map" />
+        <option value="$PROJECT_DIR$/src/layer.js.map" />
+        <option value="$PROJECT_DIR$/src/image.js" />
+        <option value="$PROJECT_DIR$/src/layer.js" />
+        <option value="$PROJECT_DIR$/src/function/cos.js" />
+        <option value="$PROJECT_DIR$/src/function/cos.js.map" />
+        <option value="$PROJECT_DIR$/src/image_array.js" />
+        <option value="$PROJECT_DIR$/src/tile_map.js.map" />
+        <option value="$PROJECT_DIR$/src/tile_map.js" />
+        <option value="$PROJECT_DIR$/src/input.js" />
+        <option value="$PROJECT_DIR$/src/input.js.map" />
+        <option value="$PROJECT_DIR$/src/image_array.js.map" />
+        <option value="$PROJECT_DIR$/src/collisions.js" />
+        <option value="$PROJECT_DIR$/src/collisions.js.map" />
+        <option value="$PROJECT_DIR$/src/drag.js.map" />
+        <option value="$PROJECT_DIR$/src/drag.js" />
+        <option value="$PROJECT_DIR$/src/save_load.js.map" />
+        <option value="$PROJECT_DIR$/src/save_load.js" />
+        <option value="$PROJECT_DIR$/src/names.js" />
+        <option value="$PROJECT_DIR$/src/nine_patch.js.map" />
+        <option value="$PROJECT_DIR$/src/names.js.map" />
+        <option value="$PROJECT_DIR$/src/vector_shape.js" />
+        <option value="$PROJECT_DIR$/src/nine_patch.js" />
+        <option value="$PROJECT_DIR$/src/vector_shape.js.map" />
+        <option value="$PROJECT_DIR$/src/pivot.js.map" />
+        <option value="$PROJECT_DIR$/src/pivot.js" />
+        <option value="$PROJECT_DIR$/src/actions/action.js.map" />
+        <option value="$PROJECT_DIR$/src/actions/action.js" />
+        <option value="$PROJECT_DIR$/examples/snow/main.js" />
+        <option value="$PROJECT_DIR$/examples/snow/main.js.map" />
+        <option value="$PROJECT_DIR$/editor/tile_set_properties.js" />
+        <option value="$PROJECT_DIR$/editor/tile_set_properties.js.map" />
+        <option value="$PROJECT_DIR$/examples/breakout/data.js" />
+        <option value="$PROJECT_DIR$/examples/breakout/data.js.map" />
+        <option value="$PROJECT_DIR$/editor/tile_map.js.map" />
+        <option value="$PROJECT_DIR$/editor/tile_map.js" />
+        <option value="$PROJECT_DIR$/editor/main_window.js" />
+        <option value="$PROJECT_DIR$/editor/main_window.js.map" />
+        <option value="$PROJECT_DIR$/editor/select_tile_set_region.js" />
+        <option value="$PROJECT_DIR$/editor/select_tile_set_region.js.map" />
+        <option value="$PROJECT_DIR$/editor/loader.js" />
+        <option value="$PROJECT_DIR$/editor/loader.js.map" />
+        <option value="$PROJECT_DIR$/editor/zoom.js" />
+        <option value="$PROJECT_DIR$/editor/zoom.js.map" />
+        <option value="$PROJECT_DIR$/editor/draw.js.map" />
+        <option value="$PROJECT_DIR$/editor/draw.js" />
+        <option value="$PROJECT_DIR$/examples/collision_test/main.js" />
+        <option value="$PROJECT_DIR$/examples/collision_test/main.js.map" />
+        <option value="$PROJECT_DIR$/editor/move_point.js.map" />
+        <option value="$PROJECT_DIR$/editor/move_point.js" />
+        <option value="$PROJECT_DIR$/examples/asteroids/turbo.js" />
+        <option value="$PROJECT_DIR$/examples/asteroids/turbo.js.map" />
+        <option value="$PROJECT_DIR$/examples/snow/generator.js" />
+        <option value="$PROJECT_DIR$/examples/snow/generator.js.map" />
+        <option value="$PROJECT_DIR$/examples/breakout/pop_effect.js" />
+        <option value="$PROJECT_DIR$/examples/breakout/pop_effect.js.map" />
+        <option value="$PROJECT_DIR$/editor/create_tile_map.js.map" />
+        <option value="$PROJECT_DIR$/editor/new_map.js" />
+        <option value="$PROJECT_DIR$/editor/create_tile_map.js" />
+        <option value="$PROJECT_DIR$/editor/new_map.js.map" />
+        <option value="$PROJECT_DIR$/editor/smooth.js.map" />
+        <option value="$PROJECT_DIR$/editor/smooth.js" />
+        <option value="$PROJECT_DIR$/examples/asteroids/data.js.map" />
+        <option value="$PROJECT_DIR$/examples/asteroids/data.js" />
+        <option value="$PROJECT_DIR$/editor/select_tile_maps.js" />
+        <option value="$PROJECT_DIR$/editor/select_tile_maps.js.map" />
+        <option value="$PROJECT_DIR$/editor/keys.js.map" />
+        <option value="$PROJECT_DIR$/editor/keys.js" />
+        <option value="$PROJECT_DIR$/editor/image_array_properties.js" />
+        <option value="$PROJECT_DIR$/editor/image_array_properties.js.map" />
+        <option value="$PROJECT_DIR$/editor/main.js" />
+        <option value="$PROJECT_DIR$/editor/main.js.map" />
+        <option value="$PROJECT_DIR$/editor/settings.js" />
+        <option value="$PROJECT_DIR$/editor/settings.js.map" />
+        <option value="$PROJECT_DIR$/editor/tile_zoom.js.map" />
+        <option value="$PROJECT_DIR$/editor/tile_zoom.js" />
+        <option value="$PROJECT_DIR$/examples/breakout/registry.js" />
+        <option value="$PROJECT_DIR$/examples/breakout/main.js" />
+        <option value="$PROJECT_DIR$/examples/breakout/registry.js.map" />
+        <option value="$PROJECT_DIR$/examples/breakout/main.js.map" />
+        <option value="$PROJECT_DIR$/editor/index.js" />
+        <option value="$PROJECT_DIR$/editor/index.js.map" />
+        <option value="$PROJECT_DIR$/examples/asteroids/main.js" />
+        <option value="$PROJECT_DIR$/examples/asteroids/main.js.map" />
+        <option value="$PROJECT_DIR$/examples/IBall2/main.js" />
+        <option value="$PROJECT_DIR$/examples/IBall2/main.js.map" />
+        <option value="$PROJECT_DIR$/editor/pan.js" />
+        <option value="$PROJECT_DIR$/editor/pan.js.map" />
+        <option value="$PROJECT_DIR$/editor/auto_tiling.js" />
+        <option value="$PROJECT_DIR$/editor/auto_tiling.js.map" />
+        <option value="$PROJECT_DIR$/editor/preload.js" />
+        <option value="$PROJECT_DIR$/editor/preload.js.map" />
+        <option value="$PROJECT_DIR$/editor/select_map_region.js" />
+        <option value="$PROJECT_DIR$/editor/select_map_region.js.map" />
+        <option value="$PROJECT_DIR$/editor/move_tile_maps.js" />
+        <option value="$PROJECT_DIR$/editor/move_tile_maps.js.map" />
+        <option value="$PROJECT_DIR$/editor/rpg.js" />
+        <option value="$PROJECT_DIR$/editor/rpg.js.map" />
+        <option value="$PROJECT_DIR$/editor/tile_set.js.map" />
+        <option value="$PROJECT_DIR$/editor/tile_set.js" />
+        <option value="$PROJECT_DIR$/editor/input.js" />
+        <option value="$PROJECT_DIR$/editor/input.js.map" />
+        <option value="$PROJECT_DIR$/editor/tile_pan.js.map" />
+        <option value="$PROJECT_DIR$/editor/tile_pan.js" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
