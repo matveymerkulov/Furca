@@ -5,44 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f84c1638-8709-4de1-b5ad-06a4a04c8f62" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/editor/auto_tiling.ts" beforeDir="false" afterPath="$PROJECT_DIR$/editor/auto_tiling.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/editor/draw.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/editor/image_array_properties.ts" beforeDir="false" afterPath="$PROJECT_DIR$/editor/image_array_properties.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/editor/tile_map.ts" beforeDir="false" afterPath="$PROJECT_DIR$/editor/tile_map.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/editor/tile_set.ts" beforeDir="false" afterPath="$PROJECT_DIR$/editor/tile_set.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/editor/tile_set_properties.ts" beforeDir="false" afterPath="$PROJECT_DIR$/editor/tile_set_properties.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/IBall2/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/examples/IBall2/main.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/asteroids/data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/examples/asteroids/data.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/asteroids/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/examples/asteroids/main.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/breakout/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/examples/breakout/main.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/collision_test/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/examples/collision_test/main.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/salute/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/examples/salute/main.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/snow/generator.ts" beforeDir="false" afterPath="$PROJECT_DIR$/examples/snow/generator.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/snow/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/examples/snow/main.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/angular_sprite.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/angular_sprite.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/auto_tiling.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto_tiling.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/box.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/box.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/canvas.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/canvas.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/functions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/functions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/furca.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/image.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/image.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/image_array.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/image_array.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/layer.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/nine_patch.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/nine_patch.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/parser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/parser.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/project.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/project.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/save_load.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/save_load.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shape.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/shape.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sprite.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sprite.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/system.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/system.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tile_map.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/tile_map.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tile_set.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/tile_set.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vector_shape.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/vector_shape.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vector_sprite.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/vector_sprite.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Furca.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/Administrator.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/blocks.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/data.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/data.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layer.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,8 +28,6 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
-        <option value="TypeScript File" />
-        <option value="tsconfig.json" />
       </list>
     </option>
   </component>
@@ -64,69 +37,37 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 4
-}</component>
   <component name="ProjectId" id="2mH4DHFTrYg4BrC2Yf26NwQ5ki1" />
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;JavaScript Debug.3d_brick_house_fixed.html.executor&quot;: &quot;Run&quot;,
-    &quot;JavaScript Debug.index.html (1).executor&quot;: &quot;Debug&quot;,
-    &quot;JavaScript Debug.index.html.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.furca.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.main.ts.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.texture.ts.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Dropbox/Dev/Furca/examples/collision_test&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.typescriptcompiler&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2024.2.4\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "D:/Dropbox/Games/Furca",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "web.server",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Dropbox\Dev\Furca\examples\collision_test" />
-      <recent name="D:\Dropbox\Dev\Furca" />
-      <recent name="D:\Dropbox\Dev\Furca\src" />
-      <recent name="D:\Dropbox\Games\Furca\examples\salute" />
-      <recent name="D:\Dropbox\Games\Furca" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\Dropbox\Dev\Furca\src\lib" />
-      <recent name="D:\Dropbox\Dev\Furca\src" />
-      <recent name="D:\Dropbox\Dev\Furca" />
-      <recent name="D:\Dropbox\Dev\Furca\examples\collision_test" />
-      <recent name="D:\Dropbox\Dev\Furca\temp" />
-    </key>
-    <key name="es6.move.members.recent.items">
-      <recent name="D:\Dropbox\Dev\Furca\src\shape_type.ts" />
-    </key>
-  </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-WS-252.23892.411" />
-      </set>
-    </attachedChunks>
+}]]></component>
+  <component name="RunManager">
+    <configuration name="index.html" type="JavascriptDebugType" nameIsGenerated="true" uri="http://localhost:8090/Furca/editor/index.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.index.html" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -141,83 +82,11 @@
       <workItem from="1726721474442" duration="2060000" />
       <workItem from="1726723607926" duration="2331000" />
       <workItem from="1726743566183" duration="174000" />
-      <workItem from="1753784565178" duration="7655000" />
-      <workItem from="1753881218483" duration="2456000" />
-      <workItem from="1753967906332" duration="1689000" />
-      <workItem from="1754150600488" duration="629000" />
-      <workItem from="1754153661603" duration="598000" />
-      <workItem from="1754243487929" duration="1192000" />
-      <workItem from="1754753471195" duration="20580000" />
-      <workItem from="1754841687124" duration="17352000" />
-      <workItem from="1754918517343" duration="12426000" />
-      <workItem from="1755018016009" duration="18578000" />
-      <workItem from="1755288590022" duration="5332000" />
-      <workItem from="1755367731208" duration="1740000" />
-      <workItem from="1755457464550" duration="4336000" />
-      <workItem from="1755758634545" duration="96000" />
-      <workItem from="1755888316602" duration="1798000" />
-      <workItem from="1755990581821" duration="787000" />
-      <workItem from="1756003576877" duration="53000" />
-      <workItem from="1756003781946" duration="95000" />
-      <workItem from="1756113008472" duration="598000" />
-      <workItem from="1756184964160" duration="662000" />
-      <workItem from="1756824988369" duration="49000" />
-      <workItem from="1757431957545" duration="213000" />
-      <workItem from="1757607180710" duration="1497000" />
-      <workItem from="1757608701132" duration="23000" />
-      <workItem from="1757608735488" duration="728000" />
-      <workItem from="1757609492630" duration="5514000" />
-      <workItem from="1757615388681" duration="25000" />
-      <workItem from="1757615424521" duration="81000" />
-      <workItem from="1757617983706" duration="51000" />
-      <workItem from="1757693248308" duration="550000" />
-      <workItem from="1757693813599" duration="3323000" />
-      <workItem from="1757701007983" duration="11000" />
-      <workItem from="1757704248995" duration="9325000" />
-      <workItem from="1757829367315" duration="1821000" />
-      <workItem from="1757831239568" duration="897000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-    <option name="exactExcludedFiles">
-      <list>
-        <option value="$PROJECT_DIR$/src/examples/collision_test/main.js" />
-        <option value="$PROJECT_DIR$/examples/collision_test/main.js" />
-        <option value="$PROJECT_DIR$/src/image_array.js" />
-        <option value="$PROJECT_DIR$/src/canvas.js" />
-        <option value="$PROJECT_DIR$/src/functions.js" />
-        <option value="$PROJECT_DIR$/src/angular_sprite.js" />
-        <option value="$PROJECT_DIR$/src/constraint.js" />
-        <option value="$PROJECT_DIR$/src/sprite.js" />
-        <option value="$PROJECT_DIR$/src/tile_map_transform.js" />
-        <option value="$PROJECT_DIR$/src/point.js" />
-        <option value="$PROJECT_DIR$/src/auto_tiling.js" />
-        <option value="$PROJECT_DIR$/src/system.js" />
-        <option value="$PROJECT_DIR$/src/block.js" />
-        <option value="$PROJECT_DIR$/src/collisions.js" />
-        <option value="$PROJECT_DIR$/src/project.js" />
-        <option value="$PROJECT_DIR$/src/vector_shape.js" />
-        <option value="$PROJECT_DIR$/src/parser.js" />
-        <option value="$PROJECT_DIR$/src/shape.js" />
-        <option value="$PROJECT_DIR$/src/tile_map.js" />
-        <option value="$PROJECT_DIR$/src/drag.js" />
-        <option value="$PROJECT_DIR$/src/nine_patch.js" />
-        <option value="$PROJECT_DIR$/src/texture.js" />
-        <option value="$PROJECT_DIR$/src/box.js" />
-        <option value="$PROJECT_DIR$/src/physics.js" />
-        <option value="$PROJECT_DIR$/src/input.js" />
-        <option value="$PROJECT_DIR$/src/tile_set.js" />
-        <option value="$PROJECT_DIR$/src/save_load.js" />
-        <option value="$PROJECT_DIR$/src/key.js" />
-        <option value="$PROJECT_DIR$/src/pivot.js" />
-        <option value="$PROJECT_DIR$/src/names.js" />
-        <option value="$PROJECT_DIR$/src/region.js" />
-        <option value="$PROJECT_DIR$/src/image.js" />
-        <option value="$PROJECT_DIR$/src/layer.js" />
-      </list>
-    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
