@@ -113,12 +113,12 @@ export function setFontSize(size) {
     ctx.font = size + "px monospace"
 }
 
-export function defaultCanvas(width, height) {
+export function defaultCanvas(width = 32, height = 18) {
     let canvas = document.getElementById("canvas")
     canvas.style.display = "block"
     canvas.focus()
 
-    setCanvas(Canvas.create(canvas, width, height))
+    setCanvas(Canvas.createAdaptive(canvas, 0, 0, width, height))
 
     defaultFontSize = canvas.height / 24
     ctx.fillStyle = "white"

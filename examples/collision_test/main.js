@@ -1,13 +1,14 @@
 import {defaultCanvas, mouse} from "../../src/system.js"
 import {Sprite} from "../../src/sprite.js"
 import {project} from "../../src/project.js"
-import {Shape, ShapeType} from "../../src/shape.js"
+import {Shape} from "../../src/shape.js"
 import {Key} from "../../src/key.js"
+import {ShapeType} from "../../src/shape_type.js"
 
 project.init = (texture) => {
     let switchType = new Key("Space", "LMB", "WheelUp", "WheelDown")
 
-    defaultCanvas(40, 22)
+    defaultCanvas(12, 18)
     
     let defaultColor = "rgb(0, 128, 0)"
     let collisionColor = "rgb(128, 255, 128)"

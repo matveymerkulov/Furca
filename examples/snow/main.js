@@ -7,9 +7,9 @@ import {Interval} from "../../src/actions/interval.js"
 import {Img} from "../../src/image.js"
 import {defaultCanvas, texture} from "../../src/system.js"
 import {RemoveIfOutside} from "../../src/actions/sprite/remove_if_outside.js"
-import {ShapeType} from "../../src/shape.js"
 import Generator from "./generator.js"
 import {rnd} from "../../src/functions.js"
+import {ShapeType} from "../../src/shape_type.js"
 
 project.getAssets = () => {
     return {

@@ -1,7 +1,7 @@
 import {Action} from "../../src/actions/action.js"
-import {ShapeType} from "../../src/shape.js"
 import {rnd} from "../../src/functions.js"
 import {VectorSprite} from "../../src/vector_sprite.js"
+import {ShapeType} from "../../src/shape_type.js"
 
 export default class Generator extends Action {
     constructor(image, shape, type) {

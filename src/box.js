@@ -10,7 +10,7 @@ export class Box extends Point {
         this.halfHeight = 0.5 * height
     }
 
-    static fromArea(left, top, width, height) {
+    static fromCorner(left, top, width, height) {
         return new Box(left + 0.5 * width, top + 0.5 * height, width, height)
     }
 
@@ -117,5 +117,3 @@ export class Box extends Point {
 }
 
 
-export let serviceSprite1 = new Box()
-export let serviceSprite2 = new Box()

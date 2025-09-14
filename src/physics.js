@@ -1,6 +1,6 @@
 import {unc} from "./system.js"
 import {toCircle} from "./collisions.js"
-import {serviceSprite1, serviceSprite2} from "./box.js"
+import {serviceSprite1, serviceSprite2} from "./service_sprites.js"
 
 
 export class Vector {

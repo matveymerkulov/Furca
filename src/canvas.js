@@ -15,8 +15,16 @@ export function setCanvas(canvas) {
 }
 
 export class Canvas extends Box {
-    constructor(node, x, y, width, height, viewport, active = true) {
-        super(x, y, width, height, 0.0, 0.0)
+    _vdx = 1.0
+    _vdy = 1.0
+    _k = 1.0
+    background = "black"
+    actions = []
+    active = true
+    viewport = new Box(0, 0, 1, 1)
+
+    constructor(node, x, y, width, height) {
+        super(x, y, width, height)
 
         if(node !== undefined) {
             this.node = node
@@ -28,39 +36,36 @@ export class Canvas extends Box {
             })
         }
 
-        this.active = true
-        this.viewport = viewport
-        this._vdx = 1.0
-        this._vdy = 1.0
-        this._k = 1.0
-        this._oldZoom = 0
-        this._defaultPosition = this
-        this.background = "black"
-        this.actions = []
         this.updateParameters()
     }
 
-    static create(node, fwidth, fheight, adaptive = true) {
-        const k = Math.min(window.innerWidth / fwidth, window.innerHeight / fheight)
-        const width = adaptive ? fwidth * k : node.clientWidth
-        const height = adaptive ? fheight * k : node.clientHeight
-        node.width = width
-        node.height = height// - document.getElementById("tabs").clientHeight * 2
-        //node.style.width = width
-        //node.style.height = height
-        return new Canvas(node, 0.0, 0.0, fwidth, fheight, Box.fromArea(node.offsetLeft
-            , node.offsetTop, width, height))
+    // sx = fx * k + dx
+    // sy = fy * k + dy
+    // dx = sx - fx * k
+    // dy = sy - fy * k
+
+    static createAdaptive(node, x, y, minWidth, minHeight) {
+        const canvas = new Canvas(node, x, y, minWidth, minHeight)
+        window.onresize = function() {
+            canvas.viewport.x = 0.5 * node.offsetWidth
+            canvas.viewport.y = 0.5 * node.offsetHeight
+            canvas.viewport.width = node.offsetWidth
+            canvas.viewport.height = node.offsetHeight
+            node.width = node.offsetWidth
+            node.height = node.offsetHeight
+            canvas._k = Math.min( node.offsetWidth / minWidth, node.offsetHeight / minHeight)
+            canvas.updateParameters()
+        }
+        window.onresize()
+        return canvas
     }
 
     renderNode() {
         this.updateParameters()
-        let viewport = this.viewport
         setCanvas(this)
 
         ctx.fillStyle = this.background
-        //g.setClip(viewport.left, viewport.top, viewport.width, viewport.height)
-        ctx.fillRect(0, 0, viewport.width, viewport.height)
-
+        ctx.fillRect(0, 0, this.viewport.width, this.viewport.height)
         ctx.fillStyle = "white"
 
         this.render()
@@ -89,12 +94,8 @@ export class Canvas extends Box {
     }
 
     updateParameters() {
-        let viewport = this.viewport
-        let k = 1.0 * viewport.width / this.width
-        this._k = k
-        this.height = 1.0 * viewport.height / k
-        this._vdx = 0.5 * viewport.width - this.x * k
-        this._vdy = 0.5 * viewport.height - this.y * k
+        this._vdx = this.viewport.halfWidth - this.x * this._k
+        this._vdy = this.viewport.halfHeight - this.y * this._k
     }
 
     setZoom(zoom) {
@@ -116,28 +117,6 @@ export class Canvas extends Box {
 
     hasMouse() {
         return this.viewport.collidesWithPoint(mouse.x, mouse.y)
-    }
-
-    setDefaultPosition() {
-        this._oldZoom = this.zoom
-        this._defaultPosition = new Sprite(undefined, undefined, this.x, this.y, this.width, this.height)
-    }
-
-    restorePosition() {
-        let defaultPosition = this._defaultPosition
-        this.x = defaultPosition.x
-        this.y = defaultPosition.y
-        this.width = defaultPosition.width
-        this.height = defaultPosition.height
-        this.zoom = this._oldZoom
-        this.updateParameters()
-    }
-
-    drawDefaultCamera() {
-        let pos = this._defaultPosition
-        ctx.fillStyle("blue")
-        ctx.strokeRect(xToScreen(pos.left), yToScreen(pos.top), distToScreen(pos.width), distToScreen(pos.height))
-        ctx.fillStyle("white")
     }
 
     toggle() {

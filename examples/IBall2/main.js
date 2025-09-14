@@ -7,7 +7,8 @@ import {Sprite} from "../../src/sprite.js"
 import {Layer} from "../../src/layer.js"
 import {TileSet} from "../../src/tile_set.js"
 import {currentCanvas} from "../../src/canvas.js"
-import {ShapeType} from "../../src/shape.js"
+
+import {ShapeType} from "../../src/shape_type.js"
 
 project.getAssets = () => {
     return {

@@ -1,7 +1,7 @@
 import {Sprite} from "./sprite.js"
 import {apsk, num} from "./system.js"
-import {ShapeType} from "./shape.js"
 import {Img} from "./image.js"
+import {ShapeType} from "./shape_type.js"
 
 export class VectorSprite extends Sprite {
     dx

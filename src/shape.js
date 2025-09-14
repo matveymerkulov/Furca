@@ -1,12 +1,7 @@
 import {Renderable} from "./renderable.js"
 import {ctx} from "./canvas.js"
 import {rad} from "./functions.js"
-
-export let ShapeType = {
-    circle: Symbol("circle"),
-    box: Symbol("box"),
-    pill: Symbol("pill"),
-}
+import {ShapeType} from "./shape_type.js"
 
 // noinspection JSSuspiciousNameCombination
 export class Shape extends Renderable {

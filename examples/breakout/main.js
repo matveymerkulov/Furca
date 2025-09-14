@@ -4,8 +4,7 @@ import {loadData} from "./data.js"
 import {Sprite} from "../../src/sprite.js"
 import {Img} from "../../src/image.js"
 import {registry} from "./registry.js"
-import {ShapeType} from "../../src/shape.js"
-import {emptyTile, initTileMap} from "../../src/tile_map.js"
+import {emptyTile} from "../../src/tile_map.js"
 import {NinePatch} from "../../src/nine_patch.js"
 import {Layer} from "../../src/layer.js"
 import {PopEffect, PopEffectType} from "./pop_effect.js"
@@ -16,14 +15,11 @@ import {Align, apsk, defaultCanvas, defaultFontSize, mouse, play, texture} from 
 import {atan2, clamp, cos, floor, rad, sin} from "../../src/functions.js"
 import {AngularSprite} from "../../src/angular_sprite.js"
 import {VectorSprite} from "../../src/vector_sprite.js"
+import {ShapeType} from "../../src/shape_type.js"
 
-project.getAssets = () => {
-    return {
-        texture: ["blocks.png"],
-        sound: ["collision1.mp3", "collision2.mp3", "collision3.mp3", "collision4.mp3", "ball_lost.ogg"
+project.textures = ["blocks.png"]
+project.sound = ["collision1.mp3", "collision2.mp3", "collision3.mp3", "collision4.mp3", "ball_lost.ogg"
             , "game_over.mp3", "win.ogg"]
-    }
-}
 
 export let minPaddleX, maxPaddleX, paddleY, initialBallY, level
 export let fx = new Layer()
@@ -32,7 +28,6 @@ project.init = () => {
     let key = new Key("LMB")
 
     loadData()
-    initTileMap()
 
     defaultCanvas(40,24)
 

@@ -2,7 +2,6 @@ import {Box} from "./box.js"
 import {ctx, distToScreen, xToScreen, yToScreen} from "./canvas.js"
 import {num} from "./system.js"
 import {Animate} from "./actions/sprite/animate.js"
-import {ShapeType} from "./shape.js"
 import {Img} from "./image.js"
 import {ImageArray} from "./image_array.js"
 import {
@@ -21,6 +20,7 @@ import {
     pillFromBoxVector,
     pillFromPillVector,
 } from "./physics.js"
+import {ShapeType} from "./shape_type.js"
 
 export class Sprite extends Box {
     shapeType
