@@ -3,7 +3,8 @@ import {Align, defaultFontSize, setFontSize} from "../system.js"
 import {ctx, xToScreen, yToScreen} from "../canvas.js"
 
 export class Label extends Box {
-    constructor(sprite, items, fontSize, horizontalAlign, verticalAlign, format, image, sizeMul = 1) {
+    constructor(sprite, items, fontSize, horizontalAlign, verticalAlign, format = undefined
+                , image = undefined, sizeMul = 1) {
         super(sprite.x, sprite.y, sprite.width, sprite.height)
         this.items = items
         this.fontSize = fontSize

@@ -1,8 +1,6 @@
 import {Win} from "../src/gui/window.js"
 import {currentImageArray, renderTileSetCanvas} from "./tile_set_properties.js"
 import {element, texture} from "../src/system.js"
-import {imageArray} from "../src/project.js"
-import {currentTileSet} from "./tile_set.js"
 
 export const imageArrayPropertiesWindow = new Win("image_array_window")
 

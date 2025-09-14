@@ -12,7 +12,6 @@ import {imageArray} from "../src/project.js"
 import {enterString} from "./input.js"
 import {ImageArray} from "../src/image_array.js"
 import {settings} from "./settings.js"
-import {floor} from "../src/functions.js"
 import {imageArrayPropertiesWindow} from "./image_array_properties.js"
 
 export const tileSetPropertiesWindow = new Win("tile_set_window")
@@ -92,8 +91,8 @@ blocksCanvas.render = () => {
 
 
 blocksCanvas.update = () => {
-    const x = floor(canvasMouse.x / tileWidth)
-    const y = floor(canvasMouse.y / tileHeight)
+    const x = Math.floor(canvasMouse.x / tileWidth)
+    const y = Math.floor(canvasMouse.y / tileHeight)
 
     if(delPropertiesKey.wasPressed) {
         currentTileSet.removeBlock(x, y)

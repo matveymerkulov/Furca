@@ -9,7 +9,6 @@ import TileZoom, {setTilesPerRow, tilesPerRow} from "./tile_zoom.js"
 import {TilePan, updateY0, y0} from "./tile_pan.js"
 import {mainWindow} from "./main_window.js"
 import {delTileSetKey, panTileSetKey, selectTileKey, zoomInTileSetKey, zoomOutTileSetKey} from "./keys.js"
-import {ceil, sqrt} from "../src/functions.js"
 import {drawDashedRegion} from "./draw.js"
 
 export let currentTile = 1, currentTileSet, currentBlock, currentGroup, altGroup
@@ -69,7 +68,7 @@ function processTiles(tileFunction, blockFunction) {
 
 export function calculateTilesPerRow() {
     const quantity = processTiles(() => {}, () => {}) + 1
-    setTilesPerRow(ceil(sqrt(quantity / tileSetCanvas.viewport.height * tileSetCanvas.viewport.width)))
+    setTilesPerRow(Math.ceil(Math.sqrt(quantity / tileSetCanvas.viewport.height * tileSetCanvas.viewport.width)))
 }
 
 

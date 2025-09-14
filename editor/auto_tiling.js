@@ -6,7 +6,7 @@ import {canvasMouse, element} from "../src/system.js"
 import {Win} from "../src/gui/window.js"
 import {Category, Pos, Rule} from "../src/auto_tiling.js"
 import {Key} from "../src/key.js"
-import {ceil, removeFromArray, sqrt} from "../src/functions.js"
+import {removeFromArray} from "../src/functions.js"
 import {readText} from "./loader.js"
 import {getCategory, initParser} from "../src/parser.js"
 import {copyCategoryKey, loadCategoryKey, moveCategoryKey} from "./keys.js"
@@ -214,7 +214,7 @@ rulesListCanvas.render = () =>  {
     viewport.height = rulesListCanvas.node.offsetHeight
 
     const rules = currentCategory.rules
-    rulesListTilesPerRow = ceil(sqrt(rules.length / viewport.height * viewport.width))
+    rulesListTilesPerRow = Math.ceil(Math.sqrt(rules.length / viewport.height * viewport.width))
     let size = rulesListCanvas.viewport.width / rulesListTilesPerRow
     for(let i = 0; i < rules.length; i++) {
         const rule = rules[i]

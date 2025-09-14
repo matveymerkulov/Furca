@@ -1,7 +1,9 @@
+// noinspection JSUnusedGlobalSymbols
+
 import {Sprite} from "./sprite.js"
 import {apsk, num} from "./system.js"
-import {Img} from "./image.js"
 import {ShapeType} from "./shape_type.js"
+import {Img} from "./image.js"
 
 export class VectorSprite extends Sprite {
     dx

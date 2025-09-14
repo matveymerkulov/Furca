@@ -1,3 +1,5 @@
+// noinspection JSUnusedGlobalSymbols
+
 export function transformTileMap(tileMap, centerX = 0.5 * tileMap.columns, centerY = 0.5 * tileMap.rows, mirrorHorizontally
     , mirrorVertically, swap) {
     centerX -= 0.5

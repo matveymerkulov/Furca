@@ -12,7 +12,7 @@ import {Box} from "../../src/box.js"
 import {Label} from "../../src/gui/label.js"
 import {Num} from "../../src/variable/number.js"
 import {Align, apsk, defaultCanvas, defaultFontSize, mouse, play, texture} from "../../src/system.js"
-import {atan2, clamp, cos, floor, rad, sin} from "../../src/functions.js"
+import {clamp, rad} from "../../src/functions.js"
 import {AngularSprite} from "../../src/angular_sprite.js"
 import {VectorSprite} from "../../src/vector_sprite.js"
 import {ShapeType} from "../../src/shape_type.js"
@@ -121,7 +121,7 @@ project.init = () => {
                 }
             } else if(tileNum < singleBlocks) {
                 dy = 1
-                if(floor(tileNum / tileSetWidth) % 2 === 1) {
+                if(Math.floor(tileNum / tileSetWidth) % 2 === 1) {
                     row -= 1
                 }
             }
@@ -151,8 +151,8 @@ project.init = () => {
         }
 
         if(ballStatus === BallStatus.rolling) {
-            let dx = cos(ball.angle) * ball.speed * apsk
-            let dy = sin(ball.angle) * ball.speed * apsk
+            let dx = Math.cos(ball.angle) * ball.speed * apsk
+            let dy = Math.sin(ball.angle) * ball.speed * apsk
             let angleChanged = collisionType.none
 
             ball.x += dx
@@ -175,9 +175,9 @@ project.init = () => {
                 ball.angle = -ball.angle
             }
 
-            if(sin(ball.angle) > 0 && ball.collidesWithSprite(paddle)) {
+            if(Math.sin(ball.angle) > 0 && ball.collidesWithSprite(paddle)) {
                 ball.pushFromSprite(paddle)
-                ball.angle = atan2(-paddle.height, ball.x - paddle.x)
+                ball.angle = Math.atan2(-paddle.height, ball.x - paddle.x)
                 play("collision3")
             }
 

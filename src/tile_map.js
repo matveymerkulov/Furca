@@ -1,9 +1,10 @@
+// noinspection JSUnusedGlobalSymbols
+
 import {Box} from "./box.js"
 import {ctx, distToScreen, xToScreen, yToScreen} from "./canvas.js"
 import {arrayToString} from "./save_load.js"
 import {showCollisionShapes} from "./input.js"
 import {tileMap} from "./project.js"
-import {floor} from "./functions.js"
 import {collisionShape, collisionSprite} from "./system.js"
 
 export const emptyTile = -1
@@ -70,19 +71,19 @@ export class TileMap extends Box {
     }
 
     tileColumnByPoint(point) {
-        return floor((point.x - this.left) / this.cellWidth)
+        return Math.floor((point.x - this.left) / this.cellWidth)
     }
 
     tileRowByPoint(point) {
-        return floor((point.y - this.top) / this.cellHeight)
+        return Math.floor((point.y - this.top) / this.cellHeight)
     }
 
     tileColumnByX(x) {
-        return floor((x - this.left) / this.cellWidth)
+        return Math.floor((x - this.left) / this.cellWidth)
     }
 
     tileRowByY(y) {
-        return floor((y - this.top) / this.cellHeight)
+        return Math.floor((y - this.top) / this.cellHeight)
     }
 
     tileByIndex(index) {

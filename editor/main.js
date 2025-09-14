@@ -13,7 +13,6 @@ import {rulesWindow, updateCategoriesList} from "./auto_tiling.js"
 import {autoTilingEditorKey, cancelKey, loadKey, saveKey, tileSetPropertiesKey} from "./keys.js"
 import {setBorderVisibility} from "../src/tile_map.js"
 import {mapsCanvas} from "./tile_map.js"
-import {max} from "../src/functions.js"
 import {zk} from "../src/canvas.js"
 import {readText} from "./loader.js"
 
@@ -35,7 +34,7 @@ export function showAll()  {
     })
 
     mapsCanvas.setPosition(0.5 * (x0 + x1), 0.5 * (y0 + y1))
-    mapsCanvas.setZoom(Math.log(max((x1 - x0) / mapsCanvas.viewport.width
+    mapsCanvas.setZoom(Math.log(Math.max((x1 - x0) / mapsCanvas.viewport.width
         , (y1 - y0) / mapsCanvas.viewport.height)) / Math.log(zk) * 0.95)
 }
 

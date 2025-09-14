@@ -1,3 +1,5 @@
+// noinspection JSUnusedGlobalSymbols
+
 import {tileSet} from "./project.js"
 import {arrayToString} from "./save_load.js"
 import {getTexturePart} from "./texture.js"

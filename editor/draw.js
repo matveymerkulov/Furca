@@ -1,5 +1,5 @@
 import {ctx} from "../src/canvas.js"
-import {atan2, cos, rad, sin} from "../src/functions.js"
+import {rad} from "../src/functions.js"
 
 export function drawShape(x, y, parameters, type) {
     if(parameters.hasOwnProperty("outline")) {
@@ -38,7 +38,7 @@ export function drawShape(x, y, parameters, type) {
 }
 
 export function drawArrow(x1, y1, x2, y2, parameters) {
-    const angle = atan2(y2 - y1, x2 - x1)
+    const angle = Math.atan2(y2 - y1, x2 - x1)
 
     ctx.beginPath()
     ctx.lineWidth = parameters.lineWidth
@@ -51,7 +51,7 @@ export function drawArrow(x1, y1, x2, y2, parameters) {
     for(let i = -1; i <= 1; i += 2) {
         const a = angle + i * parameters.angle
         ctx.moveTo(x2, y2)
-        ctx.lineTo(x2 + length * cos(a), y2 + length * sin(a))
+        ctx.lineTo(x2 + length * Math.cos(a), y2 + length * Math.sin(a))
     }
 
     ctx.stroke()

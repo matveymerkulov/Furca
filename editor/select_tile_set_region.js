@@ -4,7 +4,6 @@ import {Drag} from "../src/drag.js"
 import {Region} from "../src/region.js"
 import {currentTileSet} from "./tile_set.js"
 import {canvasUnderCursor, currentCanvas} from "../src/canvas.js"
-import {floor} from "../src/functions.js"
 
 export let tileSetRegion
 
@@ -21,17 +20,17 @@ export default class SelectTileSetRegion extends Drag {
     }
 
     start() {
-        this.#x = floor(canvasMouse.x / tileWidth)
-        this.#y = floor(canvasMouse.y / tileHeight)
+        this.#x = Math.floor(canvasMouse.x / tileWidth)
+        this.#y = Math.floor(canvasMouse.y / tileHeight)
         tileSetRegion = new Region(currentTileSet.images.columns)
     }
 
     get width() {
-        return floor(canvasMouse.x / tileWidth) - this.#x
+        return Math.floor(canvasMouse.x / tileWidth) - this.#x
     }
 
     get height() {
-        return floor(canvasMouse.y / tileHeight) - this.#y
+        return Math.floor(canvasMouse.y / tileHeight) - this.#y
     }
 
     process() {

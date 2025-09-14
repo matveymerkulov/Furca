@@ -3,7 +3,6 @@ import {Box} from "../src/box.js"
 import {mouse} from "../src/system.js"
 import {currentMode, mode, objectUnderCursor} from "./tile_map.js"
 import {world} from "../src/project.js"
-import {abs} from "../src/functions.js"
 
 export let selectedObjects = [], mapSelectionRegion
 
@@ -28,8 +27,8 @@ export class SelectTileMaps extends Drag {
 
     end() {
         selectedObjects = []
-        mapSelectionRegion.width = abs(mapSelectionRegion.width)
-        mapSelectionRegion.height = abs(mapSelectionRegion.height)
+        mapSelectionRegion.width = Math.abs(mapSelectionRegion.width)
+        mapSelectionRegion.height = Math.abs(mapSelectionRegion.height)
         for(const object of world.items) {
             if(object.isInside(mapSelectionRegion)) selectedObjects.push(object)
         }

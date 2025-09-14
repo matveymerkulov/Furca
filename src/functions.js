@@ -1,47 +1,3 @@
-// trigonometry
-
-export let pi = Math.PI
-
-export function sin(angle) {
-    return Math.sin(angle)
-}
-
-export function cos(angle) {
-    return Math.cos(angle)
-}
-
-export function atan2(y, x) {
-    return Math.atan2(y, x)
-}
-
-export function sqrt(value) {
-    return Math.sqrt(value)
-}
-
-export function sign(value) {
-    return Math.sign(value)
-}
-
-export function abs(value) {
-    return Math.abs(value)
-}
-
-export function floor(value) {
-    return Math.floor(value)
-}
-
-export function ceil(value) {
-    return Math.ceil(value)
-}
-
-export function min(value1, value2) {
-    return Math.min(value1, value2)
-}
-
-export function max(value1, value2) {
-    return Math.max(value1, value2)
-}
-
 export function clamp(value, min, max) {
     if(value < min) return min
     if(value > max) return max
@@ -53,7 +9,7 @@ export function inBounds(value, min, max) {
 }
 
 export function dist(dx, dy) {
-    return sqrt(dx * dx + dy * dy)
+    return Math.sqrt(dx * dx + dy * dy)
 }
 
 export function dist2(dx, dy) {
@@ -63,14 +19,14 @@ export function dist2(dx, dy) {
 // random
 
 export function rad(angle) {
-    return pi * angle / 180
+    return Math.PI * angle / 180
 }
 
-export function rndi(from, to) {
+export function rndi(from, to = undefined) {
     return Math.floor(rnd(from, to))
 }
 
-export function rnd(from = 1, to) {
+export function rnd(from = 1, to = undefined) {
     return to === undefined ? Math.random() * from : Math.random() * (to - from) + from
 }
 

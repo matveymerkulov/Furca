@@ -1,5 +1,4 @@
 import {arrayToString} from "./save_load.js"
-import {floor} from "./functions.js"
 
 
 export class Category {
@@ -37,10 +36,10 @@ export class Category {
     }
 
     getCorner() {
-        let minColumn, minRow
+        let minColumn = undefined, minRow = undefined
         for(let rule of this.rules) {
             const column = rule.tile % this.columns
-            const row = floor(rule.tile / this.columns)
+            const row = Math.floor(rule.tile / this.columns)
             if(minColumn === undefined || column < minColumn) minColumn = column
             if(minRow === undefined || row < minRow) minRow = row
         }

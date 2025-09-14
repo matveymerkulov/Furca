@@ -1,5 +1,5 @@
 export let ShapeType = {
-    circle: Symbol("circle"),
-    box: Symbol("box"),
-    pill: Symbol("pill"),
+    circle: 0,
+    box: 1,
+    pill: 2,
 }
