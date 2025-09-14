@@ -7,12 +7,12 @@ import {Shape, SpriteCollisionProcessor, SpriteProcessor, TileCollisionProcessor
 import {Box} from "./box.js";
 import {TileSet} from "./tile_set.js";
 
-export class Layer<Obj extends Shape = Sprite> extends Shape {
+export class Layer extends Shape {
     visible = true
     active = true
-    items: Obj[]
+    items: any[]
 
-    constructor(...items: Obj[]) {
+    constructor(...items: any[]) {
         super()
         this.items = items
     }
@@ -69,7 +69,7 @@ export class Layer<Obj extends Shape = Sprite> extends Shape {
         this.items = []
     }
 
-    has(item: Obj) {
+    has(item: any) {
         return this.items.indexOf(item) >= 0
     }
 
@@ -77,7 +77,7 @@ export class Layer<Obj extends Shape = Sprite> extends Shape {
         Array.prototype.push.apply(this.items, objects)
     }
 
-    replace(index: number, object: Obj) {
+    replace(index: number, object: any) {
         this.items[index] = object
     }
 
@@ -92,7 +92,7 @@ export class Layer<Obj extends Shape = Sprite> extends Shape {
 
     }
 
-    removeAll(itemsToRemove: Obj[]) {
+    removeAll(itemsToRemove: any[]) {
         for(const item of itemsToRemove) {
             this.remove(item)
         }
@@ -149,6 +149,7 @@ export class Layer<Obj extends Shape = Sprite> extends Shape {
         for(const item of this.items) {
             if(item instanceof TileMap && item.tileSet === tileSet) return item
         }
+        return undefined
     }
 
     // collisions
@@ -180,7 +181,7 @@ export class Layer<Obj extends Shape = Sprite> extends Shape {
         this.items.forEach(item => item.collisionWithTileMap(tileMap, code))
     }
 
-    collisionWithPoint(x: number, y: number, code) {
+    collisionWithPoint(x: number, y: number, code: SpriteCollisionProcessor) {
         this.items.forEach(item => item.collisionWithPoint(x, y, code))
     }
 
@@ -188,6 +189,7 @@ export class Layer<Obj extends Shape = Sprite> extends Shape {
         for(let item of this.items) {
             if(item.overlaps(box)) return true
         }
+        return false
     }
 
     isInside(box: Box) {

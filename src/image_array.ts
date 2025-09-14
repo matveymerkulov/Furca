@@ -28,7 +28,7 @@ export class ImageArray {
         let object = template.object
 
         if(object === undefined) {
-            object = new ImageArray(texture[template.texture], template.columns, template.rows
+            object = new ImageArray(texture.get(template.texture), template.columns, template.rows
                 , template.xMul, template.yMul, template.widthMul, template.heightMul)
             template.object = object
         }

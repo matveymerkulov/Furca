@@ -3,7 +3,7 @@ import {currentCanvas} from "./canvas.js"
 import {TileMap} from "./tile_map.js";
 import {TileSet} from "./tile_set.js";
 import {ImageArray} from "./image_array.js";
-import {Shape} from "./shape.js";
+import {Action} from "./actions/action"
 
 export let tileSet: Map<string, TileSet>, tileMap: Map<string, TileMap>, layer: Map<string, Layer>
     , world: Layer, imageArray: Map<string, ImageArray>
@@ -22,13 +22,13 @@ export function setWorld(newWorld: Layer) {
 
 export let project = {
     texturePath: "",
-    textures: [],
+    textures: new Array<string>(),
     soundPath: "",
-    sounds: [],
+    sounds: new Array<string>(),
     locale: "en",
-    locales: {},
+    locales: new Map<string, any>(),
     scene: new Layer(),
-    actions: [],
+    actions: new Array<Action>(),
 
     render() {
     },

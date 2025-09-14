@@ -15,12 +15,13 @@ export enum Visibility {
 }
 
 export class TileSet {
+    private _images: ImageArray
     visibility: number[]
     collision: any[] = []
 
     constructor(images: ImageArray, visibility: number[] = undefined, public blocks: Block[] = []
                 , public categories: Category[] = [], public altTile: number = -1, public groups: number[] = []) {
-        this.images = images
+        this._images = images
         this.visibility = visibility ? visibility : [].fill(Visibility.visible, 0, images.quantity)
     }
 
@@ -42,14 +43,14 @@ export class TileSet {
     }
 
     get images() {
-        return this.images
+        return this._images
     }
 
     set images(value) {
-        this.images = value
+        this._images = value
     }
 
-    image(num) {
+    image(num: number) {
         return this.images.image(num)
     }
 
@@ -77,7 +78,7 @@ export class TileSet {
         return Math.floor(index / this.columns)
     }
 
-    addRegion(region: Region, type) {
+    addRegion(region: Region, type: BlockType) {
         this.addBlock(region.x, region.y, region.width + 1, region.height + 1, type)
     }
 
@@ -89,12 +90,12 @@ export class TileSet {
     }
 
     initBlockImage(block: Block) {
-        const size = this.images.width
+        const size = Math.floor(this.images.texture.width / this.images.columns)
         block.texture = getTexturePart(this.images.texture, block.x * size, block.y * size
             , block.width * size, block.height * size)
     }
 
-    setBlockVisibility(block: Block, vis) {
+    setBlockVisibility(block: Block, vis: number) {
         for(let row = block.y; row < block.y + block.height; row++) {
             for(let column = block.x; column < block.x + block.width; column++) {
                 this.visibility[column + row * this.columns] = vis

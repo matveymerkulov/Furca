@@ -25,7 +25,7 @@ import {rad} from "../../../RuWebQuest 2/src/functions.js"
 import {Blink} from "../../src/actions/sprite/blink.js"
 import {AngularSprite} from "../../src/angular_sprite.js"
 
-project.locales.en = {
+project.locales["en"] = {
     // hud
 
     level: "LEVEL ",

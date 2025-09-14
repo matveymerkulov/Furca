@@ -48,7 +48,7 @@ import {
 import {emptyTile} from "../src/tile_map.js"
 import {enterString} from "./input.js"
 import {Layer} from "../src/layer.js"
-import {drawArrow, drawDashedRegion, drawShape} from "./draw.js"
+import {drawArrow, drawDashedRegion, drawShape} from "../lib/draw.js"
 import {Pivot} from "../src/pivot.js"
 import {settings} from "./settings.js"
 

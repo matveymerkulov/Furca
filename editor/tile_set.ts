@@ -10,7 +10,7 @@ import {TilePan, updateY0, y0} from "./tile_pan.js"
 import {mainWindow} from "./main_window.js"
 import {delTileSetKey, panTileSetKey, selectTileKey, zoomInTileSetKey, zoomOutTileSetKey} from "./keys.js"
 import {ceil, sqrt} from "../../RuWebQuest 2/src/functions.js"
-import {drawDashedRegion} from "./draw.js"
+import {drawDashedRegion} from "../lib/draw.js"
 
 export let currentTile = 1, currentTileSet, currentBlock, currentGroup, altGroup
 export let maxY0 = 0

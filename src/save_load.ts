@@ -1,8 +1,4 @@
-//import {initData, tileMap, tileMaps, tileSet} from "./project.js"
-//import {getString, getSymbol, getTileMap, getTileSet, getToken, initParser} from "./parser.js"
-//import {getName} from "./names.js"
-
-import {imageArray, project, tileMap, tileSet, world} from "./project.js"
+import {imageArray, project, tileSet, world} from "./project.js"
 import {getName} from "./names.js"
 import {
     getImageArray,

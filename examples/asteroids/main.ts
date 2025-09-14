@@ -6,10 +6,10 @@ import {DelayedRemove} from "../../src/actions/sprite/delayed_remove.js"
 import {currentCanvas} from "../../src/canvas.js"
 import {asteroids, bounds, bullets, explosions, flameSprite, gun, hud, invulnerabilityAction, invulnerabilityTime, level, levelBonus, lifeBonus, lives, messageLabel, score, shipAcceleration, shipAccelerationLimit, shipAngularSpeed, shipDeceleration, shipLayer, shipSprite, startingLives, startingWeapon, state, template} from "./data.js"
 import {Key} from "../../src/key.js"
-import {ShapeType} from "../../src/vector_shape.js"
 import {rad, rnd, rndi} from "../../../RuWebQuest 2/src/functions.js"
 import {AngularSprite} from "../../src/angular_sprite.js"
 import {Img} from "../../src/image.js"
+import {ShapeType} from "../../src/shape_type"
 
 export class Asteroid extends AngularSprite {
 

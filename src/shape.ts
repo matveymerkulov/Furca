@@ -1,16 +1,15 @@
-import { ShapeType } from "./vector_shape.js";
 import {Box} from "./box.js";
 import {Sprite} from "./sprite.js";
 import {Point} from "./point.js";
 import {TileMap} from "./tile_map.js";
 import {TileSet} from "./tile_set.js";
+import {ShapeType} from "./shape_type"
 
 export type SpriteProcessor = (sprite: Point) => void
 export type SpriteCollisionProcessor = (x: number, y: number, sprite: Point) => void
 export type TileCollisionProcessor = (shape: Shape, tileNum: number, x: number, y: number) => void
 
 export class Shape {
-    items: any;
     draw() {}
 
     copy(dx = 0, dy = 0): Shape {
@@ -62,19 +61,12 @@ export class Shape {
     }
 
     collisionWithSprite(sprite: Sprite, code: SpriteCollisionProcessor) {
-        for (const item of this.items) {
-            item.collisionWithSprite(sprite, code);
-        }
     }
 
     collisionWithTileMap(tileMap: TileMap, code: TileCollisionProcessor) {
-        for (const item of this.items) {
-            item.collisionWithTileMap(tileMap, code);
-        }
     }
 
-    collisionWithPoint(x: number, y: number, code) {
-        this.items.forEach(item => item.collisionWithPoint(x, y, code))
+    collisionWithPoint(x: number, y: number, code: SpriteCollisionProcessor) {
     }
 
     overlaps(box: Box) {

@@ -1,7 +1,7 @@
 import {canvasUnderCursor, ctx, currentCanvas} from "../src/canvas.js"
 import SelectTileSetRegion, {tileSetRegion} from "./select_tile_set_region.js"
 import {canvasMouse, element} from "../src/system.js"
-import {drawDashedRegion, drawLine, drawRect, drawShape} from "./draw.js"
+import {drawDashedRegion, drawLine, drawRect, drawShape} from "../lib/draw.js"
 import {currentTileSet} from "./tile_set.js"
 import {Visibility} from "../src/tile_set.js"
 import {setTileSize, tileHeight, tileWidth,} from "./main.js"

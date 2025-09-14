@@ -207,8 +207,7 @@ export function getImageArray() {
     const yMul = getFloat()
     const heightMul = getFloat()
     const widthMul = getFloat()
-    imageArray[name] = new ImageArray(texture[textureName], columns, rows, xMul, yMul, heightMul, widthMul)
-    let t = text.substring(0, pos)
+    imageArray.set(name, new ImageArray(texture.get(textureName), columns, rows, xMul, yMul, heightMul, widthMul))
     getSymbol(")")
 }
 
@@ -216,14 +215,14 @@ export function getTileSet() {
     getSymbol(".")
     const name = getToken()
     getSymbol(".")
-    const array = imageArray[getToken()]
+    const array = imageArray.get(getToken())
     const visibility = getIntArray()
     const blocks = getBlocks()
     const categories = getCategories(array.columns)
     //const prolong = getInt()
     const altTile = getInt()
     const groups = getIntArray()
-    tileSet[name] = new TileSet(array, visibility, blocks, categories, altTile, groups)
+    tileSet.set(name, new TileSet(array, visibility, blocks, categories, altTile, groups))
     getSymbol(")")
 }
 
@@ -231,7 +230,7 @@ export function getTileMap(layer: Layer = undefined) {
     const name = getToken()
     getSymbol(".")
     const tileSetName = getToken()
-    const mapTileSet = tileSet[tileSetName]
+    const mapTileSet = tileSet.get(tileSetName)
     const columns = getInt()
     const rows = getInt()
     const x = getFloat()
@@ -241,7 +240,7 @@ export function getTileMap(layer: Layer = undefined) {
     const array = getIntArray()
     const map = new TileMap(mapTileSet, columns, rows, x, y, cellWidth, cellHeight, array)
     if(layer === undefined) {
-        tileMap[name] = map
+        tileMap.set(name, map)
         world.add(map)
     } else {
         layer.add(map)
@@ -258,7 +257,7 @@ export function getLayer() {
         if(!getSymbol("(", ")")) break
         getTileMap(l)
     }
-    layer[name] = l
+    layer.set(name, l)
     setName(l, name)
     world.add(l)
 }

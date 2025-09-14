@@ -10,8 +10,8 @@ import {Point} from "./point.js";
 import {Sprite} from "./sprite.js";
 import {VectorSprite} from "./vector_sprite.js";
 import {AngularSprite} from "./angular_sprite.js";
-import {ShapeType} from "./vector_shape.js";
 import {Layer} from "./layer.js";
+import {ShapeType} from "./shape_type"
 
 export const emptyTile = -1
 
@@ -134,7 +134,7 @@ export class TileMap extends Box {
         return this.left + this.cellWidth * (0.5 + column)
     }
 
-    tileYByRow(row) {
+    tileYByRow(row: number) {
         return this.top + this.cellHeight * (0.5 + row)
     }
 

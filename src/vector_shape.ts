@@ -1,12 +1,7 @@
 import {Img} from "./image.js";
 import {ctx} from "./canvas.js"
 import {rad} from "./functions.js"
-
-export enum ShapeType {
-    circle,
-    box,
-    pill,
-}
+import {ShapeType} from "./shape_type"
 
 // noinspection JSSuspiciousNameCombination
 export class VectorShape extends Img {

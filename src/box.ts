@@ -1,7 +1,7 @@
 import {Point} from "./point.js"
 import {unc} from "./system.js"
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
-import {drawDashedRegion} from "../editor/draw.js"
+import {drawDashedRegion} from "./draw.js"
 
 export class Box extends Point {
     halfWidth: number

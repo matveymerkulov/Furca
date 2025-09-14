@@ -11,7 +11,7 @@ import {readText} from "./loader.js"
 import {getCategory, initParser} from "../src/parser.js"
 import {copyCategoryKey, loadCategoryKey, moveCategoryKey} from "./keys.js"
 import {confirm, enterString} from "./input.js"
-import {drawDashedRegion, drawRect} from "./draw.js"
+import {drawDashedRegion, drawRect} from "../lib/draw.js"
 import {settings} from "./settings.js"
 
 let currentCategory, currentRule

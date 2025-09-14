@@ -1,9 +1,9 @@
 import {Box} from "./box.js"
-import {Sprite} from "./sprite.js"
 import {canvasMouse, mouse, screenMouse} from "./system.js"
 import {project} from "./project.js"
-import {Drag} from "./drag.js";
-import {Key} from "./key.js";
+import {Drag} from "./drag.js"
+import {Key} from "./key.js"
+import {Action} from "./actions/action"
 
 export let currentCanvas: Canvas, canvasUnderCursor: Canvas, ctx: CanvasRenderingContext2D, zk = 1.2
 
@@ -24,7 +24,7 @@ export class Canvas extends Box {
     private oldZoom = 0
     private defaultPosition = this
     background = "black"
-    actions = []
+    actions: Action[] = []
 
     constructor(public node: HTMLCanvasElement = undefined, x: number, y: number, width: number, height: number
                 , public viewport: Box, public active = true) {
@@ -105,7 +105,7 @@ export class Canvas extends Box {
         this.updateParameters()
     }
 
-    setZoomXY(zoom, x, y) {
+    setZoomXY(zoom: number, x: number, y: number) {
         let fx1 = xFromScreen(x)
         let fy1 = yFromScreen(y)
         this.setZoom(zoom)

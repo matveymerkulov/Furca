@@ -7,7 +7,8 @@ import {ctx, currentCanvas, distToScreen, xToScreen, yToScreen} from "../../src/
 import {Rnd} from "../../src/function/rnd.js"
 import {cos, rad, rnd, sin} from "../../../RuWebQuest 2/src/functions.js"
 import {VectorSprite} from "../../src/vector_sprite.js";
-import {ShapeType} from "../../src/vector_shape.js";
+
+import {ShapeType} from "../../src/shape_type"
 
 project.textures = ["particle.png"]
 

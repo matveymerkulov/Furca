@@ -7,11 +7,11 @@ import {Interval} from "../../src/actions/interval.js"
 import {Img} from "../../src/image.js"
 import {defaultCanvas, texture} from "../../src/system.js"
 import {RemoveIfOutside} from "../../src/actions/sprite/remove_if_outside.js"
-import {ShapeType} from "../../src/vector_shape.js"
 import Generator from "./generator.js"
 import {rnd} from "../../../RuWebQuest 2/src/functions.js"
 import {Sprite} from "../../src/sprite.js";
 import {Shape} from "../../src/shape.js";
+import {ShapeType} from "../../src/shape_type"
 
 project.textures = ["snowflake.png"]
 

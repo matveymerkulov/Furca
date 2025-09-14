@@ -9,7 +9,7 @@ export class Category {
     prolong
     columns
 
-    constructor(name: string, rules = [], prolong = false, columns = undefined) {
+    constructor(name: string, rules: Rule[] = [], prolong = false, columns: number = undefined) {
         this.name = name
         this.rules = rules
         this.prolong = prolong

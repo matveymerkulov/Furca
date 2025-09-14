@@ -90,11 +90,11 @@ export function shuffleArray(array: any[]) {
     }
 }
 
-export function removeFromArray(item, array) {
+export function removeFromArray(item:any, array: any[]) {
     removeFromArrayByIndex(array.indexOf(item), array)
 }
 
-export function removeFromArrayByIndex(index, array) {
+export function removeFromArrayByIndex(index: number, array: any[]) {
     if(index < 0) return
     array.splice(index, 1)
 }

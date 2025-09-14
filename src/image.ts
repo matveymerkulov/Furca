@@ -2,8 +2,8 @@ import {ctx} from "./canvas.js"
 import {showCollisionShapes} from "./input.js"
 import {texture} from "./system.js"
 import {NinePatch} from "./nine_patch.js"
-import {Shape} from "./shape.js";
-import {ShapeType, VectorShape} from "./vector_shape.js";
+import {VectorShape} from "./vector_shape.js";
+import {ShapeType} from "./shape_type"
 
 let collisionShape = new VectorShape("rgb(255, 0, 255)", 0.5)
 
@@ -13,7 +13,7 @@ export class Img {
                 , public xMul = 0.5, public yMul = 0.5, public widthMul = 1.0, public heightMul = 1.0) {
     }
 
-    static create(template) {
+    static create(template: any) {
         if(template === undefined) return
 
         if(template.class === "NinePatch") {
@@ -23,7 +23,7 @@ export class Img {
         let object = template.object
 
         if(object === undefined) {
-            object = new Img(texture[template.texture], template.x, template.y, template.width, template.height
+            object = new Img(texture.get(template.texture), template.x, template.y, template.width, template.height
                 , template.xMul, template.yMul, template.widthMul, template.heightMul)
             template.object = object
         }
@@ -31,7 +31,7 @@ export class Img {
         return object
     }
 
-    drawResized(sx: number, sy: number, swidth: number, sheight: number, shapeType: ShapeType) {
+    drawResized(sx: number, sy: number, swidth: number, sheight: number, shapeType: ShapeType = undefined) {
         ctx.drawImage(this.texture, this.x, this.y, this.width, this.height, sx, sy, swidth, sheight)
     }
 

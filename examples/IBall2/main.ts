@@ -6,9 +6,9 @@ import {Sprite} from "../../src/sprite.js"
 import {Layer} from "../../src/layer.js"
 import {TileSet} from "../../src/tile_set.js"
 import {currentCanvas} from "../../src/canvas.js"
-import {ShapeType} from "../../src/vector_shape.js"
 import { VectorSprite } from "../../src/vector_sprite.js"
 import {TileMap} from "../../src/tile_map.js";
+import {ShapeType} from "../../src/shape_type"
 
 project.textures = ["tiles.png", "screens/02.png"]
 

@@ -4,7 +4,6 @@ import {loadData} from "./data.js"
 import {Sprite} from "../../src/sprite.js"
 import {Img} from "../../src/image.js"
 import {registry} from "./registry.js"
-import {ShapeType} from "../../src/vector_shape.js"
 import {emptyTile, TileMap} from "../../src/tile_map.js"
 import {NinePatch} from "../../src/nine_patch.js"
 import {Layer} from "../../src/layer.js"
@@ -18,6 +17,7 @@ import {AngularSprite} from "../../src/angular_sprite.js"
 import {VectorSprite} from "../../src/vector_sprite.js"
 import { Shape } from "../../src/shape.js"
 import {Action} from "../../src/actions/action.js";
+import {ShapeType} from "../../src/shape_type"
 
 project.textures = ["blocks.png"]
 project.sounds = ["collision1.mp3", "collision2.mp3", "collision3.mp3", "collision4.mp3", "ball_lost.ogg"

@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "ES2022",
+    "target": "ES2022",
+    "outDir": "js",
+    "allowUnreachableCode": true,
+
+  },
+  "include": ["lib/**/*.ts", "examples/collision_test/*.ts"]
+}

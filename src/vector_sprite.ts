@@ -1,8 +1,8 @@
 import {Sprite} from "./sprite.js"
 import {apsk, num} from "./system.js"
-import {ShapeType} from "./vector_shape.js"
 import {Img} from "./image.js"
 import {Layer} from "./layer.js";
+import {ShapeType} from "./shape_type"
 
 export class VectorSprite extends Sprite {
     constructor(image: Img, x = 0.0, y = 0.0, width = 1.0, height = 1.0

@@ -45,14 +45,14 @@ export function element(name: string) {
 export let masterVolume = 0.25
 
 export function play(name: string) {
-    let newSound = new Audio(sound[name].src)
+    let newSound = new Audio(sound.get(name).src)
     newSound.volume = masterVolume
     newSound.play()
     return newSound
 }
 
 export function playSound(sound: HTMLAudioElement) {
-    if(sound === undefined) return
+    if(sound === undefined) return undefined
     let newSound = new Audio(sound.src)
     newSound.volume = masterVolume
     newSound.play()
@@ -66,13 +66,13 @@ export function stopSound(sound: HTMLAudioElement) {
 }
 
 export function mutedSound(name: string) {
-    let newSound = new Audio(sound[name].src)
+    let newSound = new Audio(sound.get(name).src)
     newSound.volume = masterVolume
     return newSound
 }
 
 export function loopedSound(name: string, loopStart = 0, loopEnd: number, play = true, volume = masterVolume) {
-    let newSound = new Audio(sound[name].src)
+    let newSound = new Audio(sound.get(name).src)
     if(loopStart === 0 && loopEnd === undefined) {
         newSound.loop = true
     } else {
@@ -97,7 +97,7 @@ export class Loc extends Func {
     }
 
     toString() {
-        return project.locales[project.locale][this.name]
+        return project.locales.get(project.locale)[this.name]
     }
 }
 
@@ -128,7 +128,7 @@ export function defaultCanvas(width: number, height: number) {
 
 document.addEventListener("DOMContentLoaded", function() {
     const locale = Intl.DateTimeFormat().resolvedOptions().locale.substring(0, 2)
-    if(project.locales[locale] !== undefined) {
+    if(project.locales.get(locale) !== undefined) {
         project.locale = locale
     }
     setCanvas(new Canvas(undefined, 0, 0, 1, 1, new Box()))
@@ -147,7 +147,7 @@ export function removeExtension(fileName: string) {
 }
 
 let assetsToLoad = 0
-export function loadTexture(textureFileName: string, func) {
+export function loadTexture(textureFileName: string, func: () => void) {
     const tex = new Image()
     tex.onload = () => {
         assetsToLoad--
@@ -156,14 +156,14 @@ export function loadTexture(textureFileName: string, func) {
     const key = removeExtension(textureFileName)
     tex.src = project.texturePath + textureFileName
     tex.id = key
-    texture[key] = tex
+    texture.set(key, tex)
     assetsToLoad++
 
     return tex
 }
 
 export function loadAssets() {
-    function process(assets) {
+    function process(assets: string[]) {
         const newArray = []
         for(const fileName of assets) {
             const bracketStart = fileName.indexOf("[")
@@ -197,7 +197,7 @@ export function loadAssets() {
         addAudioListener(audio)
         let key = removeExtension(soundFileName)
         audio.src = project.soundPath + soundFileName
-        sound[key] = audio
+        sound.set(key, audio)
         assetsToLoad++
     }
 
@@ -250,7 +250,7 @@ function start() {
 
         project.renderNode()
 
-        //ctx.fillText(`fps: ${realFps}, aps: ${realAps}`, 5, 5)
+        ctx.fillText(`fps: ${realFps}, aps: ${realAps}`, 5, 5)
     }, 1000.0 / 150)
 }
 

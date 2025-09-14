@@ -4,7 +4,7 @@ import {element, texture} from "../src/system.js"
 import {imageArray} from "../src/project.js"
 import {currentTileSet} from "./tile_set.js"
 import {ctx} from "../src/canvas.js"
-import {drawLine} from "./draw.js"
+import {drawLine} from "../lib/draw.js"
 import {tileHeight, tileWidth} from "./main.js"
 
 export const imageArrayPropertiesWindow = new Win("image_array_window")

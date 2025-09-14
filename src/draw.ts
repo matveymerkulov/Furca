@@ -1,5 +1,5 @@
-import {ctx} from "../src/canvas.js"
-import {atan2, cos, rad, sin} from "../src/functions.js"
+import {ctx} from "./canvas"
+import {atan2, cos, rad, sin} from "./functions"
 
 export function drawShape(x, y, parameters, type = undefined) {
     if(parameters.hasOwnProperty("outline")) {

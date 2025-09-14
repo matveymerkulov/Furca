@@ -19,7 +19,7 @@ export class NinePatch extends Shape {
         this.height = [vertical1, vertical2 - vertical1, image.height - vertical2]
     }
 
-    static create(template) {
+    static create(template: any) {
         let object = template.object
 
         if(object === undefined) {
@@ -32,7 +32,7 @@ export class NinePatch extends Shape {
         return object
     }
 
-    drawResized(sx, sy, swidth, sheight, shapeType) {
+    drawResized(sx: number, sy: number, swidth: number, sheight: number, shapeType: any) {
         let x = sx - 0.5 * swidth
         let y = sy - 0.5 * sheight
         let x0 = [x, x + this.width[0], x + swidth - this.width[2]]
@@ -49,7 +49,7 @@ export class NinePatch extends Shape {
         }
     }
 
-    drawRotated(sx, sy, swidth, sheight, shapeType, angle, flipped) {
+    drawRotated(sx: number, sy: number, swidth: number, sheight: number, shapeType: any, angle: any, flipped: any) {
         this.drawResized(sx, sy, swidth, sheight, shapeType)
     }
 }
