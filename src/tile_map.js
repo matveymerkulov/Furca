@@ -5,7 +5,8 @@ import {ctx, distToScreen, xToScreen, yToScreen} from "./canvas.js"
 import {arrayToString} from "./save_load.js"
 import {showCollisionShapes} from "./input.js"
 import {tileMap} from "./project.js"
-import {collisionShape, collisionSprite} from "./system.js"
+import {collisionShape} from "./shape.js"
+import {collisionSprite} from "./sprite.js"
 
 export const emptyTile = -1
 

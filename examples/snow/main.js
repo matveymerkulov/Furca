@@ -9,14 +9,9 @@ import {defaultCanvas, texture} from "../../src/system.js"
 import {RemoveIfOutside} from "../../src/actions/sprite/remove_if_outside.js"
 import Generator from "./generator.js"
 import {rnd} from "../../src/functions.js"
-import {ShapeType} from "../../src/shape_type.js"
+import {ShapeType} from "../../src/sprite.js"
 
-project.getAssets = () => {
-    return {
-        texture: ["snowflake.png"],
-        sound: []
-    }
-}
+project.textures = ["snowflake.png"]
 
 project.init = () => {
     defaultCanvas(16, 16)

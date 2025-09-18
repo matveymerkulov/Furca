@@ -20,7 +20,12 @@ import {
     pillFromBoxVector,
     pillFromPillVector,
 } from "./physics.js"
-import {ShapeType} from "./shape_type.js"
+
+export let ShapeType = {
+    circle: 0,
+    box: 1,
+    pill: 2,
+}
 
 export class Sprite extends Box {
     shapeType
@@ -206,3 +211,5 @@ export class Sprite extends Box {
         return this
     }
 }
+
+export let collisionSprite = new Sprite()

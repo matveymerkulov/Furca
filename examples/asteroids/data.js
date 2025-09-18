@@ -59,14 +59,10 @@ project.locales.ru = {
     pause: "Пауза",
 }
 
-project.getAssets = () => {
-    return {
-        texture: ["textures/asteroid.png", "textures/explosion.png", "textures/fireball.png", "textures/flame.png",
-            "textures/flame_particle.png", "textures/ship.png",],
-        sound: ["sounds/death.mp3", "sounds/explosion.mp3", "sounds/extra_life.mp3", "sounds/fireball.mp3",
-            "sounds/flame.mp3", "sounds/game_over.mp3", "sounds/music.mp3", "sounds/new_level.mp3"]
-    }
-}
+project.textures = ["textures/asteroid.png", "textures/explosion.png", "textures/fireball.png", "textures/flame.png",
+    "textures/flame_particle.png", "textures/ship.png",]
+project.sounds = ["sounds/death.mp3", "sounds/explosion.mp3", "sounds/extra_life.mp3", "sounds/fireball.mp3",
+    "sounds/flame.mp3", "sounds/game_over.mp3", "sounds/music.mp3", "sounds/new_level.mp3"]
 
 // settings
 

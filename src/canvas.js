@@ -39,11 +39,6 @@ export class Canvas extends Box {
         this.updateParameters()
     }
 
-    // sx = fx * k + dx
-    // sy = fy * k + dy
-    // dx = sx - fx * k
-    // dy = sy - fy * k
-
     static createAdaptive(node, x, y, minWidth, minHeight) {
         const canvas = new Canvas(node, x, y, minWidth, minHeight)
         window.onresize = function() {

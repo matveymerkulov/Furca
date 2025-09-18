@@ -1,6 +1,7 @@
 
 import {clamp} from "./functions.js"
-import {serviceSprite1, serviceSprite2} from "./service_sprites.js"
+import {serviceSprite1, serviceSprite2} from "./box.js"
+
 
 export function toCircle(pill, point, servicePill) {
     if(pill.halfWidth === pill.halfHeight) return pill

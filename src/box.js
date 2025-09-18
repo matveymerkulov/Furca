@@ -117,3 +117,5 @@ export class Box extends Point {
 }
 
 
+export let serviceSprite1 = new Box()
+export let serviceSprite2 = new Box()

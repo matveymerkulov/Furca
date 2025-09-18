@@ -5,8 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f84c1638-8709-4de1-b5ad-06a4a04c8f62" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/IBall2/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/IBall2/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/asteroids/code.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/asteroids/code.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/examples/breakout/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/breakout/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/collision_test/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/collision_test/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/snow/generator.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/snow/generator.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/snow/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/snow/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/angular_sprite.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/angular_sprite.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/box.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/box.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/canvas.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/canvas.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collisions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/collisions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gui/window.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/window.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/image.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/image.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/physics.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/physics.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/service_sprites.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shape.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/shape.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shape_type.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sprite.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/sprite.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/system.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/system.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tile_map.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/tile_map.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/vector_sprite.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/vector_sprite.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +46,9 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -45,16 +69,24 @@
     "RunOnceActivity.git.unshallow": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "D:/Dropbox/Games/Furca",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
     "settings.editor.selected.configurable": "web.server",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="es6.move.members.recent.items">
+      <recent name="D:\Dropbox\Dev\Furca\src\sprite.js" />
+      <recent name="D:\Dropbox\Dev\Furca\src\shape.js" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="index.html" type="JavascriptDebugType" nameIsGenerated="true" uri="http://localhost:8090/Furca/editor/index.html" useBuiltInWebServerPort="true">
       <method v="2" />
@@ -87,6 +119,7 @@
       <workItem from="1726743566183" duration="174000" />
       <workItem from="1757832557310" duration="522000" />
       <workItem from="1757833659932" duration="117000" />
+      <workItem from="1758205591541" duration="704000" />
     </task>
     <servers />
   </component>

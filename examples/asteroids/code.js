@@ -35,7 +35,9 @@ import {Key} from "../../src/key.js"
 import {rad, rnd, rndi} from "../../src/functions.js"
 import {AngularSprite} from "../../src/angular_sprite.js"
 import {Img} from "../../src/image.js"
-import {ShapeType} from "../../src/shape_type.js"
+
+
+import {ShapeType} from "../../src/sprite.js"
 
 export function initUpdate() {
     let left = new Key("ArrowLeft")

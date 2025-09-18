@@ -1,21 +1,16 @@
 import {project} from "../../src/project.js"
-import {initTileMap, TileMap} from "../../src/tile_map.js"
+import {TileMap} from "../../src/tile_map.js"
 import {ImageArray} from "../../src/image_array.js"
 import {apsk, defaultCanvas, texture} from "../../src/system.js"
 import {Key} from "../../src/key.js"
-import {Sprite} from "../../src/sprite.js"
+import {ShapeType, Sprite} from "../../src/sprite.js"
 import {Layer} from "../../src/layer.js"
 import {TileSet} from "../../src/tile_set.js"
 import {currentCanvas} from "../../src/canvas.js"
 
-import {ShapeType} from "../../src/shape_type.js"
+import {VectorSprite} from "../../src/vector_sprite.js"
 
-project.getAssets = () => {
-    return {
-        texture: ["tiles.png", "screens/02.png"],
-        sound: []
-    }
-}
+project.textures = ["tiles.png", "screens/02.png"]
 
 let gravity = 10
 let jumpdy = -9.1
@@ -32,8 +27,6 @@ let bombTile = 57
 let figureTile = 51
 
 project.init = () => {
-    initTileMap()
-
     let left = new Key("KeyA")
     let right = new Key("KeyD")
     let jump = new Key("KeyW")
@@ -51,7 +44,7 @@ project.init = () => {
         ,98,115,100,101,0,0,0,100,0,116,117,98,115,114,99,116,117,0,0,0,116])
     //tileMap.array = [0,96,97,0,0,0,0,0,0,0,96,97,0,41,112,113,0,0,0,0,0,0,0,112,113,65,257,257,257,257,0,0,0,0,0,257,257,257,257,0,0,0,0,257,0,0,0,257,0,0,0,0,0,1,0,0,0,330,330,330,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,257,257,257,257,257,0,0,0,0,0,0,257,257,87,0,0,0,87,257,257,0,0,0,0,0,87,0,0,0,0,0,87,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,17]
 
-    let player = tiles.extractVectorTile(playerTile, ShapeType.circle)
+    let player = tiles.extractTile(new Sprite(), playerTile)
     player.dx = 0
     player.dy = 0
     player.size = 0.99
@@ -88,7 +81,8 @@ project.init = () => {
 
     tiles.processTilesByPos((column, row, tileNum) => {
         if(tileNum === panelTile) {
-            let panel = tiles.extractVectorTileByPos(column, row, ShapeType.box)
+            let panel = tiles.extractTileByPos(new VectorSprite(), column, row)
+            panel.shapeType = ShapeType.box
             panel.dy = -panelSpeed
             panels.add(panel)
         }

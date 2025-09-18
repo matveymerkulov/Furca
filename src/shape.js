@@ -1,7 +1,7 @@
 import {Renderable} from "./renderable.js"
 import {ctx} from "./canvas.js"
 import {rad} from "./functions.js"
-import {ShapeType} from "./shape_type.js"
+import {ShapeType} from "./sprite.js"
 
 // noinspection JSSuspiciousNameCombination
 export class Shape extends Renderable {
@@ -59,3 +59,5 @@ export class Shape extends Renderable {
         this.drawResized(sx - 0.5 * swidth, sy - 0.5 * sheight, swidth, sheight, shapeType)
     }
 }
+
+export let collisionShape = new Shape("rgb(255, 0, 255)", 0.5)

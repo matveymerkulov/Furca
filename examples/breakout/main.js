@@ -1,7 +1,7 @@
 import {Key} from "../../src/key.js"
 import {project, tileMap, tileSet} from "../../src/project.js"
 import {loadData} from "./data.js"
-import {Sprite} from "../../src/sprite.js"
+import {ShapeType, Sprite} from "../../src/sprite.js"
 import {Img} from "../../src/image.js"
 import {registry} from "./registry.js"
 import {emptyTile} from "../../src/tile_map.js"
@@ -15,7 +15,7 @@ import {Align, apsk, defaultCanvas, defaultFontSize, mouse, play, texture} from 
 import {clamp, rad} from "../../src/functions.js"
 import {AngularSprite} from "../../src/angular_sprite.js"
 import {VectorSprite} from "../../src/vector_sprite.js"
-import {ShapeType} from "../../src/shape_type.js"
+
 
 project.textures = ["blocks.png"]
 project.sound = ["collision1.mp3", "collision2.mp3", "collision3.mp3", "collision4.mp3", "ball_lost.ogg"
