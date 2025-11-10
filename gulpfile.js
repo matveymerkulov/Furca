@@ -1,4 +1,6 @@
-var gulp         = require('gulp');
+var gulp = require('gulp');
+const terser = require('gulp-terser');
+const deleteLines = require('gulp-delete-lines');
 var concat = require('gulp-concat');
 
 gulp.task('scripts', function() {
@@ -42,5 +44,11 @@ return gulp.src([
     "./src/variable/number.js",
     ])
     .pipe(concat('furca.js'))
+    .pipe(deleteLines({
+        'filters': [
+            "^import.*$"
+        ]
+    }))
+    //.pipe(terser())
     .pipe(gulp.dest('../'));
 });

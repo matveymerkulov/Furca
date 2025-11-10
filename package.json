@@ -1,6 +1,8 @@
 {
   "dependencies": {
-    "gulp": "^5.0.1"
+    "gulp": "^5.0.1",
+    "gulp-delete-lines": "^0.0.7",
+    "gulp-terser": "^2.1.0"
   },
   "devDependencies": {
     "gulp-concat": "^2.6.1"
