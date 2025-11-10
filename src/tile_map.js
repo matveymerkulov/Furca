@@ -171,7 +171,7 @@ export class TileMap extends Box {
 
         const width = distToScreen(this.cellWidth)
         const height = distToScreen(this.cellHeight)
-        const quantity = this.quantity
+        const quantity = this.#tileSet.quantity
 
         for(let row = 0; row < this.#rows; row++) {
             let intY = Math.floor(y0 + height * row)

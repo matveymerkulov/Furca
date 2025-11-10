@@ -84,7 +84,7 @@ export class Rule {
 
     convert(fromColumns, toColumns) {
         const column = this.tile % fromColumns
-        const row = floor(this.tile / fromColumns)
+        const row = Math.floor(this.tile / fromColumns)
         this.tile = column + row * toColumns
     }
 

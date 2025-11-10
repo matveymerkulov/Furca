@@ -4,7 +4,7 @@ import {project} from "../../src/project.js"
 import {Shape} from "../../src/shape.js"
 import {Key} from "../../src/key.js"
 
-project.init = (texture) => {
+project.init = function() {
     let switchType = new Key("Space", "LMB", "WheelUp", "WheelDown")
 
     defaultCanvas(12, 18)

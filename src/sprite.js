@@ -4,22 +4,8 @@ import {num} from "./system.js"
 import {Animate} from "./actions/sprite/animate.js"
 import {Img} from "./image.js"
 import {ImageArray} from "./image_array.js"
-import {
-    boxWithBoxCollision,
-    boxWithPillCollision,
-    circleWithBoxCollision,
-    circleWithCircleCollision,
-    circleWithPillCollision,
-    pillWithPillCollision
-} from "./collisions.js"
-import {
-    boxFromBoxVector,
-    circleFromBoxVector,
-    circleFromCircleVector,
-    circleFromPillVector,
-    pillFromBoxVector,
-    pillFromPillVector,
-} from "./physics.js"
+import {boxWithBoxCollision, boxWithPillCollision, circleWithBoxCollision, circleWithCircleCollision, circleWithPillCollision, pillWithPillCollision} from "./collisions.js"
+import {boxFromBoxVector, circleFromBoxVector, circleFromCircleVector, circleFromPillVector, pillFromBoxVector, pillFromPillVector,} from "./physics.js"
 
 export let ShapeType = {
     circle: 0,

@@ -1,11 +1,9 @@
 import {Renderable} from "./renderable.js"
-import {Shape} from "./shape.js"
+import {collisionShape, Shape} from "./shape.js"
 import {ctx} from "./canvas.js"
 import {showCollisionShapes} from "./input.js"
 import {texture} from "./system.js"
 import {NinePatch} from "./nine_patch.js"
-
-let collisionShape = new Shape("rgb(255, 0, 255)", 0.5)
 
 export class Img extends Renderable {
     constructor(texture, x = 0, y = 0, width = texture.width, height = texture.height

@@ -39,7 +39,7 @@ export class Canvas extends Box {
         this.updateParameters()
     }
 
-    static createAdaptive(node, x, y, minWidth, minHeight) {
+    static create(node, x, y, minWidth, minHeight) {
         const canvas = new Canvas(node, x, y, minWidth, minHeight)
         window.onresize = function() {
             canvas.viewport.x = 0.5 * node.offsetWidth

@@ -1,11 +1,11 @@
 import {Region} from "./region.js"
 
-export const blockType = {
-    block: 0,
-    frame: 1,
-}
-
 export class Block extends Region {
+    static blockType = {
+        block: 0,
+        frame: 1,
+    }
+
     type
     texture
     constructor(x, y, width, height, type, texture) {
