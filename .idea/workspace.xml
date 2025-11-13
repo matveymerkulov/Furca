@@ -6,9 +6,58 @@
   <component name="ChangeListManager">
     <list default="true" id="f84c1638-8709-4de1-b5ad-06a4a04c8f62" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bundle.bat" beforeDir="false" afterPath="$PROJECT_DIR$/bundle.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/auto_tiling.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/auto_tiling.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/create_tile_map.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/create_tile_map.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/move_tile_maps.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/move_tile_maps.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/select_map_region.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/select_map_region.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/select_tile_maps.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/select_tile_maps.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/tile_map.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/tile_map.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/tile_set.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/tile_set.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/editor/tile_set_properties.js" beforeDir="false" afterPath="$PROJECT_DIR$/editor/tile_set_properties.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/IBall2/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/IBall2/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/asteroids/code.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/asteroids/code.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/asteroids/data.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/asteroids/data.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/breakout/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/breakout/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/breakout/pop_effect.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/breakout/pop_effect.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/collision_test/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/collision_test/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/salute/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/salute/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/snow/generator.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/snow/generator.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/snow/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/examples/snow/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/snow/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/snow/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gulpfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/gulpfile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/sprite/animate.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/actions/sprite/animate.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/sprite/animate_size.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/actions/sprite/animate_size.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/sprite/execute_actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/actions/sprite/execute_actions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/sprite/loop_area.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/actions/sprite/loop_area.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/sprite/move.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/actions/sprite/move.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/sprite/remove_if_outside.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/actions/sprite/remove_if_outside.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/angular_sprite.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/angular_sprite.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/box.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/box.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/canvas.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/canvas.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collisions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/collisions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gui/label.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/label.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/image.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/image_array.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/image_array.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/key.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/key.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/container.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/nine_patch.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/parser.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/parser.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/physics.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/physics.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pivot.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pivot.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/point.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/project.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/project.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/renderable.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/save_load.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/save_load.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shape.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/shape.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sprite.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/sprite.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/system.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/system.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/texture.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tile_map.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/tile_map.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tile_set.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/tile_set.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/tilemap_from_image.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/tilemap_from_image.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/vector_sprite.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/vector_sprite.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +100,7 @@
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Dropbox/Dev/Furca&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Dropbox/Dev/Furca/src&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -65,6 +114,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Dropbox\Dev\Furca\src" />
       <recent name="D:\Dropbox\Dev\Furca\ophiura" />
     </key>
     <key name="es6.move.members.recent.items">
@@ -112,7 +162,12 @@
       <workItem from="1761966313955" duration="41000" />
       <workItem from="1762693500599" duration="7924000" />
       <workItem from="1762704756563" duration="3179000" />
-      <workItem from="1762729117421" duration="3727000" />
+      <workItem from="1762729117421" duration="8305000" />
+      <workItem from="1762774899529" duration="1317000" />
+      <workItem from="1762839792500" duration="4902000" />
+      <workItem from="1762862468616" duration="5903000" />
+      <workItem from="1762904476862" duration="22237000" />
+      <workItem from="1762960534301" duration="2770000" />
     </task>
     <servers />
   </component>

@@ -5,13 +5,13 @@ import {ctx, xToScreen, yToScreen} from "../canvas.js"
 export class Label extends Box {
     constructor(sprite, items, fontSize, horizontalAlign, verticalAlign, format = undefined
                 , image = undefined, sizeMul = 1) {
-        super(sprite.x, sprite.y, sprite.width, sprite.height)
-        this.items = items
+        super(sprite.x, sprite.y, sprite.shapeWidth, sprite.shapeHeight)
+        this.children = items
         this.fontSize = fontSize
         this.horizontalAlign = horizontalAlign
         this.verticalAlign = verticalAlign
         this.format = format
-        this.image = image
+        this.texture = image
         this.sizeMul = sizeMul
         this.visible = true
     }
@@ -22,7 +22,7 @@ export class Label extends Box {
         setFontSize(this.fontSize)
 
         let text = ""
-        this.items.forEach(item => text += (typeof item === "string" ? item : item.toString()))
+        this.children.forEach(item => text += (typeof item === "string" ? item : item.toString()))
 
         let formatString = this.format?.substring(1)
         if (this.format === undefined) {
@@ -39,12 +39,12 @@ export class Label extends Box {
 
         let x, y
         const metrics = ctx.measureText(text)
-        let width = metrics.width
+        let width = metrics.shapeWidth
         let height = metrics.actualBoundingBoxDescent
         if (this.format?.startsWith("I")) {
             height *= 2
-            let k = height / this.image.height
-            width = this.image.width * k * Math.round(parseInt(text) / parseInt(formatString))
+            let k = height / this.image.shapeHeight
+            width = this.image.shapeWidth * k * Math.round(parseInt(text) / parseInt(formatString))
             width *= this.sizeMul
             height *= this.sizeMul
         }
@@ -78,7 +78,7 @@ export class Label extends Box {
             width /= value
             let image = this.image
             for(let i = 0; i < value ; i++) {
-                ctx.drawImage(image.texture, image.x + 1, image.y + 1, image.width, image.height, x + i * width, y
+                ctx.drawImage(image.texture, image.x + 1, image.y + 1, image.shapeWidth, image.shapeHeight, x + i * width, y
                     , width - 1, height - 1)
             }
         } else {

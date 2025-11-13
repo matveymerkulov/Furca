@@ -1,4 +1,4 @@
-import {Layer} from "../../layer.js"
+import {Container} from "../../container.js"
 import {current} from "../../variable/sprite.js"
 import {Action} from "../action.js"
 
@@ -14,8 +14,8 @@ export class ExecuteActions extends Action {
     }
 
     execute() {
-        if(this.object instanceof Layer) {
-            this.object.items.forEach(item => this.executeActions(item))
+        if(this.object instanceof Container) {
+            this.object.children.forEach(item => this.executeActions(item))
         } else {
             this.executeActions(this.object.toSprite())
         }

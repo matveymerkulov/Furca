@@ -47,7 +47,7 @@ import {
 } from "./keys.js"
 import {emptyTile} from "../src/tile_map.js"
 import {enterString} from "./input.js"
-import {Layer} from "../src/layer.js"
+import {Container} from "../src/container.js"
 import {drawArrow, drawDashedRegion, drawShape} from "./draw.js"
 import {Pivot} from "../src/pivot.js"
 import {settings} from "./settings.js"
@@ -73,7 +73,7 @@ mapsCanvas.add(new SelectMapRegion(), selectKey)
 
 
 mapsCanvas.render = () => {
-    for(let object of world.items) {
+    for(let object of world.children) {
         object.draw()
         if(object instanceof Pivot) {
             const x = xToScreen(object.x)
@@ -95,8 +95,8 @@ mapsCanvas.render = () => {
         // noinspection JSCheckFunctionSignatures
         let metrics = ctx.measureText(name)
         // noinspection JSCheckFunctionSignatures
-        if(object instanceof Layer) object = object.items[0]
-        ctx.fillText(name, xToScreen(object.x) - 0.5 * metrics.width
+        if(object instanceof Container) object = object.children[0]
+        ctx.fillText(name, xToScreen(object.x) - 0.5 * metrics.shapeWidth
             , yToScreen(object.top) - 0.5 * metrics.actualBoundingBoxDescent - 4)
     }
 
@@ -106,8 +106,8 @@ mapsCanvas.render = () => {
             let cellHeight = regionTileMap.cellHeight
             drawDashedRegion(xToScreen(regionTileMap.left + mapRegion.x * cellWidth)
                 , yToScreen(regionTileMap.top + mapRegion.y * cellHeight)
-                , distToScreen((mapRegion.width + 1) * cellWidth)
-                , distToScreen((mapRegion.height + 1) * cellHeight))
+                , distToScreen((mapRegion.shapeWidth + 1) * cellWidth)
+                , distToScreen((mapRegion.shapeHeight + 1) * cellHeight))
         } else if(currentTileSprite !== undefined) {
             currentTileSprite.drawDashedRegion(currentBlock === undefined && brushType === brush.circle)
         }
@@ -228,7 +228,7 @@ export function tileModeOperations() {
 
     let x = currentTileMap.left + currentTileMap.cellWidth * column + 0.5 * brushWidth
     let y = currentTileMap.top + currentTileMap.cellHeight * row + 0.5 * brushHeight
-    tileSprite.setPosition(x, y)
+    tileSprite.setShapePosition(x, y)
     tileSprite.setSize(brushWidth, brushHeight)
     currentTileSprite = tileSprite
 
@@ -272,7 +272,7 @@ export function mapModeOperations() {
     }
 
     if(copyObjectKey.wasPressed) {
-        const width = firstObject instanceof Layer ? firstObject.items[0].width : firstObject.width
+        const width = firstObject instanceof Container ? firstObject.children[0].shapeWidth : firstObject.shapeWidth
         for(let object of objects) {
             addObject(incrementName(getName(object)), object.copy(1 + width, 0))
         }
@@ -280,8 +280,8 @@ export function mapModeOperations() {
 
     function removeObjects() {
         for(let object of objects) {
-            removeFromArray(object, world.items)
-            if(object instanceof Layer) {
+            removeFromArray(object, world.children)
+            if(object instanceof Container) {
                 delete layer[getName(object)]
             } else {
                 delete tileMap[getName(object)]
@@ -296,13 +296,13 @@ export function mapModeOperations() {
 
     function hasNoLayer() {
         for(const object of objects) {
-            if(object instanceof Layer) return false
+            if(object instanceof Container) return false
         }
         return true
     }
     
     if(groupKey.wasPressed && objects.length > 1 && hasNoLayer()) {
-        const newLayer = new Layer(...objects)
+        const newLayer = new Container(...objects)
         setName(newLayer, getName(firstObject))
         removeObjects()
         world.add(newLayer)
@@ -310,9 +310,9 @@ export function mapModeOperations() {
 
     if(ungroupKey.wasPressed) {
         for(const object of objects) {
-            if(!object instanceof Layer) continue
+            if(!object instanceof Container) continue
             let index = 0
-            for(const item of object.items) {
+            for(const item of object.children) {
                 world.add(item)
                 setName(item, getName(objectUnderCursor) + index)
                 index++
@@ -335,8 +335,8 @@ function findObject(items) {
         }
 
         if(!object.collidesWithPoint(mouse.x, mouse.y)) continue
-        if(object instanceof Layer) {
-            findObject(object.items)
+        if(object instanceof Container) {
+            findObject(object.children)
             objectUnderCursor = object
             return
         } else {
@@ -354,14 +354,14 @@ export function checkObjectsWindowCollisions() {
     objectUnderCursor = undefined
     currentTileSprite = undefined
 
-    findObject(world.items)
+    findObject(world.children)
 }
 
 
 export function setTiles(map, set, column, row, width, height, tileNum, block, group) {
     if(block !== undefined && block.type === blockType.frame) {
-        if(block.width < 3) width = block.width
-        if(block.height < 3) height = block.height
+        if(block.shapeWidth < 3) width = block.shapeWidth
+        if(block.shapeHeight < 3) height = block.shapeHeight
     }
 
     for(let y = 0; y < height; y++) {
@@ -379,11 +379,11 @@ export function setTiles(map, set, column, row, width, height, tileNum, block, g
                 }
                 map.setTileByPos(xx, yy, group === undefined ? tileNum : group[rndi(0, group.length)])
             } else if(block.type === blockType.block) {
-                map.setTileByPos(xx, yy, block.x + (x % block.width)
-                    + set.columns * (block.y + (y % block.height)))
+                map.setTileByPos(xx, yy, block.x + (x % block.shapeWidth)
+                    + set.columns * (block.y + (y % block.shapeHeight)))
             } else if(block.type === blockType.frame) {
-                let dx = block.width < 3 || x === 0 ? x : (x === blockWidth - 1 ? 2 : 1)
-                let dy = block.height < 3 || y === 0 ? y : (y === blockHeight - 1 ? 2 : 1)
+                let dx = block.shapeWidth < 3 || x === 0 ? x : (x === blockWidth - 1 ? 2 : 1)
+                let dy = block.shapeHeight < 3 || y === 0 ? y : (y === blockHeight - 1 ? 2 : 1)
                 map.setTileByPos(xx, yy, block.x + dx + set.columns * (block.y + dy))
             }
         }

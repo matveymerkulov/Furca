@@ -1,22 +1,22 @@
 import {ShapeType, Sprite} from "./sprite.js"
 import {apsk, num} from "./system.js"
-import {Img} from "./image.js"
 
 
 export class AngularSprite extends Sprite {
     angle
     speed
-    constructor(image, x = 0.0, y = 0.0, width = 1.0, height = 1.0
-        , shapeType = ShapeType.circle, angle = 0, speed = 0, imageAngle, active = true, visible = true) {
-        super(image, x, y, width, height, shapeType, imageAngle, active, visible)
+    constructor(texture, x = 0.0, y = 0.0, width = 1.0, height = 1.0,
+                shapeType = ShapeType.circle, angle, ang = 0, speed = 0,
+                active = true, visible = true) {
+        super(texture, x, y, width, height, shapeType, angle, active, visible)
         this.angle = angle
         this.speed = speed
     }
 
     static create(template, layer) {
-        let sprite = new AngularSprite(Img.create(template.image), num(template.x), num(template.y), num(template.width)
-            , num(template.height), template.shape, num(template.angle), num(template.speed), num(template.imageAngle)
-            , template.visible, template.active)
+        let sprite = new AngularSprite(template.texture, num(template.x), num(template.y),
+            num(template.shapeWidth), num(template.shapeHeight), template.shape, num(template.angle),
+            num(template.speed), template.visible, template.active)
         sprite.init(template, layer)
         return sprite
     }

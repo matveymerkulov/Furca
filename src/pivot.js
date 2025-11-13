@@ -1,8 +1,11 @@
-import {Point} from "./point.js"
 import {dist} from "./functions.js"
 
-export class Pivot extends Point {
+export class Pivot extends PIXI.Point {
     bones = []
+
+    constructor(x, y) {
+        super(x, y)
+    }
 
     addBone(pivot2) {
         for(const bone of this.bones) {

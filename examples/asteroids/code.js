@@ -95,10 +95,10 @@ export function initUpdate() {
 
     function destroyAsteroid(asteroid, angle) {
         asteroid.type.pieces?.forEach(piece => {
-            createAsteroid(piece.type, angle + rad(piece.angle)).setPositionAs(asteroid)
+            createAsteroid(piece.type, angle + rad(piece.angle)).setShapePositionAs(asteroid)
         })
         if(asteroid.onHit) asteroid.onHit()
-        createExplosion(asteroid, asteroid.width)
+        createExplosion(asteroid, asteroid.shapeWidth)
         removeAsteroid(asteroid)
     }
 
@@ -107,7 +107,7 @@ export function initUpdate() {
     function createSingleExplosion(sprite, size, playSnd = true) {
         let explosion = AngularSprite.create(template.explosion, explosions)
         explosion.size = size
-        explosion.setPosition(sprite.x, sprite.y)
+        explosion.setShapePosition(sprite.x, sprite.y)
         explosion.add(new DelayedRemove(explosion, explosions, 1.0))
         if(playSnd) play("explosion")
     }
@@ -161,7 +161,7 @@ export function initUpdate() {
 
         if(this.controller.active()) {
             let bullet = AngularSprite.create(weapon.fireball.bullet)
-            bullet.setPositionAs(gun)
+            bullet.setShapePositionAs(gun)
             bullet.turn(shipSprite.angle)
             play("fireball")
         }
@@ -252,9 +252,9 @@ export function initUpdate() {
 
         // camera
 
-        currentCanvas.setPositionAs(shipSprite)
-        bounds.setPositionAs(shipSprite)
-        hud.setPositionAs(shipSprite)
+        currentCanvas.setShapePositionAs(shipSprite)
+        bounds.setShapePositionAs(shipSprite)
+        hud.setShapePositionAs(shipSprite)
 
         // invulnerability
 

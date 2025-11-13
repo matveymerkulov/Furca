@@ -2,22 +2,21 @@
 
 import {ShapeType, Sprite} from "./sprite.js"
 import {apsk, num} from "./system.js"
-import {Img} from "./image.js"
 
 export class VectorSprite extends Sprite {
     dx
     dy
-    constructor(image, x = 0.0, y = 0.0, width = 1.0, height = 1.0
-        , shapeType = ShapeType.circle, dx = 0, dy = 0, imageAngle
+    constructor(texture, x = 0.0, y = 0.0, width = 1.0, height = 1.0
+        , shapeType = ShapeType.circle, dx = 0, dy = 0, angle
                 , active = true, visible = true) {
-        super(image, x, y, width, height, shapeType, imageAngle, active, visible)
+        super(texture, x, y, width, height, shapeType, angle, active, visible)
         this.dx = dx
         this.dy = dy
     }
 
     static create(template, layer) {
-        let sprite = new VectorSprite(Img.create(template.image), num(template.x), num(template.y), num(template.width)
-            , num(template.height), template.shape, num(template.dx), num(template.dy), num(template.imageAngle)
+        let sprite = new VectorSprite(Img.create(template.texture), num(template.x), num(template.y), num(template.shapeWidth)
+            , num(template.shapeHeight), template.shape, num(template.dx), num(template.dy), num(template.imageAngle)
             , template.visible, template.active)
         sprite.init(template, layer)
         return sprite
@@ -29,8 +28,7 @@ export class VectorSprite extends Sprite {
     }
 
     move() {
-        this.x += this.dx * apsk
-        this.y += this.dy * apsk
+        this.shiftShape(this.dx * apsk, this.dy * apsk)
     }
 
     moveHorizontally() {

@@ -20,7 +20,7 @@ project.init = function() {
 
     let mouseShape = new Sprite(new Shape(mouseColor), 0, 0, 1.5, 1.5, ShapeType.circle)
     let pushed = new Sprite(new Shape(pushedColor), 0, 0, 1.5, 1.5, ShapeType.circle)
-    mouseShape.image.opacity = 0.5
+    mouseShape.texture.opacity = 0.5
 
     let shapeNumber = 0
     let shapes = [circle, box, pill]
@@ -29,12 +29,12 @@ project.init = function() {
     project.scene.add(circle, box, pill, pushed, mouseShape)
 
     project.update = () => {
-        mouseShape.setPositionAs(mouse)
-        pushed.setPositionAs(mouse)
+        mouseShape.setShapePositionAs(mouse)
+        pushed.setShapePositionAs(mouse)
 
         for(let shape of shapes) {
             let collision = mouseShape.collidesWithSprite(shape)
-            shape.image.color = collision ? collisionColor : defaultColor
+            shape.texture.color = collision ? collisionColor : defaultColor
             if(collision) {
                 pushed.pushFromSprite(shape)
             }
@@ -46,9 +46,9 @@ project.init = function() {
             mouseShape.shapeType = type
             pushed.shapeType = type
             if(type === ShapeType.circle) {
-                mouseShape.height = pushed.height = mouseShape.width
+                mouseShape.shapeHeight = pushed.shapeHeight = mouseShape.width
             } else {
-                mouseShape.height = pushed.height = 2.5
+                mouseShape.shapeHeight = pushed.shapeHeight = 2.5
             }
         }
     }

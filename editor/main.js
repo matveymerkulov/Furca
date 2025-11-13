@@ -33,7 +33,7 @@ export function showAll()  {
         if(y1 === undefined || sprite.bottom > y1) y1 = sprite.bottom
     })
 
-    mapsCanvas.setPosition(0.5 * (x0 + x1), 0.5 * (y0 + y1))
+    mapsCanvas.setShapePosition(0.5 * (x0 + x1), 0.5 * (y0 + y1))
     mapsCanvas.setZoom(Math.log(Math.max((x1 - x0) / mapsCanvas.viewport.width
         , (y1 - y0) / mapsCanvas.viewport.height)) / Math.log(zk) * 0.95)
 }

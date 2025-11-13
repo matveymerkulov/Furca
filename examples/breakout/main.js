@@ -6,7 +6,7 @@ import {Img} from "../../src/image.js"
 import {registry} from "./registry.js"
 import {emptyTile} from "../../src/tile_map.js"
 import {NinePatch} from "../../src/nine_patch.js"
-import {Layer} from "../../src/layer.js"
+import {Container} from "../../src/container.js"
 import {PopEffect, PopEffectType} from "./pop_effect.js"
 import {Box} from "../../src/box.js"
 import {Label} from "../../src/gui/label.js"
@@ -22,7 +22,7 @@ project.sound = ["collision1.mp3", "collision2.mp3", "collision3.mp3", "collisio
             , "game_over.mp3", "win.ogg"]
 
 export let minPaddleX, maxPaddleX, paddleY, initialBallY, level
-export let fx = new Layer()
+export let fx = new Container()
 
 project.init = () => {
     let key = new Key("LMB")
@@ -37,7 +37,7 @@ project.init = () => {
     let score = new Num()
     let lives = new Num(3)
 
-    let hud = new Box(0, 1, tileMap.blocks.width - 3, tileMap.blocks.height - 1)
+    let hud = new Box(0, 1, tileMap.blocks.shapeWidth - 3, tileMap.blocks.shapeHeight - 1)
     let blocksLeftLabel = new Label(hud, [""/*"Blocks left: ", blocksLeft*/], defaultFontSize, Align.left, Align.top)
     let messageLabel = new Label(hud, [""], defaultFontSize, Align.center, Align.center)
     let scoreLabel = new Label(hud, [score], defaultFontSize, Align.center, Align.top, "Z8")
@@ -69,11 +69,11 @@ project.init = () => {
 
     function initPaddleSize(width, height) {
         paddle.setSize(width, height)
-        let d = level.cellWidth + paddle.halfWidth
-        minPaddleX = -level.halfWidth + d
-        maxPaddleX = level.halfWidth - d
-        paddleY = level.halfHeight - paddle.halfHeight
-        initialBallY = paddle.top - ball.halfHeight
+        let d = level.cellWidth + paddle.shapeHalfWidth
+        minPaddleX = -level.shapeHalfWidth + d
+        maxPaddleX = level.shapeHalfWidth - d
+        paddleY = level.shapeHalfHeight - paddle.shapeHalfHeight
+        initialBallY = paddle.top - ball.shapeHalfHeight
     }
 
     function initLevel() {
@@ -85,7 +85,7 @@ project.init = () => {
 
         lives.value = 3
         score.value = 0
-        messageLabel.items[0] = ""
+        messageLabel.children[0] = ""
 
         project.scene.replace(0, level)
 
@@ -129,13 +129,13 @@ project.init = () => {
             score.increment((2 - dx - dy)* 100)
 
             if(blocksLeft <= 0) {
-                messageLabel.items[0] = "ВЫ ПОБЕДИЛИ!"
+                messageLabel.children[0] = "ВЫ ПОБЕДИЛИ!"
                 ballStatus = BallStatus.gameOver
                 play("win")
             }
 
             let sprite = level.tileAngularSpriteByPos(column, row)
-            sprite.setPosition(sprite.x + 0.5 * dx, sprite.y + 0.5 * dy)
+            sprite.setShapePosition(sprite.x + 0.5 * dx, sprite.y + 0.5 * dy)
             sprite.setSize(1 + dx, 1 + dy)
 
             fx.add(new PopEffect(sprite, 0.5, PopEffectType.disappear))
@@ -147,7 +147,7 @@ project.init = () => {
         }
 
         if(ballStatus !== BallStatus.gameOver) {
-            paddle.setPosition(clamp(mouse.x, minPaddleX, maxPaddleX), paddleY)
+            paddle.setShapePosition(clamp(mouse.x, minPaddleX, maxPaddleX), paddleY)
         }
 
         if(ballStatus === BallStatus.rolling) {
@@ -177,13 +177,13 @@ project.init = () => {
 
             if(Math.sin(ball.angle) > 0 && ball.collidesWithSprite(paddle)) {
                 ball.pushFromSprite(paddle)
-                ball.angle = Math.atan2(-paddle.height, ball.x - paddle.x)
+                ball.angle = Math.atan2(-paddle.shapeHeight, ball.x - paddle.x)
                 play("collision3")
             }
 
             if(ball.top > paddle.bottom) {
                 if(lives.value <= 0) {
-                    messageLabel.items[0] = "ИГРА ОКОНЧЕНА"
+                    messageLabel.children[0] = "ИГРА ОКОНЧЕНА"
                     ballStatus = BallStatus.gameOver
                     ball.hide()
                     play("game_over")
@@ -204,7 +204,7 @@ project.init = () => {
                 ballStatus = BallStatus.appearing
             }
         } else {
-            ball.setPosition(paddle.x, initialBallY)
+            ball.setShapePosition(paddle.x, initialBallY)
             if(ballStatus === BallStatus.onPaddle && key.wasPressed) {
                 ballStatus = BallStatus.rolling
             } else if(ballStatus === BallStatus.gameOver && key.wasPressed) {

@@ -49,12 +49,12 @@ function processTiles(tileFunction, blockFunction) {
         let texture = images.texture
         for(let block of set.blocks) {
             incrementPos()
-            let cellWidth = texture.width / images.columns
-            let cellHeight = texture.height / images.rows
+            let cellWidth = texture.shapeWidth / images.columns
+            let cellHeight = texture.shapeHeight / images.rows
             let tx = block.x * cellWidth
             let ty = block.y * cellHeight
-            let tWidth = block.width * cellWidth
-            let tHeight = block.height * cellHeight
+            let tWidth = block.shapeWidth * cellWidth
+            let tHeight = block.shapeHeight * cellHeight
             blockFunction(set, block, texture, tx, ty, tWidth, tHeight, x, y, size)
         }
     }
@@ -74,7 +74,7 @@ export function calculateTilesPerRow() {
 
 tileSetCanvas.render = () => {
     processTiles((set, images, i, x, y, size) => {
-        images.image(i).drawResized(x, y, size, size)
+        images.texture(i).drawResized(x, y, size, size)
 
         if(set !== currentTileSet) return
 
@@ -111,7 +111,7 @@ export function updateBlockSize() {
     if(currentBlock === undefined) {
         setBlockSize(brushSize, brushSize)
     } else if(currentBlock.type === blockType.block) {
-        setBlockSize(currentBlock.width, currentBlock.height)
+        setBlockSize(currentBlock.shapeWidth, currentBlock.shapeHeight)
     } else if(currentBlock.type === blockType.frame) {
         setBlockSize(1, 1)
     }

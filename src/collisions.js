@@ -1,18 +1,17 @@
-
 import {clamp} from "./functions.js"
-import {serviceSprite1, serviceSprite2} from "./box.js"
+import {serviceSprite1, serviceSprite2} from "./sprite.js"
 
 
 export function toCircle(pill, point, servicePill) {
-    if(pill.halfWidth === pill.halfHeight) return pill
-    if(pill.halfWidth > pill.halfHeight) {
-        let dWidth = pill.halfWidth - pill.halfHeight
-        servicePill.setPosition(clamp(point.x, pill.x - dWidth, pill.x + dWidth), pill.y)
-        servicePill.size = pill.height
+    if(pill.shapeHalfWidth === pill.shapeHalfHeight) return pill
+    if(pill.shapeHalfWidth > pill.shapeHalfHeight) {
+        let dWidth = pill.shapeHalfWidth - pill.shapeHalfHeight
+        servicePill.setShapePosition(clamp(point.x, pill.x - dWidth, pill.x + dWidth), pill.y)
+        servicePill.size = pill.shapeHeight
     } else {
-        let dHeight = pill.halfHeight - pill.halfWidth
-        servicePill.setPosition(pill.x, clamp(point.y, pill.y - dHeight, pill.y + dHeight))
-        servicePill.size = pill.width
+        let dHeight = pill.shapeHalfHeight - pill.shapeHalfWidth
+        servicePill.setShapePosition(pill.x, clamp(point.y, pill.y - dHeight, pill.y + dHeight))
+        servicePill.size = pill.shapeWidth
     }
     return servicePill
 }
@@ -21,7 +20,7 @@ export function toCircle(pill, point, servicePill) {
 export function circleWithParamPointCollision(circle, x, y) {
     let dx = circle.x - x
     let dy = circle.y - y
-    return dx * dx + dy * dy < circle.halfWidth * circle.halfWidth
+    return dx * dx + dy * dy < circle.shapeHalfWidth * circle.shapeHalfWidth
 }
 
 export function pointWithParamBoxCollision(point, x, y, width, height) {
@@ -32,7 +31,7 @@ export function pointWithParamBoxCollision(point, x, y, width, height) {
 export function pointWithCircleCollision(point, circle) {
     let dx = circle.x - point.x
     let dy = circle.y - point.y
-    return dx * dx + dy * dy < circle.halfWidth * circle.halfWidth
+    return dx * dx + dy * dy < circle.shapeHalfWidth * circle.shapeHalfWidth
 }
 
 export function pointWithBoxCollision(point, box) {
@@ -47,7 +46,7 @@ export function pointWithPillCollision(point, pill) {
 export function circleWithCircleCollision(circle1, circle2) {
     let dx = circle1.x - circle2.x
     let dy = circle1.y - circle2.y
-    let radius = circle1.halfWidth + circle2.halfWidth
+    let radius = circle1.shapeHalfWidth + circle2.shapeHalfWidth
     return dx * dx + dy * dy < radius * radius
 }
 
@@ -69,8 +68,8 @@ export function circleWithPillCollision(circle, pill) {
 
 
 export function boxWithBoxCollision(box1, box2) {
-    return Math.abs(box1.x - box2.x) <= box1.halfWidth + box2.halfWidth
-        && Math.abs(box1.y - box2.y) <= box1.halfHeight + box2.halfHeight
+    return Math.abs(box1.x - box2.x) <= box1.shapeHalfWidth + box2.shapeHalfWidth
+        && Math.abs(box1.y - box2.y) <= box1.shapeHalfHeight + box2.shapeHalfHeight
 }
 
 export function boxWithPillCollision(box, pill) {

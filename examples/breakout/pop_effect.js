@@ -17,8 +17,8 @@ export class PopEffect extends Action {
     constructor(sprite, period, type) {
         super()
         this.#sprite = sprite
-        this.#width = sprite.width
-        this.#height = sprite.height
+        this.#width = sprite.shapeWidth
+        this.#height = sprite.shapeHeight
         this.#period = period
         this.#type = type
         this.#startingTime = new Date().getTime()

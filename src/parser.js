@@ -1,11 +1,10 @@
 import {imageArray, layer, tileMap, tileSet, world} from "./project.js"
 import {TileSet} from "./tile_set.js"
-import {ImageArray} from "./image_array.js"
+import {TextureArray} from "./texture_array.js"
 import {TileMap} from "./tile_map.js"
 import {Block} from "./block.js"
 import {Category, Pos, Rule} from "./auto_tiling.js"
-import {texture} from "./system.js"
-import {Layer} from "./layer.js"
+import {Container} from "./container.js"
 import {setName} from "./names.js"
 
 let pos, text
@@ -207,7 +206,7 @@ export function getImageArray() {
     const yMul = getFloat()
     const heightMul = getFloat()
     const widthMul = getFloat()
-    imageArray[name] = new ImageArray(texture[textureName], columns, rows, xMul, yMul, heightMul, widthMul)
+    imageArray[name] = new TextureArray(texture[textureName], columns, rows, xMul, yMul, heightMul, widthMul)
     let t = text.substring(0, pos)
     getSymbol(")")
 }
@@ -253,7 +252,7 @@ export function getLayer() {
     let name = getToken()
     getSymbol("(")
 
-    const l = new Layer()
+    const l = new Container()
     while(true) {
         if(!getSymbol("(", ")")) break
         getTileMap(l)

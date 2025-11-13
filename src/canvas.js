@@ -1,20 +1,8 @@
-import {Box} from "./box.js"
-import {Sprite} from "./sprite.js"
-import {canvasMouse, mouse, screenMouse} from "./system.js"
-import {project} from "./project.js"
+import {mouse} from "./system.js"
 
-export let currentCanvas, canvasUnderCursor, ctx, zk = 1.2
+export let graphics = new PIXI.Graphics()
 
-export function setCanvas(canvas) {
-    currentCanvas = canvas
-    if(canvas.node === undefined) return
-    ctx = canvas.node.getContext("2d")
-    let rect = canvas.node.getBoundingClientRect()
-    canvasMouse.setPosition(screenMouse.x - rect.left, screenMouse.y - rect.top)
-    mouse.setPosition(xFromScreen(canvasMouse.x), yFromScreen(canvasMouse.y))
-}
-
-export class Canvas extends Box {
+export class Canvas extends PIXI.Container {
     _vdx = 1.0
     _vdy = 1.0
     _k = 1.0
@@ -28,12 +16,7 @@ export class Canvas extends Box {
 
         if(node !== undefined) {
             this.node = node
-            node.addEventListener("mouseover", () => {
-                canvasUnderCursor = this
-            })
-            node.addEventListener("mouseout", () => {
-                canvasUnderCursor = undefined
-            })
+
         }
 
         this.updateParameters()
@@ -44,8 +27,8 @@ export class Canvas extends Box {
         window.onresize = function() {
             canvas.viewport.x = 0.5 * node.offsetWidth
             canvas.viewport.y = 0.5 * node.offsetHeight
-            canvas.viewport.width = node.offsetWidth
-            canvas.viewport.height = node.offsetHeight
+            canvas.viewport.shapeWidth = node.offsetWidth
+            canvas.viewport.shapeHeight = node.offsetHeight
             node.width = node.offsetWidth
             node.height = node.offsetHeight
             canvas._k = Math.min( node.offsetWidth / minWidth, node.offsetHeight / minHeight)
@@ -53,21 +36,6 @@ export class Canvas extends Box {
         }
         window.onresize()
         return canvas
-    }
-
-    renderNode() {
-        this.updateParameters()
-        setCanvas(this)
-
-        ctx.fillStyle = this.background
-        ctx.fillRect(0, 0, this.viewport.width, this.viewport.height)
-        ctx.fillStyle = "white"
-
-        this.render()
-    }
-
-    render() {
-        project.scene.draw()
     }
 
     updateNode() {
@@ -89,13 +57,13 @@ export class Canvas extends Box {
     }
 
     updateParameters() {
-        this._vdx = this.viewport.halfWidth - this.x * this._k
-        this._vdy = this.viewport.halfHeight - this.y * this._k
+        this._vdx = this.viewport.shapeHalfWidth - this.x * this._k
+        this._vdy = this.viewport.shapeHalfHeight - this.y * this._k
     }
 
     setZoom(zoom) {
         this.zoom = zoom
-        this.width = this.viewport.width * (zk ** zoom)
+        this.shapeWidth = this.viewport.shapeWidth * (zk ** zoom)
         this.updateParameters()
     }
 
@@ -117,25 +85,4 @@ export class Canvas extends Box {
     toggle() {
         this.active = !this.active
     }
-}
-
-export function xToScreen(fieldX) {
-    return fieldX * currentCanvas._k + currentCanvas._vdx
-}
-export function yToScreen(fieldY) {
-   return fieldY * currentCanvas._k + currentCanvas._vdy
-}
-export function distToScreen(fieldDist) {
-    return fieldDist * currentCanvas._k
-}
-
-export function xFromScreen(screenX) {
-    return (screenX - currentCanvas._vdx) / currentCanvas._k
-}
-export function yFromScreen(screenY) {
-    return (screenY - currentCanvas._vdy) / currentCanvas._k
-}
-
-export function distFromScreen(screenDist) {
-    return screenDist / currentCanvas._k
 }

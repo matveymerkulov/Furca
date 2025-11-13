@@ -1,5 +1,4 @@
-import {Layer} from "./layer.js"
-import {currentCanvas} from "./canvas.js"
+import {Container} from "./container.js"
 
 export let tileSet, tileMap, layer, world, imageArray
 
@@ -8,7 +7,7 @@ export function initData() {
     tileSet = {}
     tileMap = {}
     layer = {}
-    world = new Layer()
+    world = new Container()
 }
 
 export function setWorld(newWorld) {
@@ -16,33 +15,22 @@ export function setWorld(newWorld) {
 }
 
 export let project = {
-    texturePath: "",
-    textures: [],
-    soundPath: "",
-    sounds: [],
     locale: "en",
     locales: {},
-    scene: new Layer(),
     actions: [],
+
+    init: () => {},
 
     render() {
     },
 
-    renderNode() {
-        this.render()
-        currentCanvas.renderNode()
-    },
-
-    init: () => {},
-
-    update() {
-    },
+    update() {},
 
     updateNode() {
         this.update()
         for(const action of this.actions) {
             action.execute()
         }
-        this.scene.update()
+
     },
 }

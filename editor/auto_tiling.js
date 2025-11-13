@@ -35,8 +35,8 @@ let removeRule = element("remove_rule")
 let moveRuleLeft = element("move_rule_left")
 let moveRuleRight = element("move_rule_right")
 
-rulesListCanvas.viewport.width = rulesListCanvas.node.offsetWidth
-rulesListCanvas.viewport.height = rulesListCanvas.node.offsetHeight
+rulesListCanvas.viewport.shapeWidth = rulesListCanvas.node.offsetWidth
+rulesListCanvas.viewport.shapeHeight = rulesListCanvas.node.offsetHeight
 
 categoriesBox.onchange = (event) => {
     currentCategory = event.target[event.target.value].category
@@ -190,7 +190,7 @@ rulesGridCanvas.render = () => {
                 , cellSize, cellSize, settings.tileSet.rule)
         }
 
-        currentTileSet.image(currentRule.tile).drawResized(gridSize * cellSize + 1
+        currentTileSet.texture(currentRule.tile).drawResized(gridSize * cellSize + 1
             , gridSize * cellSize + 1, cellSize - 1, cellSize - 1)
     }
 
@@ -210,8 +210,8 @@ rulesListCanvas.render = () =>  {
     ctx.canvas.height = rulesListCanvas.node.offsetHeight
 
     const viewport = rulesListCanvas.viewport
-    viewport.width = rulesListCanvas.node.offsetWidth
-    viewport.height = rulesListCanvas.node.offsetHeight
+    viewport.shapeWidth = rulesListCanvas.node.offsetWidth
+    viewport.shapeHeight = rulesListCanvas.node.offsetHeight
 
     const rules = currentCategory.rules
     rulesListTilesPerRow = Math.ceil(Math.sqrt(rules.length / viewport.height * viewport.width))
@@ -221,7 +221,7 @@ rulesListCanvas.render = () =>  {
         const x = (i % rulesListTilesPerRow) * size
         const y = (Math.floor(i / rulesListTilesPerRow)) * size
 
-        currentTileSet.image(rule.tile).drawResized(x, y, size, size)
+        currentTileSet.texture(rule.tile).drawResized(x, y, size, size)
 
         if(rule === currentRule) {
             drawDashedRegion(x + 1, y + 1, size - 1, size - 1)

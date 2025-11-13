@@ -33,21 +33,21 @@ export class SelectMapRegion extends Drag {
 
         if(currentBlock !== undefined) {
             if(currentBlock.type === blockType.block) {
-                if(width < currentBlock.width - 1) width = currentBlock.width - 1
-                if(height < currentBlock.height - 1) height = currentBlock.height - 1
-                width = Math.floor((width + 1) / currentBlock.width) * currentBlock.width - 1
-                height = Math.floor((height + 1) / currentBlock.height) * currentBlock.height - 1
+                if(width < currentBlock.shapeWidth - 1) width = currentBlock.shapeWidth - 1
+                if(height < currentBlock.shapeHeight - 1) height = currentBlock.shapeHeight - 1
+                width = Math.floor((width + 1) / currentBlock.shapeWidth) * currentBlock.shapeWidth - 1
+                height = Math.floor((height + 1) / currentBlock.shapeHeight) * currentBlock.shapeHeight - 1
             } else if(currentBlock.type === blockType.frame) {
-                if(currentBlock.width < 3) width = currentBlock.width - 1
-                if(currentBlock.height < 3) height = currentBlock.height - 1
+                if(currentBlock.shapeWidth < 3) width = currentBlock.shapeWidth - 1
+                if(currentBlock.shapeHeight < 3) height = currentBlock.shapeHeight - 1
             }
         }
         mapRegion.modify(regionTileSet.images.columns, this.#x, this.#y, width, height)
     }
 
     end() {
-        setBlockSize(mapRegion.width + 1, mapRegion.height + 1)
-        setTiles(regionTileMap, regionTileSet, mapRegion.x, mapRegion.y, mapRegion.width + 1, mapRegion.height + 1
+        setBlockSize(mapRegion.shapeWidth + 1, mapRegion.shapeHeight + 1)
+        setTiles(regionTileMap, regionTileSet, mapRegion.x, mapRegion.y, mapRegion.shapeWidth + 1, mapRegion.shapeHeight + 1
             , currentBlock === undefined ? currentTile : undefined, currentBlock)
         mapRegion = undefined
         setBlockSize(1, 1)

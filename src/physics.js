@@ -1,6 +1,6 @@
 import {unc} from "./system.js"
 import {toCircle} from "./collisions.js"
-import {serviceSprite1, serviceSprite2} from "./box.js"
+import {serviceSprite1, serviceSprite2} from "./sprite.js"
 
 
 export class Vector {
@@ -22,11 +22,11 @@ export class Vector {
     }
 
     addToSprite(sprite, k = 1) {
-        sprite.setPosition(k * (sprite.x + this.x), k * (sprite.y + this.y))
+        sprite.setShapePosition(k * (sprite.x + this.x), k * (sprite.y + this.y))
     }
 
     subtractFromSprite(sprite, k = 1) {
-        sprite.setPosition(k * (sprite.x - this.x), k * (sprite.y - this.y))
+        sprite.setShapePosition(k * (sprite.x - this.x), k * (sprite.y - this.y))
     }
 
     normalize() {
@@ -42,7 +42,7 @@ export function circleFromCircleVector(circle, fromCircle) {
     let dx = circle.x - fromCircle.x
     let dy = circle.y - fromCircle.y
     let length = Math.sqrt(dx * dx + dy * dy)
-    let k = (circle.halfWidth + fromCircle.halfWidth + unc) / length
+    let k = (circle.shapeHalfWidth + fromCircle.shapeHalfWidth + unc) / length
     return new Vector(fromCircle.x - circle.x + dx * k, fromCircle.y - circle.y + dy * k)
 }
 
@@ -62,7 +62,7 @@ export function circleFromBoxVector(circle, fromBox) {
 
 export function circleFromPillVector(circle, fromPill) {
     let circle2 = toCircle(fromPill, circle, serviceSprite2)
-    let k = (circle.halfWidth + circle2.halfWidth) / circle.distanceTo(circle2) - 1.0
+    let k = (circle.shapeHalfWidth + circle2.shapeHalfWidth) / circle.distanceTo(circle2) - 1.0
     return new Vector((circle.x - circle2.x) * k, (circle.y - circle2.y) * k)
 }
 
@@ -70,8 +70,8 @@ export function circleFromPillVector(circle, fromPill) {
 export function boxFromBoxVector(box, fromBox) {
     let dx = box.x - fromBox.x
     let dy = box.y - fromBox.y
-    let dwidth = box.halfWidth + fromBox.halfWidth + unc
-    let dheight = box.halfHeight + fromBox.halfHeight + unc
+    let dwidth = box.shapeHalfWidth + fromBox.shapeHalfWidth + unc
+    let dheight = box.shapeHalfHeight + fromBox.shapeHalfHeight + unc
     if(dwidth - Math.abs(dx) < dheight - Math.abs(dy)) {
         return new Vector(fromBox.x - box.x + Math.sign(dx) * dwidth, 0)
     } else {
@@ -85,16 +85,16 @@ export function pillFromBoxVector(box, fromPill) {
     let dy = fromPill.y - box.y
     let xDistance = Math.abs(dx)
     let yDistance = Math.abs(dy)
-    let a = yDistance * box.width >= xDistance * box.height
+    let a = yDistance * box.shapeWidth >= xDistance * box.shapeHeight
     if(fromPill.x > box.left && fromPill.x < box.right && a) {
-        return new Vector(0, (box.halfHeight + fromPill.halfHeight - yDistance) * -Math.sign(dy))
+        return new Vector(0, (box.shapeHalfHeight + fromPill.shapeHalfHeight - yDistance) * -Math.sign(dy))
     } else if (fromPill.y > box.top && fromPill.y < box.bottom && !a) {
-        return new Vector((box.halfWidth + fromPill.halfWidth - xDistance) * -Math.sign(dx), 0)
+        return new Vector((box.shapeHalfWidth + fromPill.shapeHalfWidth - xDistance) * -Math.sign(dx), 0)
     } else {
-        serviceSprite1.x = box.x + box.halfWidth * Math.sign(dx)
-        serviceSprite1.y = box.y + box.halfHeight * Math.sign(dy)
+        serviceSprite1.x = box.x + box.shapeHalfWidth * Math.sign(dx)
+        serviceSprite1.y = box.y + box.shapeHalfHeight * Math.sign(dy)
         toCircle(fromPill, serviceSprite1, serviceSprite2)
-        let k = 1.0 - serviceSprite2.halfWidth / serviceSprite2.distanceTo(serviceSprite1)
+        let k = 1.0 - serviceSprite2.shapeHalfWidth / serviceSprite2.distanceTo(serviceSprite1)
         return new Vector( (serviceSprite2.x - serviceSprite1.x) * k, (serviceSprite2.y - serviceSprite1.y) * k)
     }
 }
@@ -103,6 +103,6 @@ export function pillFromBoxVector(box, fromPill) {
 export function pillFromPillVector(pill, fromPill) {
     let circle1 = toCircle(pill, fromPill, serviceSprite1)
     let circle2 = toCircle(fromPill, pill, serviceSprite2)
-    let k = (circle1.halfWidth + circle2.halfWidth) / circle1.distanceTo(circle2) - 1.0
+    let k = (circle1.shapeHalfWidth + circle2.shapeHalfWidth) / circle1.distanceTo(circle2) - 1.0
     return new Vector((circle1.x - circle2.x) * k, (circle1.y - circle2.y) * k)
 }

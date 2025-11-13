@@ -4,7 +4,7 @@ export class Key {
     #isDown = false
     #wasPressed = false
     constructor(...codes) {
-        this.items = []
+        this.children = []
         codes.forEach(code => {
             let item = {}
             switch(code) {
@@ -26,14 +26,14 @@ export class Key {
                 default:
                     item.code = code
             }
-            this.items.push(item)
+            this.children.push(item)
         })
         keys.push(this)
     }
 
 
     processKeyDownEvent(event) {
-        this.items.forEach(item => {
+        this.children.forEach(item => {
             if(event.code === item.code) {
                 if(!this.#isDown) {
                     this.#wasPressed = true
@@ -44,7 +44,7 @@ export class Key {
     }
 
     processKeyUpEvent(event) {
-        this.items.forEach(item => {
+        this.children.forEach(item => {
             if(event.code === item.code) {
                 this.#isDown = false
             }
@@ -52,7 +52,7 @@ export class Key {
     }
 
     processMouseDownEvent(event) {
-        this.items.forEach(item => {
+        this.children.forEach(item => {
             if(event.button === item.button) {
                 if(!this.#isDown) {
                     this.#wasPressed = true
@@ -63,7 +63,7 @@ export class Key {
     }
 
     processMouseUpEvent(event) {
-        this.items.forEach(item => {
+        this.children.forEach(item => {
             if(event.button === item.button) {
                 this.#isDown = false
             }
@@ -71,7 +71,7 @@ export class Key {
     }
 
     processWheelEvent(dir) {
-        this.items.forEach(item => {
+        this.children.forEach(item => {
             if(dir === item.dir) {
                 this.#wasPressed = true
             }

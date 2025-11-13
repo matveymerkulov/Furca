@@ -1,6 +1,6 @@
 import {TileSet} from "../src/tile_set.js"
 import {TileMap} from "../src/tile_map.js"
-import {ImageArray} from "../src/image_array.js"
+import {TextureArray} from "../src/texture_array.js"
 import {imageArray, project, tileMap, tileSet} from "../src/project.js"
 import {Block} from "../src/block.js"
 import {Category, Pos, Rule} from "../src/auto_tiling.js"
@@ -10,8 +10,8 @@ project.texturePath = "textures/"
 project.textures = ["farm_floor.png", "farm_furniture.png", ]
 
 export function loadData() {
-    imageArray.floor = new ImageArray(texture.farm_floor, 9, 11, 0.5, 0.5, 1, 1)
-    imageArray.furniture = new ImageArray(texture.farm_furniture, 10, 16, 0.5, 0.5, 1, 1)
+    imageArray.floor = new TextureArray(texture.farm_floor, 9, 11, 0.5, 0.5, 1, 1)
+    imageArray.furniture = new TextureArray(texture.farm_furniture, 10, 16, 0.5, 0.5, 1, 1)
 
     tileSet.floor = new TileSet(imageArray.floor, [
         0, 1, 1, 1, 1, 1, 1, 1, 1,

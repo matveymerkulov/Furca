@@ -1,10 +1,10 @@
 import {project} from "../../src/project.js"
 import {TileMap} from "../../src/tile_map.js"
-import {ImageArray} from "../../src/image_array.js"
+import {TextureArray} from "../../src/texture_array.js"
 import {apsk, defaultCanvas, texture} from "../../src/system.js"
 import {Key} from "../../src/key.js"
 import {ShapeType, Sprite} from "../../src/sprite.js"
-import {Layer} from "../../src/layer.js"
+import {Container} from "../../src/container.js"
 import {TileSet} from "../../src/tile_set.js"
 import {currentCanvas} from "../../src/canvas.js"
 
@@ -32,7 +32,7 @@ project.init = () => {
     let jump = new Key("KeyW")
 
     //let tileMap = tileMapFromImage(texture.levels, texture.tiles, 16, 16, 16, 0, 0, 1, 1)
-    let tileSet = new TileSet(new ImageArray(texture.tiles, 16, 21))
+    let tileSet = new TileSet(new TextureArray(texture.tiles, 16, 21))
     tileSet.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.box), 2)
     tileSet.setCollision(new Sprite(undefined, 0.5, 0.5, 1.0, 1.0, ShapeType.circle)
         , [keyTile, diamondTile, bombTile, figureTile])
@@ -77,7 +77,7 @@ project.init = () => {
         }
     }
 
-    let panels = new Layer()
+    let panels = new Container()
 
     tiles.processTilesByPos((column, row, tileNum) => {
         if(tileNum === panelTile) {
@@ -116,7 +116,7 @@ project.init = () => {
             onGround()
         })
 
-        for(let panel of panels.items) {
+        for(let panel of panels.children) {
             panel.y += panel.dy * apsk
             if(!tiles.overlaps(panel)) {
                 panel.dy = -panel.dy
@@ -147,7 +147,7 @@ project.init = () => {
             player.dx = 0
         })
 
-        for(let panel of panels.items) {
+        for(let panel of panels.children) {
             if(panel.collidesWithSprite(player)) {
                 player.pushFromSprite(panel)
                 player.dx = 0

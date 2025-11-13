@@ -19,7 +19,7 @@ export class Animate extends Action {
         while(this.frame > quantity) {
             this.frame -= quantity
         }
-        this.sprite.image = this.images.image(Math.floor(this.frame))
+        this.sprite.texture = this.images.texture(Math.floor(this.frame))
     }
 
     copy(from) {

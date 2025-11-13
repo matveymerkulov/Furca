@@ -2,7 +2,7 @@ import MovePoint from "./move_point.js"
 import {selectedObjects} from "./select_tile_maps.js"
 import {canvasMouse, mouse} from "../src/system.js"
 import {currentMode, mode, objectUnderCursor, pivotRadius} from "./tile_map.js"
-import {Layer} from "../src/layer.js"
+import {Container} from "../src/container.js"
 import {distToScreen} from "../src/canvas.js"
 import {dist} from "../src/functions.js"
 import {Pivot} from "../src/pivot.js"
@@ -34,8 +34,8 @@ export default class MoveTileMaps extends MovePoint {
         objects = []
 
         function addObject(object) {
-            if(object instanceof Layer) {
-                objects.push(...object.items)
+            if(object instanceof Container) {
+                objects.push(...object.children)
             } else {
                 objects.push(object)
             }

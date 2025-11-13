@@ -1,13 +1,13 @@
-import {ImageArray} from "../image_array.js"
+import {TextureArray} from "../texture_array.js"
 import {TileMap} from "../tile_map.js"
 
 function getImageData(image, x = 0, y = 0, width, height) {
-    if(width === undefined) width = image.width
-    if(height === undefined) height = image.height
+    if(width === undefined) width = image.shapeWidth
+    if(height === undefined) height = image.shapeHeight
     const canvas = document.createElement('canvas')
-    canvas.width = image.width;
-    canvas.height = image.height;
-    canvas.getContext('2d').drawImage(image, 0, 0, image.width, image.height);
+    canvas.width = image.shapeWidth;
+    canvas.height = image.shapeHeight;
+    canvas.getContext('2d').drawImage(image, 0, 0, image.shapeWidth, image.shapeHeight);
     return {canvas: canvas, data: canvas.getContext('2d').getImageData(x, y, width, height).data}
 }
 
@@ -29,8 +29,8 @@ function downloadCanvas(canvas) {
 export function tileMapFromImage(image, tilesImage, cellWidth, cellHeight, columns, tx, ty, twidth, theight) {
     let tiles = []
 
-    let tileSetColumns = tilesImage.width / cellWidth
-    let tileSetRows = tilesImage.height / cellHeight
+    let tileSetColumns = tilesImage.shapeWidth / cellWidth
+    let tileSetRows = tilesImage.shapeHeight / cellHeight
     for(let y = 0; y < tileSetRows; y ++) {
         let yy = y * cellWidth
         for(let x = 0; x < tileSetColumns; x ++) {
@@ -39,8 +39,8 @@ export function tileMapFromImage(image, tilesImage, cellWidth, cellHeight, colum
         }
     }
 
-    let width = image.width
-    let height = image.height
+    let width = image.shapeWidth
+    let height = image.shapeHeight
 
     let imageData = getImageData(image).data
     let screenColumns = 13//width / cellWidth
@@ -81,7 +81,7 @@ export function tileMapFromImage(image, tilesImage, cellWidth, cellHeight, colum
     canvas.height = rows * cellHeight
     let ctx = canvas.getContext("2d")
 
-    let imageArray = new ImageArray(image, columns, rows)
+    let imageArray = new TextureArray(image, columns, rows)
 
     for(let i = 0; i < tiles.length; i++) {
         ctx.putImageData(new ImageData(tiles[i], cellWidth, cellHeight), cellWidth * (i % columns), cellHeight

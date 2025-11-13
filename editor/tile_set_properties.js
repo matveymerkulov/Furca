@@ -10,7 +10,7 @@ import {Win} from "../src/gui/window.js"
 import {delPropertiesKey, newBlockKey, newFrameKey, selectTilePropertiesKey, toggleVisibilityKey} from "./keys.js"
 import {imageArray} from "../src/project.js"
 import {enterString} from "./input.js"
-import {ImageArray} from "../src/image_array.js"
+import {TextureArray} from "../src/texture_array.js"
 import {settings} from "./settings.js"
 import {imageArrayPropertiesWindow} from "./image_array_properties.js"
 
@@ -38,17 +38,17 @@ export function updateImageArraysList() {
 export function renderTileSetCanvas(dWidth, dHeight, selection = true) {
     let images = currentTileSet.images
     let tex = images.texture
-    let scale = Math.min((document.body.offsetWidth - dWidth) / tex.width
-        , (document.body.offsetHeight - dHeight) / tex.height, 2)
+    let scale = Math.min((document.body.offsetWidth - dWidth) / tex.shapeWidth
+        , (document.body.offsetHeight - dHeight) / tex.shapeHeight, 2)
     let style = currentCanvas.node.style
-    let canvasWidth = tex.width * scale
-    let canvasHeight = tex.height * scale
+    let canvasWidth = tex.shapeWidth * scale
+    let canvasHeight = tex.shapeHeight * scale
     style.width = canvasWidth + "px"
     style.height = canvasHeight + "px"
 
     ctx.canvas.width = canvasWidth
     ctx.canvas.height = canvasHeight
-    ctx.drawImage(tex, 0, 0, tex.width, tex.height, 0, 0, canvasWidth, canvasHeight)
+    ctx.drawImage(tex, 0, 0, tex.shapeWidth, tex.shapeHeight, 0, 0, canvasWidth, canvasHeight)
 
     setTileSize(canvasWidth / images.columns, canvasHeight / images.rows)
 
@@ -80,13 +80,13 @@ blocksCanvas.render = () => {
             outerColor = "darkred"
         }
         drawRect(block.x * tileWidth, block.y * tileHeight
-            , block.width * tileWidth, block.height * tileHeight
+            , block.shapeWidth * tileWidth, block.shapeHeight * tileHeight
             , block.type === blockType.block ? settings.tileSet.block : settings.tileSet.frame)
     }
 
     if(tileSetRegion === undefined) return
     drawDashedRegion(tileSetRegion.x * tileWidth, tileSetRegion.y * tileHeight
-        , (tileSetRegion.width + 1) * tileWidth, (tileSetRegion.height + 1) * tileHeight)
+        , (tileSetRegion.shapeWidth + 1) * tileWidth, (tileSetRegion.shapeHeight + 1) * tileHeight)
 }
 
 
@@ -134,7 +134,7 @@ imageArrayComboBox.onchange = (event) => {
 
 newImageArray.onclick = () => {
     enterString("Введите название нового массива изображений:", "", (string) => {
-        const array = new ImageArray()
+        const array = new TextureArray()
     })
 }
 

@@ -4,8 +4,8 @@ import {currentCanvas} from "../../src/canvas.js"
 import {Label} from "../../src/gui/label.js"
 import {Align, defaultCanvas, defaultFontSize, loc, texture} from "../../src/system.js"
 import {Img} from "../../src/image.js"
-import {ImageArray} from "../../src/image_array.js"
-import {Layer} from "../../src/layer.js"
+import {TextureArray} from "../../src/texture_array.js"
+import {Container} from "../../src/container.js"
 import {Key} from "../../src/key.js"
 import {LoopArea} from "../../src/actions/sprite/loop_area.js"
 import {Move} from "../../src/actions/sprite/move.js"
@@ -83,12 +83,12 @@ export const level = new Num()
 
 // layers
 
-export const bullets = new Layer()
-export const shipLayer = new Layer()
-export const asteroids = new Layer()
-export const particles = new Layer()
-export const bonuses = new Layer()
-export const explosions = new Layer()
+export const bullets = new Container()
+export const shipLayer = new Container()
+export const asteroids = new Container()
+export const particles = new Container()
+export const bonuses = new Container()
+export const explosions = new Container()
 
 // other
 
@@ -240,8 +240,8 @@ project.init = () => {
     shipSprite = AngularSprite.create(template.ship, shipLayer)
     invulnerabilityAction = new Blink(shipSprite, new Cos(0.2, 0.5, 0, 0.5))
 
-    let flameImages = new ImageArray(texture["flame"], 3, 3, 0.5, 1)
-    flameSprite = new AngularSprite(flameImages.image(0), -0.6, 0
+    let flameImages = new TextureArray(texture["flame"], 3, 3, 0.5, 1)
+    flameSprite = new AngularSprite(flameImages.texture(0), -0.6, 0
         , 1, 1, undefined, rad(-90), 0)
     shipLayer.add(flameSprite)
 
@@ -254,16 +254,16 @@ project.init = () => {
 
     defaultCanvas(16, 16)
 
-    bounds = new Box(0, 0, currentCanvas.width + 3, currentCanvas.height + 3)
+    bounds = new Box(0, 0, currentCanvas.shapeWidth + 3, currentCanvas.shapeHeight + 3)
 
-    let hudArea = new Box(0, 0, currentCanvas.width - 1, currentCanvas.height - 1)
+    let hudArea = new Box(0, 0, currentCanvas.shapeWidth - 1, currentCanvas.shapeHeight - 1)
 
     let scoreLabel = new Label(hudArea, [score], defaultFontSize, Align.left, Align.top, "Z8")
     let levelLabel = new Label(hudArea, [loc("level"), level], defaultFontSize, Align.center, Align.top)
     let livesLabel = new Label(hudArea, [lives], defaultFontSize, Align.right, Align.top, "I1", new Img(texture.ship))
 
     messageLabel = new Label(hudArea, [""], defaultFontSize, Align.center, Align.center)
-    hud = new Layer(scoreLabel, levelLabel, livesLabel, messageLabel)
+    hud = new Container(scoreLabel, levelLabel, livesLabel, messageLabel)
 
     // other
 

@@ -2,14 +2,14 @@
 
 import {TileSet} from "../../src/tile_set.js"
 import {tileMap, tileSet, world} from "../../src/project.js"
-import {ImageArray} from "../../src/image_array.js"
+import {TextureArray} from "../../src/texture_array.js"
 import {Block} from "../../src/block.js"
 import {Category, Pos, Rule} from "../../src/auto_tiling.js"
 import {TileMap} from "../../src/tile_map.js"
 import {texture} from "../../src/system.js"
 
 export function loadData() {
-    tileSet.blocks = new TileSet(new ImageArray(texture.blocks, 4, 14, 0.5, 0.5, 1, 1), [
+    tileSet.blocks = new TileSet(new TextureArray(texture.blocks, 4, 14, 0.5, 0.5, 1, 1), [
         1, 1, 1, 0,
         1, 1, 1, 1,
         1, 1, 1, 1,

@@ -11,6 +11,6 @@ export class AnimateSize extends Action {
 
     execute() {
         this.time += apsk
-        this.object.width = this.object.height = this.func.calculate(this.time)
+        this.object.shapeWidth = this.object.shapeHeight = this.func.calculate(this.time)
     }
 }

@@ -2,9 +2,7 @@
 
 import {tileSet} from "./project.js"
 import {arrayToString} from "./save_load.js"
-import {getTexturePart} from "./texture.js"
 import {Block} from "./block.js"
-import {removeFromArray} from "./functions.js"
 
 export const visibility = {
     visible: 0,
@@ -57,7 +55,7 @@ export class TileSet {
     }
 
     image(num) {
-        return this.#images.image(num)
+        return this.#images.texture(num)
     }
 
     get columns() {
@@ -85,7 +83,7 @@ export class TileSet {
     }
 
     addRegion(region, type) {
-        this.addBlock(region.x, region.y, region.width + 1, region.height + 1, type)
+        this.addBlock(region.x, region.y, region.shapeWidth + 1, region.shapeHeight + 1, type)
     }
 
     addBlock(x, y, width, height, type) {
@@ -96,14 +94,14 @@ export class TileSet {
     }
 
     initBlockImage(block) {
-        const size = this.images.width
+        const size = this.images.shapeWidth
         block.texture = getTexturePart(this.images.texture, block.x * size, block.y * size
-            , block.width * size, block.height * size)
+            , block.shapeWidth * size, block.shapeHeight * size)
     }
 
     setBlockVisibility(block, vis) {
-        for(let row = block.y; row < block.y + block.height; row++) {
-            for(let column = block.x; column < block.x + block.width; column++) {
+        for(let row = block.y; row < block.y + block.shapeHeight; row++) {
+            for(let column = block.x; column < block.x + block.shapeWidth; column++) {
                 this.visibility[column + row * this.columns] = vis
             }
         }
@@ -113,7 +111,7 @@ export class TileSet {
         for(let block of this.blocks) {
             if(block.collidesWithTile(x, y)) {
                 this.setBlockVisibility(block, visibility.visible)
-                removeFromArray(block, this.blocks)
+                this.blocks.remove(block)
                 return
             }
         }

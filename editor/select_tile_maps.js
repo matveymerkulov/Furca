@@ -22,14 +22,14 @@ export class SelectTileMaps extends Drag {
 
     process() {
         mapSelectionRegion.setSize(mouse.x - this.#x, mouse.y - this.#y)
-        mapSelectionRegion.setCorner(this.#x, this.#y)
+        mapSelectionRegion.setShapeCorner(this.#x, this.#y)
     }
 
     end() {
         selectedObjects = []
-        mapSelectionRegion.width = Math.abs(mapSelectionRegion.width)
-        mapSelectionRegion.height = Math.abs(mapSelectionRegion.height)
-        for(const object of world.items) {
+        mapSelectionRegion.shapeWidth = Math.abs(mapSelectionRegion.shapeWidth)
+        mapSelectionRegion.shapeHeight = Math.abs(mapSelectionRegion.shapeHeight)
+        for(const object of world.children) {
             if(object.isInside(mapSelectionRegion)) selectedObjects.push(object)
         }
         mapSelectionRegion = undefined

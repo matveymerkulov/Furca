@@ -1,7 +1,5 @@
 // noinspection JSUnusedGlobalSymbols
 
-import {Box} from "./box.js"
-import {ctx, distToScreen, xToScreen, yToScreen} from "./canvas.js"
 import {arrayToString} from "./save_load.js"
 import {showCollisionShapes} from "./input.js"
 import {tileMap} from "./project.js"
@@ -15,7 +13,7 @@ export function setBorderVisibility(value) {
     showBorder = value
 }
 
-export class TileMap extends Box {
+export class TileMap extends PIXI.Container {
     #tileSet
     #columns
     #rows
@@ -28,6 +26,61 @@ export class TileMap extends Box {
         this.#array = array ?? new Array(columns * rows).fill(emptyTile)
         this.cellWidth = cellWidth
         this.cellHeight = cellHeight
+    }
+
+
+    get left() {
+        return this.x - 0.5 * this.width
+    }
+    set left(value) {
+        this.x = value + 0.5 * this.width
+    }
+
+
+    get top() {
+        return this.y - 0.5 * this.height
+    }
+    set top(value) {
+        this.y = value + 0.5 * this.height
+    }
+
+
+    get right() {
+        return this.x + 0.5 * this.width
+    }
+    set right(value) {
+        this.x = value - 0.5 * this.width
+    }
+
+
+    get bottom() {
+        return this.y + 0.5 * this.height
+    }
+    set bottom(value) {
+        this.y = value - 0.5 * this.height
+    }
+
+
+    setPosition(x, y) {
+        this.position.set(x, y)
+    }
+
+    setPositionAs(sprite, dx = 0, dy = 0) {
+        this.position.set(sprite.x + dx, sprite.y + dy)
+    }
+
+    shift(dx, dy) {
+        this.position.set(this.x + dx, this.y + dy)
+    }
+
+    setCorner(x, y) {
+        this.left = x
+        this.top = y
+    }
+
+    setSize(width, height) {
+        this.width = width * 0.5
+        this.height = height * 0.5
     }
 
     copy(dx = 0, dy = 0) {
@@ -68,7 +121,7 @@ export class TileMap extends Box {
     }
 
     image(num) {
-        return this.#tileSet.image(num)
+        return this.#tileSet.texture(num)
     }
 
     tileColumnByPoint(point) {
@@ -166,7 +219,7 @@ export class TileMap extends Box {
 
         if(showBorder) {
             ctx.strokeStyle = "white"
-            ctx.strokeRect(x0, y0, distToScreen(this.width), distToScreen((this.height)))
+            ctx.strokeRect(x0, y0, distToScreen(this.shapeWidth), distToScreen((this.shapeHeight)))
         }
 
         const width = distToScreen(this.cellWidth)
@@ -186,15 +239,15 @@ export class TileMap extends Box {
                 if(!showCollisionShapes) continue
                 const shape = tileSet.collisionShape(tileNum)
                 if(shape === undefined) continue
-                collisionShape.drawResized(intX + distToScreen(shape.x - shape.halfWidth)
-                    , intY + distToScreen(shape.y - shape.halfHeight)
-                    , width * shape.width, height * shape.height, shape.shapeType)
+                collisionShape.drawResized(intX + distToScreen(shape.x - shape.shapeHalfWidth)
+                    , intY + distToScreen(shape.y - shape.this.height)
+                    , width * shape.shapeWidth, height * shape.shapeHeight, shape.shapeType)
             }
         }
     }
 
     drawTile(tileNum, column, row, intX, intY, intWidth, intHeight) {
-        this.tileSet.images.image(tileNum).drawResized(intX, intY, intWidth, intHeight)
+        this.tileSet.images.texture(tileNum).drawResized(intX, intY, intWidth, intHeight)
     }
 
 
@@ -313,9 +366,9 @@ export class TileMap extends Box {
                 let shape = tileSet.collisionShape(tileNum)
                 if(shape === undefined) continue
                 collisionSprite.shapeType = shape.shapeType
-                collisionSprite.setPosition(this.left + (shape.x + x) * this.cellWidth
+                collisionSprite.setShapePosition(this.left + (shape.x + x) * this.cellWidth
                     , this.top + (shape.y + y) * this.cellHeight)
-                collisionSprite.setSize(this.cellWidth * shape.width, this.cellHeight * shape.height)
+                collisionSprite.setSize(this.cellWidth * shape.shapeWidth, this.cellHeight * shape.shapeHeight)
                 if(!sprite.collidesWithSprite(collisionSprite)) continue
                 code.call(null, collisionSprite, tileNum, x, y)
             }

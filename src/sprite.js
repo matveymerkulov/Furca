@@ -1,11 +1,7 @@
-import {Box} from "./box.js"
-import {ctx, distToScreen, xToScreen, yToScreen} from "./canvas.js"
-import {num} from "./system.js"
-import {Animate} from "./actions/sprite/animate.js"
-import {Img} from "./image.js"
-import {ImageArray} from "./image_array.js"
+import {num, unc} from "./system.js"
 import {boxWithBoxCollision, boxWithPillCollision, circleWithBoxCollision, circleWithCircleCollision, circleWithPillCollision, pillWithPillCollision} from "./collisions.js"
 import {boxFromBoxVector, circleFromBoxVector, circleFromCircleVector, circleFromPillVector, pillFromBoxVector, pillFromPillVector,} from "./physics.js"
+import {rad, rnd, rndi} from "./functions.js"
 
 export let ShapeType = {
     circle: 0,
@@ -13,81 +9,239 @@ export let ShapeType = {
     pill: 2,
 }
 
-export class Sprite extends Box {
+export class Sprite extends PIXI.AnimatedSprite {
+    #shapeHalfWidth
+    #shapeHalfHeight
     shapeType
-    image
-    imageAngle
-    visible
     active
-    opacity
-    flipped
     actions
 
-    constructor(image, x = 0.0, y = 0.0, width = 1.0, height = 1.0
-                , shapeType = ShapeType.circle, imageAngle, active = true, visible = true) {
-        super(x, y, width, height)
+    constructor(textureArray, x = 0, y = 0, width = 1, height = 1,
+                shapeType = ShapeType.circle, angle = 0, active = true, visible = true) {
+        super(textureArray instanceof PIXI.Texture ? [textureArray] : textureArray.textures)
+        this.position.set(x, y)
+        this.setSize(width, height)
+        this.#shapeHalfWidth = 0.5 * width
+        this.#shapeHalfHeight = 0.5 * height
         this.shapeType = shapeType
-        this.image = image
-        this.imageAngle = imageAngle
-        this.visible = visible
+        this.angle = angle
         this.active = active
-        this.opacity = 1.0
-        this.flipped = false
+        this.visible = visible
         this.actions = []
+
+        this.widthMul = 1
+        this.heightMul = 1
+
+        this.anchor.set(0.5, 0.5)
     }
 
-    static create(template, layer) {
-        let sprite = new Sprite(Img.create(template.image), num(template.x), num(template.y), num(template.width)
-            , num(template.height), template.shape, num(template.imageAngle), template.visible, template.active)
-        sprite.init(template, layer)
-        return sprite
+
+    get shapeX() {
+        return this.x
+    }
+    set shapeX(value) {
+        this.x = value
     }
 
-    init(template, layer) {
-        if(template.size !== undefined) {
-            this.width = this.height = num(template.size)
-        }
 
-        if(layer !== undefined) {
-            layer.add(this)
-        }
-
-        if(template.images !== undefined) {
-            const images = ImageArray.create(template.images)
-            this.image = images.image(0)
-            this.actions.push(new Animate(this, images, num(template.animationSpeed)))
-        }
-
-        if(template.parameters !== undefined) {
-            for(const [key, value] of Object.entries(template.parameters)) {
-                this[key] = value
-            }
-        }
-        return this
+    get shapeY() {
+        return this.y
     }
+    set shapeY(value) {
+        this.y = value
+    }
+
+    
+    get shapeHalfWidth() {
+        return this.#shapeHalfWidth
+    }
+    get shapeHalfHeight() {
+        return this.#shapeHalfHeight
+    }
+
+
+    get size() {
+        return this.#shapeHalfWidth * 2.0
+    }
+    set size(value) {
+        this.setSize(value, value)
+    }
+
+
+    get radius() {
+        return this.#shapeHalfWidth
+    }
+    set radius(value) {
+        this.setSize(value, value)
+    }
+
+
+    get shapeWidth() {
+        return this.#shapeHalfWidth * 2.0
+    }
+    set shapeWidth(value) {
+        this.#shapeHalfWidth = value * 0.5
+        this.width = value * this.widthMul / this.texture.width
+    }
+
+
+    get shapeHeight() {
+        return this.#shapeHalfHeight * 2.0
+    }
+    set shapeHeight(value) {
+        this.#shapeHalfHeight = value * 0.5
+        this.height = value * this.heightMul / this.texture.height
+    }
+
+
+    get left() {
+        return this.x - this.#shapeHalfWidth
+    }
+    set left(value) {
+        this.x = value + this.#shapeHalfWidth
+    }
+
+
+    get top() {
+        return this.y - this.#shapeHalfHeight
+    }
+    set top(value) {
+        this.y = value + this.#shapeHalfHeight
+    }
+
+
+    get right() {
+        return this.x + this.#shapeHalfWidth
+    }
+    set right(value) {
+        this.x = value - this.#shapeHalfWidth
+    }
+
+
+    get bottom() {
+        return this.y + this.#shapeHalfHeight
+    }
+    set bottom(value) {
+        this.y = value - this.#shapeHalfHeight
+    }
+
+
+    setSize(width, height) {
+        if(height === undefined) height = width
+        this.#shapeHalfWidth = 0.5 * width
+        this.#shapeHalfHeight = 0.5 * height
+        this.scale.set(width / this.texture.width, height / this.texture.height)
+    }
+
+    setShapePosition(x, y) {
+        this.position.set(x, y)
+    }
+
+    setShapePositionAs(sprite, dx = 0, dy = 0) {
+        this.position.set(sprite.x + dx, sprite.y + dy)
+    }
+
+    shiftShape(dx, dy) {
+        this.position.set(this.x + dx, this.y + dy)
+    }
+
+    setShapeCorner(x, y) {
+        this.left = x
+        this.top = y
+    }
+
+    setShapeSize(width, height) {
+        this.#shapeHalfWidth = width * 0.5
+        this.#shapeHalfHeight = height * 0.5
+        this.setSize(width * this.widthMul, height * this.heightMul)
+    }
+
+    alterShapeSize(dWidth, dHeight) {
+        this.setShapeSize(this.shapeWidth + dWidth, this.shapeHeight * dHeight)
+    }
+
+    setShapeSizeAs(shape) {
+        this.setShapeSize(shape.shapeWidth, shape.shapeHeight)
+    }
+
+    moveToCircle(x, y, radius) {
+        let angle = rad(rnd(360))
+        radius = Math.sqrt(rnd(radius))
+        this.position.set(x + radius * Math.cos(angle), y + radius * Math.sin(angle))
+    }
+
+    moveToPerimeter(area) {
+        const bounds = area.bounds
+        let dx = bounds.maxX - bounds.minX
+        let dy = bounds.maxY - bounds.minY
+        if (rnd(dx + dy) < dx) {
+            this.x = rnd(bounds.minX, bounds.maxX)
+            this.y = rndi(2) ? bounds.minY : bounds.maxY
+        } else {
+            this.x = rndi(2) ? bounds.minX : bounds.maxX
+            this.y = rnd(bounds.minY, bounds.maxY)
+        }
+    }
+
+    wrap(area) {
+        const bounds = area.bounds
+        let x = this.x
+        let y = this.y
+        while(x < bounds.minX) x += bounds.width
+        while(x >= bounds.maxX) x -= bounds.width
+        while(y < bounds.minY) y += bounds.height
+        while(y >= bounds.maxY) y -= bounds.height
+        this.position.set(x, y)
+    }
+
+    distance2To(sprite) {
+        let dx = this.x - sprite.x
+        let dy = this.y - sprite.y
+        return dx * dx + dy * dy
+    }
+
+    distanceTo(sprite) {
+        return Math.sqrt(this.distance2To(sprite))
+    }
+
+    angleTo(x, y) {
+        return Math.atan2(y - this.y, x - this.x)
+    }
+
+    angleToPoint(sprite) {
+        return this.angleTo(sprite.x, sprite.y)
+    }
+
+    limit(box) {
+        if(this.left < box.left) this.left = box.left + unc
+        if(this.right > box.right) this.right = box.right - unc
+        if(this.top < box.top) this.top = box.top + unc
+        if(this.bottom > box.bottom) this.bottom = box.bottom - unc
+    }
+
 
     add(...actions) {
         this.actions.push(...actions)
     }
 
-    draw() {
-        if(!this.image || !this.visible) return
-        ctx.globalAlpha = this.opacity
-
-        this.image.drawRotated(xToScreen(this.x), yToScreen(this.y), distToScreen(this.width)
-            , distToScreen(this.height), this.shapeType, this.imageAngle ?? this.angle, this.flipped)
-
-        ctx.globalAlpha = 1.0
+    applyAction(action) {
+        action.execute(this)
     }
+
+    processSprites(code) {
+        code.call(undefined, this)
+    }
+
+    // collisions
 
     update() {
         for(const action of this.actions) {
-            action.execute()
+            action.execute(this)
         }
     }
 
     turnImage(value) {
-        this.imageAngle += value
+        this.rotation.set(this.rotation + value)
     }
 
     hide() {
@@ -99,6 +253,18 @@ export class Sprite extends Box {
     }
 
     // collisions
+
+    collidesWithPoint(x, y) {
+        return x >= this.left && x < this.right && y >= this.top && y < this.bottom
+    }
+
+    firstCollisionWithPoint(x, y) {
+        return this.collidesWithPoint(x, y) ? this : undefined
+    }
+
+    collisionWithPoint(x, y, code) {
+        if(this.collidesWithPoint(x, y)) code.call(null, x, y, this)
+    }
 
     collisionWith(object, code) {
         object.collisionWithSprite(this, code)
@@ -193,9 +359,20 @@ export class Sprite extends Box {
         }
     }
 
+    overlaps(sprite) {
+        return sprite.left >= this.left && sprite.top >= this.top && sprite.right < this.right
+            && sprite.bottom < this.bottom
+    }
+
+    isInside(sprite) {
+        return sprite.overlaps(this)
+    }
+
     toSprite() {
         return this
     }
 }
 
-export let collisionSprite = new Sprite()
+export let collisionSprite = null// new Sprite(PIXI.Texture.EMPTY)
+export let serviceSprite1 = null//new Sprite(PIXI.Texture.EMPTY)
+export let serviceSprite2 = null//new Sprite(PIXI.Texture.EMPTY)

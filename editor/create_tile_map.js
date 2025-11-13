@@ -2,11 +2,11 @@ import {TileMap} from "../src/tile_map.js"
 import {layer, tileMap, world} from "../src/project.js"
 import {eof, getInt, getSymbol, getToken, initParser, readSymbol} from "../src/parser.js"
 import {setName} from "../src/names.js"
-import {Layer} from "../src/layer.js"
+import {Container} from "../src/container.js"
 
 export function addObject(name, object) {
     setName(object, name)
-    if(object instanceof Layer) {
+    if(object instanceof Container) {
         layer[name] = object
     } else {
         tileMap[name] = object

@@ -6,7 +6,6 @@ import {imageArray, project, tileMap, tileSet, world} from "./project.js"
 import {getName} from "./names.js"
 import {getImageArray, getLayer, getString, getStringArray, getSymbol, getTileMap, getTileSet, getToken, initParser} from "./parser.js"
 import {TileMap} from "./tile_map.js"
-import {loadTexture} from "./system.js"
 
 export let indent = ""
 
@@ -94,7 +93,7 @@ export function projectToText() {
     }
     text += "\t\n"
 
-    for(let object of world.items) {
+    for(let object of world.children) {
         text += `\t${object instanceof TileMap ? "tileMap" : "layer"}.${getName(object)} = ${object.toString()}\n`
     }
 
