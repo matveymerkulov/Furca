@@ -1,4 +1,3 @@
-import {imageArray, layer, tileMap, tileSet, world} from "./project.js"
 import {TileSet} from "./tile_set.js"
 import {TextureArray} from "./texture_array.js"
 import {TileMap} from "./tile_map.js"

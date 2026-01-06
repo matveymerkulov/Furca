@@ -18,7 +18,8 @@ export class Sprite extends PIXI.AnimatedSprite {
 
     constructor(textureArray, x = 0, y = 0, width = 1, height = 1,
                 shapeType = ShapeType.circle, angle = 0, active = true, visible = true) {
-        super(textureArray instanceof PIXI.Texture ? [textureArray] : textureArray.textures)
+        super(textureArray instanceof PIXI.Texture ? [textureArray] :
+            (textureArray === undefined ? undefined : textureArray.textures) )
         this.position.set(x, y)
         this.setSize(width, height)
         this.#shapeHalfWidth = 0.5 * width
@@ -127,7 +128,9 @@ export class Sprite extends PIXI.AnimatedSprite {
 
 
     setSize(width, height) {
-        if(height === undefined) height = width
+        if(height === undefined) { // noinspection JSSuspiciousNameCombination
+            height = width
+        }
         this.#shapeHalfWidth = 0.5 * width
         this.#shapeHalfHeight = 0.5 * height
         this.scale.set(width / this.texture.width, height / this.texture.height)
@@ -153,11 +156,11 @@ export class Sprite extends PIXI.AnimatedSprite {
     setShapeSize(width, height) {
         this.#shapeHalfWidth = width * 0.5
         this.#shapeHalfHeight = height * 0.5
-        this.setSize(width * this.widthMul, height * this.heightMul)
+        this.setSize(width * this.widthMul, height + this.heightMul)
     }
 
     alterShapeSize(dWidth, dHeight) {
-        this.setShapeSize(this.shapeWidth + dWidth, this.shapeHeight * dHeight)
+        this.setShapeSize(this.shapeWidth + dWidth, this.shapeHeight + dHeight)
     }
 
     setShapeSizeAs(shape) {

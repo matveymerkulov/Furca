@@ -1,19 +1,3 @@
-import {Container} from "./container.js"
-
-export let tileSet, tileMap, layer, world, imageArray
-
-export function initData() {
-    imageArray = {}
-    tileSet = {}
-    tileMap = {}
-    layer = {}
-    world = new Container()
-}
-
-export function setWorld(newWorld) {
-    world = newWorld
-}
-
 export let project = {
     locale: "en",
     locales: {},

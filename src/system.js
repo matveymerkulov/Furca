@@ -1,4 +1,4 @@
-import {initData, project} from "./project.js"
+import {project} from "./project.js"
 import {Function} from "./function/function.js"
 import {keys} from "./key.js"
 import {initInput} from "./input.js"
@@ -104,14 +104,22 @@ export function getViewport() {
     return new PIXI.Rectangle(corner1.x + 0.5 * width, corner1.y + 0.5 * height, width, height)
 }
 
+export function setViewport(height) {
+    const width = app.screen.width / app.screen.height * height
+    stage.scale.set(app.screen.height / height)
+    stage.origin.set(-0.5 * width, -0.5 * height)
+}
+
+export let defaultFontSize
+
 export async function initApp() {
     app = new PIXI.Application();
     await app.init({background: '#1099bb', resizeTo: window})
     document.body.appendChild(app.canvas)
     app.stage.origin.set(app.screen.width / 2, app.screen.height / 2)
     stage = new Container()
-    stage.scale = 1.0 / 64
     app.stage.addChild(stage)
+    defaultFontSize = app.canvas.height / 24
 }
 
 export function initSystem() {
@@ -132,7 +140,6 @@ export function initSystem() {
     })
 
     initInput()
-    initData()
 
     project.init()
 

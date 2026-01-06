@@ -1,4 +1,5 @@
 import {mouse} from "./system.js"
+import {Box} from "./box.js"
 
 export let graphics = new PIXI.Graphics()
 

@@ -1,8 +1,8 @@
 // noinspection JSUnusedGlobalSymbols
 
-import {tileSet} from "./project.js"
 import {arrayToString} from "./save_load.js"
 import {Block} from "./block.js"
+import {getTexturePart} from "./texture.js"
 
 export const visibility = {
     visible: 0,
@@ -19,7 +19,7 @@ export class TileSet {
     altTile
     groups
 
-    constructor(images, vis, blocks = [], categories = [], altTile = -1, groups = []) {
+    constructor(images, vis = undefined, blocks = [], categories = [], altTile = -1, groups = []) {
         this.#images = images
         this.#collision = new Array(images.quantity)
         this.visibility = vis ? vis : new Array(images.quantity).fill(visibility.visible)
@@ -55,7 +55,7 @@ export class TileSet {
     }
 
     image(num) {
-        return this.#images.texture(num)
+        return this.#images.image(num)
     }
 
     get columns() {

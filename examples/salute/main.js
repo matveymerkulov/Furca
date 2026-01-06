@@ -1,6 +1,6 @@
 import {project} from "../../src/project.js"
 import {ShapeType, Sprite} from "../../src/sprite.js"
-import {app, apsk, getViewport, initApp, initSystem, stage} from "../../src/system.js"
+import {app, apsk, getViewport, initApp, initSystem, setViewport, stage} from "../../src/system.js"
 import {Container} from "../../src/container.js"
 import {RemoveIfOutside} from "../../src/actions/sprite/remove_if_outside.js"
 import {Rnd} from "../../src/function/rnd.js"
@@ -27,7 +27,8 @@ import {Box} from "../../src/box.js"
     const fadingSpeed = new Rnd(0.25, 0.5)
 
     project.init = () => {
-        stage.scale = 100
+        setViewport(50)
+        let v = getViewport()
 
         let particles = new Container()
         particles.isShot = false
@@ -62,8 +63,8 @@ import {Box} from "../../src/box.js"
 
                 let dx = shotDX.toNumber()
                 let dy = shotDY.toNumber()
-                let x = 3
-                let y = shotY
+                let x = 5
+                let y = 5
                 for(let i = 0; i < tailLength; i++) {
                     let shot = new Sprite(particleTexture, x, y)
                     shot.size = shotSize.toNumber() * i / tailLength

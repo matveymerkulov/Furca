@@ -2,7 +2,6 @@
 
 import {arrayToString} from "./save_load.js"
 import {showCollisionShapes} from "./input.js"
-import {tileMap} from "./project.js"
 import {collisionShape} from "./shape.js"
 import {collisionSprite} from "./sprite.js"
 
@@ -14,73 +13,45 @@ export function setBorderVisibility(value) {
 }
 
 export class TileMap extends PIXI.Container {
+    #cellWidth
+    #cellHeight
     #tileSet
     #columns
     #rows
     #array
     constructor(tileSet, columns, rows, x = 0, y = 0, cellWidth = 1, cellHeight = 1, array) {
         super(x, y, cellWidth * columns, cellHeight * rows)
+        this.#cellWidth = cellWidth
+        this.#cellHeight = cellHeight
         this.#tileSet = tileSet
         this.#columns = columns
         this.#rows = rows
         this.#array = array ?? new Array(columns * rows).fill(emptyTile)
-        this.cellWidth = cellWidth
-        this.cellHeight = cellHeight
+        this.init()
     }
 
+    init() {
+        this.removeChildren()
 
-    get left() {
-        return this.x - 0.5 * this.width
-    }
-    set left(value) {
-        this.x = value + 0.5 * this.width
-    }
+        const dx = this.x - 0.5 * this.#cellWidth * this.#columns
+        const dy = this.y - 0.5 * this.#cellHeight * this.#rows
 
-
-    get top() {
-        return this.y - 0.5 * this.height
-    }
-    set top(value) {
-        this.y = value + 0.5 * this.height
-    }
-
-
-    get right() {
-        return this.x + 0.5 * this.width
-    }
-    set right(value) {
-        this.x = value - 0.5 * this.width
+        for(let yy = 0; yy < this.#rows; yy++) {
+            for(let xx = 0; xx < this.#columns; xx++) {
+                const tileNum = this.#array[xx + yy * this.#columns]
+                if(tileNum < 0) continue
+                const texture = this.#tileSet.image(tileNum)
+                const tile = new PIXI.AnimatedSprite([texture])
+                tile.position.set(xx * this.#cellWidth + dx, yy * this.#cellHeight + dy)
+                tile.scale.set(this.#cellWidth / texture.width, this.#cellHeight / texture.height)
+                this.addChild(tile)
+            }
+        }
     }
 
-
-    get bottom() {
-        return this.y + 0.5 * this.height
-    }
-    set bottom(value) {
-        this.y = value - 0.5 * this.height
-    }
-
-
-    setPosition(x, y) {
-        this.position.set(x, y)
-    }
-
-    setPositionAs(sprite, dx = 0, dy = 0) {
-        this.position.set(sprite.x + dx, sprite.y + dy)
-    }
-
-    shift(dx, dy) {
-        this.position.set(this.x + dx, this.y + dy)
-    }
-
-    setCorner(x, y) {
-        this.left = x
-        this.top = y
-    }
-
-    setSize(width, height) {
-        this.width = width * 0.5
-        this.height = height * 0.5
+    toString() {
+        return `new TileMap(tileSet.${this.#tileSet.name}, ${this.#columns}, ${this.#rows}, ${this.x}, ${this.y}`
+            + `, ${this.cellWidth}, ${this.cellHeight}, ${arrayToString(this.#array, this.#columns, 3)})`
     }
 
     copy(dx = 0, dy = 0) {
@@ -88,10 +59,126 @@ export class TileMap extends PIXI.Container {
             , this.cellWidth, this.cellHeight, [...this.#array])
     }
 
-    toString() {
-        return `new TileMap(tileSet.${this.#tileSet.name}, ${this.#columns}, ${this.#rows}, ${this.x}, ${this.y}`
-            + `, ${this.cellWidth}, ${this.cellHeight}, ${arrayToString(this.#array, this.#columns, 3)})`
+
+    get shapeX() {
+        return this.x
     }
+    set shapeX(value) {
+        this.x = value
+    }
+
+
+    get shapeY() {
+        return this.y
+    }
+    set shapeY(value) {
+        this.y = value
+    }
+
+
+    get shapeWidth() {
+        return this.#cellWidth * this.columns
+    }
+
+    set shapeWidth(value) {
+        this.#cellWidth = value / this.columns
+    }
+
+
+    get cellSize() {
+        return this.cellWidth
+    }
+    set cellSize(value) {
+        this.setCellSize(value, value)
+    }
+
+
+    get cellWidth() {
+        return this.#cellWidth
+    }
+    set cellWidth(value) {
+        this.setCellSize(this.cellWidth, value)
+    }
+
+
+    get cellHeight() {
+        return this.#cellHeight
+    }
+    set cellHeight(value) {
+        this.setCellSize(value, this.cellHeight)
+    }
+
+
+    get left() {
+        return this.x - 0.5 * this.shapeWidth
+    }
+    set left(value) {
+        this.x = value + 0.5 * this.shapeWidth
+    }
+
+
+    get top() {
+        return this.y - 0.5 * this.shapeHeight
+    }
+    set top(value) {
+        this.y = value + 0.5 * this.shapeHeight
+    }
+
+
+    get right() {
+        return this.x + 0.5 * this.shapeWidth
+    }
+    set right(value) {
+        this.x = value - 0.5 * this.shapeWidth
+    }
+
+
+    get bottom() {
+        return this.y + 0.5 * this.shapeHeight
+    }
+    set bottom(value) {
+        this.y = value - 0.5 * this.shapeHeight
+    }
+
+
+    setCellSize(width, height) {
+        if(height === undefined) { // noinspection JSSuspiciousNameCombination
+            height = width
+        }
+        this.#cellWidth = width
+        this.#cellHeight = height
+        this.scale.set(width * this.columns / this.texture.width, height * this.rows / this.texture.height)
+    }
+
+    setShapePosition(x, y) {
+        this.position.set(x, y)
+    }
+
+    setShapePositionAs(sprite, dx = 0, dy = 0) {
+        this.position.set(sprite.x + dx, sprite.y + dy)
+    }
+
+    shiftShape(dx, dy) {
+        this.position.set(this.x + dx, this.y + dy)
+    }
+
+    setShapeCorner(x, y) {
+        this.left = x
+        this.top = y
+    }
+
+    setShapeSize(width, height) {
+        this.setCellSize(width / this.columns, height / this.rows)
+    }
+
+    alterShapeSize(dWidth, dHeight) {
+        this.setShapeSize(this.shapeWidth + dWidth, this.shapeHeight + dHeight)
+    }
+
+    setShapeSizeAs(shape) {
+        this.setShapeSize(shape.shapeWidth, shape.shapeHeight)
+    }
+
 
     get rows() {
         return this.#rows
@@ -121,7 +208,7 @@ export class TileMap extends PIXI.Container {
     }
 
     image(num) {
-        return this.#tileSet.texture(num)
+        return this.#tileSet.image(num)
     }
 
     tileColumnByPoint(point) {
@@ -206,10 +293,12 @@ export class TileMap extends PIXI.Container {
     setArray(array) {
         if(array.length !== this.#array.length) throw Error("Array size is not equal to tile map size")
         this.#array = array
+        this.init()
     }
 
     clear() {
         this.#array.fill(-1)
+        this.init()
     }
 
     draw() {
@@ -268,10 +357,8 @@ export class TileMap extends PIXI.Container {
 
     initTileSpriteByIndex(sprite, index) {
         sprite.image = this.image(this.tileByIndex(index))
-        sprite.x = this.tileXByIndex(index)
-        sprite.y = this.tileYByIndex(index)
-        sprite.width = this.cellWidth
-        sprite.height = this.cellHeight
+        sprite.setShapePosition(this.tileXByIndex(index), this.tileYByIndex(index))
+        sprite.setShapeSize(this.cellWidth, this.cellHeight)
         return sprite
     }
 

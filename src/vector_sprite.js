@@ -6,10 +6,10 @@ import {apsk, num} from "./system.js"
 export class VectorSprite extends Sprite {
     dx
     dy
-    constructor(texture, x = 0.0, y = 0.0, width = 1.0, height = 1.0
+    constructor(textureArray, x = 0.0, y = 0.0, width = 1.0, height = 1.0
         , shapeType = ShapeType.circle, dx = 0, dy = 0, angle
                 , active = true, visible = true) {
-        super(texture, x, y, width, height, shapeType, angle, active, visible)
+        super(textureArray, x, y, width, height, shapeType, angle, active, visible)
         this.dx = dx
         this.dy = dy
     }

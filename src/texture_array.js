@@ -28,7 +28,7 @@ export class TextureArray {
         return `new ImageArray(texture.${this.texture.id}, ${this.columns}, ${this.rows})`
     }
 
-    texture(num) {
+    image(num) {
         return this.#textures[num]
     }
 

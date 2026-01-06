@@ -6,13 +6,13 @@ import {RemoveIfOutside} from "../../src/actions/sprite/remove_if_outside.js"
 import Generator from "./generator.js"
 import {rnd} from "../../src/functions.js"
 import {ShapeType, Sprite} from "../../src/sprite.js"
-import {app, getViewport, initApp, initSystem, stage} from "../../src/system.js"
+import {app, getViewport, initApp, initSystem, loadTexture, stage} from "../../src/system.js"
 import {Box} from "../../src/box.js"
 
 (async () => {
     await initApp()
 
-    const showFlake = await PIXI.Assets.load("snowflake.png")
+    const showFlake = loadTexture("snowflake.png")
 
     project.init = () => {
         stage.scale = 100
